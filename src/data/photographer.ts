@@ -1,7 +1,7 @@
 import type { PhotographerInfo } from '@/types';
 
 export const photographerInfo: PhotographerInfo = {
-  name: 'Lorena Alves Arq',
+  name: 'Lorena Alves',
   tagline: 'Architectural Photographer',
   heroIntroduction: 'Capturing the dialogue between space, light, and form.',
   biography: `Lorena Alves Arq is an award-winning architectural photographer specializing in documenting built environments, with recognition including the International Photography Awards Architectural Photographer of the Year 2023. With over a decade of experience, her work has been featured in numerous international design publications and exhibitions, collaborating with leading architectural firms and developers.
