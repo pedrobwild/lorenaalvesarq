@@ -8,34 +8,34 @@ gsap.registerPlugin(ScrollTrigger);
 // ---------- Ensaios slideshow data ----------
 const ENSAIOS = [
   {
-    id: "silencio",
-    vertical: "Ensaio · 02",
-    word: "silêncio",
-    title: "Casa Pau-Brasil",
+    id: "proposito",
+    vertical: "Ensaio · 01",
+    word: "propósito",
+    title: "Antes do traço",
     text:
-      "O silêncio entre os volumes é parte do projeto — é onde a luz se senta. Uma varanda suspensa sobre o mar, onde a madeira carrega o gesto do ofício em cada junta.",
+      "Cada projeto começa antes do primeiro risco — começa no porquê. Na vida que vai acontecer ali, nos rituais de quem habita, no futuro que a obra torna possível.",
     img: "/images/veranda.png",
     alt: "Varanda suspensa com deck em ipê voltada para o mar",
   },
   {
-    id: "materia",
-    vertical: "Ensaio · 03",
-    word: "matéria",
-    title: "Fazenda Porto",
+    id: "vida",
+    vertical: "Ensaio · 02",
+    word: "vida",
+    title: "Casa habitada",
     text:
-      "A matéria é linguagem. Taipa, madeira, telha cerâmica e cal — ofícios que atravessam gerações e encontram, aqui, uma gramática contemporânea.",
-    img: "/images/detail-materials.png",
-    alt: "Detalhe construtivo com parede em taipa, madeira e luz natural rasante",
-  },
-  {
-    id: "tempo",
-    vertical: "Ensaio · 04",
-    word: "tempo",
-    title: "Apto. Higienópolis",
-    text:
-      "Projetar para o tempo longo — não o aplauso da estreia, a permanência. Uma arquitetura que envelhece com beleza e se torna melhor com o uso.",
+      "A casa é o palco do cotidiano — o café de manhã, o silêncio da tarde, o encontro à noite. Desenhamos para que esse dia comum aconteça melhor, todos os dias.",
     img: "/images/ambience-corridor.png",
     alt: "Corredor interno com luz rasante e piso em taco de madeira envelhecido",
+  },
+  {
+    id: "legado",
+    vertical: "Ensaio · 03",
+    word: "legado",
+    title: "Permanência",
+    text:
+      "Obras feitas para atravessar o tempo — e permanecer na memória de quem as habita. Arquitetura que envelhece com beleza e se torna melhor com o uso.",
+    img: "/images/detail-materials.png",
+    alt: "Detalhe construtivo com parede em taipa, madeira e luz natural rasante",
   },
 ];
 
@@ -503,7 +503,12 @@ export default function App() {
               <span>tempo, o território e quem</span>
             </span>
             <span className="reveal-line">
-              <span>irá habitar — para durar.</span>
+              <span>
+                irá habitar — para <em>transformar</em>,
+              </span>
+            </span>
+            <span className="reveal-line">
+              <span>não apenas abrigar.</span>
             </span>
           </div>
         </div>
@@ -515,7 +520,7 @@ export default function App() {
           <div>
             <div className="section__eyebrow">Projetos em destaque · 02</div>
             <h2 className="section__title" style={{ marginTop: "1.2rem" }}>
-              Obras que carregam <em>silêncio</em>, presença e memória.
+              Obras que carregam <em>propósito</em>, presença e vida.
             </h2>
           </div>
           <div className="projects__count mono">Selecionados · 2024 — 2026</div>
@@ -563,7 +568,7 @@ export default function App() {
         <div className="section__header">
           <div className="section__eyebrow">Estúdio · 03</div>
           <h2 className="section__title">
-            Uma arquitetura <em>do silêncio</em>, do gesto e do detalhe.
+            Uma arquitetura <em>da vida</em>, do gesto e do legado.
           </h2>
         </div>
         <div className="about__grid">
@@ -705,8 +710,8 @@ export default function App() {
         {[
           { m: "I", text: <>Projetar é <em>escutar</em> antes de desenhar.</> },
           { m: "II", text: <>Poucas obras por ano, <em>cada uma inteira</em>.</> },
-          { m: "III", text: <>O detalhe é <em>onde mora</em> a arquitetura.</> },
-          { m: "IV", text: <>Desenhar para o <em>tempo longo</em>, não para o aplauso.</> },
+          { m: "III", text: <>O detalhe serve a <em>quem vai viver</em> — não a si mesmo.</> },
+          { m: "IV", text: <>Desenhar para <em>transformar</em>, não para o aplauso.</> },
         ].map((c) => (
           <div className="credo reveal" key={c.m}>
             <div className="credo__mark">{c.m}</div>
@@ -760,7 +765,7 @@ export default function App() {
       <section className="section cta" id="contato">
         <div className="cta__grid">
           <h2 className="cta__title reveal">
-            Para obras que exigem <em>tempo</em> e <em>cuidado.</em>
+            Vamos projetar o seu próximo <em>modo de viver</em>?
           </h2>
           <div className="cta__details">
             <div className="cta__detail">
