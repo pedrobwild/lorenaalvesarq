@@ -135,7 +135,7 @@ export default function PortfolioPage() {
               data-cursor="hover"
               aria-label={`Abrir projeto ${p.title} ${p.em}`}
             >
-              <div className="pf-card__media">
+              <div className="pf-card__media" data-cursor="zoom">
                 <img src={p.cover} alt={p.alt} loading="lazy" />
                 <div className="pf-card__veil" />
                 <span className="pf-card__index mono">
