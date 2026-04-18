@@ -354,7 +354,7 @@ export default function App() {
         </nav>
         <div>
           <div className="mono" style={{ marginBottom: "0.8rem" }}>
-            Contato
+            Sobre
           </div>
           <p style={{ fontFamily: "var(--font-display)", fontSize: "1.35rem" }}>
             contato@lorenaalves.arq.br
@@ -685,7 +685,7 @@ export default function App() {
             </ul>
           </div>
           <div className="footer__col">
-            <h4>Contato</h4>
+            <h4>Sobre</h4>
             <ul>
               <li>
                 <a href="mailto:contato@lorenaalves.arq.br">contato@lorenaalves.arq.br</a>
