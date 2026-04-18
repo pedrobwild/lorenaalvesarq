@@ -894,6 +894,7 @@ button {
 .about {
   background: var(--ink);
   color: var(--bone);
+  padding-top: clamp(2rem, 4vw, 3.5rem);
 }
 
 .about__grid {
