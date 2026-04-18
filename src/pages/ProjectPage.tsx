@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import { getNextProject, getProjectBySlug, type ProjectImage } from "../data/projects";
 import { routes } from "../lib/useHashRoute";
 import { shouldRunParallax, shouldUseSmoothScroll } from "../lib/device";
+import { useCustomCursor } from "../lib/useCustomCursor";
 
 type Props = { slug: string };
 
@@ -12,6 +13,9 @@ export default function ProjectPage({ slug }: Props) {
   const project = getProjectBySlug(slug);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
+
+  useCustomCursor();
+
 
   useEffect(() => {
     const useLenis = shouldUseSmoothScroll();
