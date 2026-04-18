@@ -47,12 +47,15 @@ function Root() {
   }, [route]);
 
   return (
-    <div
-      className={`route-transition route-transition--${phase}`}
-      style={{ ["--route-transition-ms" as string]: `${TRANSITION_MS}ms` }}
-    >
-      {renderRoute(displayed)}
-    </div>
+    <>
+      <div className="cursor" aria-hidden="true"></div>
+      <div
+        className={`route-transition route-transition--${phase}`}
+        style={{ ["--route-transition-ms" as string]: `${TRANSITION_MS}ms` }}
+      >
+        {renderRoute(displayed)}
+      </div>
+    </>
   );
 }
 

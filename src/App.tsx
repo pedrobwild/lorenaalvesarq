@@ -385,9 +385,6 @@ export default function App() {
         Pular para o conteúdo
       </a>
 
-      {/* Custom cursor */}
-      <div className="cursor" aria-hidden="true"></div>
-
       {/* Loader */}
       <div className="loader" aria-hidden="true">
         <div className="loader__inner">
