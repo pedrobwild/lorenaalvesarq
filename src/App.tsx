@@ -241,52 +241,8 @@ export default function App() {
       });
     });
 
-    // Horizontal projects
-    const track = document.querySelector<HTMLElement>(".projects__track");
-    if (track) {
-      const cards = track.querySelectorAll<HTMLElement>(".project-card");
-      if (cards.length > 2 && window.matchMedia("(min-width: 900px)").matches) {
-        const scrollLen = () => track.scrollWidth - window.innerWidth + 120;
-        gsap.to(track, {
-          x: () => -scrollLen(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".projects",
-            start: "top top",
-            end: () => `+=${scrollLen()}`,
-            pin: true,
-            scrub: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        requestAnimationFrame(() => {
-          const containerST = ScrollTrigger.getAll().find(
-            (st) => st.trigger === document.querySelector(".projects") && (st as any).pin
-          );
-          if (!containerST || !containerST.animation) return;
-          cards.forEach((card) => {
-            const img = card.querySelector<HTMLImageElement>("img");
-            if (!img) return;
-            gsap.fromTo(
-              img,
-              { yPercent: -4 },
-              {
-                yPercent: 4,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: card,
-                  start: "left right",
-                  end: "right left",
-                  scrub: 1,
-                  containerAnimation: containerST.animation,
-                },
-              }
-            );
-          });
-        });
-      }
-    }
+    // Horizontal projects — native horizontal scroll (no page pin)
+    // The track scrolls horizontally on its own axis; the page can be scrolled past freely.
 
     // Fullbleed zoom
     document.querySelectorAll<HTMLImageElement>(".fullbleed img").forEach((img) => {
