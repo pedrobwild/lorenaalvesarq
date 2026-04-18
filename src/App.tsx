@@ -1,11 +1,62 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// ---------- Ensaios slideshow data ----------
+const ENSAIOS = [
+  {
+    id: "silencio",
+    vertical: "Ensaio · 02",
+    word: "silêncio",
+    title: "Casa Pau-Brasil",
+    text:
+      "O silêncio entre os volumes é parte do projeto — é onde a luz se senta. Uma varanda suspensa sobre o mar, onde a madeira carrega o gesto do ofício em cada junta.",
+    img: "/images/veranda.png",
+    alt: "Varanda suspensa com deck em ipê voltada para o mar",
+  },
+  {
+    id: "materia",
+    vertical: "Ensaio · 03",
+    word: "matéria",
+    title: "Fazenda Porto",
+    text:
+      "A matéria é linguagem. Taipa, madeira, telha cerâmica e cal — ofícios que atravessam gerações e encontram, aqui, uma gramática contemporânea.",
+    img: "/images/detail-materials.png",
+    alt: "Detalhe construtivo com parede em taipa, madeira e luz natural rasante",
+  },
+  {
+    id: "tempo",
+    vertical: "Ensaio · 04",
+    word: "tempo",
+    title: "Apto. Higienópolis",
+    text:
+      "Projetar para o tempo longo — não o aplauso da estreia, a permanência. Uma arquitetura que envelhece com beleza e se torna melhor com o uso.",
+    img: "/images/ambience-corridor.png",
+    alt: "Corredor interno com luz rasante e piso em taco de madeira envelhecido",
+  },
+];
+
 export default function App() {
+  const [ensaioIdx, setEnsaioIdx] = useState(0);
+  const ensaiosPaused = useRef(false);
+
+  // Auto-advance do slideshow
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion) return;
+    const id = window.setInterval(() => {
+      if (!ensaiosPaused.current) {
+        setEnsaioIdx((i) => (i + 1) % ENSAIOS.length);
+      }
+    }, 6500);
+    return () => window.clearInterval(id);
+  }, []);
+
   useEffect(() => {
     // ---------- Smooth scroll (Lenis) ----------
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -262,43 +313,23 @@ export default function App() {
       );
     });
 
-    // Essay split — parallax na textura + drift no objeto
-    document.querySelectorAll<HTMLElement>(".essay").forEach((section) => {
-      const texture = section.querySelector<HTMLImageElement>(".essay__texture");
-      const object = section.querySelector<HTMLImageElement>(".essay__object");
-      if (texture) {
-        gsap.fromTo(
-          texture,
-          { scale: 1.15, yPercent: -3 },
-          {
-            scale: 1,
-            yPercent: 3,
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1.1,
-            },
-          }
-        );
-      }
-      if (object) {
-        gsap.fromTo(
-          object,
-          { yPercent: 8 },
-          {
-            yPercent: -8,
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1.2,
-            },
-          }
-        );
-      }
+    // Ensaios slideshow — parallax sutil na imagem de cada slide
+    document.querySelectorAll<HTMLElement>(".ensaio-slide__media img").forEach((img) => {
+      gsap.fromTo(
+        img,
+        { scale: 1.1, yPercent: -2 },
+        {
+          scale: 1,
+          yPercent: 2,
+          ease: "none",
+          scrollTrigger: {
+            trigger: img.closest(".ensaios") as HTMLElement,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.1,
+          },
+        }
+      );
     });
 
     // Footer mega drift
@@ -578,55 +609,93 @@ export default function App() {
         </div>
       </section>
 
-      {/* Ensaio editorial — composição dupla (textura + objeto escultural) */}
-      <section className="essay reveal" aria-label="Ensaio · Casa Pau-Brasil">
-        <div className="essay__grid">
-          <div className="essay__copy">
-            <div className="essay__top">
-              <span className="essay__tag">Ensaio · Casa Pau-Brasil</span>
-            </div>
-
-            <h2 className="essay__title">
-              <span>O silêncio</span>
-              <span><em>entre os volumes</em></span>
-            </h2>
-
-            <div className="essay__meta">
-              <div className="essay__num">02.</div>
-              <p className="essay__lede">
-                Uma varanda suspensa sobre o mar — onde a luz se senta e a
-                madeira carrega o gesto do ofício em cada junta. É nos intervalos
-                que a casa respira.
-              </p>
-            </div>
-
-            <div className="essay__footer">
-              <a href="#projetos" className="essay__link">
-                <span>Ver ensaio completo</span>
-                <span className="essay__arrow" aria-hidden="true">→</span>
-              </a>
-              <span className="essay__index mono">001 / 006</span>
-            </div>
+      {/* Ensaios — slideshow editorial */}
+      <section
+        className="ensaios reveal"
+        aria-label="Ensaios editoriais"
+        onMouseEnter={() => (ensaiosPaused.current = true)}
+        onMouseLeave={() => (ensaiosPaused.current = false)}
+      >
+        <div className="ensaios__frame">
+          <div className="ensaios__badge" aria-hidden="true">
+            <span>L</span>
+            <em>/</em>
+            <span>A</span>
           </div>
 
-          <div className="essay__media">
-            <img
-              src="/images/intro-texture.png"
-              alt="Textura de madeira maciça em close — veios e grãos"
-              className="essay__texture"
-              loading="lazy"
-            />
-            <img
-              src="/images/stair-detail.png"
-              alt="Detalhe escultural — escada helicoidal em madeira maciça"
-              className="essay__object"
-              loading="lazy"
-            />
+          <div
+            className="ensaios__track"
+            style={{ transform: `translateX(-${ensaioIdx * 100}%)` }}
+          >
+            {ENSAIOS.map((e, i) => (
+              <article
+                className="ensaio-slide"
+                key={e.id}
+                aria-hidden={i !== ensaioIdx}
+                aria-roledescription="slide"
+              >
+                <div className="ensaio-slide__media">
+                  <img src={e.img} alt={e.alt} loading="lazy" />
+                </div>
+                <div className="ensaio-slide__panel">
+                  <span className="ensaio-slide__vertical mono">{e.vertical}</span>
+                  <span className="ensaio-slide__dots" aria-hidden="true"></span>
+                  <h2 className="ensaio-slide__word">{e.word}</h2>
+                  <div className="ensaio-slide__body">
+                    <h3 className="ensaio-slide__title">{e.title}</h3>
+                    <p className="ensaio-slide__text">{e.text}</p>
+                    <a href="#projetos" className="ensaio-slide__cta">
+                      <span>Ver ensaio</span>
+                      <span className="ensaio-slide__cta-arrow" aria-hidden="true">↗</span>
+                    </a>
+                  </div>
+                  <span className="ensaio-slide__search" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round">
+                      <circle cx="10.5" cy="10.5" r="6.5" />
+                      <line x1="15.5" y1="15.5" x2="20" y2="20" />
+                    </svg>
+                  </span>
+                </div>
+              </article>
+            ))}
           </div>
 
-          <div className="essay__scroll" aria-hidden="true">
-            <span>Role</span>
-            <span className="essay__scroll-arrow">↓</span>
+          <div className="ensaios__controls" role="group" aria-label="Navegação dos ensaios">
+            <button
+              type="button"
+              className="ensaios__arrow"
+              aria-label="Ensaio anterior"
+              onClick={() =>
+                setEnsaioIdx((i) => (i - 1 + ENSAIOS.length) % ENSAIOS.length)
+              }
+            >
+              ←
+            </button>
+            <span className="ensaios__counter mono">
+              {String(ensaioIdx + 1).padStart(2, "0")} / {String(ENSAIOS.length).padStart(2, "0")}
+            </span>
+            <button
+              type="button"
+              className="ensaios__arrow"
+              aria-label="Próximo ensaio"
+              onClick={() => setEnsaioIdx((i) => (i + 1) % ENSAIOS.length)}
+            >
+              →
+            </button>
+          </div>
+
+          <div className="ensaios__dots-nav" role="tablist" aria-label="Selecionar ensaio">
+            {ENSAIOS.map((e, i) => (
+              <button
+                key={e.id}
+                type="button"
+                role="tab"
+                aria-selected={i === ensaioIdx}
+                aria-label={`Ensaio ${i + 1}: ${e.title}`}
+                className={`ensaios__dot ${i === ensaioIdx ? "is-active" : ""}`}
+                onClick={() => setEnsaioIdx(i)}
+              />
+            ))}
           </div>
         </div>
       </section>
