@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import { PROJECTS, type Project } from "../data/projects";
 import { routes } from "../lib/useHashRoute";
 import { shouldUseSmoothScroll } from "../lib/device";
+import { useCustomCursor } from "../lib/useCustomCursor";
 
 const TAGS = ["Todos", "Residencial", "Interiores", "Comercial", "Rural"] as const;
 type Tag = (typeof TAGS)[number];
@@ -13,6 +14,9 @@ export default function PortfolioPage() {
   const [filter, setFilter] = useState<Tag>("Todos");
   const [hovered, setHovered] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  useCustomCursor();
+
 
   const filtered = useMemo<Project[]>(() => {
     if (filter === "Todos") return PROJECTS;
