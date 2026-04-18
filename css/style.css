@@ -799,45 +799,55 @@ button {
   max-width: 22ch;
 }
 
-/* ---------- Metrics ---------- */
-.metrics {
+/* ---------- Credos (editorial principles) ---------- */
+.credos {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1px;
-  background: var(--line);
   border-block: 1px solid var(--line);
-}
-@media (min-width: 700px) { .metrics { grid-template-columns: repeat(4, 1fr); } }
-
-.metric {
   background: var(--ink);
-  padding: 3rem var(--edge);
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+}
+@media (min-width: 820px) {
+  .credos { grid-template-columns: repeat(2, 1fr); }
+  .credos .credo:nth-child(odd)  { border-right: 1px solid var(--line); }
+  .credos .credo:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+}
+@media (max-width: 819px) {
+  .credos .credo + .credo { border-top: 1px solid var(--line); }
 }
 
-.metric__num {
+.credo {
+  padding: clamp(2.4rem, 5vw, 4.5rem) var(--edge);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+}
+
+.credo__mark {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1rem, 1.1vw, 1.15rem);
+  color: var(--clay);
+  letter-spacing: 0.18em;
+  padding-top: 0.6em;
+  min-width: 2.4ch;
+}
+
+.credo__text {
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: clamp(3.5rem, 7vw, 6rem);
-  line-height: 0.9;
-  letter-spacing: -0.04em;
+  font-size: clamp(1.45rem, 2.2vw, 2.15rem);
+  line-height: 1.25;
+  letter-spacing: -0.012em;
   color: var(--bone);
+  max-width: 28ch;
 }
 
-.metric__num em {
+.credo__text em {
   font-style: italic;
   color: var(--clay);
-}
-
-.metric__label {
-  font-family: var(--font-mono);
-  font-size: var(--t-xs);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--bone-warm);
-  opacity: 0.75;
+  font-weight: 300;
 }
 
 /* ---------- About split ---------- */
