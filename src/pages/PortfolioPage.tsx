@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { PROJECTS, type Project } from "../data/projects";
 import { routes } from "../lib/useHashRoute";
+import { shouldUseSmoothScroll } from "../lib/device";
 
 const TAGS = ["Todos", "Residencial", "Interiores", "Comercial", "Rural"] as const;
 type Tag = (typeof TAGS)[number];
@@ -20,11 +21,11 @@ export default function PortfolioPage() {
 
   // Smooth scroll + revelação
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const useLenis = shouldUseSmoothScroll();
     let lenis: Lenis | null = null;
     let rafId: number | null = null;
 
-    if (!prefersReducedMotion) {
+    if (useLenis) {
       lenis = new Lenis({ duration: 1.2, smoothWheel: true });
       lenis.on("scroll", ScrollTrigger.update);
       const raf = (time: number) => {

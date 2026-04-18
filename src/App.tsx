@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { PROJECTS } from "./data/projects";
 import { routes } from "./lib/useHashRoute";
+import { shouldRunParallax, shouldUseSmoothScroll } from "./lib/device";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -61,11 +62,13 @@ export default function App() {
 
   useEffect(() => {
     // ---------- Smooth scroll (Lenis) ----------
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Em touch/mobile usamos o scroll nativo: Lenis feels sticky em iOS/Android.
+    const useLenis = shouldUseSmoothScroll();
+    const canParallax = shouldRunParallax();
     let lenis: Lenis | null = null;
     let rafId: number | null = null;
 
-    if (!prefersReducedMotion) {
+    if (useLenis) {
       lenis = new Lenis({
         duration: 1.25,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -297,60 +300,62 @@ export default function App() {
     // Horizontal projects — native horizontal scroll (no page pin)
     // The track scrolls horizontally on its own axis; the page can be scrolled past freely.
 
-    // Fullbleed zoom
-    document.querySelectorAll<HTMLImageElement>(".fullbleed img").forEach((img) => {
-      gsap.fromTo(
-        img,
-        { scale: 1.18 },
-        {
-          scale: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: img.closest(".fullbleed") as HTMLElement,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.1,
-          },
-        }
-      );
-    });
+    // Fullbleed zoom — parallax pesado, só em desktop
+    if (canParallax) {
+      document.querySelectorAll<HTMLImageElement>(".fullbleed img").forEach((img) => {
+        gsap.fromTo(
+          img,
+          { scale: 1.18 },
+          {
+            scale: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: img.closest(".fullbleed") as HTMLElement,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.1,
+            },
+          }
+        );
+      });
 
-    // Ensaios slideshow — parallax sutil na imagem de cada slide
-    document.querySelectorAll<HTMLElement>(".ensaio-slide__media img").forEach((img) => {
-      gsap.fromTo(
-        img,
-        { scale: 1.1, yPercent: -2 },
-        {
-          scale: 1,
-          yPercent: 2,
-          ease: "none",
-          scrollTrigger: {
-            trigger: img.closest(".ensaios") as HTMLElement,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.1,
-          },
-        }
-      );
-    });
+      // Ensaios slideshow — parallax sutil na imagem de cada slide
+      document.querySelectorAll<HTMLElement>(".ensaio-slide__media img").forEach((img) => {
+        gsap.fromTo(
+          img,
+          { scale: 1.1, yPercent: -2 },
+          {
+            scale: 1,
+            yPercent: 2,
+            ease: "none",
+            scrollTrigger: {
+              trigger: img.closest(".ensaios") as HTMLElement,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.1,
+            },
+          }
+        );
+      });
 
-    // Footer mega drift
-    const mega = document.querySelector<HTMLElement>(".footer__mega");
-    if (mega) {
-      gsap.fromTo(
-        mega,
-        { xPercent: 8 },
-        {
-          xPercent: -8,
-          ease: "none",
-          scrollTrigger: {
-            trigger: mega,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.2,
-          },
-        }
-      );
+      // Footer mega drift
+      const mega = document.querySelector<HTMLElement>(".footer__mega");
+      if (mega) {
+        gsap.fromTo(
+          mega,
+          { xPercent: 8 },
+          {
+            xPercent: -8,
+            ease: "none",
+            scrollTrigger: {
+              trigger: mega,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.2,
+            },
+          }
+        );
+      }
     }
 
     // Refresh once images load

@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { getNextProject, getProjectBySlug, type ProjectImage } from "../data/projects";
 import { routes } from "../lib/useHashRoute";
+import { shouldRunParallax, shouldUseSmoothScroll } from "../lib/device";
 
 type Props = { slug: string };
 
@@ -13,11 +14,12 @@ export default function ProjectPage({ slug }: Props) {
   const pageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const useLenis = shouldUseSmoothScroll();
+    const canParallax = shouldRunParallax();
     let lenis: Lenis | null = null;
     let rafId: number | null = null;
 
-    if (!prefersReducedMotion) {
+    if (useLenis) {
       lenis = new Lenis({ duration: 1.25, smoothWheel: true });
       lenis.on("scroll", ScrollTrigger.update);
       const raf = (time: number) => {
@@ -53,19 +55,21 @@ export default function ProjectPage({ slug }: Props) {
         );
       });
 
-      // parallax leve nas imagens da galeria
-      gsap.utils.toArray<HTMLElement>(".pp-gallery img").forEach((img) => {
-        gsap.to(img, {
-          yPercent: -8,
-          ease: "none",
-          scrollTrigger: {
-            trigger: img.parentElement!,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
+      // parallax leve nas imagens da galeria — só em desktop
+      if (canParallax) {
+        gsap.utils.toArray<HTMLElement>(".pp-gallery img").forEach((img) => {
+          gsap.to(img, {
+            yPercent: -8,
+            ease: "none",
+            scrollTrigger: {
+              trigger: img.parentElement!,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          });
         });
-      });
+      }
     }, pageRef);
 
     return () => {
