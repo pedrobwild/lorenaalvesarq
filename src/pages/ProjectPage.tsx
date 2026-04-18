@@ -235,7 +235,7 @@ function GalleryTile({ img, onOpen }: { img: ProjectImage; onOpen: () => void })
   const klass = `pp-tile pp-tile--${img.format ?? "full"} pp-reveal`;
   return (
     <figure className={klass}>
-      <button type="button" className="pp-tile__btn" onClick={onOpen} data-cursor="hover">
+      <button type="button" className="pp-tile__btn" onClick={onOpen} data-cursor="zoom">
         <img src={img.src} alt={img.alt} loading="lazy" />
         <span className="pp-tile__zoom mono">ampliar +</span>
       </button>
@@ -267,7 +267,7 @@ function Lightbox({
       <button type="button" className="pp-lb__nav pp-lb__nav--prev" onClick={onPrev} aria-label="Anterior">
         ←
       </button>
-      <figure className="pp-lb__fig">
+      <figure className="pp-lb__fig" data-cursor="zoom">
         <img src={img.src} alt={img.alt} />
         <figcaption className="pp-lb__cap mono">
           {index + 1} / {images.length} — {img.alt}
