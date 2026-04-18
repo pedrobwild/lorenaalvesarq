@@ -262,6 +262,45 @@ export default function App() {
       );
     });
 
+    // Essay split — parallax na textura + drift no objeto
+    document.querySelectorAll<HTMLElement>(".essay").forEach((section) => {
+      const texture = section.querySelector<HTMLImageElement>(".essay__texture");
+      const object = section.querySelector<HTMLImageElement>(".essay__object");
+      if (texture) {
+        gsap.fromTo(
+          texture,
+          { scale: 1.15, yPercent: -3 },
+          {
+            scale: 1,
+            yPercent: 3,
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.1,
+            },
+          }
+        );
+      }
+      if (object) {
+        gsap.fromTo(
+          object,
+          { yPercent: 8 },
+          {
+            yPercent: -8,
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.2,
+            },
+          }
+        );
+      }
+    });
+
     // Footer mega drift
     const mega = document.querySelector<HTMLElement>(".footer__mega");
     if (mega) {
@@ -539,18 +578,56 @@ export default function App() {
         </div>
       </section>
 
-      {/* Fullbleed 1 */}
-      <section className="fullbleed reveal">
-        <img
-          src="/images/veranda.png"
-          alt="Varanda tropical com deck em ipê e piscina de borda infinita voltada para o mar"
-          loading="lazy"
-        />
-        <div className="fullbleed__caption">
-          <p className="fullbleed__quote">
-            "O silêncio entre os volumes é parte do projeto. <br />É onde a luz se senta."
-          </p>
-          <p className="mono">— Ensaio · Casa Pau-Brasil</p>
+      {/* Ensaio editorial — composição dupla (textura + objeto escultural) */}
+      <section className="essay reveal" aria-label="Ensaio · Casa Pau-Brasil">
+        <div className="essay__grid">
+          <div className="essay__copy">
+            <div className="essay__top">
+              <span className="essay__tag">Ensaio · Casa Pau-Brasil</span>
+            </div>
+
+            <h2 className="essay__title">
+              <span>O silêncio</span>
+              <span><em>entre os volumes</em></span>
+            </h2>
+
+            <div className="essay__meta">
+              <div className="essay__num">02.</div>
+              <p className="essay__lede">
+                Uma varanda suspensa sobre o mar — onde a luz se senta e a
+                madeira carrega o gesto do ofício em cada junta. É nos intervalos
+                que a casa respira.
+              </p>
+            </div>
+
+            <div className="essay__footer">
+              <a href="#projetos" className="essay__link">
+                <span>Ver ensaio completo</span>
+                <span className="essay__arrow" aria-hidden="true">→</span>
+              </a>
+              <span className="essay__index mono">001 / 006</span>
+            </div>
+          </div>
+
+          <div className="essay__media">
+            <img
+              src="/images/intro-texture.png"
+              alt="Textura de madeira maciça em close — veios e grãos"
+              className="essay__texture"
+              loading="lazy"
+            />
+            <img
+              src="/images/stair-detail.png"
+              alt="Detalhe escultural — escada helicoidal em madeira maciça"
+              className="essay__object"
+              loading="lazy"
+            />
+          </div>
+
+          <div className="essay__scroll" aria-hidden="true">
+            <span>Role</span>
+            <span className="essay__scroll-arrow">↓</span>
+          </div>
         </div>
       </section>
 
