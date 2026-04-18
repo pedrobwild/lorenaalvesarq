@@ -47,23 +47,35 @@ export function useCustomCursor() {
     };
     render();
 
+    // Define o conteúdo interno do cursor (label "ver +" para variante zoom)
+    c.innerHTML = '<span class="cursor__label">ver <i>+</i></span>';
+
+    const HOVER_SEL = 'a, button, .project-card, .process__item, [data-cursor="hover"]';
+    const ZOOM_SEL = '[data-cursor="zoom"]';
+
     // Hover state — usa delegação para cobrir elementos adicionados depois
     const enter = (e: Event) => {
       const t = e.target as HTMLElement | null;
       if (!t) return;
-      if (t.closest('a, button, .project-card, .process__item, [data-cursor="hover"]')) {
+      if (t.closest(ZOOM_SEL)) {
+        c?.classList.add("cursor--zoom");
+        c?.classList.remove("cursor--hover");
+      } else if (t.closest(HOVER_SEL)) {
         c?.classList.add("cursor--hover");
       }
     };
     const leave = (e: Event) => {
       const t = e.target as HTMLElement | null;
       if (!t) return;
-      if (t.closest('a, button, .project-card, .process__item, [data-cursor="hover"]')) {
+      if (t.closest(ZOOM_SEL)) {
+        c?.classList.remove("cursor--zoom");
+      } else if (t.closest(HOVER_SEL)) {
         c?.classList.remove("cursor--hover");
       }
     };
     document.addEventListener("mouseover", enter);
     document.addEventListener("mouseout", leave);
+
 
     return () => {
       cancelAnimationFrame(rafId);
