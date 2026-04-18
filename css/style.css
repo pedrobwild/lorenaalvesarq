@@ -65,11 +65,13 @@ body {
   color: var(--bone);
   background: var(--ink);
   overflow-x: hidden;
-  cursor: none;
 }
 
-@media (max-width: 900px) {
-  body { cursor: auto; }
+/* Cursor customizado só onde faz sentido (desktop com mouse) */
+@media (hover: hover) and (pointer: fine) {
+  body { cursor: none; }
+  button { cursor: none; }
+  a { cursor: none; }
 }
 
 ::selection {
@@ -87,10 +89,32 @@ a {
 
 button {
   font: inherit;
-  cursor: none;
   background: none;
   border: none;
   color: inherit;
+}
+
+/* ---------- Skip link (acessibilidade) ---------- */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 1000;
+  padding: 0.75rem 1.25rem;
+  background: var(--bone);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  transition: top 0.3s var(--ease);
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 1rem;
+  outline: 2px solid var(--clay);
+  outline-offset: 4px;
 }
 
 /* ---------- Typography helpers ---------- */
@@ -204,7 +228,10 @@ button {
   border-radius: 2px;
 }
 
-@media (max-width: 900px) { .cursor { display: none; } }
+/* Cursor customizado escondido em qualquer device sem hover/pointer fino */
+@media not all and (hover: hover) and (pointer: fine) {
+  .cursor { display: none; }
+}
 
 /* ---------- Nav ---------- */
 .nav {
@@ -555,7 +582,7 @@ button {
   letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--bone-warm);
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 .section__eyebrow::before {
@@ -664,7 +691,7 @@ button {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--bone-warm);
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 .projects__track {
@@ -909,7 +936,7 @@ button {
   margin-bottom: 1.1em;
 }
 
-.about__bio p:first-letter {
+.about__bio p:first-of-type:first-letter {
   font-family: var(--font-display);
   font-size: 3em;
   float: left;
@@ -1002,7 +1029,8 @@ button {
   transition: transform 0.6s var(--ease), color 0.6s var(--ease);
 }
 
-.process__item:hover .process__title {
+.process__item:hover .process__title,
+.process__item:focus-within .process__title {
   transform: translateX(1.5rem);
   color: var(--clay);
   font-style: italic;
@@ -1019,7 +1047,8 @@ button {
   line-height: 1.5;
 }
 
-.process__item:hover .process__desc {
+.process__item:hover .process__desc,
+.process__item:focus-within .process__desc {
   opacity: 0.85;
   transform: translateY(0);
 }
@@ -1208,7 +1237,7 @@ button {
   font-size: var(--t-xs);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  opacity: 0.55;
+  opacity: 0.75;
 }
 
 .footer__mega {
@@ -1289,7 +1318,7 @@ button {
   .nav__toggle { width: 40px; height: 40px; } /* larger touch target */
 
   /* ---------- Hero ---------- */
-  .hero { padding: 0 var(--edge) 2.5rem; min-height: 100svh; min-height: 100vh; }
+  .hero { padding: 0 var(--edge) 2.5rem; min-height: 100vh; min-height: 100svh; }
   .hero__content { gap: 1.5rem; padding-bottom: 2.5rem; }
   .hero__title {
     font-size: clamp(3.4rem, 15.5vw, 4.8rem);
@@ -1327,7 +1356,7 @@ button {
   /* ---------- Credos ---------- */
   .credos { padding: 0 var(--edge); margin-top: 1.5rem; }
   .credos .credo { padding: 1.75rem 0; gap: 1rem; }
-  .credos .credo__num { font-size: 0.95rem; min-width: 2ch; opacity: 0.7; }
+  .credos .credo__mark { font-size: 0.95rem; min-width: 2ch; opacity: 0.85; }
   .credos .credo__text { font-size: clamp(1.15rem, 5.2vw, 1.45rem); line-height: 1.35; }
 
   /* ---------- About ---------- */
@@ -1343,14 +1372,14 @@ button {
   .pillars { padding: 0 var(--edge); gap: 0; }
   .pillar { padding: 1.5rem 0; border-top: 1px solid var(--line); }
   .pillar:first-child { border-top: 0; }
-  .pillar h3 { font-size: 1.35rem; line-height: 1.2; }
-  .pillar p { font-size: 0.98rem; line-height: 1.55; }
+  .pillar .pillar__title { font-size: 1.35rem; line-height: 1.2; }
+  .pillar .pillar__text { font-size: 0.98rem; line-height: 1.55; }
 
   /* ---------- Process ---------- */
   .process { padding: 0 var(--edge); }
   .process__item { padding: 1.25rem 0; }
-  .process__item .mono { font-size: 0.7rem; }
-  .process__item h4 { font-size: 1.1rem; }
+  .process__item .process__num { font-size: 0.7rem; }
+  .process__item .process__title { font-size: 1.1rem; }
 
   /* ---------- CTA ---------- */
   .cta { padding: calc(var(--section) * 0.9) 0; }
@@ -1359,7 +1388,7 @@ button {
   .cta__details { gap: 0; }
   .cta__detail { padding: 1.25rem 0; }
   .cta__detail .label { font-size: 0.7rem; letter-spacing: 0.22em; }
-  .cta__button { min-height: 56px; padding: 1.1rem 1.75rem; font-size: 0.78rem; letter-spacing: 0.22em; } /* larger touch target */
+  .cta .btn-big { min-height: 56px; padding: 1.1rem 1.75rem; font-size: 0.78rem; letter-spacing: 0.22em; } /* larger touch target */
 
   /* ---------- Footer ---------- */
   .footer { padding: 3.5rem var(--edge) max(2rem, env(safe-area-inset-bottom)); }

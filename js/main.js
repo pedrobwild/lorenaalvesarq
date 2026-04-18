@@ -11,12 +11,16 @@ if (window.Lenis && !window.matchMedia('(prefers-reduced-motion: reduce)').match
     wheelMultiplier: 1,
     smoothWheel: true
   });
-  function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-  requestAnimationFrame(raf);
+
   if (window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add((time) => { lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
+  } else {
+    // Fallback: RAF manual só quando GSAP não está disponível
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
   }
 }
 
@@ -24,11 +28,25 @@ if (window.Lenis && !window.matchMedia('(prefers-reduced-motion: reduce)').match
 window.addEventListener('load', () => {
   const loader = document.querySelector('.loader');
   if (!loader) return;
+
+  // Safety net: se GSAP não carregar, derruba o loader em 5s
+  const failsafe = setTimeout(() => {
+    loader.style.transform = 'translateY(-100%)';
+    loader.style.pointerEvents = 'none';
+    document.body.classList.add('is-ready');
+    document.querySelectorAll('.hero__title .word > span, .manifesto__text .reveal-line > span, .reveal-mask > *')
+      .forEach(el => { el.style.transform = 'none'; });
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+  }, 5000);
+
+  if (!window.gsap) return; // noscript/CSS fallback cuida do resto
+
   const mark = loader.querySelector('.loader__mark span');
   const line = loader.querySelector('.loader__line');
   const counter = loader.querySelector('.loader__counter');
 
   const tl = gsap.timeline({ onComplete: () => {
+    clearTimeout(failsafe);
     loader.style.pointerEvents = 'none';
     document.body.classList.add('is-ready');
     startHeroAnim();
@@ -67,7 +85,8 @@ function startHeroAnim() {
 // ---------- Custom cursor ----------
 (function cursor() {
   const c = document.querySelector('.cursor');
-  if (!c || window.matchMedia('(max-width: 900px)').matches) return;
+  // Só em dispositivos com hover real + pointer fino (desktops)
+  if (!c || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   let x = window.innerWidth / 2, y = window.innerHeight / 2;
   let tx = x, ty = y;
 
@@ -99,24 +118,31 @@ function startHeroAnim() {
   }, { passive: true });
 })();
 
-// ---------- Mobile menu ----------
+// ---------- Mobile menu (com ARIA) ----------
 (function mobileMenu() {
   const btn = document.querySelector('.nav__toggle');
   const menu = document.querySelector('.mobile-menu');
   if (!btn || !menu) return;
-  btn.addEventListener('click', () => {
-    menu.classList.toggle('is-open');
-    document.body.classList.toggle('menu-open');
+
+  const setState = (open) => {
+    menu.classList.toggle('is-open', open);
+    document.body.classList.toggle('menu-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    menu.setAttribute('aria-hidden', String(!open));
+  };
+
+  btn.addEventListener('click', () => setState(!menu.classList.contains('is-open')));
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setState(false)));
+
+  // Fecha com Esc
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu.classList.contains('is-open')) setState(false);
   });
-  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    menu.classList.remove('is-open');
-    document.body.classList.remove('menu-open');
-  }));
 })();
 
-// ---------- Hero parallax + ticker ----------
+// ---------- Hero parallax + reveals (requer GSAP) ----------
 if (window.gsap && window.ScrollTrigger) {
-  gsap.registerPlugin(ScrollTrigger);
 
   const heroImg = document.querySelector('.hero__media img');
   if (heroImg) {
@@ -167,7 +193,7 @@ if (window.gsap && window.ScrollTrigger) {
         }
       });
 
-      // subtle per-card parallax on images — find parent containerAnimation safely
+      // subtle per-card parallax on images
       requestAnimationFrame(() => {
         const containerST = ScrollTrigger.getAll().find(st => st.trigger === document.querySelector('.projects') && st.pin);
         if (!containerST || !containerST.animation) return;
@@ -183,32 +209,6 @@ if (window.gsap && window.ScrollTrigger) {
       });
     }
   }
-
-  // ---------- Marquee seamless ----------
-  document.querySelectorAll('.marquee__track').forEach(tr => {
-    // content is doubled in HTML
-  });
-
-  // ---------- Metric counters ----------
-  document.querySelectorAll('[data-count]').forEach(el => {
-    const target = parseFloat(el.dataset.count);
-    const suffix = el.dataset.suffix || '';
-    const decimals = el.dataset.decimals ? parseInt(el.dataset.decimals) : 0;
-    const obj = { v: 0 };
-    ScrollTrigger.create({
-      trigger: el,
-      start: 'top 85%',
-      once: true,
-      onEnter: () => {
-        gsap.to(obj, {
-          v: target,
-          duration: 2,
-          ease: 'power3.out',
-          onUpdate: () => { el.textContent = obj.v.toFixed(decimals) + suffix; }
-        });
-      }
-    });
-  });
 
   // ---------- Fullbleed image zoom on scroll ----------
   document.querySelectorAll('.fullbleed img').forEach(img => {

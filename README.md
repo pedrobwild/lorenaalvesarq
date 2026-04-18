@@ -16,9 +16,8 @@ Site estático (HTML + CSS + JS vanilla) com:
 .
 ├── index.html          Home completa (loader, hero, projetos, sobre, método, contato)
 ├── css/style.css       Design system completo (tokens, tipografia, todas as seções)
-├── js/main.js          Interações: Lenis, cursor, loader, reveals, horizontal scroll, counters
-├── images/             Imagens do site (hero, 6 projetos, retrato, ambientes)
-└── pages/              Páginas internas (expandir quando necessário)
+├── js/main.js          Interações: Lenis, cursor, loader, reveals, horizontal scroll
+└── images/             Imagens do site (hero, 6 projetos, retrato, ambientes)
 ```
 
 ## Rodar localmente
