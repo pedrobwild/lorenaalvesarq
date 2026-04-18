@@ -488,21 +488,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Fullbleed 1 */}
-      <section className="fullbleed reveal">
-        <img
-          src="/images/veranda.png"
-          alt="Varanda tropical com deck em ipê e piscina de borda infinita voltada para o mar"
-          loading="lazy"
-        />
-        <div className="fullbleed__caption">
-          <p className="fullbleed__quote">
-            "O silêncio entre os volumes é parte do projeto. <br />É onde a luz se senta."
-          </p>
-          <p className="mono">— Ensaio · Casa Pau-Brasil</p>
-        </div>
-      </section>
-
       {/* Credos */}
       <section className="credos" aria-label="Princípios do estúdio">
         {[
@@ -566,6 +551,21 @@ export default function App() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Fullbleed 1 */}
+      <section className="fullbleed reveal">
+        <img
+          src="/images/veranda.png"
+          alt="Varanda tropical com deck em ipê e piscina de borda infinita voltada para o mar"
+          loading="lazy"
+        />
+        <div className="fullbleed__caption">
+          <p className="fullbleed__quote">
+            "O silêncio entre os volumes é parte do projeto. <br />É onde a luz se senta."
+          </p>
+          <p className="mono">— Ensaio · Casa Pau-Brasil</p>
         </div>
       </section>
 
