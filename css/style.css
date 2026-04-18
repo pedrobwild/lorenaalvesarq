@@ -390,11 +390,11 @@ button {
 .hero__title {
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: var(--t-hero);
+  font-size: clamp(4.4rem, 11vw, 11.5rem);
   line-height: 0.88;
   letter-spacing: -0.035em;
   color: var(--bone);
-  max-width: 14ch;
+  max-width: 16ch;
 }
 
 .hero__title em {
@@ -424,11 +424,20 @@ button {
 }
 
 .hero__lede {
-  max-width: 32ch;
+  max-width: 38ch;
   color: var(--bone);
-  opacity: 0.82;
-  font-size: var(--t-base);
-  line-height: 1.5;
+  opacity: 0.88;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.2rem, 1.6vw, 1.65rem);
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+}
+
+.hero__lede em {
+  font-style: italic;
+  color: var(--clay);
+  font-weight: 300;
 }
 
 .hero__scroll {
