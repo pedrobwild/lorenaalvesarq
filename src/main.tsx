@@ -1,34 +1,59 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import PortfolioPage from "./pages/PortfolioPage";
 import ProjectPage from "./pages/ProjectPage";
-import { useHashRoute } from "./lib/useHashRoute";
+import { useHashRoute, type Route } from "./lib/useHashRoute";
 import "./index.css";
+
+const TRANSITION_MS = 380;
+
+function renderRoute(route: Route) {
+  if (route.name === "portfolio") return <PortfolioPage />;
+  if (route.name === "project") return <ProjectPage slug={route.slug} />;
+  // home (com ou sem âncora) e not-found caem na App (que trata âncoras legadas)
+  return <App />;
+}
+
+function routeKeyOf(route: Route) {
+  return route.name === "project" ? `project:${route.slug}` : route.name;
+}
 
 function Root() {
   const route = useHashRoute();
-  const lastRouteKey = useRef<string>("");
 
-  // Chave que muda quando entramos/saímos de uma rota "real" (não âncora).
-  const routeKey =
-    route.name === "project" ? `project:${route.slug}` : route.name;
+  // "displayed" é a rota que está renderizada no DOM. Quando a rota real muda,
+  // disparamos um fade-out, trocamos `displayed` no meio e fazemos fade-in.
+  const [displayed, setDisplayed] = useState<Route>(route);
+  const [phase, setPhase] = useState<"in" | "out">("in");
+  const lastRouteKey = useRef<string>(routeKeyOf(route));
 
-  // Sempre que a página troca (home <-> portfolio <-> project), voltamos ao topo.
-  // Sem isso, clicar em "Portifólio" estando rolado para baixo na home renderiza
-  // a nova página, mas o scroll continua onde estava e parece que nada aconteceu.
   useEffect(() => {
-    if (lastRouteKey.current && lastRouteKey.current !== routeKey) {
+    const nextKey = routeKeyOf(route);
+    if (nextKey === lastRouteKey.current) return;
+
+    // Fase 1: fade-out da rota atual
+    setPhase("out");
+    const swapTimer = window.setTimeout(() => {
+      // Troca o conteúdo e volta ao topo no momento "invisível"
+      setDisplayed(route);
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    }
-    lastRouteKey.current = routeKey;
-  }, [routeKey]);
+      lastRouteKey.current = nextKey;
+      // Fase 2: fade-in da nova rota
+      requestAnimationFrame(() => setPhase("in"));
+    }, TRANSITION_MS);
 
-  if (route.name === "portfolio") return <PortfolioPage />;
-  if (route.name === "project") return <ProjectPage slug={route.slug} />;
+    return () => window.clearTimeout(swapTimer);
+  }, [route]);
 
-  // home (com ou sem âncora) e not-found caem na App (que trata âncoras legadas)
-  return <App />;
+  return (
+    <div
+      className={`route-transition route-transition--${phase}`}
+      style={{ ["--route-transition-ms" as string]: `${TRANSITION_MS}ms` }}
+    >
+      {renderRoute(displayed)}
+    </div>
+  );
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
