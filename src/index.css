@@ -702,8 +702,16 @@ button {
   display: flex;
   gap: clamp(1.5rem, 3vw, 2.5rem);
   padding: 0 var(--edge);
-  will-change: transform;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  will-change: scroll-position;
 }
+.projects__track::-webkit-scrollbar { display: none; }
+.projects__track > .project-card { scroll-snap-align: start; }
 
 .project-card {
   flex: 0 0 clamp(280px, 36vw, 520px);
