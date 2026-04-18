@@ -230,8 +230,30 @@ button {
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
-  transition: width 0.3s var(--ease), height 0.3s var(--ease), background 0.3s var(--ease);
+  transition: width 0.3s var(--ease), height 0.3s var(--ease),
+    background 0.3s var(--ease), color 0.3s var(--ease);
   mix-blend-mode: difference;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: var(--ink);
+}
+
+.cursor__label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.cursor__label i {
+  font-style: normal;
+  display: inline-block;
+  margin-left: 0.15em;
 }
 
 .cursor--hover {
@@ -244,6 +266,18 @@ button {
   width: 2px;
   height: 20px;
   border-radius: 2px;
+}
+
+/* Variante "ampliar" — círculo grande com label "ver +" */
+.cursor--zoom {
+  width: 96px;
+  height: 96px;
+  background: var(--bone);
+  mix-blend-mode: normal;
+}
+.cursor--zoom .cursor__label {
+  opacity: 1;
+  transform: scale(1);
 }
 
 /* Cursor customizado escondido em qualquer device sem hover/pointer fino */
