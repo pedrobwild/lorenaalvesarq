@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import { PROJECTS } from "./data/projects";
+import { routes } from "./lib/useHashRoute";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -395,7 +397,7 @@ export default function App() {
           <span>Lorena Alves</span>
         </a>
         <nav className="nav__menu" aria-label="Principal">
-          <a href="#projetos">Portifólio</a>
+          <a href={routes.portfolio}>Portifólio</a>
           <a href="#estudio">serviços</a>
           <a href="#metodo">Método</a>
           <a href="#contato">Sobre</a>
@@ -417,7 +419,7 @@ export default function App() {
       {/* Mobile menu */}
       <div className="mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav>
-          <a href="#projetos">Portifólio</a>
+          <a href={routes.portfolio}>Portifólio</a>
           <a href="#estudio">serviços</a>
           <a href="#metodo">Método</a>
           <a href="#contato">Sobre</a>
@@ -526,18 +528,18 @@ export default function App() {
           <div className="projects__count mono">Selecionados · 2024 — 2026</div>
         </div>
         <div className="projects__track">
-          {[
-            { n: "01", title: "Casa", em: "Paineira", tag: "Residencial", year: "2026", img: "project-01.png", alt: "Casa Paineira — pavilhão horizontal de concreto e ipê" },
-            { n: "02", title: "Casa", em: "Jequitibá", tag: "Interiores", year: "2025", img: "project-02.png", alt: "Casa Jequitibá — interior contemporâneo brasileiro" },
-            { n: "03", title: "Apto.", em: "Higienópolis", tag: "Residencial", year: "2025", img: "project-03.png", alt: "Apartamento Higienópolis — sala com estante em walnut" },
-            { n: "04", title: "Casa", em: "Pau-Brasil", tag: "Residencial", year: "2025", img: "project-04.png", alt: "Casa Pau-Brasil — residência de praia com volume cantilevered" },
-            { n: "05", title: "Restaurante", em: "Takka", tag: "Comercial", year: "2024", img: "project-05.png", alt: "Restaurante Takka — interior sofisticado com banquettes em couro" },
-            { n: "06", title: "Fazenda", em: "Porto", tag: "Rural", year: "2024", img: "project-06.png", alt: "Fazenda Porto — pavilhão rural em taipa e telha cerâmica" },
-          ].map((p) => (
-            <article className="project-card" key={p.n}>
+          {PROJECTS.map((p) => (
+            <a
+              className="project-card"
+              key={p.slug}
+              href={routes.project(p.slug)}
+              data-cursor="hover"
+              aria-label={`Abrir projeto ${p.title} ${p.em}`}
+            >
               <div className="project-card__media">
-                <span className="project-card__number mono">{p.n} / 06</span>
-                <img src={`/images/${p.img}`} alt={p.alt} loading="lazy" />
+                <span className="project-card__number mono">{p.number} / 06</span>
+                <img src={p.cover} alt={p.alt} loading="lazy" />
+                <span className="project-card__go mono">ver projeto →</span>
               </div>
               <div className="project-card__meta">
                 <h3 className="project-card__title">
@@ -549,14 +551,14 @@ export default function App() {
                   <span>{p.year}</span>
                 </div>
               </div>
-            </article>
+            </a>
           ))}
         </div>
         <div className="projects__cta">
           <p className="mono" style={{ opacity: 0.6, maxWidth: "34ch" }}>
             Cada obra é um manuscrito — desenhada à mão, do primeiro risco ao último detalhe.
           </p>
-          <a href="#estudio" className="btn-big">
+          <a href={routes.portfolio} className="btn-big" data-cursor="hover">
             <span>VISITAR GALERIA COMPLETA</span>
             <span className="btn-big__arrow"></span>
           </a>
@@ -649,7 +651,7 @@ export default function App() {
                   <div className="ensaio-slide__body">
                     <h3 className="ensaio-slide__title">{e.title}</h3>
                     <p className="ensaio-slide__text">{e.text}</p>
-                    <a href="#projetos" className="ensaio-slide__cta">
+                    <a href={routes.portfolio} className="ensaio-slide__cta">
                       <span>Ver ensaio</span>
                       <span className="ensaio-slide__cta-arrow" aria-hidden="true">↗</span>
                     </a>
@@ -811,7 +813,7 @@ export default function App() {
                 <a href="#metodo">Método</a>
               </li>
               <li>
-                <a href="#projetos">Portifólio</a>
+                <a href={routes.portfolio}>Portifólio</a>
               </li>
             </ul>
           </div>
