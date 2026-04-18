@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------- Route transition (fade entre páginas) ---------- */
+.route-transition {
+  opacity: 1;
+  transition: opacity var(--route-transition-ms, 380ms) ease;
+  will-change: opacity;
+}
+.route-transition--out { opacity: 0; }
+.route-transition--in { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .route-transition { transition: none !important; }
+}
+
 /* =========================================================
    LORENA ALVES ARQUITETURA — PREMIUM
    Design system · Editorial · Brasilidade contemporânea
