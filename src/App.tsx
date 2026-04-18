@@ -325,10 +325,10 @@ export default function App() {
           <span>Lorena Alves</span>
         </a>
         <nav className="nav__menu" aria-label="Principal">
-          <a href="#projetos">Projetos</a>
-          <a href="#estudio">Estúdio</a>
+          <a href="#projetos">Portifólio</a>
+          <a href="#estudio">serviços</a>
           <a href="#metodo">Método</a>
-          <a href="#contato">Contato</a>
+          <a href="#contato">Sobre</a>
         </nav>
         <a className="nav__cta" href="#contato">
           ENTRE EM CONTATO
@@ -347,14 +347,14 @@ export default function App() {
       {/* Mobile menu */}
       <div className="mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav>
-          <a href="#projetos">Projetos</a>
-          <a href="#estudio">Estúdio</a>
+          <a href="#projetos">Portifólio</a>
+          <a href="#estudio">serviços</a>
           <a href="#metodo">Método</a>
-          <a href="#contato">Contato</a>
+          <a href="#contato">Sobre</a>
         </nav>
         <div>
           <div className="mono" style={{ marginBottom: "0.8rem" }}>
-            Contato
+            Sobre
           </div>
           <p style={{ fontFamily: "var(--font-display)", fontSize: "1.35rem" }}>
             contato@lorenaalves.arq.br
@@ -482,7 +482,7 @@ export default function App() {
             Cada obra é um manuscrito — desenhada à mão, do primeiro risco ao último detalhe.
           </p>
           <a href="#estudio" className="btn-big">
-            <span>Conhecer o estúdio</span>
+            <span>VISITAR GALERIA COMPLETA</span>
             <span className="btn-big__arrow"></span>
           </a>
         </div>
@@ -651,7 +651,7 @@ export default function App() {
             </p>
           </div>
           <div className="footer__col">
-            <h4>Estúdio</h4>
+            <h4>serviços</h4>
             <ul>
               <li>
                 <a href="#estudio">Sobre</a>
@@ -660,7 +660,7 @@ export default function App() {
                 <a href="#metodo">Método</a>
               </li>
               <li>
-                <a href="#projetos">Projetos</a>
+                <a href="#projetos">Portifólio</a>
               </li>
             </ul>
           </div>
@@ -685,7 +685,7 @@ export default function App() {
             </ul>
           </div>
           <div className="footer__col">
-            <h4>Contato</h4>
+            <h4>Sobre</h4>
             <ul>
               <li>
                 <a href="mailto:contato@lorenaalves.arq.br">contato@lorenaalves.arq.br</a>
