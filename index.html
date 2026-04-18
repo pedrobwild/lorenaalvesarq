@@ -1,28 +1,403 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lorena Alves Arq</title>
-    <meta name="description" content="A beautiful web application">
-    <meta name="author" content="Lovable" />
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0f0e0c" />
+<title>Lorena Alves — Arquitetura e Interiores</title>
+<meta name="description" content="Escritório de arquitetura e interiores de alto padrão. Projetos residenciais e comerciais com identidade brasileira, contemporânea e atemporal." />
+<meta property="og:title" content="Lorena Alves — Arquitetura de Alto Padrão" />
+<meta property="og:description" content="Projetos residenciais e comerciais com identidade brasileira, contemporânea e atemporal." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="./images/hero-main.png" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230f0e0c'/%3E%3Ctext x='50%25' y='52%25' text-anchor='middle' font-family='Georgia' font-size='30' font-style='italic' fill='%23b98867'%3El%3C/text%3E%3C/svg%3E" />
 
-    
-    
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1b7f1f6a-3d39-4e7c-9b6b-5934fe6193eb/id-preview-f1388939--85f56295-b53b-435e-bcca-233206093ba2.lovable.app-1776469050092.png">
+<!-- Preload hero -->
+<link rel="preload" as="image" href="./images/hero-main.png" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1b7f1f6a-3d39-4e7c-9b6b-5934fe6193eb/id-preview-f1388939--85f56295-b53b-435e-bcca-233206093ba2.lovable.app-1776469050092.png">
-    <meta property="og:title" content="Lorena Alves Arq">
-  <meta name="twitter:title" content="Lorena Alves Arq">
-  <meta property="og:description" content="A beautiful web application">
-  <meta name="twitter:description" content="A beautiful web application">
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="./css/style.css" />
 </head>
+<body>
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!-- Custom cursor -->
+<div class="cursor" aria-hidden="true"></div>
+
+<!-- Loader -->
+<div class="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <div class="loader__mark"><span><em style="font-style:italic">l</em>orena <em style="font-style:italic">a</em>lves</span></div>
+    <div class="loader__counter">000</div>
+  </div>
+  <div class="loader__line"></div>
+</div>
+
+<!-- Nav -->
+<header class="nav">
+  <a class="nav__brand" href="/" aria-label="Lorena Alves — Arquitetura">
+    <span><em>l</em>orena<br/><em>a</em>lves</span>
+  </a>
+  <nav class="nav__menu" aria-label="Principal">
+    <a href="#projetos">Projetos</a>
+    <a href="#estudio">Estúdio</a>
+    <a href="#metodo">Método</a>
+    <a href="#contato">Contato</a>
+  </nav>
+  <a class="nav__cta" href="#contato">Iniciar projeto</a>
+  <button class="nav__toggle" aria-label="Menu"><span></span><span></span></button>
+</header>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" aria-hidden="true">
+  <nav>
+    <a href="#projetos">Projetos</a>
+    <a href="#estudio">Estúdio</a>
+    <a href="#metodo">Método</a>
+    <a href="#contato">Contato</a>
+  </nav>
+  <div>
+    <div class="mono" style="margin-bottom: 0.8rem;">Contato</div>
+    <p style="font-family: var(--font-display); font-size: 1.35rem;">contato@lorenaalves.arq.br</p>
+  </div>
+</div>
+
+<!-- Hero -->
+<section class="hero" id="inicio">
+  <div class="hero__media">
+    <img src="./images/hero-main.png" alt="Residência contemporânea brasileira projetada pelo estúdio Lorena Alves" />
+  </div>
+  <div class="hero__vignette"></div>
+  <div class="hero__ticker">Em construção · São Paulo · 2026 · Projetos autorais</div>
+  <div class="hero__content">
+    <h1 class="hero__title">
+      <span class="word"><span>Arquitetura</span></span><br/>
+      <span class="word"><span>que <em>permanece</em></span></span><br/>
+      <span class="word"><span>no tempo.</span></span>
+    </h1>
+    <div class="hero__meta">
+      <p class="hero__lede">
+        Estúdio autoral de arquitetura e interiores de alto padrão.
+        Projetos residenciais e comerciais com identidade brasileira, contemporânea e atemporal.
+      </p>
+      <div class="hero__scroll">Role para explorar</div>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>
+      Residencial <span class="marquee__dot"></span>
+      Comercial <span class="marquee__dot"></span>
+      <em>Interiores</em> <span class="marquee__dot"></span>
+      Retrofit <span class="marquee__dot"></span>
+      Consultoria <span class="marquee__dot"></span>
+      <em>Autoral</em> <span class="marquee__dot"></span>
+      Atemporal <span class="marquee__dot"></span>
+    </span>
+    <span>
+      Residencial <span class="marquee__dot"></span>
+      Comercial <span class="marquee__dot"></span>
+      <em>Interiores</em> <span class="marquee__dot"></span>
+      Retrofit <span class="marquee__dot"></span>
+      Consultoria <span class="marquee__dot"></span>
+      <em>Autoral</em> <span class="marquee__dot"></span>
+      Atemporal <span class="marquee__dot"></span>
+    </span>
+  </div>
+</div>
+
+<!-- Manifesto -->
+<section class="section section--tight manifesto" id="manifesto">
+  <div class="manifesto__grid">
+    <div class="section__eyebrow">Manifesto · 01</div>
+    <div class="manifesto__text">
+      <span class="reveal-line"><span>Acreditamos que a arquitetura</span></span>
+      <span class="reveal-line"><span>verdadeira <em>envelhece com a</em></span></span>
+      <span class="reveal-line"><span><em>vida</em> — não compete com ela.</span></span>
+      <span class="reveal-line"><span>Cada projeto nasce da escuta,</span></span>
+      <span class="reveal-line"><span>do território e do tempo.</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- Projects horizontal -->
+<section class="projects" id="projetos">
+  <div class="projects__head">
+    <div>
+      <div class="section__eyebrow">Projetos em destaque · 02</div>
+      <h2 class="section__title" style="margin-top:1.2rem;">Uma seleção <em>curada</em> do nosso trabalho recente.</h2>
+    </div>
+    <div class="projects__count mono">Seis projetos / 2024 — 2026</div>
+  </div>
+  <div class="projects__track">
+    <article class="project-card">
+      <div class="project-card__media">
+        <span class="project-card__number mono">01 / 06</span>
+        <img src="./images/project-01.png" alt="Casa Paineira — pavilhão horizontal de concreto e ipê" loading="lazy" />
+      </div>
+      <div class="project-card__meta">
+        <h3 class="project-card__title">Casa <em>Paineira</em></h3>
+        <div class="project-card__tags"><span>Residencial</span><span>·</span><span>2026</span></div>
+      </div>
+    </article>
+    <article class="project-card">
+      <div class="project-card__media">
+        <span class="project-card__number mono">02 / 06</span>
+        <img src="./images/project-02.png" alt="Casa Jequitibá — interior contemporâneo brasileiro" loading="lazy" />
+      </div>
+      <div class="project-card__meta">
+        <h3 class="project-card__title">Casa <em>Jequitibá</em></h3>
+        <div class="project-card__tags"><span>Interiores</span><span>·</span><span>2025</span></div>
+      </div>
+    </article>
+    <article class="project-card">
+      <div class="project-card__media">
+        <span class="project-card__number mono">03 / 06</span>
+        <img src="./images/project-03.png" alt="Apartamento Higienópolis — sala com estante em walnut" loading="lazy" />
+      </div>
+      <div class="project-card__meta">
+        <h3 class="project-card__title">Apto. <em>Higienópolis</em></h3>
+        <div class="project-card__tags"><span>Residencial</span><span>·</span><span>2025</span></div>
+      </div>
+    </article>
+    <article class="project-card">
+      <div class="project-card__media">
+        <span class="project-card__number mono">04 / 06</span>
+        <img src="./images/project-04.png" alt="Casa Pau-Brasil — residência de praia com volume cantilevered" loading="lazy" />
+      </div>
+      <div class="project-card__meta">
+        <h3 class="project-card__title">Casa <em>Pau-Brasil</em></h3>
+        <div class="project-card__tags"><span>Residencial</span><span>·</span><span>2025</span></div>
+      </div>
+    </article>
+    <article class="project-card">
+      <div class="project-card__media">
+        <span class="project-card__number mono">05 / 06</span>
+        <img src="./images/project-05.png" alt="Restaurante Takka — interior sofisticado com banquettes em couro" loading="lazy" />
+      </div>
+      <div class="project-card__meta">
+        <h3 class="project-card__title">Restaurante <em>Takka</em></h3>
+        <div class="project-card__tags"><span>Comercial</span><span>·</span><span>2024</span></div>
+      </div>
+    </article>
+    <article class="project-card">
+      <div class="project-card__media">
+        <span class="project-card__number mono">06 / 06</span>
+        <img src="./images/project-06.png" alt="Fazenda Porto — pavilhão rural em taipa e telha cerâmica" loading="lazy" />
+      </div>
+      <div class="project-card__meta">
+        <h3 class="project-card__title">Fazenda <em>Porto</em></h3>
+        <div class="project-card__tags"><span>Rural</span><span>·</span><span>2024</span></div>
+      </div>
+    </article>
+  </div>
+  <div class="projects__cta">
+    <p class="mono" style="opacity:0.6;max-width:30ch;">Cada projeto é desenhado sob medida, do primeiro risco ao último detalhe.</p>
+    <a href="#contato" class="btn-big">
+      <span>Conversar sobre seu projeto</span>
+      <span class="btn-big__arrow"></span>
+    </a>
+  </div>
+</section>
+
+<!-- Fullbleed editorial -->
+<section class="fullbleed reveal">
+  <img src="./images/veranda.png" alt="Varanda tropical com deck em ipê e piscina de borda infinita voltada para o mar" />
+  <div class="fullbleed__caption">
+    <p class="fullbleed__quote">"O silêncio entre os volumes é parte do projeto. <br/>É onde a luz se senta."</p>
+    <p class="mono">— Ensaio · Casa Pau-Brasil</p>
+  </div>
+</section>
+
+<!-- Metrics -->
+<section class="metrics" aria-label="Números do estúdio">
+  <div class="metric reveal">
+    <div class="metric__num"><span data-count="12" data-suffix="+">0+</span></div>
+    <div class="metric__label">Anos de prática</div>
+  </div>
+  <div class="metric reveal">
+    <div class="metric__num"><span data-count="68">0</span></div>
+    <div class="metric__label">Projetos entregues</div>
+  </div>
+  <div class="metric reveal">
+    <div class="metric__num"><span data-count="14">0</span></div>
+    <div class="metric__label">Estados atendidos</div>
+  </div>
+  <div class="metric reveal">
+    <div class="metric__num"><em>∞</em></div>
+    <div class="metric__label">Desenhos à mão</div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="section about" id="estudio">
+  <div class="section__header">
+    <div class="section__eyebrow">Estúdio · 03</div>
+    <h2 class="section__title">Uma arquitetura <em>do silêncio</em> e dos detalhes.</h2>
+  </div>
+  <div class="about__grid">
+    <div class="about__portrait reveal">
+      <img src="./images/portrait.png" alt="Retrato de Lorena Alves, arquiteta fundadora do estúdio" />
+    </div>
+    <div class="about__body">
+      <h3 class="about__name reveal">Lorena <em>Alves</em>,<br/>arquiteta fundadora.</h3>
+      <div class="about__bio">
+        <p>
+          Formada em Arquitetura e Urbanismo, Lorena fundou o estúdio com a convicção de que cada projeto é uma conversa longa — entre cliente, território e tempo. Sua abordagem une a escola modernista brasileira, a precisão construtiva europeia e uma sensibilidade material para os trópicos. Trabalhamos em poucas obras por ano, com dedicação integral.
+        </p>
+        <p>
+          O estúdio atende projetos residenciais, comerciais e hospitalidade de alto padrão, cuidando do conceito às especificações finais: arquitetura, interiores, mobiliário sob medida e paisagem.
+        </p>
+      </div>
+
+      <div class="pillars">
+        <div class="pillar reveal">
+          <div class="pillar__num">01</div>
+          <h4 class="pillar__title">Autoria</h4>
+          <p class="pillar__text">Cada obra é desenhada de dentro para fora — sem fórmulas, sem recortes.</p>
+        </div>
+        <div class="pillar reveal">
+          <div class="pillar__num">02</div>
+          <h4 class="pillar__title">Brasilidade</h4>
+          <p class="pillar__text">Materiais, técnicas e luz do Brasil — traduzidos em uma arquitetura contemporânea.</p>
+        </div>
+        <div class="pillar reveal">
+          <div class="pillar__num">03</div>
+          <h4 class="pillar__title">Atemporal</h4>
+          <p class="pillar__text">Projetos feitos para envelhecer com beleza — décadas depois da entrega.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Fullbleed #2 -->
+<section class="fullbleed reveal">
+  <img src="./images/intro-texture.png" alt="Detalhe de luz entre brise de madeira e parede de concreto" />
+  <div class="fullbleed__caption">
+    <p class="fullbleed__quote">A matéria é linguagem. <br/>O tempo, <em>o maior dos arquitetos</em>.</p>
+    <p class="mono">— Filosofia do estúdio</p>
+  </div>
+</section>
+
+<!-- Process -->
+<section class="section process" id="metodo">
+  <div class="section__header">
+    <div class="section__eyebrow">Método · 04</div>
+    <h2 class="section__title">Do primeiro <em>encontro</em> à última fechadura.</h2>
+  </div>
+  <div class="process__list">
+    <div class="process__item">
+      <span class="process__num">01</span>
+      <h3 class="process__title">Escuta</h3>
+      <p class="process__desc">Uma conversa longa antes de qualquer risco. Entender a rotina, o território, os desejos não ditos.</p>
+    </div>
+    <div class="process__item">
+      <span class="process__num">02</span>
+      <h3 class="process__title">Conceito</h3>
+      <p class="process__desc">O primeiro risco nasce à mão, no papel. Volumetria, luz, fluxos, atmosfera.</p>
+    </div>
+    <div class="process__item">
+      <span class="process__num">03</span>
+      <h3 class="process__title">Projeto</h3>
+      <p class="process__desc">Desenvolvimento executivo, compatibilizações, especificações e detalhamento integral.</p>
+    </div>
+    <div class="process__item">
+      <span class="process__num">04</span>
+      <h3 class="process__title">Interiores</h3>
+      <p class="process__desc">Mobiliário sob medida, curadoria de peças autorais, iluminação e paisagem.</p>
+    </div>
+    <div class="process__item">
+      <span class="process__num">05</span>
+      <h3 class="process__title">Obra</h3>
+      <p class="process__desc">Acompanhamento semanal em campo, do canteiro ao ajuste fino. Precisão construtiva.</p>
+    </div>
+    <div class="process__item">
+      <span class="process__num">06</span>
+      <h3 class="process__title">Entrega</h3>
+      <p class="process__desc">Styling, ambientação e book fotográfico. A casa já pronta para ser habitada.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section cta" id="contato">
+  <div class="cta__grid">
+    <h2 class="cta__title reveal">
+      Vamos começar <br/>
+      seu <em>projeto dos sonhos?</em>
+    </h2>
+    <div class="cta__details">
+      <div class="cta__detail">
+        <span class="label">Escreva</span>
+        <a href="mailto:contato@lorenaalves.arq.br">contato@lorenaalves.arq.br</a>
+      </div>
+      <div class="cta__detail">
+        <span class="label">Telefone</span>
+        <a href="tel:+5511999999999">+55 11 9 9999 9999</a>
+      </div>
+      <div class="cta__detail">
+        <span class="label">Estúdio</span>
+        <p>Rua Jerônimo da Veiga, 164<br/>Itaim Bibi, São Paulo — SP</p>
+      </div>
+      <a href="mailto:contato@lorenaalves.arq.br" class="btn-big" data-cursor="hover">
+        <span>Iniciar uma conversa</span>
+        <span class="btn-big__arrow"></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer__top">
+    <div>
+      <div class="footer__brand"><em>l</em>orena <em>a</em>lves</div>
+      <p class="footer__tag">Arquitetura e interiores de alto padrão. Brasilidade contemporânea, desenhada para permanecer.</p>
+    </div>
+    <div class="footer__col">
+      <h4>Estúdio</h4>
+      <ul>
+        <li><a href="#estudio">Sobre</a></li>
+        <li><a href="#metodo">Método</a></li>
+        <li><a href="#projetos">Projetos</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <h4>Social</h4>
+      <ul>
+        <li><a href="#" aria-label="Instagram">Instagram</a></li>
+        <li><a href="#" aria-label="Pinterest">Pinterest</a></li>
+        <li><a href="#" aria-label="LinkedIn">LinkedIn</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <h4>Contato</h4>
+      <ul>
+        <li><a href="mailto:contato@lorenaalves.arq.br">contato@lorenaalves.arq.br</a></li>
+        <li><a href="tel:+5511999999999">+55 11 9 9999 9999</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__mega"><em>l</em>orena <em>a</em>lves <em>arq</em>.</div>
+  <div class="footer__bottom">
+    <span>© 2026 Lorena Alves Arquitetura. Todos os direitos reservados.</span>
+    <span>CAU BR · Brasil</span>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="./js/main.js"></script>
+</body>
 </html>
