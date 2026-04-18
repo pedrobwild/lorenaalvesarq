@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import { PROJECTS } from "./data/projects";
 import { routes } from "./lib/useHashRoute";
 import { shouldRunParallax, shouldUseSmoothScroll } from "./lib/device";
+import { useCustomCursor } from "./lib/useCustomCursor";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -45,6 +46,8 @@ const ENSAIOS = [
 export default function App() {
   const [ensaioIdx, setEnsaioIdx] = useState(0);
   const ensaiosPaused = useRef(false);
+
+  useCustomCursor();
 
   // Auto-advance do slideshow
   useEffect(() => {
@@ -168,53 +171,6 @@ export default function App() {
           { y: 0, opacity: 0.75, duration: 0.8, ease: "power3.out" },
           1.3
         );
-    }
-
-    // ---------- Custom cursor ----------
-    const c = document.querySelector<HTMLElement>(".cursor");
-    const hasFineHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    const cursorCleanups: Array<() => void> = [];
-
-    if (c && hasFineHover) {
-      document.body.classList.add("has-custom-cursor");
-      cursorCleanups.push(() => document.body.classList.remove("has-custom-cursor"));
-
-      let x = window.innerWidth / 2;
-      let y = window.innerHeight / 2;
-      let tx = x;
-      let ty = y;
-      let cursorRafId: number;
-
-      const onMove = (e: MouseEvent) => {
-        tx = e.clientX;
-        ty = e.clientY;
-      };
-      window.addEventListener("mousemove", onMove);
-      cursorCleanups.push(() => window.removeEventListener("mousemove", onMove));
-
-      const render = () => {
-        x += (tx - x) * 0.22;
-        y += (ty - y) * 0.22;
-        c.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
-        cursorRafId = requestAnimationFrame(render);
-      };
-      render();
-      cursorCleanups.push(() => cancelAnimationFrame(cursorRafId));
-
-      document
-        .querySelectorAll<HTMLElement>(
-          'a, button, .project-card, .process__item, [data-cursor="hover"]'
-        )
-        .forEach((el) => {
-          const enter = () => c.classList.add("cursor--hover");
-          const leave = () => c.classList.remove("cursor--hover");
-          el.addEventListener("mouseenter", enter);
-          el.addEventListener("mouseleave", leave);
-          cursorCleanups.push(() => {
-            el.removeEventListener("mouseenter", enter);
-            el.removeEventListener("mouseleave", leave);
-          });
-        });
     }
 
     // ---------- Nav hide on scroll ----------
@@ -371,7 +327,6 @@ export default function App() {
       if (rafId) cancelAnimationFrame(rafId);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("load", onLoad);
-      cursorCleanups.forEach((fn) => fn());
       mobileCleanups.forEach((fn) => fn());
       ScrollTrigger.getAll().forEach((st) => st.kill());
       lenis?.destroy();
@@ -384,9 +339,6 @@ export default function App() {
       <a href="#inicio" className="skip-link">
         Pular para o conteúdo
       </a>
-
-      {/* Custom cursor */}
-      <div className="cursor" aria-hidden="true"></div>
 
       {/* Loader */}
       <div className="loader" aria-hidden="true">

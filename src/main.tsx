@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import PortfolioPage from "./pages/PortfolioPage";
 import ProjectPage from "./pages/ProjectPage";
+import { useCustomCursor } from "./lib/useCustomCursor";
 import { useHashRoute, type Route } from "./lib/useHashRoute";
 import "./index.css";
 
@@ -21,6 +22,7 @@ function routeKeyOf(route: Route) {
 
 function Root() {
   const route = useHashRoute();
+  useCustomCursor();
 
   // "displayed" é a rota que está renderizada no DOM. Quando a rota real muda,
   // disparamos um fade-out, trocamos `displayed` no meio e fazemos fade-in.
@@ -47,12 +49,15 @@ function Root() {
   }, [route]);
 
   return (
-    <div
-      className={`route-transition route-transition--${phase}`}
-      style={{ ["--route-transition-ms" as string]: `${TRANSITION_MS}ms` }}
-    >
-      {renderRoute(displayed)}
-    </div>
+    <>
+      <div className="cursor" aria-hidden="true"></div>
+      <div
+        className={`route-transition route-transition--${phase}`}
+        style={{ ["--route-transition-ms" as string]: `${TRANSITION_MS}ms` }}
+      >
+        {renderRoute(displayed)}
+      </div>
+    </>
   );
 }
 
