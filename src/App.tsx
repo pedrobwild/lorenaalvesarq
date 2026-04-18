@@ -461,7 +461,18 @@ export default function App() {
               Arquitetura vai muito além de forma &mdash; é sobre criar <em>futuro</em>,{" "}
               <em>propósito</em> e <em>legado</em>.
             </p>
-            <div className="hero__scroll">Role para descobrir</div>
+            <div className="hero__actions">
+              <a
+                href={routes.portfolio}
+                className="hero__cta"
+                data-cursor="hover"
+                aria-label="Ver portfólio completo"
+              >
+                <span className="hero__cta-label">Ver portfólio</span>
+                <span className="hero__cta-arrow" aria-hidden="true">→</span>
+              </a>
+              <div className="hero__scroll">Role para descobrir</div>
+            </div>
           </div>
         </div>
       </section>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import PortfolioPage from "./pages/PortfolioPage";
@@ -8,6 +8,21 @@ import "./index.css";
 
 function Root() {
   const route = useHashRoute();
+  const lastRouteKey = useRef<string>("");
+
+  // Chave que muda quando entramos/saímos de uma rota "real" (não âncora).
+  const routeKey =
+    route.name === "project" ? `project:${route.slug}` : route.name;
+
+  // Sempre que a página troca (home <-> portfolio <-> project), voltamos ao topo.
+  // Sem isso, clicar em "Portifólio" estando rolado para baixo na home renderiza
+  // a nova página, mas o scroll continua onde estava e parece que nada aconteceu.
+  useEffect(() => {
+    if (lastRouteKey.current && lastRouteKey.current !== routeKey) {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    }
+    lastRouteKey.current = routeKey;
+  }, [routeKey]);
 
   if (route.name === "portfolio") return <PortfolioPage />;
   if (route.name === "project") return <ProjectPage slug={route.slug} />;
