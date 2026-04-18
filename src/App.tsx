@@ -488,21 +488,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Credos */}
-      <section className="credos" aria-label="Princípios do estúdio">
-        {[
-          { m: "I", text: <>Projetar é <em>escutar</em> antes de desenhar.</> },
-          { m: "II", text: <>Poucas obras por ano, <em>cada uma inteira</em>.</> },
-          { m: "III", text: <>O detalhe é <em>onde mora</em> a arquitetura.</> },
-          { m: "IV", text: <>Desenhar para o <em>tempo longo</em>, não para o aplauso.</> },
-        ].map((c) => (
-          <div className="credo reveal" key={c.m}>
-            <div className="credo__mark">{c.m}</div>
-            <p className="credo__text">{c.text}</p>
-          </div>
-        ))}
-      </section>
-
       {/* About */}
       <section className="section about" id="estudio">
         <div className="section__header">
@@ -567,6 +552,21 @@ export default function App() {
           </p>
           <p className="mono">— Ensaio · Casa Pau-Brasil</p>
         </div>
+      </section>
+
+      {/* Credos */}
+      <section className="credos" aria-label="Princípios do estúdio">
+        {[
+          { m: "I", text: <>Projetar é <em>escutar</em> antes de desenhar.</> },
+          { m: "II", text: <>Poucas obras por ano, <em>cada uma inteira</em>.</> },
+          { m: "III", text: <>O detalhe é <em>onde mora</em> a arquitetura.</> },
+          { m: "IV", text: <>Desenhar para o <em>tempo longo</em>, não para o aplauso.</> },
+        ].map((c) => (
+          <div className="credo reveal" key={c.m}>
+            <div className="credo__mark">{c.m}</div>
+            <p className="credo__text">{c.text}</p>
+          </div>
+        ))}
       </section>
 
       {/* Fullbleed 2 */}
