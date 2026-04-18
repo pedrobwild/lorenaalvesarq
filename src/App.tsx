@@ -634,7 +634,7 @@ export default function App() {
               </p>
             </div>
             <a href="mailto:contato@lorenaalves.arq.br" className="btn-big" data-cursor="hover">
-              <span>Escrever ao estúdio</span>
+              <span>ENTRE EM CONTATO</span>
               <span className="btn-big__arrow"></span>
             </a>
           </div>
