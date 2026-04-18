@@ -71,11 +71,12 @@ body {
   overflow-x: hidden;
 }
 
-/* Cursor customizado só onde faz sentido (desktop com mouse) */
+/* Cursor customizado só onde faz sentido (desktop com mouse) e só nas páginas
+   que efetivamente montam o elemento .cursor (controlado via body.has-custom-cursor). */
 @media (hover: hover) and (pointer: fine) {
-  body { cursor: none; }
-  button { cursor: none; }
-  a { cursor: none; }
+  body.has-custom-cursor,
+  body.has-custom-cursor button,
+  body.has-custom-cursor a { cursor: none; }
 }
 
 ::selection {

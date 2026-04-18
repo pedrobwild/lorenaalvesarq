@@ -176,6 +176,9 @@ export default function App() {
     const cursorCleanups: Array<() => void> = [];
 
     if (c && hasFineHover) {
+      document.body.classList.add("has-custom-cursor");
+      cursorCleanups.push(() => document.body.classList.remove("has-custom-cursor"));
+
       let x = window.innerWidth / 2;
       let y = window.innerHeight / 2;
       let tx = x;
