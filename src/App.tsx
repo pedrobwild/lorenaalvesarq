@@ -745,12 +745,12 @@ export default function App() {
         </div>
         <div className="process__list">
           {[
-            { n: "01", title: "Escuta", desc: "Uma conversa longa antes de qualquer risco. Ler a rotina, o território, os desejos não ditos." },
-            { n: "02", title: "Conceito", desc: "O primeiro risco nasce à mão, em papel. Volumetria, luz, fluxo, atmosfera." },
-            { n: "03", title: "Projeto", desc: "Desenvolvimento executivo e detalhamento integral. Nada de improviso em obra." },
-            { n: "04", title: "Interiores", desc: "Mobiliário autoral, curadoria de peças clássicas, iluminação e paisagem." },
-            { n: "05", title: "Obra", desc: "Presença semanal em campo, do canteiro ao ajuste fino. Precisão construída." },
-            { n: "06", title: "Entrega", desc: "Ambientação, styling e registro fotográfico. A obra, pronta para o tempo." },
+            { n: "01", title: "Escuta", desc: "Antes do risco, a escuta. Entender a vida que vai habitar — a rotina, o território, os desejos que ainda não foram ditos." },
+            { n: "02", title: "Conceito", desc: "O propósito do projeto traduzido em matéria: volume, luz, fluxo e atmosfera nascem à mão, em papel." },
+            { n: "03", title: "Projeto", desc: "Desenvolvimento executivo com detalhamento integral — cada decisão alinhada ao modo de viver do cliente." },
+            { n: "04", title: "Interiores", desc: "Mobiliário autoral, curadoria de peças e iluminação que dão textura ao cotidiano e personalidade ao espaço." },
+            { n: "05", title: "Obra", desc: "Presença semanal em campo. O projeto transforma-se em lugar com precisão, ofício e continuidade." },
+            { n: "06", title: "Entrega", desc: "Ambientação, styling e registro da casa habitada. O espaço pronto para formar memória, rotina e legado." },
           ].map((p) => (
             <div className="process__item" tabIndex={0} key={p.n}>
               <span className="process__num">{p.n}</span>

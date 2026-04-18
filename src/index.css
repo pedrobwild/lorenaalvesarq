@@ -1374,6 +1374,7 @@ button {
   background: var(--ink);
   color: var(--bone);
   border-top: 1px solid var(--line);
+  padding-bottom: calc(var(--section) * 0.4);
 }
 
 .process__list {
@@ -1420,24 +1421,30 @@ button {
 
 .process__desc {
   font-size: var(--t-sm);
-  max-width: 32ch;
-  opacity: 0;
-  transform: translateY(8px);
+  max-width: 34ch;
+  opacity: 0.72;
+  transform: translateY(0);
   transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
   text-align: right;
   color: var(--bone);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .process__item:hover .process__desc,
 .process__item:focus-within .process__desc {
-  opacity: 0.85;
-  transform: translateY(0);
+  opacity: 1;
 }
 
 @media (max-width: 700px) {
-  .process__item { grid-template-columns: auto 1fr; gap: 1rem; }
-  .process__desc { display: none; }
+  .process__item { grid-template-columns: auto 1fr; gap: 0.75rem 1rem; row-gap: 0.5rem; }
+  .process__title { grid-column: 2; }
+  .process__desc {
+    grid-column: 2;
+    max-width: 100%;
+    text-align: left;
+    opacity: 0.78;
+    font-size: 0.92rem;
+  }
 }
 
 /* ---------- CTA / Contact ---------- */
