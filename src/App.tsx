@@ -449,7 +449,6 @@ export default function App() {
                 <span className="hero__cta-label">Ver portfólio</span>
                 <span className="hero__cta-arrow" aria-hidden="true">→</span>
               </a>
-              <div className="hero__scroll">Role para descobrir</div>
             </div>
           </div>
         </div>
