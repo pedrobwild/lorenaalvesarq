@@ -166,8 +166,8 @@ export default function App() {
       if (heroMedia)
         tl.fromTo(
           heroMedia,
-          { scale: 1.25, filter: "brightness(0.5)" },
-          { scale: 1.08, filter: "brightness(1)", duration: 2.2, ease: "expo.out" },
+          { scale: 1.12, filter: "brightness(0.5)" },
+          { scale: 1.0, filter: "brightness(1)", duration: 2.2, ease: "expo.out" },
           0
         );
       if (words.length)
@@ -233,8 +233,8 @@ export default function App() {
     const heroMedia = document.querySelector<HTMLElement>(".hero__media");
     if (heroMedia) {
       gsap.to(heroMedia, {
-        yPercent: 18,
-        scale: 1.18,
+        yPercent: 10,
+        scale: 1.06,
         ease: "none",
         scrollTrigger: {
           trigger: ".hero",
