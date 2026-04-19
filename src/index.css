@@ -580,10 +580,11 @@ button {
   color: var(--bone);
   opacity: 1;
   font-family: var(--font-display);
-  font-weight: 300;
+  font-weight: 400;
   font-size: clamp(1.2rem, 1.6vw, 1.65rem);
   line-height: 1.35;
   letter-spacing: -0.005em;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
 }
 
 .hero__lede em {
