@@ -21,23 +21,23 @@
    ========================================================= */
 
 :root {
-  /* Palette — warm earth, cinematic */
-  --ink: #0f0e0c;
-  --ink-900: #161411;
-  --ink-800: #1c1915;
-  --ink-700: #2a251f;
-  --bone: #f4efe6;
-  --bone-soft: #eae3d5;
-  --bone-warm: #e0d6c2;
-  --clay: #b98867;
-  --clay-deep: #8a5a3c;
-  --sand: #c9ad84;
-  --line: rgba(244, 239, 230, 0.14);
-  --line-strong: rgba(244, 239, 230, 0.28);
+  /* Palette — brandbook lorenaalves arq: Neutral Black / City Gray / Clear White */
+  --ink: #0A0A0A;            /* Neutral Black */
+  --ink-900: #121212;
+  --ink-800: #1A1A1A;
+  --ink-700: #242424;
+  --bone: #FFFFFF;           /* Clear White */
+  --bone-soft: #E8E8E8;
+  --bone-warm: #CFCFCF;
+  --clay: #9A9A9A;           /* City Gray (acento neutro) */
+  --clay-deep: #6E6E6E;
+  --sand: #B8B8B8;
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.26);
 
-  /* Type */
-  --font-display: 'Fraunces', 'Canela', 'Didot', serif;
-  --font-body: 'General Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  /* Type — Manrope (sans geométrica, afinidade com o logotipo lorenaalves arq) */
+  --font-display: 'Manrope', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body: 'Manrope', 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   /* Spacing */
