@@ -457,44 +457,13 @@ export default function App() {
 
 
 
-      {/* Manifesto */}
-      <section className="section section--tight manifesto" id="manifesto">
-        <div className="manifesto__grid">
-          <div className="section__eyebrow">Manifesto · 01</div>
-          <div className="manifesto__text">
-            <span className="reveal-line">
-              <span>Construir é, antes de tudo,</span>
-            </span>
-            <span className="reveal-line">
-              <span>
-                um gesto de <em>escuta</em>.
-              </span>
-            </span>
-            <span className="reveal-line">
-              <span>Arquitetura que respeita o</span>
-            </span>
-            <span className="reveal-line">
-              <span>tempo, o território e quem</span>
-            </span>
-            <span className="reveal-line">
-              <span>
-                irá habitar — para <em>transformar</em>,
-              </span>
-            </span>
-            <span className="reveal-line">
-              <span>não apenas abrigar.</span>
-            </span>
-          </div>
-        </div>
-      </section>
-
       {/* Projects */}
       <section className="projects" id="projetos">
         <div className="projects__head">
           <div>
             <div className="section__eyebrow">Projetos em destaque · 02</div>
             <h2 className="section__title" style={{ marginTop: "1.2rem" }}>
-              Obras que carregam <em>propósito</em>, presença e vida.
+              Projetar é, antes de tudo, um ato de <em>escuta</em> e <em>empatia</em>. Arquitetura de verdade, toma histórias como ponto de partida, e as converte em espaço, luz, matéria e medida, para <em>transformar</em> a vida, não apenas construir.
             </h2>
           </div>
           <div className="projects__count mono">Selecionados · 2024 — 2026</div>
