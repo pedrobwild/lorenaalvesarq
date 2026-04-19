@@ -582,6 +582,7 @@ button {
 .hero__actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: clamp(1.25rem, 3vw, 2.5rem);
   flex-wrap: wrap;
 }
