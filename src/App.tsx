@@ -156,15 +156,15 @@ export default function App() {
     function startHeroAnim() {
       const hero = document.querySelector<HTMLElement>(".hero");
       if (!hero) return;
-      const heroImg = hero.querySelector<HTMLImageElement>(".hero__media img");
+      const heroMedia = hero.querySelector<HTMLElement>(".hero__media");
       const words = hero.querySelectorAll<HTMLElement>(".hero__title .word > span");
       const lede = hero.querySelector<HTMLElement>(".hero__lede");
       const scroll = hero.querySelector<HTMLElement>(".hero__scroll");
 
       const tl = gsap.timeline();
-      if (heroImg)
+      if (heroMedia)
         tl.fromTo(
-          heroImg,
+          heroMedia,
           { scale: 1.25, filter: "brightness(0.5)" },
           { scale: 1.08, filter: "brightness(1)", duration: 2.2, ease: "expo.out" },
           0
@@ -229,9 +229,9 @@ export default function App() {
     }
 
     // ---------- ScrollTrigger animations ----------
-    const heroImg = document.querySelector<HTMLImageElement>(".hero__media img");
-    if (heroImg) {
-      gsap.to(heroImg, {
+    const heroMedia = document.querySelector<HTMLElement>(".hero__media");
+    if (heroMedia) {
+      gsap.to(heroMedia, {
         yPercent: 18,
         scale: 1.18,
         ease: "none",
