@@ -427,7 +427,7 @@ export default function App() {
           ))}
         </div>
         <div className="hero__vignette"></div>
-        <div className="hero__ticker">São Paulo · 2026 · Estúdio autoral</div>
+        <div className="hero__ticker">Uberlândia · 2026</div>
         <div className="hero__content">
           <h1 className="hero__title">
             <span className="word">
