@@ -330,8 +330,7 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  mix-blend-mode: difference;
-  color: var(--bone);
+  color: var(--ink);
   transition: transform 0.5s var(--ease);
 }
 
