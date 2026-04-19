@@ -344,7 +344,9 @@ export default function App() {
       <div className="loader" aria-hidden="true">
         <div className="loader__inner">
           <div className="loader__mark">
-            <span>Lorena Alves</span>
+            <span>
+              <span className="brand-lockup brand-lockup--hero">lorena<b>alves</b><sup>arq</sup></span>
+            </span>
           </div>
           <div className="loader__counter">000</div>
         </div>
@@ -353,8 +355,8 @@ export default function App() {
 
       {/* Nav */}
       <header className="nav">
-        <a className="nav__brand" href="/" aria-label="Lorena Alves — Arquitetura">
-          <span>Lorena Alves</span>
+        <a className="nav__brand" href="/" aria-label="lorenaalves arq — Arquitetura">
+          <span className="brand-lockup">lorena<b>alves</b><sup>arq</sup></span>
         </a>
         <nav className="nav__menu" aria-label="Principal">
           <a href={routes.portfolio}>Portifólio</a>
@@ -408,7 +410,7 @@ export default function App() {
         <div className="hero__content">
           <h1 className="hero__title">
             <span className="word">
-              <span>Lorena Alves</span>
+              <span className="brand-lockup brand-lockup--hero">lorena<b>alves</b><sup>arq</sup></span>
             </span>
           </h1>
           <div className="hero__meta">
@@ -769,7 +771,7 @@ export default function App() {
       <footer className="footer">
         <div className="footer__top">
           <div>
-            <div className="footer__brand">Lorena Alves</div>
+            <div className="footer__brand"><span className="brand-lockup">lorena<b>alves</b><sup>arq</sup></span></div>
             <p className="footer__tag">
               Futuro, propósito e legado. Brasilidade contemporânea, desenhada para permanecer.
             </p>
@@ -821,7 +823,7 @@ export default function App() {
           </div>
         </div>
         <div className="footer__mega">
-          Lorena Alves <em>arq</em>.
+          <span className="brand-lockup brand-lockup--mega">lorena<b>alves</b><sup>arq</sup></span>
         </div>
         <div className="footer__bottom">
           <span>© 2026 Lorena Alves Arquitetura. Todos os direitos reservados.</span>

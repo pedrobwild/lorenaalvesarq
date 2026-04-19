@@ -116,8 +116,8 @@ export default function ProjectPage({ slug }: Props) {
     <div className="pp-page" ref={pageRef}>
       {/* Nav topo */}
       <nav className="pf-nav pp-nav">
-        <a className="pf-nav__brand" href={routes.home}>
-          Lorena Alves
+        <a className="pf-nav__brand" href={routes.home} aria-label="lorenaalves arq — início">
+          <span className="brand-lockup">lorena<b>alves</b><sup>arq</sup></span>
         </a>
         <a className="pf-nav__back" href={routes.portfolio} data-cursor="hover">
           <span className="pf-nav__arrow">←</span>
