@@ -76,8 +76,8 @@ export default function PortfolioPage() {
     <div className="pf-page">
       {/* Top nav minimal */}
       <nav className="pf-nav">
-        <a className="pf-nav__brand" href={routes.home}>
-          Lorena Alves
+        <a className="pf-nav__brand" href={routes.home} aria-label="lorenaalves arq — início">
+          <span className="brand-lockup">lorena<b>alves</b><sup>arq</sup></span>
         </a>
         <a className="pf-nav__back" href={routes.home} data-cursor="hover">
           <span className="pf-nav__arrow">←</span>
