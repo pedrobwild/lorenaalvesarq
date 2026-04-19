@@ -177,7 +177,7 @@ export default function App() {
         tl.fromTo(
           lede,
           { y: 16, opacity: 0 },
-          { y: 0, opacity: 0.82, duration: 1, ease: "power3.out" },
+          { y: 0, opacity: 1, duration: 1, ease: "power3.out" },
           1.1
         );
       if (scroll)
@@ -461,7 +461,7 @@ export default function App() {
       <section className="projects" id="projetos">
         <div className="projects__head">
           <div>
-            <div className="section__eyebrow">Projetos em destaque · 02</div>
+            <div className="section__eyebrow">Manifesto</div>
             <h2 className="section__title" style={{ marginTop: "1.2rem", fontSize: "clamp(1.4rem, 2.2vw, 2rem)", lineHeight: 1.3, maxWidth: "60ch" }}>
               Projetar é, antes de tudo, um ato de <em>escuta</em> e <em>empatia</em>. Arquitetura de verdade, toma histórias como ponto de partida, e as converte em espaço, luz, matéria e medida, para <em>transformar</em> a vida, não apenas construir.
             </h2>

@@ -578,7 +578,7 @@ button {
 .hero__lede {
   max-width: 38ch;
   color: var(--bone);
-  opacity: 0.88;
+  opacity: 1;
   font-family: var(--font-display);
   font-weight: 300;
   font-size: clamp(1.2rem, 1.6vw, 1.65rem);
