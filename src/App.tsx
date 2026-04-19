@@ -177,7 +177,7 @@ export default function App() {
         tl.fromTo(
           lede,
           { y: 16, opacity: 0 },
-          { y: 0, opacity: 0.82, duration: 1, ease: "power3.out" },
+          { y: 0, opacity: 1, duration: 1, ease: "power3.out" },
           1.1
         );
       if (scroll)
