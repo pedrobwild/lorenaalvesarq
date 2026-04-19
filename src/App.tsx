@@ -6,8 +6,13 @@ import { PROJECTS } from "./data/projects";
 import { routes } from "./lib/useHashRoute";
 import { shouldRunParallax, shouldUseSmoothScroll } from "./lib/device";
 import { useCustomCursor } from "./lib/useCustomCursor";
+import heroImg1 from "./assets/hero/hero-1.webp";
+import heroImg2 from "./assets/hero/hero-2.webp";
+import heroImg3 from "./assets/hero/hero-3.webp";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const HERO_IMAGES = [heroImg1, heroImg2, heroImg3];
 
 // ---------- Ensaios slideshow data ----------
 const ENSAIOS = [
@@ -46,8 +51,17 @@ const ENSAIOS = [
 export default function App() {
   const [ensaioIdx, setEnsaioIdx] = useState(0);
   const ensaiosPaused = useRef(false);
+  const [heroIdx, setHeroIdx] = useState(0);
 
   useCustomCursor();
+
+  // Hero slider — alterna a cada 4s
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setHeroIdx((i) => (i + 1) % HERO_IMAGES.length);
+    }, 4000);
+    return () => window.clearInterval(id);
+  }, []);
 
   // Auto-advance do slideshow
   useEffect(() => {
@@ -399,11 +413,17 @@ export default function App() {
       {/* Hero */}
       <section className="hero" id="inicio">
         <div className="hero__media">
-          <img
-            src="/images/hero-main.png"
-            alt="Residência contemporânea brasileira projetada pelo estúdio Lorena Alves"
-            fetchPriority="high"
-          />
+          {HERO_IMAGES.map((src, i) => (
+            <img
+              key={src}
+              src={src}
+              alt="Residência contemporânea brasileira projetada pelo estúdio Lorena Alves"
+              fetchPriority={i === 0 ? "high" : "low"}
+              loading={i === 0 ? "eager" : "lazy"}
+              className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
+              aria-hidden={i === heroIdx ? "false" : "true"}
+            />
+          ))}
         </div>
         <div className="hero__vignette"></div>
         <div className="hero__ticker">São Paulo · 2026 · Estúdio autoral</div>
