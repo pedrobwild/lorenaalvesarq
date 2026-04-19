@@ -233,8 +233,8 @@ export default function App() {
     const heroMedia = document.querySelector<HTMLElement>(".hero__media");
     if (heroMedia) {
       gsap.to(heroMedia, {
-        yPercent: 18,
-        scale: 1.18,
+        yPercent: 10,
+        scale: 1.06,
         ease: "none",
         scrollTrigger: {
           trigger: ".hero",
