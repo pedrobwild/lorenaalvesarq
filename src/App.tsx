@@ -9,10 +9,11 @@ import { useCustomCursor } from "./lib/useCustomCursor";
 import heroImg1 from "./assets/hero/hero-1.webp";
 import heroImg2 from "./assets/hero/hero-2.webp";
 import heroImg3 from "./assets/hero/hero-3.webp";
+import heroImg4 from "./assets/hero/hero-4.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HERO_IMAGES = [heroImg1, heroImg2, heroImg3];
+const HERO_IMAGES = [heroImg1, heroImg2, heroImg3, heroImg4];
 
 // ---------- Ensaios slideshow data ----------
 const ENSAIOS = [
