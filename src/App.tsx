@@ -434,29 +434,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Marquee */}
-      <div className="marquee" aria-hidden="true">
-        <div className="marquee__track">
-          <span>
-            Residencial <span className="marquee__dot"></span>
-            Comercial <span className="marquee__dot"></span>
-            <em>Interiores</em> <span className="marquee__dot"></span>
-            Retrofit <span className="marquee__dot"></span>
-            Consultoria <span className="marquee__dot"></span>
-            <em>Autoral</em> <span className="marquee__dot"></span>
-            Atemporal <span className="marquee__dot"></span>
-          </span>
-          <span>
-            Residencial <span className="marquee__dot"></span>
-            Comercial <span className="marquee__dot"></span>
-            <em>Interiores</em> <span className="marquee__dot"></span>
-            Retrofit <span className="marquee__dot"></span>
-            Consultoria <span className="marquee__dot"></span>
-            <em>Autoral</em> <span className="marquee__dot"></span>
-            Atemporal <span className="marquee__dot"></span>
-          </span>
-        </div>
-      </div>
+
 
       {/* Manifesto */}
       <section className="section section--tight manifesto" id="manifesto">
