@@ -330,8 +330,24 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: var(--ink);
+  color: var(--bone);
   transition: transform 0.5s var(--ease);
+}
+
+/* Leve fade escuro no topo da página para dar contraste à nav */
+.nav::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 140px;
+  pointer-events: none;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.55) 0%,
+    rgba(10, 10, 10, 0.25) 55%,
+    rgba(10, 10, 10, 0) 100%
+  );
 }
 
 .nav__brand {
