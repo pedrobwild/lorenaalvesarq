@@ -140,9 +140,8 @@ button {
   font-family: var(--font-display);
   font-weight: 300;
   letter-spacing: -0.03em;
-  line-height: 0.92;
+  line-height: 0.95;
   font-optical-sizing: auto;
-  font-variation-settings: "opsz" 144, "SOFT" 30;
 }
 
 .display-italic {
