@@ -166,7 +166,42 @@ button {
   color: var(--bone-warm);
 }
 
-/* ---------- Loader ---------- */
+/* ---------- Brand lockup (lorenaalves arq) ---------- */
+.brand-lockup {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  text-transform: lowercase;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: baseline;
+  line-height: 1;
+}
+.brand-lockup b {
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.brand-lockup sup {
+  font-family: var(--font-mono);
+  font-size: 0.42em;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-left: 0.35em;
+  align-self: flex-start;
+  transform: translateY(0.35em);
+  text-transform: lowercase;
+  opacity: 0.9;
+}
+.brand-lockup--hero sup {
+  font-size: 0.22em;
+  margin-left: 0.28em;
+  transform: translateY(0.8em);
+}
+.brand-lockup--mega sup {
+  font-size: 0.2em;
+  margin-left: 0.25em;
+  transform: translateY(0.9em);
+}
 .loader {
   position: fixed;
   inset: 0;
@@ -236,7 +271,7 @@ button {
   place-items: center;
   overflow: hidden;
   color: var(--ink);
-  box-shadow: 0 0 0 1px rgba(15, 14, 12, 0.12), 0 8px 24px rgba(15, 14, 12, 0.08);
+  box-shadow: 0 0 0 1px rgba(10, 10, 10, 0.18), 0 8px 24px rgba(10, 10, 10, 0.12);
 }
 
 .cursor__label {
