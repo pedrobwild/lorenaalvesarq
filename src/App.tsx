@@ -6,8 +6,13 @@ import { PROJECTS } from "./data/projects";
 import { routes } from "./lib/useHashRoute";
 import { shouldRunParallax, shouldUseSmoothScroll } from "./lib/device";
 import { useCustomCursor } from "./lib/useCustomCursor";
+import heroImg1 from "./assets/hero/hero-1.webp";
+import heroImg2 from "./assets/hero/hero-2.webp";
+import heroImg3 from "./assets/hero/hero-3.webp";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const HERO_IMAGES = [heroImg1, heroImg2, heroImg3];
 
 // ---------- Ensaios slideshow data ----------
 const ENSAIOS = [
@@ -46,8 +51,17 @@ const ENSAIOS = [
 export default function App() {
   const [ensaioIdx, setEnsaioIdx] = useState(0);
   const ensaiosPaused = useRef(false);
+  const [heroIdx, setHeroIdx] = useState(0);
 
   useCustomCursor();
+
+  // Hero slider — alterna a cada 4s
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setHeroIdx((i) => (i + 1) % HERO_IMAGES.length);
+    }, 4000);
+    return () => window.clearInterval(id);
+  }, []);
 
   // Auto-advance do slideshow
   useEffect(() => {
@@ -142,15 +156,15 @@ export default function App() {
     function startHeroAnim() {
       const hero = document.querySelector<HTMLElement>(".hero");
       if (!hero) return;
-      const heroImg = hero.querySelector<HTMLImageElement>(".hero__media img");
+      const heroMedia = hero.querySelector<HTMLElement>(".hero__media");
       const words = hero.querySelectorAll<HTMLElement>(".hero__title .word > span");
       const lede = hero.querySelector<HTMLElement>(".hero__lede");
       const scroll = hero.querySelector<HTMLElement>(".hero__scroll");
 
       const tl = gsap.timeline();
-      if (heroImg)
+      if (heroMedia)
         tl.fromTo(
-          heroImg,
+          heroMedia,
           { scale: 1.25, filter: "brightness(0.5)" },
           { scale: 1.08, filter: "brightness(1)", duration: 2.2, ease: "expo.out" },
           0
@@ -215,9 +229,9 @@ export default function App() {
     }
 
     // ---------- ScrollTrigger animations ----------
-    const heroImg = document.querySelector<HTMLImageElement>(".hero__media img");
-    if (heroImg) {
-      gsap.to(heroImg, {
+    const heroMedia = document.querySelector<HTMLElement>(".hero__media");
+    if (heroMedia) {
+      gsap.to(heroMedia, {
         yPercent: 18,
         scale: 1.18,
         ease: "none",
@@ -399,11 +413,17 @@ export default function App() {
       {/* Hero */}
       <section className="hero" id="inicio">
         <div className="hero__media">
-          <img
-            src="/images/hero-main.png"
-            alt="Residência contemporânea brasileira projetada pelo estúdio Lorena Alves"
-            fetchPriority="high"
-          />
+          {HERO_IMAGES.map((src, i) => (
+            <img
+              key={src}
+              src={src}
+              alt="Residência contemporânea brasileira projetada pelo estúdio Lorena Alves"
+              fetchPriority={i === 0 ? "high" : "low"}
+              loading={i === 0 ? "eager" : "lazy"}
+              className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
+              aria-hidden={i === heroIdx ? "false" : "true"}
+            />
+          ))}
         </div>
         <div className="hero__vignette"></div>
         <div className="hero__ticker">São Paulo · 2026 · Estúdio autoral</div>
