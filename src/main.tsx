@@ -5,11 +5,13 @@ import PortfolioPage from "./pages/PortfolioPage";
 import ProjectPage from "./pages/ProjectPage";
 import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
+import AnalyticsPage from "./pages/admin/AnalyticsPage";
 import ProjectsListPage from "./pages/admin/ProjectsListPage";
 import ProjectFormPage from "./pages/admin/ProjectFormPage";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import { useCustomCursor } from "./lib/useCustomCursor";
 import { useHashRoute, type Route } from "./lib/useHashRoute";
+import { initAnalytics } from "./lib/analytics";
 import "./index.css";
 
 const TRANSITION_MS = 380;
@@ -22,6 +24,12 @@ function renderRoute(route: Route) {
     return (
       <ProtectedRoute>
         <DashboardPage />
+      </ProtectedRoute>
+    );
+  if (route.name === "admin-analytics")
+    return (
+      <ProtectedRoute>
+        <AnalyticsPage />
       </ProtectedRoute>
     );
   if (route.name === "admin-projects")
@@ -59,6 +67,12 @@ function routeKeyOf(route: Route) {
 function Root() {
   const route = useHashRoute();
   useCustomCursor();
+
+  // Inicializa analytics uma vez no mount
+  useEffect(() => {
+    const cleanup = initAnalytics();
+    return cleanup;
+  }, []);
 
   // "displayed" é a rota que está renderizada no DOM. Quando a rota real muda,
   // disparamos um fade-out, trocamos `displayed` no meio e fazemos fade-in.
