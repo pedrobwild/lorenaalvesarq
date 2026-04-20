@@ -387,9 +387,8 @@ export default function App() {
         </a>
         <nav className="nav__menu" aria-label="Principal">
           <a href={routes.portfolio}>Portifólio</a>
-          <a href="#estudio">serviços</a>
+          <a href="#estudio">Sobre</a>
           <a href="#metodo">Método</a>
-          <a href="#contato">Sobre</a>
         </nav>
         <a className="nav__cta" href="#contato" onClick={() => track("click_contact", { value: { from: "nav" } })}>
           ENTRE EM CONTATO
@@ -409,9 +408,8 @@ export default function App() {
       <div className="mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav>
           <a href={routes.portfolio}>Portifólio</a>
-          <a href="#estudio">serviços</a>
+          <a href="#estudio">Sobre</a>
           <a href="#metodo">Método</a>
-          <a href="#contato">Sobre</a>
         </nav>
         <div>
           <div className="mono" style={{ marginBottom: "0.8rem" }}>
