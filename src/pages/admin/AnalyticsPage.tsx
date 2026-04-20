@@ -5,6 +5,7 @@ import { useAnalyticsState } from "@/components/admin/analytics/useAnalyticsStat
 import AnalyticsShell from "@/components/admin/analytics/AnalyticsShell";
 import OverviewTab from "@/components/admin/analytics/OverviewTab";
 import AcquisitionTab from "@/components/admin/analytics/AcquisitionTab";
+import BehaviorTab from "@/components/admin/analytics/BehaviorTab";
 import ProtectedRoute from "@/components/admin/ProtectedRoute";
 
 function ComingSoon({ name }: { name: string }) {
@@ -37,7 +38,14 @@ function AnalyticsContent() {
           onRemoveSegment={state.removeSegment}
         />
       )}
-      {state.tab === "behavior" && <ComingSoon name="Comportamento" />}
+      {state.tab === "behavior" && (
+        <BehaviorTab
+          range={state.range}
+          segments={state.segments}
+          onAddSegment={state.addSegment}
+          onRemoveSegment={state.removeSegment}
+        />
+      )}
       {state.tab === "conversion" && <ComingSoon name="Conversão" />}
       {state.tab === "retention" && <ComingSoon name="Retenção" />}
       {state.tab === "realtime" && <ComingSoon name="Tempo real" />}
