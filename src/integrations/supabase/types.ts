@@ -44,17 +44,25 @@ export type Database = {
           duration_ms: number | null
           event_type: string
           id: string
+          is_bounce: boolean | null
+          landing_path: string | null
+          language: string | null
           os: string | null
           path: string | null
           project_slug: string | null
           referrer: string | null
+          referrer_host: string | null
+          screen: string | null
           scroll_depth: number | null
           session_id: string | null
           user_agent: string | null
           utm_campaign: string | null
+          utm_content: string | null
           utm_medium: string | null
           utm_source: string | null
+          utm_term: string | null
           value: Json | null
+          visitor_id: string | null
         }
         Insert: {
           browser?: string | null
@@ -64,17 +72,25 @@ export type Database = {
           duration_ms?: number | null
           event_type: string
           id?: string
+          is_bounce?: boolean | null
+          landing_path?: string | null
+          language?: string | null
           os?: string | null
           path?: string | null
           project_slug?: string | null
           referrer?: string | null
+          referrer_host?: string | null
+          screen?: string | null
           scroll_depth?: number | null
           session_id?: string | null
           user_agent?: string | null
           utm_campaign?: string | null
+          utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          utm_term?: string | null
           value?: Json | null
+          visitor_id?: string | null
         }
         Update: {
           browser?: string | null
@@ -84,17 +100,25 @@ export type Database = {
           duration_ms?: number | null
           event_type?: string
           id?: string
+          is_bounce?: boolean | null
+          landing_path?: string | null
+          language?: string | null
           os?: string | null
           path?: string | null
           project_slug?: string | null
           referrer?: string | null
+          referrer_host?: string | null
+          screen?: string | null
           scroll_depth?: number | null
           session_id?: string | null
           user_agent?: string | null
           utm_campaign?: string | null
+          utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          utm_term?: string | null
           value?: Json | null
+          visitor_id?: string | null
         }
         Relationships: []
       }
@@ -318,8 +342,78 @@ export type Database = {
         }
         Relationships: []
       }
+      analytics_sessions: {
+        Row: {
+          conversions: number | null
+          converted: boolean | null
+          country: string | null
+          device: string | null
+          duration_s: number | null
+          ended_at: string | null
+          engagement_ms: number | null
+          is_bounce: boolean | null
+          landing_path: string | null
+          pageviews: number | null
+          referrer_host: string | null
+          session_id: string | null
+          started_at: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          visitor_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      analytics_breakdown: {
+        Args: {
+          p_dim: string
+          p_limit?: number
+          p_since: string
+          p_until: string
+        }
+        Returns: {
+          avg_duration_s: number
+          bounce_rate: number
+          conversions: number
+          dim: string
+          sessions: number
+        }[]
+      }
+      analytics_funnel: {
+        Args: { p_since: string; p_steps: string[]; p_until: string }
+        Returns: {
+          event_type: string
+          sessions: number
+          step: number
+        }[]
+      }
+      analytics_realtime: {
+        Args: never
+        Returns: {
+          minute: string
+          pageviews: number
+          sessions: number
+        }[]
+      }
+      analytics_retention: {
+        Args: { p_since: string; p_weeks?: number }
+        Returns: {
+          cohort_week: string
+          visitors: number
+          week_offset: number
+        }[]
+      }
+      analytics_timeseries: {
+        Args: { p_grain?: string; p_since: string; p_until: string }
+        Returns: {
+          bucket: string
+          conversions: number
+          pageviews: number
+          sessions: number
+        }[]
+      }
       analytics_top_paths: {
         Args: { p_limit?: number; p_since: string }
         Returns: {
