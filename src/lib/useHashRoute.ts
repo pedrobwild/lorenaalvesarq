@@ -6,6 +6,7 @@ export type Route =
   | { name: "project"; slug: string }
   | { name: "admin-login" }
   | { name: "admin-dashboard" }
+  | { name: "admin-analytics" }
   | { name: "admin-projects" }
   | { name: "admin-project-new" }
   | { name: "admin-project-edit"; slug: string }
@@ -26,6 +27,8 @@ function parseHash(hash: string): Route {
   // Admin
   if (h === "/admin/login") return { name: "admin-login" };
   if (h === "/admin" || h === "/admin/") return { name: "admin-dashboard" };
+  if (h === "/admin/analytics" || h === "/admin/analytics/")
+    return { name: "admin-analytics" };
   if (h === "/admin/projects" || h === "/admin/projects/") return { name: "admin-projects" };
   if (h === "/admin/projects/new") return { name: "admin-project-new" };
   const adminEdit = h.match(/^\/admin\/projects\/([a-z0-9-]+)\/?$/);
@@ -56,6 +59,7 @@ export const routes = {
   project: (slug: string) => `#/projeto/${slug}`,
   adminLogin: "#/admin/login",
   adminDashboard: "#/admin",
+  adminAnalytics: "#/admin/analytics",
   adminProjects: "#/admin/projects",
   adminProjectNew: "#/admin/projects/new",
   adminProjectEdit: (slug: string) => `#/admin/projects/${slug}`,
