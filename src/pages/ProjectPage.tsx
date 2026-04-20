@@ -7,7 +7,7 @@ import { useProjects } from "../lib/useProjects";
 import { routes } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
 import { shouldRunParallax, shouldUseSmoothScroll } from "../lib/device";
-import { useSeo, projectJsonLd } from "../lib/useSeo";
+import { useSeo, projectJsonLd, breadcrumbJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import SmartImage from "../components/SmartImage";
 
@@ -20,15 +20,37 @@ export default function ProjectPage({ slug }: Props) {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
 
+  // SEO derivado: prioriza campos do admin; senão monta um título e descrição ricos.
+  const seoTitle =
+    project?.seoTitle ||
+    (project
+      ? `${project.title} ${project.em} — ${project.tag} ${project.location ? `em ${project.location}` : ""} | Lorena Alves Arquitetura`.replace(/\s+/g, " ").trim()
+      : "Projeto — Lorena Alves Arquitetura");
+  const seoDescription =
+    project?.seoDescription ||
+    (project
+      ? `${project.summary} Projeto ${project.tag.toLowerCase()} ${project.year ? `de ${project.year}` : ""} ${project.location ? `em ${project.location}` : ""} pelo escritório Lorena Alves Arquitetura, com sede em Uberlândia/MG.`.replace(/\s+/g, " ").trim()
+      : undefined);
+  const ogImage = project?.ogImage || project?.cover;
+
+  const jsonLd = settings && project
+    ? [
+        projectJsonLd(settings, { ...project, tag: project.tag }),
+        breadcrumbJsonLd(settings, [
+          { name: "Início", path: "/" },
+          { name: "Portfólio", path: "/portfolio" },
+          { name: `${project.title} ${project.em}`.trim(), path: `/projeto/${project.slug}` },
+        ]),
+      ]
+    : undefined;
+
   useSeo({
-    title: project
-      ? `${project.title} ${project.em} — lorenaalves arq`
-      : "Projeto — lorenaalves arq",
-    description: project?.summary || project?.intro || undefined,
+    title: seoTitle,
+    description: seoDescription,
     canonicalPath: `/projeto/${slug}`,
-    ogImage: project?.cover,
+    ogImage,
     ogType: "article",
-    jsonLd: settings && project ? projectJsonLd(settings, project) : undefined,
+    jsonLd,
   });
 
   useEffect(() => {

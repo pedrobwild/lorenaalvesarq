@@ -14,7 +14,7 @@
     <image:image>
       <image:loc>https://lorenaalvesarq.com/images/hero-main.png</image:loc>
       <image:title>Arquiteta em Uberlândia — Lorena Alves Arquitetura</image:title>
-      <image:caption>Projeto residencial contemporâneo em Uberlândia/MG.</image:caption>
+      <image:caption>Escritório autoral de arquitetura e interiores em Uberlândia/MG.</image:caption>
     </image:image>
   </url>
 
@@ -23,6 +23,7 @@
     <lastmod>2026-04-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/portfolio" />
   </url>
 
   <url>
@@ -30,35 +31,41 @@
     <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-paineira" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/casa-jequitiba</loc>
     <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-jequitiba" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/apto-higienopolis</loc>
     <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/apto-higienopolis" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/casa-pau-brasil</loc>
     <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-pau-brasil" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/restaurante-takka</loc>
     <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/restaurante-takka" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/fazenda-porto</loc>
     <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/fazenda-porto" />
   </url>
 </urlset>

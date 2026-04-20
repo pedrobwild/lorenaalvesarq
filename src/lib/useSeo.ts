@@ -149,6 +149,7 @@ export function projectJsonLd(
     cover?: string;
     location?: string;
     year?: string;
+    tag?: string;
   }
 ) {
   const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
@@ -164,7 +165,45 @@ export function projectJsonLd(
       name: s.site_title || "Lorena Alves Arquitetura",
       url: base,
     },
+    about: project.tag,
     contentLocation: project.location,
     dateCreated: project.year,
+  };
+}
+
+/** BreadcrumbList JSON-LD para melhorar exibição em SERP. */
+export function breadcrumbJsonLd(
+  s: SiteSettings,
+  trail: Array<{ name: string; path: string }>
+) {
+  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: trail.map((t, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: t.name,
+      item: `${base}${t.path.startsWith("/") ? t.path : `/${t.path}`}`,
+    })),
+  };
+}
+
+/** ItemList JSON-LD para coleções (ex.: portfólio). */
+export function itemListJsonLd(
+  s: SiteSettings,
+  items: Array<{ name: string; path: string; image?: string }>
+) {
+  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: items.map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${base}${it.path.startsWith("/") ? it.path : `/${it.path}`}`,
+      name: it.name,
+      image: it.image,
+    })),
   };
 }

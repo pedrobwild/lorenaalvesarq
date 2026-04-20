@@ -26,6 +26,10 @@ type DbProject = {
   photographer: string | null;
   order_index: number | null;
   visible: boolean | null;
+  seo_title: string | null;
+  seo_description: string | null;
+  og_image_url: string | null;
+  updated_at: string | null;
   project_images?: Array<{
     url: string;
     url_md: string | null;
@@ -73,6 +77,10 @@ function mapDbToProject(p: DbProject): Project {
     team: p.team ?? "",
     photographer: p.photographer ?? "",
     gallery: images,
+    seoTitle: p.seo_title,
+    seoDescription: p.seo_description,
+    ogImage: p.og_image_url,
+    updatedAt: p.updated_at,
   };
 }
 
@@ -90,7 +98,7 @@ export function useProjects() {
     supabase
       .from("projects")
       .select(
-        "id, slug, number, title, em, tag, year, location, area, status, cover_url, cover_url_md, cover_url_sm, cover_blur_data_url, cover_alt, summary, intro, program, materials, team, photographer, order_index, visible, project_images(url, url_md, url_sm, blur_data_url, alt, caption, format, order_index)"
+        "id, slug, number, title, em, tag, year, location, area, status, cover_url, cover_url_md, cover_url_sm, cover_blur_data_url, cover_alt, summary, intro, program, materials, team, photographer, order_index, visible, seo_title, seo_description, og_image_url, updated_at, project_images(url, url_md, url_sm, blur_data_url, alt, caption, format, order_index)"
       )
       .eq("visible", true)
       .order("order_index", { ascending: true })
