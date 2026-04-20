@@ -188,7 +188,9 @@ export const PROJECTS: Project[] = [
     location: "Pinheiros, São Paulo, SP",
     area: "280 m²",
     status: "Concluído",
-    cover: "/images/project-05.png",
+    cover: "/images/project-05.jpg",
+    coverMd: "/images/project-05-md.jpg",
+    coverSm: "/images/project-05-sm.jpg",
     alt: "Restaurante Takka — interior sofisticado com banquettes em couro",
     summary:
       "Restaurante autoral com banquettes em couro caramelo e balcão em travertino.",
