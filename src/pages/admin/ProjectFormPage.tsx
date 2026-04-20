@@ -615,24 +615,20 @@ export default function ProjectFormPage({ slug }: Props) {
                     if (f) uploadCover(f);
                   }}
                 />
-                <Field label="Alt-text da capa" full>
-                  <div className="admin-alt-row">
-                    <input
-                      className="admin-field__input"
-                      value={form.cover_alt}
-                      onChange={(e) => set("cover_alt", e.target.value)}
-                      placeholder="Descrição visual da capa"
-                    />
-                    <button
-                      type="button"
-                      className="admin-btn admin-btn--ghost"
-                      onClick={handleGenerateCoverAlt}
-                      disabled={!form.cover_url || genAlt?.kind === "cover"}
-                      title="Gerar alt-text com IA a partir da imagem"
-                    >
-                      {genAlt?.kind === "cover" ? "gerando…" : "✨ gerar com IA"}
-                    </button>
-                  </div>
+                <Field
+                  label={`Alt-text da capa${coverAltLoading ? " · gerando com IA…" : ""}`}
+                  full
+                >
+                  <input
+                    className="admin-field__input"
+                    value={form.cover_alt}
+                    onChange={(e) => set("cover_alt", e.target.value)}
+                    placeholder={
+                      coverAltLoading
+                        ? "gerando descrição automaticamente…"
+                        : "Descrição visual da capa"
+                    }
+                  />
                 </Field>
               </div>
             </div>
