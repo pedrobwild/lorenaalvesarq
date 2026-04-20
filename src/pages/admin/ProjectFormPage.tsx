@@ -103,6 +103,11 @@ export default function ProjectFormPage({ slug }: Props) {
   const [msg, setMsg] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [slugDirty, setSlugDirty] = useState(false);
 
+  const gallerySensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+
   useEffect(() => {
     if (isNew) return;
     (async () => {
