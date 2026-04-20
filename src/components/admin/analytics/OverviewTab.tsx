@@ -385,9 +385,9 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
                   fontSize: 11,
                   color: "var(--aa-fg)",
                 }}
-                labelFormatter={(d: string) => {
-                  const dt = new Date(d);
-                  return Number.isNaN(dt.getTime()) ? d : dt.toLocaleString("pt-BR");
+                labelFormatter={(d) => {
+                  const dt = new Date(String(d));
+                  return Number.isNaN(dt.getTime()) ? String(d) : dt.toLocaleString("pt-BR");
                 }}
               />
               <Area
