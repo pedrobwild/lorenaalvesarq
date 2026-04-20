@@ -386,7 +386,7 @@ export default function App() {
           <span className="brand-lockup">lorena<b>alves</b><sup>arq</sup></span>
         </a>
         <nav className="nav__menu" aria-label="Principal">
-          <a href={routes.portfolio}>Portifólio</a>
+          <a href={routes.portfolio}>Portfólio</a>
           <a href="#estudio">Sobre</a>
           <a href="#metodo">Método</a>
         </nav>
@@ -407,7 +407,7 @@ export default function App() {
       {/* Mobile menu */}
       <div className="mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav>
-          <a href={routes.portfolio}>Portifólio</a>
+          <a href={routes.portfolio}>Portfólio</a>
           <a href="#estudio">Sobre</a>
           <a href="#metodo">Método</a>
         </nav>
@@ -760,7 +760,7 @@ export default function App() {
                 <a href="#metodo">Método</a>
               </li>
               <li>
-                <a href={routes.portfolio}>Portifólio</a>
+                <a href={routes.portfolio}>Portfólio</a>
               </li>
             </ul>
           </div>
