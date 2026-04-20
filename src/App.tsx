@@ -769,7 +769,16 @@ export default function App() {
         </div>
         <div className="footer__bottom">
           <span>© 2026 Lorena Alves Arquitetura. Todos os direitos reservados.</span>
-          <span>CAU BR · Brasil</span>
+          <span>
+            CAU BR ·{" "}
+            <a
+              href="#/admin/login"
+              className="footer__admin-link"
+              aria-label="Área administrativa"
+            >
+              Brasil
+            </a>
+          </span>
         </div>
       </footer>
     </>

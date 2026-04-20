@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-import { PROJECTS, type Project } from "../data/projects";
+import { type Project } from "../data/projects";
+import { useProjects } from "../lib/useProjects";
 import { routes } from "../lib/useHashRoute";
 import { shouldUseSmoothScroll } from "../lib/device";
 
@@ -10,14 +11,15 @@ const TAGS = ["Todos", "Residencial", "Interiores", "Comercial", "Rural"] as con
 type Tag = (typeof TAGS)[number];
 
 export default function PortfolioPage() {
+  const { projects } = useProjects();
   const [filter, setFilter] = useState<Tag>("Todos");
   const [hovered, setHovered] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
   const filtered = useMemo<Project[]>(() => {
-    if (filter === "Todos") return PROJECTS;
-    return PROJECTS.filter((p) => p.tag === filter);
-  }, [filter]);
+    if (filter === "Todos") return projects;
+    return projects.filter((p) => p.tag === filter);
+  }, [filter, projects]);
 
   // Smooth scroll + revelação
   useEffect(() => {
@@ -109,7 +111,7 @@ export default function PortfolioPage() {
             >
               {t}
               <span className="pf-filter__count">
-                {t === "Todos" ? PROJECTS.length : PROJECTS.filter((p) => p.tag === t).length}
+                {t === "Todos" ? projects.length : projects.filter((p) => p.tag === t).length}
               </span>
             </button>
           ))}
@@ -135,7 +137,7 @@ export default function PortfolioPage() {
                 <img src={p.cover} alt={p.alt} loading="lazy" />
                 <div className="pf-card__veil" />
                 <span className="pf-card__index mono">
-                  {p.number} / {String(PROJECTS.length).padStart(2, "0")}
+                  {p.number} / {String(projects.length).padStart(2, "0")}
                 </span>
                 <span className="pf-card__go mono">
                   ver projeto
