@@ -77,6 +77,10 @@ function mapDbToProject(p: DbProject): Project {
     team: p.team ?? "",
     photographer: p.photographer ?? "",
     gallery: images,
+    seoTitle: p.seo_title,
+    seoDescription: p.seo_description,
+    ogImage: p.og_image_url,
+    updatedAt: p.updated_at,
   };
 }
 
