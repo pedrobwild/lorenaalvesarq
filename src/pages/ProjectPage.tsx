@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import { type ProjectImage } from "../data/projects";
 import { useProjects } from "../lib/useProjects";
 import { routes } from "../lib/useHashRoute";
+import { track } from "../lib/analytics";
 import { shouldRunParallax, shouldUseSmoothScroll } from "../lib/device";
 
 type Props = { slug: string };
@@ -16,6 +17,7 @@ export default function ProjectPage({ slug }: Props) {
   const pageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    track("project_view", { project_slug: slug });
     const useLenis = shouldUseSmoothScroll();
     const canParallax = shouldRunParallax();
     let lenis: Lenis | null = null;
