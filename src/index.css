@@ -3588,10 +3588,21 @@ textarea.admin-field__input {
   border-radius: 10px;
   overflow: hidden;
   background: #fafaf9;
+  position: relative;
 }
 .admin-gallery__item img {
   width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block;
   background: #ddd;
+}
+.admin-gallery__drag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 6px;
+  padding: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 .admin-gallery__fields {
   padding: 10px;
@@ -3603,6 +3614,32 @@ textarea.admin-field__input {
   font-size: 12px;
   padding-top: 4px;
   border-top: 1px solid #f0f0ee;
+}
+
+/* ----- Drag handle ----- */
+.admin-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: #888;
+  cursor: grab;
+  padding: 0;
+  border-radius: 4px;
+  touch-action: none;
+}
+.admin-drag-handle:hover { color: #111; background: #f0f0ee; }
+.admin-drag-handle:active { cursor: grabbing; }
+.admin-drag-handle.is-disabled { cursor: not-allowed; opacity: 0.3; }
+.admin-drag-handle svg { fill: currentColor; }
+
+.admin-hint {
+  font-size: 12px;
+  opacity: 0.6;
+  margin: 0 0 10px;
 }
 
 /* ----- Loading state ----- */
