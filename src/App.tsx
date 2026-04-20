@@ -683,12 +683,30 @@ export default function App() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA visual full-bleed */}
+      <section className="cta-hero" id="cta-hero" aria-label="Vamos projetar seu próximo modo de viver">
+        <img
+          src="/images/cta-projetos-vida.jpg"
+          alt="Ambiente residencial projetado pelo estúdio Lorena Alves — onde projetos ganham vida"
+          className="cta-hero__bg"
+          loading="lazy"
+          decoding="async"
+        />
+        <div className="cta-hero__overlay" aria-hidden="true"></div>
+        <div className="cta-hero__content reveal">
+          <p className="cta-hero__eyebrow mono">Contato · 05</p>
+          <h2 className="cta-hero__title">
+            Onde seus projetos <em>ganham vida</em>.
+          </h2>
+          <p className="cta-hero__subtitle">
+            Vamos projetar o seu próximo <em>modo de viver</em>?
+          </p>
+        </div>
+      </section>
+
+      {/* CTA contatos */}
       <section className="section cta" id="contato">
         <div className="cta__grid">
-          <h2 className="cta__title reveal">
-            Vamos projetar o seu próximo <em>modo de viver</em>?
-          </h2>
           <div className="cta__details">
             {settings?.contact_email && (
               <div className="cta__detail">
