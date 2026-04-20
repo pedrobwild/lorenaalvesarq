@@ -6,6 +6,7 @@ import ProjectPage from "./pages/ProjectPage";
 import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import AnalyticsPage from "./pages/admin/AnalyticsPage";
+import SeoPage from "./pages/admin/SeoPage";
 import ProjectsListPage from "./pages/admin/ProjectsListPage";
 import ProjectFormPage from "./pages/admin/ProjectFormPage";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
@@ -30,6 +31,12 @@ function renderRoute(route: Route) {
     return (
       <ProtectedRoute>
         <AnalyticsPage />
+      </ProtectedRoute>
+    );
+  if (route.name === "admin-seo")
+    return (
+      <ProtectedRoute>
+        <SeoPage />
       </ProtectedRoute>
     );
   if (route.name === "admin-projects")

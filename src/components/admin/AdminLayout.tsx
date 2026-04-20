@@ -4,7 +4,7 @@ import { routes } from "@/lib/useHashRoute";
 
 type Props = {
   children: ReactNode;
-  active?: "dashboard" | "projects" | "analytics";
+  active?: "dashboard" | "projects" | "analytics" | "seo";
 };
 
 export default function AdminLayout({ children, active }: Props) {
@@ -14,6 +14,7 @@ export default function AdminLayout({ children, active }: Props) {
     { key: "dashboard", label: "Dashboard", href: routes.adminDashboard },
     { key: "analytics", label: "Analytics", href: routes.adminAnalytics },
     { key: "projects", label: "Projetos", href: routes.adminProjects },
+    { key: "seo", label: "SEO", href: routes.adminSeo },
   ];
 
   async function handleSignOut() {
@@ -56,7 +57,9 @@ export default function AdminLayout({ children, active }: Props) {
               ? "Projetos"
               : active === "analytics"
                 ? "Analytics"
-                : "Dashboard"}
+                : active === "seo"
+                  ? "SEO"
+                  : "Dashboard"}
           </span>
           <div className="admin__topbar-right">
             {user?.email && <span className="admin__user mono">{user.email}</span>}

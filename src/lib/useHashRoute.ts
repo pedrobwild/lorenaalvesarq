@@ -30,6 +30,7 @@ function parseHash(hash: string): Route {
   if (h === "/admin" || h === "/admin/") return { name: "admin-dashboard" };
   if (h === "/admin/analytics" || h === "/admin/analytics/")
     return { name: "admin-analytics" };
+  if (h === "/admin/seo" || h === "/admin/seo/") return { name: "admin-seo" };
   if (h === "/admin/projects" || h === "/admin/projects/") return { name: "admin-projects" };
   if (h === "/admin/projects/new") return { name: "admin-project-new" };
   const adminEdit = h.match(/^\/admin\/projects\/([a-z0-9-]+)\/?$/);
@@ -61,6 +62,7 @@ export const routes = {
   adminLogin: "#/admin/login",
   adminDashboard: "#/admin",
   adminAnalytics: "#/admin/analytics",
+  adminSeo: "#/admin/seo",
   adminProjects: "#/admin/projects",
   adminProjectNew: "#/admin/projects/new",
   adminProjectEdit: (slug: string) => `#/admin/projects/${slug}`,
