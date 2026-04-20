@@ -4,6 +4,9 @@
 
 export type ProjectImage = {
   src: string;
+  srcMd?: string | null;
+  srcSm?: string | null;
+  blurDataUrl?: string | null;
   alt: string;
   caption?: string;
   // tamanho no grid da página de projeto: "full" | "half" | "tall" | "wide"
@@ -21,6 +24,9 @@ export type Project = {
   area: string;
   status: "Em obra" | "Concluído" | "Em projeto";
   cover: string;
+  coverMd?: string | null;
+  coverSm?: string | null;
+  coverBlurDataUrl?: string | null;
   alt: string;
   summary: string; // usado na página de portfólio (1-2 linhas)
   intro: string; // parágrafo na página do projeto

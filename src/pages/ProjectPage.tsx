@@ -9,6 +9,7 @@ import { track } from "../lib/analytics";
 import { shouldRunParallax, shouldUseSmoothScroll } from "../lib/device";
 import { useSeo, projectJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
+import SmartImage from "../components/SmartImage";
 
 type Props = { slug: string };
 
@@ -156,7 +157,16 @@ export default function ProjectPage({ slug }: Props) {
           <p className="pp-hero__sub">{project.summary}</p>
         </div>
         <div className="pp-hero__img">
-          <img src={project.cover} alt={project.alt} />
+          <SmartImage
+            src={project.cover}
+            srcMd={project.coverMd}
+            srcSm={project.coverSm}
+            blurDataUrl={project.coverBlurDataUrl}
+            alt={project.alt}
+            sizes="(max-width: 900px) 100vw, 60vw"
+            priority
+            wrapperClassName="pp-hero__img-wrap"
+          />
         </div>
       </header>
 
@@ -251,7 +261,15 @@ function GalleryTile({ img, onOpen }: { img: ProjectImage; onOpen: () => void })
   return (
     <figure className={klass}>
       <button type="button" className="pp-tile__btn" onClick={onOpen} data-cursor="zoom">
-        <img src={img.src} alt={img.alt} loading="lazy" />
+        <SmartImage
+          src={img.src}
+          srcMd={img.srcMd}
+          srcSm={img.srcSm}
+          blurDataUrl={img.blurDataUrl}
+          alt={img.alt}
+          sizes="(max-width: 700px) 100vw, (max-width: 1200px) 50vw, 800px"
+          wrapperClassName="pp-tile__img-wrap"
+        />
         <span className="pp-tile__zoom mono">ampliar +</span>
       </button>
       {img.caption && <figcaption className="pp-tile__cap mono">{img.caption}</figcaption>}
