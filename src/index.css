@@ -1595,7 +1595,7 @@ button {
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 2rem;
-  padding: 2.5rem 0;
+  padding: 1.5rem 0;
   border-top: 1px solid var(--line);
   align-items: center;
   transition: background 0.6s var(--ease);
@@ -1614,7 +1614,7 @@ button {
 .process__title {
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
   letter-spacing: -0.02em;
   line-height: 1;
   transition: transform 0.6s var(--ease), color 0.6s var(--ease);
