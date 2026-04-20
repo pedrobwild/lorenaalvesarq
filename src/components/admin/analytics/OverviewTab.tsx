@@ -136,30 +136,38 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
       days <= 2 ? "hour" : days <= 90 ? "day" : days <= 365 ? "week" : "month";
 
     const calls: Promise<unknown>[] = [
-      supabase.rpc("analytics_overview_kpis", {
-        p_since: sinceISO,
-        p_until: untilISO,
-        ...segArgs,
-      }),
-      supabase.rpc("analytics_timeseries", {
-        p_since: sinceISO,
-        p_until: untilISO,
-        p_grain: grain,
-      }),
+      Promise.resolve(
+        supabase.rpc("analytics_overview_kpis", {
+          p_since: sinceISO,
+          p_until: untilISO,
+          ...segArgs,
+        })
+      ),
+      Promise.resolve(
+        supabase.rpc("analytics_timeseries", {
+          p_since: sinceISO,
+          p_until: untilISO,
+          p_grain: grain,
+        })
+      ),
     ];
 
     if (prevRange) {
       calls.push(
-        supabase.rpc("analytics_overview_kpis", {
-          p_since: prevRange.from.toISOString(),
-          p_until: sinceISO,
-          ...segArgs,
-        }),
-        supabase.rpc("analytics_timeseries", {
-          p_since: prevRange.from.toISOString(),
-          p_until: sinceISO,
-          p_grain: grain,
-        })
+        Promise.resolve(
+          supabase.rpc("analytics_overview_kpis", {
+            p_since: prevRange.from.toISOString(),
+            p_until: sinceISO,
+            ...segArgs,
+          })
+        ),
+        Promise.resolve(
+          supabase.rpc("analytics_timeseries", {
+            p_since: prevRange.from.toISOString(),
+            p_until: sinceISO,
+            p_grain: grain,
+          })
+        )
       );
     }
 
