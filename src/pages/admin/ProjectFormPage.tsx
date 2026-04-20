@@ -543,56 +543,73 @@ export default function ProjectFormPage({ slug }: Props) {
                 />
               </label>
             </header>
-            <div className="admin-gallery">
-              {gallery.map((g, i) => (
-                <div key={i} className="admin-gallery__item">
-                  <img src={g.url} alt={g.alt} />
-                  <div className="admin-gallery__fields">
-                    <input
-                      className="admin-field__input"
-                      placeholder="alt-text"
-                      value={g.alt}
-                      onChange={(e) => updateImg(i, { alt: e.target.value })}
-                    />
-                    <input
-                      className="admin-field__input"
-                      placeholder="legenda (opcional)"
-                      value={g.caption ?? ""}
-                      onChange={(e) => updateImg(i, { caption: e.target.value })}
-                    />
-                    <select
-                      className="admin-field__input"
-                      value={g.format}
-                      onChange={(e) => updateImg(i, { format: e.target.value })}
-                    >
-                      <option value="full">full</option>
-                      <option value="half">half</option>
-                      <option value="tall">tall</option>
-                      <option value="wide">wide</option>
-                    </select>
-                    <div className="admin-gallery__actions">
-                      <button className="admin-link" onClick={() => moveImg(i, -1)}>
-                        ↑
-                      </button>
-                      <button className="admin-link" onClick={() => moveImg(i, 1)}>
-                        ↓
-                      </button>
-                      <button
-                        className="admin-link admin-link--danger"
-                        onClick={() => removeImg(i)}
-                      >
-                        excluir
-                      </button>
-                    </div>
-                  </div>
+            <DndContext
+              sensors={gallerySensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleGalleryDragEnd}
+            >
+              <SortableContext
+                items={gallery.map((g) => g.uid)}
+                strategy={rectSortingStrategy}
+              >
+                <div className="admin-gallery">
+                  {gallery.map((g, i) => (
+                    <SortableRow key={g.uid} id={g.uid} as="div" className="admin-gallery__item">
+                      {({ listeners, attributes, isDragging }) => (
+                        <>
+                          <div className="admin-gallery__drag">
+                            <DragHandle
+                              listeners={listeners}
+                              attributes={attributes}
+                              label="arrastar imagem"
+                            />
+                          </div>
+                          <img src={g.url} alt={g.alt} />
+                          <div className="admin-gallery__fields">
+                            <input
+                              className="admin-field__input"
+                              placeholder="alt-text"
+                              value={g.alt}
+                              onChange={(e) => updateImg(i, { alt: e.target.value })}
+                            />
+                            <input
+                              className="admin-field__input"
+                              placeholder="legenda (opcional)"
+                              value={g.caption ?? ""}
+                              onChange={(e) => updateImg(i, { caption: e.target.value })}
+                            />
+                            <select
+                              className="admin-field__input"
+                              value={g.format}
+                              onChange={(e) => updateImg(i, { format: e.target.value })}
+                            >
+                              <option value="full">full</option>
+                              <option value="half">half</option>
+                              <option value="tall">tall</option>
+                              <option value="wide">wide</option>
+                            </select>
+                            <div className="admin-gallery__actions">
+                              <button
+                                className="admin-link admin-link--danger"
+                                onClick={() => removeImg(i)}
+                                disabled={isDragging}
+                              >
+                                excluir
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </SortableRow>
+                  ))}
+                  {gallery.length === 0 && (
+                    <p className="mono" style={{ opacity: 0.6 }}>
+                      ainda sem imagens.
+                    </p>
+                  )}
                 </div>
-              ))}
-              {gallery.length === 0 && (
-                <p className="mono" style={{ opacity: 0.6 }}>
-                  ainda sem imagens.
-                </p>
-              )}
-            </div>
+              </SortableContext>
+            </DndContext>
           </section>
         </>
       )}
