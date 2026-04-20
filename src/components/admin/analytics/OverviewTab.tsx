@@ -1,10 +1,13 @@
 /**
- * OverviewTab — aba "Visão executiva".
+ * OverviewTab — aba "Visão executiva" (server-side).
  *
- * Por enquanto, mantém a mesma lógica que a página antiga já tinha
- * (fetch direto em analytics_events com filtro por dispositivo e
- * comparativo com período anterior). Nas próximas fases isso vai
- * migrar para as RPCs server-side (analytics_timeseries / breakdown).
+ * Usa duas RPCs:
+ *   - analytics_overview_kpis(since, until, ...filters): KPIs + sparkline (14d)
+ *   - analytics_timeseries(since, until, grain): série diária para o chart principal
+ *
+ * O cliente nunca puxa eventos brutos. Todos os filtros de segmento são
+ * traduzidos em parâmetros nomeados da RPC. Comparativo com período anterior
+ * faz uma segunda chamada paralela com a janela equivalente.
  */
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -19,24 +22,21 @@ import {
   CartesianGrid,
 } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
-import HoursHeatmap from "@/components/admin/HoursHeatmap";
-import type { DateRange, Segment } from "./types";
+import type { DateRange, Segment, SegmentDim } from "./types";
 
-type RawEvent = {
-  event_type: string;
-  session_id: string | null;
-  visitor_id: string | null;
-  path: string | null;
-  device: string | null;
-  duration_ms: number | null;
-  utm_source: string | null;
-  utm_medium: string | null;
-  utm_campaign: string | null;
-  country: string | null;
-  landing_path: string | null;
-  referrer_host: string | null;
-  project_slug: string | null;
-  created_at: string;
+// ---------------------------------------------------------------------------
+// Tipos
+// ---------------------------------------------------------------------------
+type Kpis = {
+  sessions: number;
+  unique_visitors: number;
+  pageviews: number;
+  pages_per_session: number;
+  avg_engagement_ms: number;
+  bounce_rate: number;
+  conversions: number;
+  conversion_rate: number;
+  spark: { d: string; sessions: number; pageviews: number }[];
 };
 
 type DailyPoint = {
@@ -47,149 +47,23 @@ type DailyPoint = {
   prevPageviews?: number;
 };
 
-const SEGMENT_COL_MAP: Record<Segment["dim"], keyof RawEvent> = {
-  device: "device",
-  country: "country",
-  utm_source: "utm_source",
-  utm_medium: "utm_medium",
-  utm_campaign: "utm_campaign",
-  landing_path: "landing_path",
-  referrer_host: "referrer_host",
+const EMPTY_KPIS: Kpis = {
+  sessions: 0,
+  unique_visitors: 0,
+  pageviews: 0,
+  pages_per_session: 0,
+  avg_engagement_ms: 0,
+  bounce_rate: 0,
+  conversions: 0,
+  conversion_rate: 0,
+  spark: [],
 };
 
-function applySegments(rows: RawEvent[], segments: Segment[]): RawEvent[] {
-  if (!segments.length) return rows;
-  return rows.filter((r) =>
-    segments.every((s) => {
-      const col = SEGMENT_COL_MAP[s.dim];
-      const v = r[col];
-      return (v ?? "").toString().toLowerCase() === s.value.toLowerCase();
-    })
-  );
-}
-
-function startOfUtcDay(d: Date): string {
-  return d.toISOString().slice(0, 10);
-}
-
-function buildDailySeries(
-  rows: RawEvent[],
-  range: DateRange,
-  prevRange: DateRange | null,
-  prevRows: RawEvent[]
-): DailyPoint[] {
-  const dayMs = 86400_000;
-  const start = new Date(range.from);
-  start.setHours(0, 0, 0, 0);
-  const end = new Date(range.to);
-  end.setHours(0, 0, 0, 0);
-  const days = Math.max(1, Math.round((end.getTime() - start.getTime()) / dayMs) + 1);
-
-  const map = new Map<string, { sessions: Set<string>; pageviews: number }>();
-  for (let i = 0; i < days; i++) {
-    const d = new Date(start.getTime() + i * dayMs);
-    map.set(startOfUtcDay(d), { sessions: new Set(), pageviews: 0 });
-  }
-  for (const r of rows) {
-    if (r.event_type !== "pageview") continue;
-    const k = startOfUtcDay(new Date(r.created_at));
-    const b = map.get(k);
-    if (!b) continue;
-    b.pageviews++;
-    if (r.session_id) b.sessions.add(r.session_id);
-  }
-
-  // previous period aligned by day offset
-  const prevMap: { sessions: Set<string>; pageviews: number }[] = [];
-  if (prevRange && prevRows.length) {
-    const prevStart = new Date(prevRange.from);
-    prevStart.setHours(0, 0, 0, 0);
-    for (let i = 0; i < days; i++) {
-      prevMap.push({ sessions: new Set(), pageviews: 0 });
-    }
-    for (const r of prevRows) {
-      if (r.event_type !== "pageview") continue;
-      const t = new Date(r.created_at).getTime();
-      const off = Math.floor((t - prevStart.getTime()) / dayMs);
-      if (off < 0 || off >= days) continue;
-      const b = prevMap[off];
-      b.pageviews++;
-      if (r.session_id) b.sessions.add(r.session_id);
-    }
-  }
-
-  return Array.from(map.entries()).map(([day, v], i) => ({
-    day,
-    sessions: v.sessions.size,
-    pageviews: v.pageviews,
-    prevSessions: prevMap[i]?.sessions.size,
-    prevPageviews: prevMap[i]?.pageviews,
-  }));
-}
-
-type Kpis = {
-  sessions: number;
-  uniqueVisitors: number;
-  pageviews: number;
-  pagesPerSession: number;
-  avgEngagementMs: number;
-  bounceRate: number;
-  conversions: number;
-  conversionRate: number;
-};
-
-function calcKpis(rows: RawEvent[]): Kpis {
-  const sessionPV = new Map<string, number>();
-  const visitors = new Set<string>();
-  const sessionsConverted = new Set<string>();
-  let pageviews = 0;
-  let conversions = 0;
-  let engagementSum = 0;
-  let engagementCount = 0;
-
-  for (const r of rows) {
-    if (r.visitor_id) visitors.add(r.visitor_id);
-    if (r.event_type === "pageview") {
-      pageviews++;
-      if (r.session_id) {
-        sessionPV.set(r.session_id, (sessionPV.get(r.session_id) || 0) + 1);
-      }
-    }
-    if (r.event_type === "engagement_time" && r.duration_ms && r.duration_ms > 0) {
-      engagementSum += r.duration_ms;
-      engagementCount++;
-    }
-    if (
-      (r.event_type === "click_contact" ||
-        r.event_type === "click_whatsapp" ||
-        r.event_type === "form_submit") &&
-      r.session_id
-    ) {
-      sessionsConverted.add(r.session_id);
-      conversions++;
-    }
-  }
-
-  const sessions = sessionPV.size;
-  let bounced = 0;
-  for (const [sid, pv] of sessionPV) {
-    if (pv <= 1 && !sessionsConverted.has(sid)) bounced++;
-  }
-
-  return {
-    sessions,
-    uniqueVisitors: visitors.size,
-    pageviews,
-    pagesPerSession: sessions ? pageviews / sessions : 0,
-    avgEngagementMs: engagementCount ? engagementSum / engagementCount : 0,
-    bounceRate: sessions ? (bounced / sessions) * 100 : 0,
-    conversions,
-    conversionRate: sessions ? (sessionsConverted.size / sessions) * 100 : 0,
-  };
-}
-
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 function fmtNum(n: number): string {
-  return n.toLocaleString("pt-BR");
+  return Math.round(n).toLocaleString("pt-BR");
 }
 function fmtPct(n: number): string {
   return `${n.toFixed(1)}%`;
@@ -207,6 +81,24 @@ function delta(cur: number, prev: number): { txt: string; dir: "up" | "down" | "
   return { txt: `${d > 0 ? "+" : ""}${d.toFixed(1)}%`, dir };
 }
 
+/** Converte segmentos ativos em parâmetros nomeados da RPC. */
+function segmentsToRpcArgs(segments: Segment[]): Record<string, string | null> {
+  const map: Partial<Record<SegmentDim, string>> = {};
+  for (const s of segments) map[s.dim] = s.value;
+  return {
+    p_device: map.device ?? null,
+    p_country: map.country ?? null,
+    p_utm_source: map.utm_source ?? null,
+    p_utm_medium: map.utm_medium ?? null,
+    p_utm_campaign: map.utm_campaign ?? null,
+    p_landing_path: map.landing_path ?? null,
+    p_referrer_host: map.referrer_host ?? null,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
 type Props = {
   range: DateRange;
   segments: Segment[];
@@ -215,8 +107,10 @@ type Props = {
 
 export default function OverviewTab({ range, segments, comparePrev }: Props) {
   const [loading, setLoading] = useState(true);
-  const [rawCur, setRawCur] = useState<RawEvent[]>([]);
-  const [rawPrev, setRawPrev] = useState<RawEvent[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [kpis, setKpis] = useState<Kpis>(EMPTY_KPIS);
+  const [prevKpis, setPrevKpis] = useState<Kpis>(EMPTY_KPIS);
+  const [series, setSeries] = useState<DailyPoint[]>([]);
   const [metric, setMetric] = useState<"sessions" | "pageviews">("sessions");
 
   const prevRange = useMemo<DateRange | null>(() => {
@@ -230,42 +124,114 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    const cols =
-      "event_type,session_id,visitor_id,path,device,duration_ms,utm_source,utm_medium,utm_campaign,country,landing_path,referrer_host,project_slug,created_at";
+    setError(null);
 
+    const segArgs = segmentsToRpcArgs(segments);
     const sinceISO = range.from.toISOString();
     const untilISO = range.to.toISOString();
 
-    const curQuery = supabase
-      .from("analytics_events")
-      .select(cols)
-      .gte("created_at", sinceISO)
-      .lte("created_at", untilISO)
-      .order("created_at", { ascending: true })
-      .limit(50000);
+    // grain heurístico: ≤2 dias = hora, ≤90 = dia, ≤365 = semana, > = mês
+    const days = (range.to.getTime() - range.from.getTime()) / 86400_000;
+    const grain: "hour" | "day" | "week" | "month" =
+      days <= 2 ? "hour" : days <= 90 ? "day" : days <= 365 ? "week" : "month";
 
-    const prevQuery = prevRange
-      ? supabase
-          .from("analytics_events")
-          .select(cols)
-          .gte("created_at", prevRange.from.toISOString())
-          .lt("created_at", sinceISO)
-          .limit(50000)
-      : null;
+    const calls: Promise<unknown>[] = [
+      Promise.resolve(
+        supabase.rpc("analytics_overview_kpis", {
+          p_since: sinceISO,
+          p_until: untilISO,
+          ...segArgs,
+        })
+      ),
+      Promise.resolve(
+        supabase.rpc("analytics_timeseries", {
+          p_since: sinceISO,
+          p_until: untilISO,
+          p_grain: grain,
+        })
+      ),
+    ];
 
-    Promise.all([
-      Promise.resolve(curQuery),
-      prevQuery ? Promise.resolve(prevQuery) : Promise.resolve({ data: [] as RawEvent[] }),
-    ])
+    if (prevRange) {
+      calls.push(
+        Promise.resolve(
+          supabase.rpc("analytics_overview_kpis", {
+            p_since: prevRange.from.toISOString(),
+            p_until: sinceISO,
+            ...segArgs,
+          })
+        ),
+        Promise.resolve(
+          supabase.rpc("analytics_timeseries", {
+            p_since: prevRange.from.toISOString(),
+            p_until: sinceISO,
+            p_grain: grain,
+          })
+        )
+      );
+    }
+
+    Promise.all(calls)
       .then((results) => {
         if (cancelled) return;
-        const cur = (results[0] as { data?: RawEvent[] }).data ?? [];
-        const prev = prevRange ? ((results[1] as { data?: RawEvent[] }).data ?? []) : [];
-        setRawCur(cur);
-        setRawPrev(prev);
+        type RpcRes<T> = { data: T | null; error: { message: string } | null };
+
+        const kpiRes = results[0] as RpcRes<Kpis[]>;
+        const tsRes = results[1] as RpcRes<{ bucket: string; sessions: number; pageviews: number; conversions: number }[]>;
+
+        if (kpiRes.error) throw new Error(kpiRes.error.message);
+        if (tsRes.error) throw new Error(tsRes.error.message);
+
+        const k = kpiRes.data?.[0] ?? EMPTY_KPIS;
+        // spark vem como jsonb; pode chegar como objeto já parseado
+        const sparkRaw = (k as unknown as { spark?: unknown }).spark;
+        const spark = Array.isArray(sparkRaw)
+          ? (sparkRaw as Kpis["spark"])
+          : typeof sparkRaw === "string"
+            ? (JSON.parse(sparkRaw) as Kpis["spark"])
+            : [];
+        setKpis({ ...k, spark });
+
+        const ts = tsRes.data ?? [];
+        const main: DailyPoint[] = ts.map((p) => ({
+          day: p.bucket,
+          sessions: Number(p.sessions ?? 0),
+          pageviews: Number(p.pageviews ?? 0),
+        }));
+
+        if (prevRange) {
+          const prevKpiRes = results[2] as RpcRes<Kpis[]>;
+          const prevTsRes = results[3] as RpcRes<{ bucket: string; sessions: number; pageviews: number }[]>;
+          if (prevKpiRes.error) throw new Error(prevKpiRes.error.message);
+          if (prevTsRes.error) throw new Error(prevTsRes.error.message);
+
+          const pk = prevKpiRes.data?.[0] ?? EMPTY_KPIS;
+          const pSparkRaw = (pk as unknown as { spark?: unknown }).spark;
+          const pSpark = Array.isArray(pSparkRaw)
+            ? (pSparkRaw as Kpis["spark"])
+            : typeof pSparkRaw === "string"
+              ? (JSON.parse(pSparkRaw) as Kpis["spark"])
+              : [];
+          setPrevKpis({ ...pk, spark: pSpark });
+
+          // alinha série anterior ao mesmo offset da série atual
+          const prevTs = prevTsRes.data ?? [];
+          for (let i = 0; i < main.length; i++) {
+            const p = prevTs[i];
+            if (!p) continue;
+            main[i].prevSessions = Number(p.sessions ?? 0);
+            main[i].prevPageviews = Number(p.pageviews ?? 0);
+          }
+        } else {
+          setPrevKpis(EMPTY_KPIS);
+        }
+
+        setSeries(main);
       })
-      .catch((err) => {
-        console.error("[analytics overview] fetch error", err);
+      .catch((err: unknown) => {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error("[analytics overview] rpc error", err);
+        if (!cancelled) setError(msg);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -274,41 +240,30 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [range, prevRange]);
+  }, [range, prevRange, segments]);
 
-  const events = useMemo(() => applySegments(rawCur, segments), [rawCur, segments]);
-  const prevEvents = useMemo(() => applySegments(rawPrev, segments), [rawPrev, segments]);
-
-  const kpis = useMemo(() => calcKpis(events), [events]);
-  const prevKpis = useMemo(() => calcKpis(prevEvents), [prevEvents]);
-  const daily = useMemo(
-    () => buildDailySeries(events, range, prevRange, prevEvents),
-    [events, range, prevRange, prevEvents]
-  );
-
-  const heatmapEvents = useMemo(
-    () =>
-      events.map((e) => ({
-        event_type: e.event_type,
-        session_id: e.session_id,
-        created_at: e.created_at,
-      })),
-    [events]
-  );
-
+  // ----- render -----
   if (loading) {
     return (
       <div className="aa-grid">
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="aa-col-3 aa-skel" style={{ height: 92 }} />
         ))}
-        <div className="aa-col-8 aa-skel" style={{ height: 320 }} />
-        <div className="aa-col-4 aa-skel" style={{ height: 320 }} />
+        <div className="aa-col-12 aa-skel" style={{ height: 320 }} />
       </div>
     );
   }
 
-  if (!events.length && !prevEvents.length) {
+  if (error) {
+    return (
+      <div className="aa-empty">
+        <span className="aa-empty__icon">!</span>
+        erro ao carregar · <span className="aa-mono">{error}</span>
+      </div>
+    );
+  }
+
+  if (!kpis.sessions && !prevKpis.sessions) {
     return (
       <div className="aa-empty">
         <span className="aa-empty__icon">∅</span>
@@ -317,15 +272,15 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
     );
   }
 
-  const kpiList: { label: string; value: string; cur: number; prev: number }[] = [
-    { label: "sessões", value: fmtNum(kpis.sessions), cur: kpis.sessions, prev: prevKpis.sessions },
-    { label: "visitantes únicos", value: fmtNum(kpis.uniqueVisitors), cur: kpis.uniqueVisitors, prev: prevKpis.uniqueVisitors },
-    { label: "pageviews", value: fmtNum(kpis.pageviews), cur: kpis.pageviews, prev: prevKpis.pageviews },
-    { label: "pv / sessão", value: kpis.pagesPerSession.toFixed(2), cur: kpis.pagesPerSession, prev: prevKpis.pagesPerSession },
-    { label: "tempo engajado", value: fmtMs(kpis.avgEngagementMs), cur: kpis.avgEngagementMs, prev: prevKpis.avgEngagementMs },
-    { label: "bounce rate", value: fmtPct(kpis.bounceRate), cur: kpis.bounceRate, prev: prevKpis.bounceRate },
-    { label: "conversões", value: fmtNum(kpis.conversions), cur: kpis.conversions, prev: prevKpis.conversions },
-    { label: "taxa de conversão", value: fmtPct(kpis.conversionRate), cur: kpis.conversionRate, prev: prevKpis.conversionRate },
+  const kpiList: { label: string; value: string; cur: number; prev: number; sparkKey: "sessions" | "pageviews" }[] = [
+    { label: "sessões",            value: fmtNum(kpis.sessions),           cur: kpis.sessions,           prev: prevKpis.sessions,           sparkKey: "sessions" },
+    { label: "visitantes únicos",  value: fmtNum(kpis.unique_visitors),    cur: kpis.unique_visitors,    prev: prevKpis.unique_visitors,    sparkKey: "sessions" },
+    { label: "pageviews",          value: fmtNum(kpis.pageviews),          cur: kpis.pageviews,          prev: prevKpis.pageviews,          sparkKey: "pageviews" },
+    { label: "pv / sessão",        value: kpis.pages_per_session.toFixed(2), cur: kpis.pages_per_session, prev: prevKpis.pages_per_session, sparkKey: "pageviews" },
+    { label: "tempo engajado",     value: fmtMs(kpis.avg_engagement_ms),   cur: kpis.avg_engagement_ms,  prev: prevKpis.avg_engagement_ms,  sparkKey: "sessions" },
+    { label: "bounce rate",        value: fmtPct(kpis.bounce_rate),        cur: kpis.bounce_rate,        prev: prevKpis.bounce_rate,        sparkKey: "sessions" },
+    { label: "conversões",         value: fmtNum(kpis.conversions),        cur: kpis.conversions,        prev: prevKpis.conversions,        sparkKey: "sessions" },
+    { label: "taxa de conversão",  value: fmtPct(kpis.conversion_rate),    cur: kpis.conversion_rate,    prev: prevKpis.conversion_rate,    sparkKey: "sessions" },
   ];
 
   return (
@@ -334,7 +289,7 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
       <div className="aa-kpi-grid">
         {kpiList.map((k) => {
           const d = delta(k.cur, k.prev);
-          // for bounce rate, "down" is good. invert color logic
+          // bounce rate: cair é bom — inverte a cor do delta
           const invert = k.label === "bounce rate";
           const dir = invert ? (d.dir === "up" ? "down" : d.dir === "down" ? "up" : "flat") : d.dir;
           return (
@@ -348,10 +303,10 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
               )}
               <div className="aa-kpi__spark">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={daily.slice(-14)}>
+                  <AreaChart data={kpis.spark}>
                     <Area
                       type="monotone"
-                      dataKey={k.label === "pageviews" ? "pageviews" : "sessions"}
+                      dataKey={k.sparkKey}
                       stroke="var(--aa-accent)"
                       fill="var(--aa-accent)"
                       fillOpacity={0.15}
@@ -366,100 +321,98 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
         })}
       </div>
 
-      {/* Main chart + heatmap */}
-      <div className="aa-grid">
-        <div className="aa-col-8 aa-card">
-          <div className="aa-card__head">
-            <h3 className="aa-card__title">série temporal</h3>
-            <div className="aa-row" style={{ gap: 4 }}>
-              <button
-                type="button"
-                className="admin-analytics__btn"
-                data-variant="ghost"
-                aria-pressed={metric === "sessions"}
-                onClick={() => setMetric("sessions")}
-                style={{ fontSize: 11, padding: "3px 8px" }}
-              >
-                sessões
-              </button>
-              <button
-                type="button"
-                className="admin-analytics__btn"
-                data-variant="ghost"
-                aria-pressed={metric === "pageviews"}
-                onClick={() => setMetric("pageviews")}
-                style={{ fontSize: 11, padding: "3px 8px" }}
-              >
-                pageviews
-              </button>
-            </div>
-          </div>
-          <div style={{ height: 280, color: "var(--aa-fg)" }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={daily} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
-                <defs>
-                  <linearGradient id="g-cur" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--aa-accent)" stopOpacity={0.32} />
-                    <stop offset="100%" stopColor="var(--aa-accent)" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid stroke="var(--aa-border)" vertical={false} />
-                <XAxis
-                  dataKey="day"
-                  tickFormatter={(d: string) => d.slice(5).replace("-", "/")}
-                  tick={{ fontSize: 10, fontFamily: "var(--aa-font-mono)", fill: "var(--aa-fg-faint)" }}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <YAxis
-                  tick={{ fontSize: 10, fontFamily: "var(--aa-font-mono)", fill: "var(--aa-fg-faint)" }}
-                  tickLine={false}
-                  axisLine={false}
-                  width={36}
-                  allowDecimals={false}
-                />
-                <Tooltip
-                  contentStyle={{
-                    background: "var(--aa-bg-elev)",
-                    border: "1px solid var(--aa-border)",
-                    borderRadius: 6,
-                    fontFamily: "var(--aa-font-mono)",
-                    fontSize: 11,
-                    color: "var(--aa-fg)",
-                  }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey={metric}
-                  stroke="var(--aa-accent)"
-                  strokeWidth={1.6}
-                  fill="url(#g-cur)"
-                  name="atual"
-                  isAnimationActive={false}
-                />
-                {comparePrev && (
-                  <Line
-                    type="monotone"
-                    dataKey={metric === "sessions" ? "prevSessions" : "prevPageviews"}
-                    stroke="var(--aa-fg-faint)"
-                    strokeWidth={1.2}
-                    strokeDasharray="3 4"
-                    dot={false}
-                    name="anterior"
-                    isAnimationActive={false}
-                  />
-                )}
-              </ComposedChart>
-            </ResponsiveContainer>
+      {/* Main chart */}
+      <div className="aa-card">
+        <div className="aa-card__head">
+          <h3 className="aa-card__title">série temporal</h3>
+          <div className="aa-row" style={{ gap: 4 }}>
+            <button
+              type="button"
+              className="admin-analytics__btn"
+              data-variant="ghost"
+              aria-pressed={metric === "sessions"}
+              onClick={() => setMetric("sessions")}
+              style={{ fontSize: 11, padding: "3px 8px" }}
+            >
+              sessões
+            </button>
+            <button
+              type="button"
+              className="admin-analytics__btn"
+              data-variant="ghost"
+              aria-pressed={metric === "pageviews"}
+              onClick={() => setMetric("pageviews")}
+              style={{ fontSize: 11, padding: "3px 8px" }}
+            >
+              pageviews
+            </button>
           </div>
         </div>
-
-        <div className="aa-col-4 aa-card">
-          <div className="aa-card__head">
-            <h3 className="aa-card__title">hora × dia da semana</h3>
-            <span className="aa-card__action">sessões únicas</span>
-          </div>
-          <HoursHeatmap events={heatmapEvents} />
+        <div style={{ height: 300, color: "var(--aa-fg)" }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={series} margin={{ top: 4, right: 8, bottom: 0, left: -16 }}>
+              <defs>
+                <linearGradient id="g-cur" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--aa-accent)" stopOpacity={0.32} />
+                  <stop offset="100%" stopColor="var(--aa-accent)" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid stroke="var(--aa-border)" vertical={false} />
+              <XAxis
+                dataKey="day"
+                tickFormatter={(d: string) => {
+                  const dt = new Date(d);
+                  if (Number.isNaN(dt.getTime())) return d;
+                  return dt.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+                }}
+                tick={{ fontSize: 10, fontFamily: "var(--aa-font-mono)", fill: "var(--aa-fg-faint)" }}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 10, fontFamily: "var(--aa-font-mono)", fill: "var(--aa-fg-faint)" }}
+                tickLine={false}
+                axisLine={false}
+                width={36}
+                allowDecimals={false}
+              />
+              <Tooltip
+                contentStyle={{
+                  background: "var(--aa-bg-elev)",
+                  border: "1px solid var(--aa-border)",
+                  borderRadius: 6,
+                  fontFamily: "var(--aa-font-mono)",
+                  fontSize: 11,
+                  color: "var(--aa-fg)",
+                }}
+                labelFormatter={(d) => {
+                  const dt = new Date(String(d));
+                  return Number.isNaN(dt.getTime()) ? String(d) : dt.toLocaleString("pt-BR");
+                }}
+              />
+              <Area
+                type="monotone"
+                dataKey={metric}
+                stroke="var(--aa-accent)"
+                strokeWidth={1.6}
+                fill="url(#g-cur)"
+                name="atual"
+                isAnimationActive={false}
+              />
+              {comparePrev && (
+                <Line
+                  type="monotone"
+                  dataKey={metric === "sessions" ? "prevSessions" : "prevPageviews"}
+                  stroke="var(--aa-fg-faint)"
+                  strokeWidth={1.2}
+                  strokeDasharray="3 4"
+                  dot={false}
+                  name="anterior"
+                  isAnimationActive={false}
+                />
+              )}
+            </ComposedChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

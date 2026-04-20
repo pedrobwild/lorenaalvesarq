@@ -389,6 +389,30 @@ export type Database = {
           step: number
         }[]
       }
+      analytics_overview_kpis: {
+        Args: {
+          p_country?: string
+          p_device?: string
+          p_landing_path?: string
+          p_referrer_host?: string
+          p_since: string
+          p_until: string
+          p_utm_campaign?: string
+          p_utm_medium?: string
+          p_utm_source?: string
+        }
+        Returns: {
+          avg_engagement_ms: number
+          bounce_rate: number
+          conversion_rate: number
+          conversions: number
+          pages_per_session: number
+          pageviews: number
+          sessions: number
+          spark: Json
+          unique_visitors: number
+        }[]
+      }
       analytics_realtime: {
         Args: never
         Returns: {
