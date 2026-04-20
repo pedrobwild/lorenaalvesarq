@@ -86,5 +86,5 @@ export function useCustomCursor(enabled: boolean = true) {
       document.body.classList.remove("has-custom-cursor");
       if (createdHere && c?.parentNode) c.parentNode.removeChild(c);
     };
-  }, []);
+  }, [enabled]);
 }
