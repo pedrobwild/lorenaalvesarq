@@ -49,6 +49,7 @@ type Form = {
 
 type GalleryRow = {
   id?: string;
+  uid: string; // id estável usado pelo dnd (id do banco ou gerado client-side)
   url: string;
   alt: string;
   caption: string | null;
@@ -139,12 +140,12 @@ export default function ProjectFormPage({ slug }: Props) {
         seo_description: data.seo_description ?? "",
         og_image_url: data.og_image_url ?? "",
       });
-      const imgs = (data.project_images ?? []) as GalleryRow[];
+      const imgs = (data.project_images ?? []) as Array<Omit<GalleryRow, "uid">>;
       setGallery(
         imgs
           .slice()
           .sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0))
-          .map((i) => ({ ...i, format: i.format ?? "full" }))
+          .map((i) => ({ ...i, uid: i.id ?? crypto.randomUUID(), format: i.format ?? "full" }))
       );
       setSlugDirty(true);
       setLoading(false);
@@ -185,13 +186,35 @@ export default function ProjectFormPage({ slug }: Props) {
     setGallery((g) => [...g, ...items]);
   }
 
-  function moveImg(idx: number, dir: -1 | 1) {
-    const next = [...gallery];
-    const j = idx + dir;
-    if (j < 0 || j >= next.length) return;
-    [next[idx], next[j]] = [next[j], next[idx]];
-    next.forEach((it, i) => (it.order_index = i + 1));
-    setGallery(next);
+  async function uploadGalleryFiles(files: FileList) {
+    const slugSafe = form.slug || slugify(form.title) || "novo";
+    const items: GalleryRow[] = [];
+    for (const f of Array.from(files)) {
+      const { url } = await uploadImage(f, "project-gallery", slugSafe);
+      items.push({
+        uid: crypto.randomUUID(),
+        url,
+        alt: form.title ? `${form.title} ${form.em}` : "imagem",
+        caption: null,
+        format: "full",
+        order_index: gallery.length + items.length + 1,
+        _new: true,
+      });
+    }
+    setGallery((g) => [...g, ...items]);
+  }
+
+  function handleGalleryDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = gallery.findIndex((g) => g.uid === active.id);
+    const newIndex = gallery.findIndex((g) => g.uid === over.id);
+    if (oldIndex < 0 || newIndex < 0) return;
+    const reordered = arrayMove(gallery, oldIndex, newIndex).map((g, i) => ({
+      ...g,
+      order_index: i + 1,
+    }));
+    setGallery(reordered);
   }
 
   function updateImg(idx: number, patch: Partial<GalleryRow>) {
