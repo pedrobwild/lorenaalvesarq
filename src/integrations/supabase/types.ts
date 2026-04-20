@@ -37,37 +37,64 @@ export type Database = {
       }
       analytics_events: {
         Row: {
+          browser: string | null
           country: string | null
           created_at: string | null
+          device: string | null
+          duration_ms: number | null
           event_type: string
           id: string
+          os: string | null
           path: string | null
           project_slug: string | null
           referrer: string | null
+          scroll_depth: number | null
           session_id: string | null
           user_agent: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          value: Json | null
         }
         Insert: {
+          browser?: string | null
           country?: string | null
           created_at?: string | null
+          device?: string | null
+          duration_ms?: number | null
           event_type: string
           id?: string
+          os?: string | null
           path?: string | null
           project_slug?: string | null
           referrer?: string | null
+          scroll_depth?: number | null
           session_id?: string | null
           user_agent?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          value?: Json | null
         }
         Update: {
+          browser?: string | null
           country?: string | null
           created_at?: string | null
+          device?: string | null
+          duration_ms?: number | null
           event_type?: string
           id?: string
+          os?: string | null
           path?: string | null
           project_slug?: string | null
           referrer?: string | null
+          scroll_depth?: number | null
           session_id?: string | null
           user_agent?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          value?: Json | null
         }
         Relationships: []
       }
@@ -246,9 +273,40 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      analytics_daily: {
+        Row: {
+          day: string | null
+          event_type: string | null
+          events: number | null
+          sessions: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      analytics_top_paths: {
+        Args: { p_limit?: number; p_since: string }
+        Returns: {
+          pageviews: number
+          path: string
+          sessions: number
+        }[]
+      }
+      analytics_top_projects: {
+        Args: { p_limit?: number; p_since: string }
+        Returns: {
+          project_slug: string
+          sessions: number
+          views: number
+        }[]
+      }
+      analytics_top_referrers: {
+        Args: { p_limit?: number; p_since: string }
+        Returns: {
+          referrer: string
+          sessions: number
+        }[]
+      }
       is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
