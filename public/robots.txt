@@ -1,0 +1,23 @@
+# =========================================================
+# robots.txt — Lorena Alves Arquitetura
+# Escritório de arquitetura em Uberlândia, MG
+# https://lorenaalvesarq.com
+# =========================================================
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /#/admin
+
+Allow: /images/
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.svg$
+Allow: /*.webp$
+Allow: /*.jpg$
+Allow: /*.png$
+
+Crawl-delay: 1
+
+Sitemap: https://lorenaalvesarq.com/sitemap.xml
