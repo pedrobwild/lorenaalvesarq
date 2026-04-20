@@ -2,6 +2,22 @@ import { useEffect, useState } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { routes } from "@/lib/useHashRoute";
+import {
+  DndContext,
+  PointerSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  closestCenter,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { SortableRow, DragHandle } from "@/components/admin/SortableRow";
 
 type Row = {
   id: string;
@@ -23,6 +39,12 @@ export default function ProjectsListPage() {
   const [filter, setFilter] = useState<string>("Todos");
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
+  const [savingOrder, setSavingOrder] = useState(false);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
 
   async function load() {
     const { data } = await supabase
@@ -43,22 +65,6 @@ export default function ProjectsListPage() {
     load();
   }
 
-  async function move(id: string, dir: -1 | 1) {
-    const idx = rows.findIndex((r) => r.id === id);
-    if (idx < 0) return;
-    const swapWith = rows[idx + dir];
-    if (!swapWith) return;
-    setBusy(id);
-    const a = rows[idx].order_index ?? idx + 1;
-    const b = swapWith.order_index ?? idx + 1 + dir;
-    await Promise.all([
-      supabase.from("projects").update({ order_index: b }).eq("id", rows[idx].id),
-      supabase.from("projects").update({ order_index: a }).eq("id", swapWith.id),
-    ]);
-    setBusy(null);
-    load();
-  }
-
   async function remove(id: string, slug: string) {
     if (!confirm(`Excluir o projeto "${slug}"? Essa ação não pode ser desfeita.`)) return;
     setBusy(id);
@@ -73,6 +79,39 @@ export default function ProjectsListPage() {
       return false;
     return true;
   });
+
+  // Drag-and-drop só faz sentido quando estamos vendo todos sem busca,
+  // porque a ordem global é o que persiste no banco.
+  const canReorder = filter === "Todos" && search.trim() === "";
+
+  async function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = rows.findIndex((r) => r.id === active.id);
+    const newIndex = rows.findIndex((r) => r.id === over.id);
+    if (oldIndex < 0 || newIndex < 0) return;
+
+    const previous = rows;
+    const reordered = arrayMove(rows, oldIndex, newIndex).map((r, i) => ({
+      ...r,
+      order_index: i + 1,
+    }));
+    setRows(reordered);
+
+    setSavingOrder(true);
+    try {
+      await Promise.all(
+        reordered.map((r) =>
+          supabase.from("projects").update({ order_index: r.order_index }).eq("id", r.id)
+        )
+      );
+    } catch {
+      setRows(previous);
+    } finally {
+      setSavingOrder(false);
+    }
+  }
 
   return (
     <AdminLayout active="projects">
@@ -101,88 +140,99 @@ export default function ProjectsListPage() {
         </a>
       </div>
 
+      {!canReorder && (
+        <p className="mono admin-hint">
+          arraste para reordenar é desabilitado quando há filtro ou busca ativos.
+        </p>
+      )}
+      {savingOrder && <p className="mono admin-hint">salvando nova ordem…</p>}
+
       <div className="admin-table-wrap">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Projeto</th>
-              <th>Categoria</th>
-              <th>Ano</th>
-              <th>Visível</th>
-              <th>Ordem</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((r) => (
-              <tr key={r.id}>
-                <td style={{ width: 64 }}>
-                  {r.cover_url ? (
-                    <img src={r.cover_url} alt="" className="admin-thumb" />
-                  ) : (
-                    <div className="admin-thumb admin-thumb--empty" />
-                  )}
-                </td>
-                <td>
-                  <strong>
-                    {r.title} <em>{r.em}</em>
-                  </strong>
-                  <div className="mono admin-table__sub">{r.slug}</div>
-                </td>
-                <td className="mono">{r.tag}</td>
-                <td className="mono">{r.year}</td>
-                <td>
-                  <button
-                    type="button"
-                    className={`admin-toggle ${r.visible ? "is-on" : ""}`}
-                    onClick={() => toggleVisible(r.id, r.visible)}
-                    disabled={busy === r.id}
-                    aria-label={r.visible ? "ocultar do site" : "mostrar no site"}
-                  >
-                    <span />
-                  </button>
-                </td>
-                <td className="mono">
-                  <button
-                    className="admin-link"
-                    onClick={() => move(r.id, -1)}
-                    disabled={busy === r.id}
-                  >
-                    ↑
-                  </button>{" "}
-                  <button
-                    className="admin-link"
-                    onClick={() => move(r.id, 1)}
-                    disabled={busy === r.id}
-                  >
-                    ↓
-                  </button>
-                </td>
-                <td style={{ textAlign: "right" }}>
-                  <a className="admin-link" href={routes.adminProjectEdit(r.slug)}>
-                    editar
-                  </a>
-                  {"  ·  "}
-                  <button
-                    className="admin-link admin-link--danger"
-                    onClick={() => remove(r.id, r.slug)}
-                    disabled={busy === r.id}
-                  >
-                    excluir
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {filtered.length === 0 && (
-              <tr>
-                <td colSpan={7} className="mono" style={{ opacity: 0.6 }}>
-                  nenhum projeto.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext
+            items={filtered.map((r) => r.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th style={{ width: 32 }}></th>
+                  <th></th>
+                  <th>Projeto</th>
+                  <th>Categoria</th>
+                  <th>Ano</th>
+                  <th>Visível</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((r) => (
+                  <SortableRow key={r.id} id={r.id}>
+                    {({ listeners, attributes, isDragging }) => (
+                      <>
+                        <td style={{ width: 32 }}>
+                          {canReorder ? (
+                            <DragHandle listeners={listeners} attributes={attributes} />
+                          ) : (
+                            <span className="admin-drag-handle is-disabled" aria-hidden>
+                              ≡
+                            </span>
+                          )}
+                        </td>
+                        <td style={{ width: 64 }}>
+                          {r.cover_url ? (
+                            <img src={r.cover_url} alt="" className="admin-thumb" />
+                          ) : (
+                            <div className="admin-thumb admin-thumb--empty" />
+                          )}
+                        </td>
+                        <td>
+                          <strong>
+                            {r.title} <em>{r.em}</em>
+                          </strong>
+                          <div className="mono admin-table__sub">{r.slug}</div>
+                        </td>
+                        <td className="mono">{r.tag}</td>
+                        <td className="mono">{r.year}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className={`admin-toggle ${r.visible ? "is-on" : ""}`}
+                            onClick={() => toggleVisible(r.id, r.visible)}
+                            disabled={busy === r.id || isDragging}
+                            aria-label={r.visible ? "ocultar do site" : "mostrar no site"}
+                          >
+                            <span />
+                          </button>
+                        </td>
+                        <td style={{ textAlign: "right" }}>
+                          <a className="admin-link" href={routes.adminProjectEdit(r.slug)}>
+                            editar
+                          </a>
+                          {"  ·  "}
+                          <button
+                            className="admin-link admin-link--danger"
+                            onClick={() => remove(r.id, r.slug)}
+                            disabled={busy === r.id || isDragging}
+                          >
+                            excluir
+                          </button>
+                        </td>
+                      </>
+                    )}
+                  </SortableRow>
+                ))}
+                {filtered.length === 0 && (
+                  <tr>
+                    <td colSpan={7} className="mono" style={{ opacity: 0.6 }}>
+                      nenhum projeto.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </SortableContext>
+        </DndContext>
       </div>
     </AdminLayout>
   );

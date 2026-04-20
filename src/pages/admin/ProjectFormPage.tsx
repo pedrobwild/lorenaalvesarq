@@ -3,6 +3,22 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { navigate, routes } from "@/lib/useHashRoute";
 import { uploadImage } from "@/lib/uploadImage";
+import {
+  DndContext,
+  PointerSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  closestCenter,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  rectSortingStrategy,
+  sortableKeyboardCoordinates,
+} from "@dnd-kit/sortable";
+import { SortableRow, DragHandle } from "@/components/admin/SortableRow";
 
 type Tag = "Residencial" | "Interiores" | "Comercial" | "Rural";
 
