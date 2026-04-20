@@ -1192,11 +1192,12 @@ button {
   font-family: var(--font-display);
   font-weight: 300;
   font-size: clamp(4rem, 11vw, 9.5rem);
-  line-height: 0.85;
+  line-height: 0.95;
   letter-spacing: -0.04em;
   color: var(--ink);
   margin: 0;
   padding-top: clamp(1.5rem, 3vw, 2.5rem);
+  padding-bottom: 0.15em;
   /* Pull slightly left to feel like it crosses the split */
   margin-left: clamp(-0.8rem, -1.5vw, -1.5rem);
   font-optical-sizing: auto;
