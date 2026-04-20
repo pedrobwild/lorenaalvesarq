@@ -91,10 +91,13 @@ export default function SettingsPage() {
     }
     setSaving(true);
     // Normaliza strings vazias para null
-    const payload = Object.fromEntries(
-      Object.entries(parsed.data).map(([k, v]) => [k, v === "" ? null : v])
+    const payload: Record<string, string | null> = Object.fromEntries(
+      Object.entries(parsed.data).map(([k, v]) => [k, v === "" || v == null ? null : v])
     );
-    const { error } = await supabase.from("site_settings").update(payload).eq("id", 1);
+    const { error } = await supabase
+      .from("site_settings")
+      .update(payload as never)
+      .eq("id", 1);
     setSaving(false);
     if (error) {
       setMsg({ kind: "err", text: error.message });
