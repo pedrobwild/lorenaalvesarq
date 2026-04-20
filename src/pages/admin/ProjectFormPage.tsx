@@ -175,23 +175,6 @@ export default function ProjectFormPage({ slug }: Props) {
     for (const f of Array.from(files)) {
       const { url } = await uploadImage(f, "project-gallery", slugSafe);
       items.push({
-        url,
-        alt: form.title ? `${form.title} ${form.em}` : "imagem",
-        caption: null,
-        format: "full",
-        order_index: gallery.length + items.length + 1,
-        _new: true,
-      });
-    }
-    setGallery((g) => [...g, ...items]);
-  }
-
-  async function uploadGalleryFiles(files: FileList) {
-    const slugSafe = form.slug || slugify(form.title) || "novo";
-    const items: GalleryRow[] = [];
-    for (const f of Array.from(files)) {
-      const { url } = await uploadImage(f, "project-gallery", slugSafe);
-      items.push({
         uid: crypto.randomUUID(),
         url,
         alt: form.title ? `${form.title} ${form.em}` : "imagem",
