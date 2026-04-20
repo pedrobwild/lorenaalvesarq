@@ -2,14 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-import { getNextProject, getProjectBySlug, type ProjectImage } from "../data/projects";
+import { type ProjectImage } from "../data/projects";
+import { useProjects } from "../lib/useProjects";
 import { routes } from "../lib/useHashRoute";
 import { shouldRunParallax, shouldUseSmoothScroll } from "../lib/device";
 
 type Props = { slug: string };
 
 export default function ProjectPage({ slug }: Props) {
-  const project = getProjectBySlug(slug);
+  const { projects } = useProjects();
+  const project = projects.find((p) => p.slug === slug);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
 
@@ -110,7 +112,8 @@ export default function ProjectPage({ slug }: Props) {
     );
   }
 
-  const next = getNextProject(slug);
+  const i = projects.findIndex((p) => p.slug === slug);
+  const next = projects[(i + 1) % projects.length] ?? project;
 
   return (
     <div className="pp-page" ref={pageRef}>

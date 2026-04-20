@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-import { PROJECTS } from "./data/projects";
+import { useProjects } from "./lib/useProjects";
 import { routes } from "./lib/useHashRoute";
 import { shouldRunParallax, shouldUseSmoothScroll } from "./lib/device";
 import { useCustomCursor } from "./lib/useCustomCursor";
@@ -51,6 +51,7 @@ const ENSAIOS = [
 ];
 
 export default function App() {
+  const { projects: PROJECTS } = useProjects();
   const [ensaioIdx, setEnsaioIdx] = useState(0);
   const ensaiosPaused = useRef(false);
   const [heroIdx, setHeroIdx] = useState(0);
@@ -769,7 +770,16 @@ export default function App() {
         </div>
         <div className="footer__bottom">
           <span>© 2026 Lorena Alves Arquitetura. Todos os direitos reservados.</span>
-          <span>CAU BR · Brasil</span>
+          <span>
+            CAU BR ·{" "}
+            <a
+              href="#/admin/login"
+              className="footer__admin-link"
+              aria-label="Área administrativa"
+            >
+              Brasil
+            </a>
+          </span>
         </div>
       </footer>
     </>

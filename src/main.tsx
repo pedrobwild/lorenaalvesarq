@@ -3,6 +3,11 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import PortfolioPage from "./pages/PortfolioPage";
 import ProjectPage from "./pages/ProjectPage";
+import LoginPage from "./pages/admin/LoginPage";
+import DashboardPage from "./pages/admin/DashboardPage";
+import ProjectsListPage from "./pages/admin/ProjectsListPage";
+import ProjectFormPage from "./pages/admin/ProjectFormPage";
+import ProtectedRoute from "./components/admin/ProtectedRoute";
 import { useCustomCursor } from "./lib/useCustomCursor";
 import { useHashRoute, type Route } from "./lib/useHashRoute";
 import "./index.css";
@@ -12,12 +17,43 @@ const TRANSITION_MS = 380;
 function renderRoute(route: Route) {
   if (route.name === "portfolio") return <PortfolioPage />;
   if (route.name === "project") return <ProjectPage slug={route.slug} />;
+  if (route.name === "admin-login") return <LoginPage />;
+  if (route.name === "admin-dashboard")
+    return (
+      <ProtectedRoute>
+        <DashboardPage />
+      </ProtectedRoute>
+    );
+  if (route.name === "admin-projects")
+    return (
+      <ProtectedRoute>
+        <ProjectsListPage />
+      </ProtectedRoute>
+    );
+  if (route.name === "admin-project-new")
+    return (
+      <ProtectedRoute>
+        <ProjectFormPage />
+      </ProtectedRoute>
+    );
+  if (route.name === "admin-project-edit")
+    return (
+      <ProtectedRoute>
+        <ProjectFormPage slug={route.slug} />
+      </ProtectedRoute>
+    );
   // home (com ou sem âncora) e not-found caem na App (que trata âncoras legadas)
   return <App />;
 }
 
+function isAdminRoute(route: Route) {
+  return route.name.startsWith("admin-");
+}
+
 function routeKeyOf(route: Route) {
-  return route.name === "project" ? `project:${route.slug}` : route.name;
+  if (route.name === "project") return `project:${route.slug}`;
+  if (route.name === "admin-project-edit") return `admin-edit:${route.slug}`;
+  return route.name;
 }
 
 function Root() {
@@ -48,9 +84,11 @@ function Root() {
     return () => window.clearTimeout(swapTimer);
   }, [route]);
 
+  const adminMode = isAdminRoute(displayed);
+
   return (
     <>
-      <div className="cursor" aria-hidden="true"></div>
+      {!adminMode && <div className="cursor" aria-hidden="true"></div>}
       <div
         className={`route-transition route-transition--${phase}`}
         style={{ ["--route-transition-ms" as string]: `${TRANSITION_MS}ms` }}

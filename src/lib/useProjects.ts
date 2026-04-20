@@ -1,0 +1,98 @@
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { PROJECTS as STATIC_PROJECTS, type Project, type ProjectImage } from "@/data/projects";
+
+type DbProject = {
+  id: string;
+  slug: string;
+  number: string | null;
+  title: string;
+  em: string | null;
+  tag: Project["tag"];
+  year: string | null;
+  location: string | null;
+  area: string | null;
+  status: string | null;
+  cover_url: string | null;
+  cover_alt: string | null;
+  summary: string | null;
+  intro: string | null;
+  program: string | null;
+  materials: string[] | null;
+  team: string | null;
+  photographer: string | null;
+  order_index: number | null;
+  visible: boolean | null;
+  project_images?: Array<{
+    url: string;
+    alt: string;
+    caption: string | null;
+    format: string | null;
+    order_index: number | null;
+  }>;
+};
+
+function mapDbToProject(p: DbProject): Project {
+  const images: ProjectImage[] = (p.project_images ?? [])
+    .slice()
+    .sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0))
+    .map((i) => ({
+      src: i.url,
+      alt: i.alt,
+      caption: i.caption ?? undefined,
+      format: (i.format as ProjectImage["format"]) ?? "full",
+    }));
+  return {
+    slug: p.slug,
+    number: p.number ?? "",
+    title: p.title,
+    em: p.em ?? "",
+    tag: p.tag,
+    year: p.year ?? "",
+    location: p.location ?? "",
+    area: p.area ?? "",
+    status: (p.status as Project["status"]) ?? "Concluído",
+    cover: p.cover_url ?? "",
+    alt: p.cover_alt ?? p.title,
+    summary: p.summary ?? "",
+    intro: p.intro ?? "",
+    program: p.program ?? "",
+    materials: p.materials ?? [],
+    team: p.team ?? "",
+    photographer: p.photographer ?? "",
+    gallery: images,
+  };
+}
+
+/**
+ * useProjects — busca projetos visíveis do Supabase.
+ * Enquanto carrega, devolve o array estático como fallback para garantir
+ * primeiro paint instantâneo e zero quebra se a chamada falhar.
+ */
+export function useProjects() {
+  const [projects, setProjects] = useState<Project[]>(STATIC_PROJECTS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    supabase
+      .from("projects")
+      .select(
+        "id, slug, number, title, em, tag, year, location, area, status, cover_url, cover_alt, summary, intro, program, materials, team, photographer, order_index, visible, project_images(url, alt, caption, format, order_index)"
+      )
+      .eq("visible", true)
+      .order("order_index", { ascending: true })
+      .then(({ data, error }) => {
+        if (!mounted) return;
+        if (data && data.length > 0 && !error) {
+          setProjects((data as DbProject[]).map(mapDbToProject));
+        }
+        setLoading(false);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  return { projects, loading };
+}
