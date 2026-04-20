@@ -51,20 +51,23 @@ export default function ConversionTab({ range, segments }: Props) {
     const untilISO = range.to.toISOString();
     const steps = FUNNEL_STEPS.map((s) => s.key);
 
-    supabase
-      .rpc("analytics_funnel", {
+    Promise.resolve(
+      supabase.rpc("analytics_funnel", {
         p_since: sinceISO,
         p_until: untilISO,
         p_steps: steps,
       })
-      .then(({ data, error: err }) => {
+    )
+      .then((res) => {
         if (cancelled) return;
-        if (err) throw new Error(err.message);
+        type RpcRes = { data: FunnelRow[] | null; error: { message: string } | null };
+        const r = res as unknown as RpcRes;
+        if (r.error) throw new Error(r.error.message);
         setRows(
-          (data ?? []).map((r) => ({
-            step: Number(r.step),
-            event_type: String(r.event_type),
-            sessions: Number(r.sessions ?? 0),
+          (r.data ?? []).map((row) => ({
+            step: Number(row.step),
+            event_type: String(row.event_type),
+            sessions: Number(row.sessions ?? 0),
           }))
         );
       })
