@@ -267,14 +267,14 @@ export default function AcquisitionTab({
                           </td>
                           <td className="num aa-mono">{fmtNum(r.sessions)}</td>
                           {comparePrev && d && (
-                            <td className="num aa-mono" data-dir={d.dir}>
+                            <td className="num aa-mono">
                               <span
                                 style={{
                                   color:
                                     d.dir === "up"
-                                      ? "var(--aa-pos)"
+                                      ? "var(--aa-accent-conversions)"
                                       : d.dir === "down"
-                                        ? "var(--aa-neg)"
+                                        ? "var(--aa-accent-negative)"
                                         : "var(--aa-fg-faint)",
                                 }}
                               >
