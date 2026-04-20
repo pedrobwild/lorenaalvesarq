@@ -7,14 +7,28 @@ import { useProjects } from "../lib/useProjects";
 import { routes } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
 import { shouldRunParallax, shouldUseSmoothScroll } from "../lib/device";
+import { useSeo, projectJsonLd } from "../lib/useSeo";
+import { useSiteSettings } from "../lib/useSiteSettings";
 
 type Props = { slug: string };
 
 export default function ProjectPage({ slug }: Props) {
   const { projects } = useProjects();
+  const { settings } = useSiteSettings();
   const project = projects.find((p) => p.slug === slug);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
+
+  useSeo({
+    title: project
+      ? `${project.title} ${project.em} — lorenaalves arq`
+      : "Projeto — lorenaalves arq",
+    description: project?.summary || project?.intro || undefined,
+    canonicalPath: `/#/projeto/${slug}`,
+    ogImage: project?.cover,
+    ogType: "article",
+    jsonLd: settings && project ? projectJsonLd(settings, project) : undefined,
+  });
 
   useEffect(() => {
     track("project_view", { project_slug: slug });

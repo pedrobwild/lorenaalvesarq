@@ -7,6 +7,8 @@ import { routes } from "./lib/useHashRoute";
 import { track } from "./lib/analytics";
 import { shouldRunParallax, shouldUseSmoothScroll } from "./lib/device";
 import { useCustomCursor } from "./lib/useCustomCursor";
+import { useSeo, professionalServiceJsonLd } from "./lib/useSeo";
+import { useSiteSettings } from "./lib/useSiteSettings";
 import heroImg1 from "./assets/hero/hero-1.webp";
 import heroImg2 from "./assets/hero/hero-2.webp";
 import heroImg3 from "./assets/hero/hero-3.webp";
@@ -53,11 +55,18 @@ const ENSAIOS = [
 
 export default function App() {
   const { projects: PROJECTS } = useProjects();
+  const { settings } = useSiteSettings();
   const [ensaioIdx, setEnsaioIdx] = useState(0);
   const ensaiosPaused = useRef(false);
   const [heroIdx, setHeroIdx] = useState(0);
 
   useCustomCursor();
+
+  useSeo({
+    canonicalPath: "/",
+    ogType: "website",
+    jsonLd: settings ? professionalServiceJsonLd(settings) : undefined,
+  });
 
   // Hero slider — alterna a cada 4s
   useEffect(() => {

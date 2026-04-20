@@ -235,6 +235,12 @@ export type Database = {
           instagram_url: string | null
           linkedin_url: string | null
           pinterest_url: string | null
+          seo_canonical_base: string | null
+          seo_default_description: string | null
+          seo_default_title: string | null
+          seo_og_image: string | null
+          seo_robots: string | null
+          seo_twitter_handle: string | null
           site_description: string | null
           site_title: string | null
           updated_at: string | null
@@ -250,6 +256,12 @@ export type Database = {
           instagram_url?: string | null
           linkedin_url?: string | null
           pinterest_url?: string | null
+          seo_canonical_base?: string | null
+          seo_default_description?: string | null
+          seo_default_title?: string | null
+          seo_og_image?: string | null
+          seo_robots?: string | null
+          seo_twitter_handle?: string | null
           site_description?: string | null
           site_title?: string | null
           updated_at?: string | null
@@ -265,6 +277,12 @@ export type Database = {
           instagram_url?: string | null
           linkedin_url?: string | null
           pinterest_url?: string | null
+          seo_canonical_base?: string | null
+          seo_default_description?: string | null
+          seo_default_title?: string | null
+          seo_og_image?: string | null
+          seo_robots?: string | null
+          seo_twitter_handle?: string | null
           site_description?: string | null
           site_title?: string | null
           updated_at?: string | null

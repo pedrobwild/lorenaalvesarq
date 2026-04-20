@@ -1,1 +1,7 @@
 project_id = "erivcmnvvgxyfkhugupq"
+
+[functions.sitemap]
+verify_jwt = false
+
+[functions.robots]
+verify_jwt = false
