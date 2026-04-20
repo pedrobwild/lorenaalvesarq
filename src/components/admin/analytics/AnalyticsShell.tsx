@@ -47,9 +47,7 @@ export default function AnalyticsShell({ state, children }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [state]);
 
-  function toggleTheme() {
-    state.setTheme(state.theme === "dark" ? "light" : "dark");
-  }
+  // toggleTheme removido — admin sempre em light mode.
 
   function handleSave() {
     if (!savedName.trim()) return;
