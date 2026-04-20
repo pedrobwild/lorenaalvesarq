@@ -521,12 +521,6 @@ export default function App() {
 
       {/* About */}
       <section className="section about" id="estudio">
-        <div className="section__header">
-          <div className="section__eyebrow">Estúdio · 03</div>
-          <h2 className="section__title">
-            Uma arquitetura <em>da vida</em>, do gesto e do legado.
-          </h2>
-        </div>
         <div className="about__grid">
           <div className="about__portrait reveal">
             <img
