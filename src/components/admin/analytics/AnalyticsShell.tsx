@@ -161,15 +161,7 @@ export default function AnalyticsShell({ state, children }: Props) {
               </DropdownMenu.Portal>
             </DropdownMenu.Root>
 
-            <button
-              type="button"
-              className="admin-analytics__icon-btn"
-              onClick={toggleTheme}
-              title={state.theme === "dark" ? "modo claro" : "modo escuro"}
-              aria-label="alternar tema"
-            >
-              {state.theme === "dark" ? "☀" : "☾"}
-            </button>
+            {/* Toggle de tema removido — admin é sempre light. */}
 
             <button
               type="button"
