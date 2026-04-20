@@ -25,8 +25,8 @@ const ENSAIOS = [
     title: "Antes do traço",
     text:
       "Cada projeto começa antes do primeiro risco — começa no porquê. Na vida que vai acontecer ali, nos rituais de quem habita, no futuro que a obra torna possível.",
-    img: "/images/veranda.png",
-    alt: "Varanda suspensa com deck em ipê voltada para o mar",
+    img: "/images/ensaio-proposito.jpg",
+    alt: "Ensaio propósito — atmosfera arquitetônica",
   },
   {
     id: "vida",
