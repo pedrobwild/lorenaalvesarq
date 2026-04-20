@@ -101,6 +101,7 @@ export type Database = {
       project_images: {
         Row: {
           alt: string
+          blur_data_url: string | null
           caption: string | null
           created_at: string | null
           format: string | null
@@ -108,9 +109,12 @@ export type Database = {
           order_index: number | null
           project_id: string
           url: string
+          url_md: string | null
+          url_sm: string | null
         }
         Insert: {
           alt: string
+          blur_data_url?: string | null
           caption?: string | null
           created_at?: string | null
           format?: string | null
@@ -118,9 +122,12 @@ export type Database = {
           order_index?: number | null
           project_id: string
           url: string
+          url_md?: string | null
+          url_sm?: string | null
         }
         Update: {
           alt?: string
+          blur_data_url?: string | null
           caption?: string | null
           created_at?: string | null
           format?: string | null
@@ -128,6 +135,8 @@ export type Database = {
           order_index?: number | null
           project_id?: string
           url?: string
+          url_md?: string | null
+          url_sm?: string | null
         }
         Relationships: [
           {
@@ -143,7 +152,10 @@ export type Database = {
         Row: {
           area: string | null
           cover_alt: string | null
+          cover_blur_data_url: string | null
           cover_url: string | null
+          cover_url_md: string | null
+          cover_url_sm: string | null
           created_at: string | null
           em: string | null
           id: string
@@ -170,7 +182,10 @@ export type Database = {
         Insert: {
           area?: string | null
           cover_alt?: string | null
+          cover_blur_data_url?: string | null
           cover_url?: string | null
+          cover_url_md?: string | null
+          cover_url_sm?: string | null
           created_at?: string | null
           em?: string | null
           id?: string
@@ -197,7 +212,10 @@ export type Database = {
         Update: {
           area?: string | null
           cover_alt?: string | null
+          cover_blur_data_url?: string | null
           cover_url?: string | null
+          cover_url_md?: string | null
+          cover_url_sm?: string | null
           created_at?: string | null
           em?: string | null
           id?: string
