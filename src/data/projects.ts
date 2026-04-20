@@ -222,7 +222,9 @@ export const PROJECTS: Project[] = [
     location: "Serra da Canastra, MG",
     area: "1.200 m² (conjunto)",
     status: "Concluído",
-    cover: "/images/project-06.png",
+    cover: "/images/project-06.jpg",
+    coverMd: "/images/project-06-md.jpg",
+    coverSm: "/images/project-06-sm.jpg",
     alt: "Fazenda Porto — pavilhão rural em taipa e telha cerâmica",
     summary:
       "Conjunto rural em taipa de pilão e telha cerâmica, em diálogo com a arquitetura colonial mineira.",
