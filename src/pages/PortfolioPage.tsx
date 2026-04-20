@@ -8,6 +8,7 @@ import { routes } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
 import { shouldUseSmoothScroll } from "../lib/device";
 import { useSeo } from "../lib/useSeo";
+import SmartImage from "../components/SmartImage";
 
 const TAGS = ["Todos", "Residencial", "Interiores", "Comercial", "Rural"] as const;
 type Tag = (typeof TAGS)[number];
@@ -145,7 +146,16 @@ export default function PortfolioPage() {
               aria-label={`Abrir projeto ${p.title} ${p.em}`}
             >
               <div className="pf-card__media" data-cursor="zoom">
-                <img src={p.cover} alt={p.alt} loading="lazy" />
+                <SmartImage
+                  src={p.cover}
+                  srcMd={p.coverMd}
+                  srcSm={p.coverSm}
+                  blurDataUrl={p.coverBlurDataUrl}
+                  alt={p.alt}
+                  sizes="(max-width: 700px) 100vw, (max-width: 1200px) 50vw, 600px"
+                  wrapperClassName="pf-card__img-wrap"
+                  priority={i === 0}
+                />
                 <div className="pf-card__veil" />
                 <span className="pf-card__index mono">
                   {p.number} / {String(projects.length).padStart(2, "0")}
