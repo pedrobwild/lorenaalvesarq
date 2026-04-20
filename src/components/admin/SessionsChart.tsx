@@ -98,7 +98,7 @@ export default function SessionsChart({
 
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <AreaChart data={safe} margin={{ top: 8, right: 8, bottom: 4, left: 4 }}>
+      <ComposedChart data={safe} margin={{ top: 8, right: 8, bottom: 4, left: 4 }}>
         <defs>
           <linearGradient id="grad-sessions" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="currentColor" stopOpacity={0.25} />
@@ -157,7 +157,19 @@ export default function SessionsChart({
           fill="url(#grad-sessions)"
           name="sessions"
         />
-      </AreaChart>
+        {showPrev && (
+          <Line
+            type="monotone"
+            dataKey="prevSessions"
+            stroke="currentColor"
+            strokeWidth={1.2}
+            strokeOpacity={0.55}
+            strokeDasharray="3 4"
+            dot={false}
+            name="sessões (anterior)"
+          />
+        )}
+      </ComposedChart>
     </ResponsiveContainer>
   );
 }

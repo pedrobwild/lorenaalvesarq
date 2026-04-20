@@ -3825,6 +3825,100 @@ textarea.admin-field__input {
 }
 .admin-funnel__arrow > span:first-child { font-size: 16px; }
 
+/* ============= CSV menu (dropdown) ============= */
+.admin-csv-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 20;
+  background: #fff;
+  border: 1px solid #e6e6e3;
+  border-radius: 6px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  min-width: 240px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.admin-csv-menu__item {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 10px 14px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: #111;
+  border-bottom: 1px solid #f1f1ee;
+  transition: background 140ms ease;
+}
+.admin-csv-menu__item:last-child { border-bottom: none; }
+.admin-csv-menu__item:hover { background: #fafaf9; }
+.admin-csv-menu__item strong {
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+.admin-csv-menu__item span { opacity: 0.65; }
+
+/* ============= Heatmap (sessões por hora × dia) ============= */
+.admin-heatmap { display: flex; flex-direction: column; gap: 12px; }
+.admin-heatmap__grid {
+  display: grid;
+  grid-template-columns: 36px repeat(24, 1fr);
+  gap: 2px;
+  align-items: stretch;
+}
+.admin-heatmap__corner { height: 16px; }
+.admin-heatmap__hhead {
+  font-size: 9px; text-align: center; opacity: 0.5;
+  height: 16px; line-height: 16px;
+}
+.admin-heatmap__rowlabel {
+  font-size: 10px; opacity: 0.7; text-transform: lowercase;
+  display: flex; align-items: center; padding-right: 6px; height: 22px;
+}
+.admin-heatmap__cell {
+  height: 22px; border-radius: 2px;
+  border: 1px solid rgba(17, 17, 17, 0.06);
+  background: transparent;
+  transition: outline 120ms ease;
+}
+.admin-heatmap__cell.is-peak {
+  outline: 1.5px solid #c2410c; outline-offset: -1px;
+}
+.admin-heatmap__rowtotal {
+  font-size: 10px; opacity: 0.5;
+  display: flex; align-items: center; padding-right: 6px; height: 16px;
+}
+.admin-heatmap__hourtotal {
+  font-size: 9px; text-align: center; opacity: 0.55;
+  line-height: 16px; height: 16px;
+}
+.admin-heatmap__legend {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; opacity: 0.75; flex-wrap: wrap;
+}
+.admin-heatmap__legend-bar {
+  display: inline-block; width: 80px; height: 8px; border-radius: 2px;
+  background: linear-gradient(to right, rgba(17,17,17,0.08), rgba(17,17,17,0.93));
+  border: 1px solid rgba(17, 17, 17, 0.06);
+}
+.admin-heatmap__legend-spacer { flex: 0 0 12px; }
+.admin-heatmap__legend strong { font-weight: 600; }
+
+@media (max-width: 700px) {
+  .admin-heatmap__grid { grid-template-columns: 28px repeat(24, 1fr); gap: 1px; }
+  .admin-heatmap__cell { height: 16px; }
+  .admin-heatmap__rowlabel { height: 16px; font-size: 9px; }
+  .admin-heatmap__hhead { font-size: 8px; }
+}
+
 /* Link helper utilizado nos analytics/dashboard */
 .admin-link {
   font-family: "JetBrains Mono", ui-monospace, monospace;
