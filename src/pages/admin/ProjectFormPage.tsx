@@ -111,6 +111,47 @@ export default function ProjectFormPage({ slug }: Props) {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [slugDirty, setSlugDirty] = useState(false);
+  const [genAlt, setGenAlt] = useState<{ kind: "cover" | "gallery"; key: string } | null>(null);
+
+  async function generateAltText(imageUrl: string): Promise<string> {
+    const context = [form.title, form.em, form.tag].filter(Boolean).join(" ");
+    const { data, error } = await supabase.functions.invoke("generate-alt-text", {
+      body: { imageUrl, context },
+    });
+    if (error) throw new Error(error.message || "falha ao gerar");
+    if (!data?.alt) throw new Error("resposta vazia da IA");
+    return data.alt as string;
+  }
+
+  async function handleGenerateCoverAlt() {
+    if (!form.cover_url) {
+      setMsg({ kind: "err", text: "envie a capa antes de gerar o alt-text." });
+      return;
+    }
+    setGenAlt({ kind: "cover", key: "cover" });
+    try {
+      const alt = await generateAltText(form.cover_url);
+      set("cover_alt", alt);
+    } catch (err) {
+      setMsg({ kind: "err", text: err instanceof Error ? err.message : "erro" });
+    } finally {
+      setGenAlt(null);
+    }
+  }
+
+  async function handleGenerateGalleryAlt(idx: number) {
+    const item = gallery[idx];
+    if (!item?.url) return;
+    setGenAlt({ kind: "gallery", key: item.uid });
+    try {
+      const alt = await generateAltText(item.url);
+      updateImg(idx, { alt });
+    } catch (err) {
+      setMsg({ kind: "err", text: err instanceof Error ? err.message : "erro" });
+    } finally {
+      setGenAlt(null);
+    }
+  }
 
   const gallerySensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -572,12 +613,23 @@ export default function ProjectFormPage({ slug }: Props) {
                   }}
                 />
                 <Field label="Alt-text da capa" full>
-                  <input
-                    className="admin-field__input"
-                    value={form.cover_alt}
-                    onChange={(e) => set("cover_alt", e.target.value)}
-                    placeholder="Descrição visual da capa"
-                  />
+                  <div className="admin-alt-row">
+                    <input
+                      className="admin-field__input"
+                      value={form.cover_alt}
+                      onChange={(e) => set("cover_alt", e.target.value)}
+                      placeholder="Descrição visual da capa"
+                    />
+                    <button
+                      type="button"
+                      className="admin-btn admin-btn--ghost"
+                      onClick={handleGenerateCoverAlt}
+                      disabled={!form.cover_url || genAlt?.kind === "cover"}
+                      title="Gerar alt-text com IA a partir da imagem"
+                    >
+                      {genAlt?.kind === "cover" ? "gerando…" : "✨ gerar com IA"}
+                    </button>
+                  </div>
                 </Field>
               </div>
             </div>
@@ -622,12 +674,23 @@ export default function ProjectFormPage({ slug }: Props) {
                           </div>
                           <img src={g.url} alt={g.alt} />
                           <div className="admin-gallery__fields">
-                            <input
-                              className="admin-field__input"
-                              placeholder="alt-text"
-                              value={g.alt}
-                              onChange={(e) => updateImg(i, { alt: e.target.value })}
-                            />
+                            <div className="admin-alt-row">
+                              <input
+                                className="admin-field__input"
+                                placeholder="alt-text"
+                                value={g.alt}
+                                onChange={(e) => updateImg(i, { alt: e.target.value })}
+                              />
+                              <button
+                                type="button"
+                                className="admin-btn admin-btn--ghost admin-btn--sm"
+                                onClick={() => handleGenerateGalleryAlt(i)}
+                                disabled={genAlt?.kind === "gallery" && genAlt.key === g.uid}
+                                title="Gerar alt-text com IA"
+                              >
+                                {genAlt?.kind === "gallery" && genAlt.key === g.uid ? "…" : "✨ IA"}
+                              </button>
+                            </div>
                             <input
                               className="admin-field__input"
                               placeholder="legenda (opcional)"

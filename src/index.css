@@ -3283,6 +3283,23 @@ textarea.admin-field__input {
   opacity: 0.5;
   cursor: not-allowed;
 }
+.admin-btn--sm {
+  padding: 6px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.admin-alt-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.admin-alt-row > .admin-field__input {
+  flex: 1;
+  min-width: 0;
+}
+.admin-alt-row > .admin-btn {
+  flex-shrink: 0;
+}
 
 /* ----- Layout ----- */
 .admin {
