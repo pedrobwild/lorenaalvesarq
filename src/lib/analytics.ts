@@ -535,15 +535,19 @@ export function initAnalytics(): () => void {
   // pageview inicial
   emitPageview();
 
-  const onHashChange = () => emitPageview();
-  window.addEventListener("hashchange", onHashChange);
+  const onRouteChange = () => emitPageview();
+  window.addEventListener("popstate", onRouteChange);
+  window.addEventListener("hashchange", onRouteChange);
+  window.addEventListener("lovable:navigate", onRouteChange);
   window.addEventListener("scroll", onScroll, { passive: true });
   document.addEventListener("click", onClick, true);
   document.addEventListener("visibilitychange", onVisibilityChange);
   window.addEventListener("pagehide", onPageHide);
 
   return () => {
-    window.removeEventListener("hashchange", onHashChange);
+    window.removeEventListener("popstate", onRouteChange);
+    window.removeEventListener("hashchange", onRouteChange);
+    window.removeEventListener("lovable:navigate", onRouteChange);
     window.removeEventListener("scroll", onScroll);
     document.removeEventListener("click", onClick, true);
     document.removeEventListener("visibilitychange", onVisibilityChange);

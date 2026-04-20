@@ -65,17 +65,12 @@ function parseDay(s: string | null): Date | null {
 }
 
 function readQuery(): URLSearchParams {
-  const h = window.location.hash || "";
-  const i = h.indexOf("?");
-  return new URLSearchParams(i >= 0 ? h.slice(i + 1) : "");
+  return new URLSearchParams(window.location.search || "");
 }
 function writeQuery(params: URLSearchParams) {
-  const h = window.location.hash || "";
-  const i = h.indexOf("?");
-  const base = i >= 0 ? h.slice(0, i) : h;
   const qs = params.toString();
-  const next = qs ? `${base}?${qs}` : base;
-  if (next !== h) {
+  const next = `${window.location.pathname}${qs ? `?${qs}` : ""}`;
+  if (next !== `${window.location.pathname}${window.location.search}`) {
     history.replaceState(null, "", next);
   }
 }

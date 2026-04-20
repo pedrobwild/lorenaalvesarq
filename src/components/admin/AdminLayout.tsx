@@ -20,7 +20,7 @@ export default function AdminLayout({ children, active }: Props) {
 
   async function handleSignOut() {
     await signOut();
-    window.location.hash = routes.adminLogin.replace(/^#/, "");
+    navigate(routes.adminLogin);
   }
 
   return (

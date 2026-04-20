@@ -158,7 +158,7 @@ export function projectJsonLd(
     name: `${project.title} ${project.em ?? ""}`.trim(),
     description: project.summary,
     image: project.cover,
-    url: `${base}/#/projeto/${project.slug}`,
+    url: `${base}/projeto/${project.slug}`,
     creator: {
       "@type": "Organization",
       name: s.site_title || "Lorena Alves Arquitetura",
