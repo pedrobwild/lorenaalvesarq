@@ -47,7 +47,13 @@ function AnalyticsContent() {
           onRemoveSegment={state.removeSegment}
         />
       )}
-      {state.tab === "conversion" && <ComingSoon name="Conversão" />}
+      {state.tab === "conversion" && (
+        <ConversionTab
+          range={state.range}
+          segments={state.segments}
+          comparePrev={state.comparePrev}
+        />
+      )}
       {state.tab === "retention" && <ComingSoon name="Retenção" />}
       {state.tab === "realtime" && <ComingSoon name="Tempo real" />}
     </AnalyticsShell>
