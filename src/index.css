@@ -1493,7 +1493,7 @@ button {
 .about__name {
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
   line-height: 1;
   letter-spacing: -0.025em;
 }
