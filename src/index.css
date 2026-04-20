@@ -1017,6 +1017,27 @@ button {
   isolation: isolate;
 }
 
+/* Fades suaves nas transições entre seções de cores contrastantes
+   (preto ↔ branco). Aplicado nas bordas top/bottom da seção .ensaios. */
+.ensaios::before,
+.ensaios::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: clamp(60px, 9vw, 140px);
+  pointer-events: none;
+  z-index: 4;
+}
+.ensaios::before {
+  top: 0;
+  background: linear-gradient(180deg, var(--ink) 0%, rgba(10,10,10,0) 100%);
+}
+.ensaios::after {
+  bottom: 0;
+  background: linear-gradient(0deg, var(--ink) 0%, rgba(10,10,10,0) 100%);
+}
+
 .ensaios__frame {
   position: relative;
   width: 100%;
