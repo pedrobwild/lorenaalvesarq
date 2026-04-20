@@ -673,23 +673,16 @@ export default function ProjectFormPage({ slug }: Props) {
                           </div>
                           <img src={g.url} alt={g.alt} />
                           <div className="admin-gallery__fields">
-                            <div className="admin-alt-row">
-                              <input
-                                className="admin-field__input"
-                                placeholder="alt-text"
-                                value={g.alt}
-                                onChange={(e) => updateImg(i, { alt: e.target.value })}
-                              />
-                              <button
-                                type="button"
-                                className="admin-btn admin-btn--ghost admin-btn--sm"
-                                onClick={() => handleGenerateGalleryAlt(i)}
-                                disabled={genAlt?.kind === "gallery" && genAlt.key === g.uid}
-                                title="Gerar alt-text com IA"
-                              >
-                                {genAlt?.kind === "gallery" && genAlt.key === g.uid ? "…" : "✨ IA"}
-                              </button>
-                            </div>
+                            <input
+                              className="admin-field__input"
+                              placeholder={
+                                galleryAltLoading[g.uid]
+                                  ? "gerando alt-text com IA…"
+                                  : "alt-text"
+                              }
+                              value={g.alt}
+                              onChange={(e) => updateImg(i, { alt: e.target.value })}
+                            />
                             <input
                               className="admin-field__input"
                               placeholder="legenda (opcional)"
