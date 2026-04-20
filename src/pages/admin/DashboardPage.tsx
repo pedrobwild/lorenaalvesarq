@@ -22,7 +22,9 @@ export default function DashboardPage() {
     (async () => {
       const since = new Date(Date.now() - 30 * 86400_000).toISOString();
 
-      const [{ count: totalProjects }, pv, uv, cc, recentRes] = await Promise.all([
+      const since14 = new Date(Date.now() - 14 * 86400_000).toISOString();
+
+      const [{ count: totalProjects }, pv, uv, cc, recentRes, daily14Res] = await Promise.all([
         supabase.from("projects").select("id", { count: "exact", head: true }),
         supabase
           .from("analytics_events")
@@ -44,6 +46,13 @@ export default function DashboardPage() {
           .select("slug, title, em, updated_at")
           .order("updated_at", { ascending: false })
           .limit(5),
+        supabase
+          .from("analytics_events")
+          .select("session_id, created_at")
+          .eq("event_type", "pageview")
+          .gte("created_at", since14)
+          .order("created_at", { ascending: true })
+          .limit(20000),
       ]);
 
       const uniqueIds = new Set((uv.data ?? []).map((r) => r.session_id).filter(Boolean));
@@ -55,6 +64,29 @@ export default function DashboardPage() {
         contactClicks30: cc.count ?? 0,
       });
       setRecent((recentRes.data ?? []) as RecentProject[]);
+
+      // Constrói série diária dos últimos 14 dias
+      const buckets = new Map<string, { sessions: Set<string>; pageviews: number }>();
+      const today = new Date();
+      for (let i = 13; i >= 0; i--) {
+        const d = new Date(today.getTime() - i * 86400_000);
+        const k = d.toISOString().slice(0, 10);
+        buckets.set(k, { sessions: new Set(), pageviews: 0 });
+      }
+      for (const r of (daily14Res.data ?? []) as { session_id: string | null; created_at: string }[]) {
+        const k = new Date(r.created_at).toISOString().slice(0, 10);
+        const b = buckets.get(k);
+        if (!b) continue;
+        b.pageviews++;
+        if (r.session_id) b.sessions.add(r.session_id);
+      }
+      setDaily14(
+        Array.from(buckets.entries()).map(([day, v]) => ({
+          day,
+          sessions: v.sessions.size,
+          pageviews: v.pageviews,
+        }))
+      );
     })();
   }, []);
 
