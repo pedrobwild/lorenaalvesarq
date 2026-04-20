@@ -97,13 +97,9 @@ function stringifySegments(segs: Segment[]): string {
 }
 
 function readTheme(): Theme {
-  try {
-    const t = localStorage.getItem(THEME_KEY);
-    if (t === "dark" || t === "light") return t;
-    if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) return "dark";
-  } catch {
-    /* noop */
-  }
+  // Tema fixado em "light" no painel admin — não respeita mais localStorage
+  // nem prefers-color-scheme. Se quiser reintroduzir o toggle, basta voltar
+  // a leitura aqui e reativar o botão no AnalyticsShell.
   return "light";
 }
 
