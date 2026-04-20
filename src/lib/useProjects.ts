@@ -14,6 +14,9 @@ type DbProject = {
   area: string | null;
   status: string | null;
   cover_url: string | null;
+  cover_url_md: string | null;
+  cover_url_sm: string | null;
+  cover_blur_data_url: string | null;
   cover_alt: string | null;
   summary: string | null;
   intro: string | null;
@@ -25,6 +28,9 @@ type DbProject = {
   visible: boolean | null;
   project_images?: Array<{
     url: string;
+    url_md: string | null;
+    url_sm: string | null;
+    blur_data_url: string | null;
     alt: string;
     caption: string | null;
     format: string | null;
@@ -38,6 +44,9 @@ function mapDbToProject(p: DbProject): Project {
     .sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0))
     .map((i) => ({
       src: i.url,
+      srcMd: i.url_md,
+      srcSm: i.url_sm,
+      blurDataUrl: i.blur_data_url,
       alt: i.alt,
       caption: i.caption ?? undefined,
       format: (i.format as ProjectImage["format"]) ?? "full",
@@ -53,6 +62,9 @@ function mapDbToProject(p: DbProject): Project {
     area: p.area ?? "",
     status: (p.status as Project["status"]) ?? "Concluído",
     cover: p.cover_url ?? "",
+    coverMd: p.cover_url_md,
+    coverSm: p.cover_url_sm,
+    coverBlurDataUrl: p.cover_blur_data_url,
     alt: p.cover_alt ?? p.title,
     summary: p.summary ?? "",
     intro: p.intro ?? "",
@@ -78,7 +90,7 @@ export function useProjects() {
     supabase
       .from("projects")
       .select(
-        "id, slug, number, title, em, tag, year, location, area, status, cover_url, cover_alt, summary, intro, program, materials, team, photographer, order_index, visible, project_images(url, alt, caption, format, order_index)"
+        "id, slug, number, title, em, tag, year, location, area, status, cover_url, cover_url_md, cover_url_sm, cover_blur_data_url, cover_alt, summary, intro, program, materials, team, photographer, order_index, visible, project_images(url, url_md, url_sm, blur_data_url, alt, caption, format, order_index)"
       )
       .eq("visible", true)
       .order("order_index", { ascending: true })
