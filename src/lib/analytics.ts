@@ -140,13 +140,12 @@ function isAdminContext(): boolean {
 
 function isDntEnabled(): boolean {
   try {
+    const nav = navigator as unknown as Record<string, unknown>;
+    const win = window as unknown as Record<string, unknown>;
     const dnt =
-      // @ts-expect-error legacy
-      navigator.doNotTrack ||
-      // @ts-expect-error legacy
-      window.doNotTrack ||
-      // @ts-expect-error legacy
-      navigator.msDoNotTrack;
+      (nav.doNotTrack as string | undefined) ||
+      (win.doNotTrack as string | undefined) ||
+      (nav.msDoNotTrack as string | undefined);
     return dnt === "1" || dnt === "yes";
   } catch {
     return false;
