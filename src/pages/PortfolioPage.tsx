@@ -196,7 +196,13 @@ export default function PortfolioPage() {
             Cada obra é um <em>manuscrito</em> — desenhada à mão, do primeiro risco ao último detalhe.
           </p>
         </div>
-        <a className="pf-foot__cta" href="#/#contato" data-cursor="hover">
+        <a
+          className="pf-foot__cta"
+          href="#/#contato"
+          data-cursor="hover"
+          data-track="click_cta"
+          data-value='{"label":"iniciar um projeto","from":"portfolio-footer"}'
+        >
           <span>INICIAR UM PROJETO</span>
           <span className="btn-big__arrow" />
         </a>
