@@ -389,6 +389,24 @@ export type Database = {
           step: number
         }[]
       }
+      analytics_hours_dow: {
+        Args: {
+          p_country?: string
+          p_device?: string
+          p_landing_path?: string
+          p_referrer_host?: string
+          p_since: string
+          p_until: string
+          p_utm_campaign?: string
+          p_utm_medium?: string
+          p_utm_source?: string
+        }
+        Returns: {
+          dow: number
+          hour: number
+          sessions: number
+        }[]
+      }
       analytics_overview_kpis: {
         Args: {
           p_country?: string
@@ -446,8 +464,46 @@ export type Database = {
           sessions: number
         }[]
       }
+      analytics_top_paths_v2: {
+        Args: {
+          p_country?: string
+          p_device?: string
+          p_landing_path?: string
+          p_limit?: number
+          p_referrer_host?: string
+          p_since: string
+          p_until: string
+          p_utm_campaign?: string
+          p_utm_medium?: string
+          p_utm_source?: string
+        }
+        Returns: {
+          pageviews: number
+          path: string
+          sessions: number
+        }[]
+      }
       analytics_top_projects: {
         Args: { p_limit?: number; p_since: string }
+        Returns: {
+          project_slug: string
+          sessions: number
+          views: number
+        }[]
+      }
+      analytics_top_projects_v2: {
+        Args: {
+          p_country?: string
+          p_device?: string
+          p_landing_path?: string
+          p_limit?: number
+          p_referrer_host?: string
+          p_since: string
+          p_until: string
+          p_utm_campaign?: string
+          p_utm_medium?: string
+          p_utm_source?: string
+        }
         Returns: {
           project_slug: string
           sessions: number
