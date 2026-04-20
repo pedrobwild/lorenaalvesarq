@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <url>
+    <loc>https://lorenaalvesarq.com/</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.00</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/" />
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/hero-main.png</image:loc>
+      <image:title>Arquiteta em Uberlândia — Lorena Alves Arquitetura</image:title>
+      <image:caption>Projeto residencial contemporâneo em Uberlândia/MG.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://lorenaalvesarq.com/#/portfolio</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://lorenaalvesarq.com/#/projeto/casa-paineira</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/#/projeto/casa-jequitiba</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/#/projeto/apto-higienopolis</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/#/projeto/casa-pau-brasil</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/#/projeto/restaurante-takka</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/#/projeto/fazenda-porto</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+</urlset>

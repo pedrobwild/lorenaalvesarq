@@ -1,0 +1,14 @@
+{
+  "name": "Lorena Alves Arquitetura — Uberlândia, MG",
+  "short_name": "Lorena Alves Arq",
+  "description": "Escritório autoral de arquitetura e design de interiores em Uberlândia, MG. Triângulo Mineiro.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0A0A0A",
+  "theme_color": "#0A0A0A",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "categories": ["design", "business", "lifestyle"]
+}
