@@ -77,6 +77,20 @@ const EMPTY_DATA: Record<SegmentDim, Row[]> = {
   landing_path: [],
 };
 
+function segArgs(segments: Segment[]): Record<string, string | null> {
+  const map: Partial<Record<SegmentDim, string>> = {};
+  for (const s of segments) map[s.dim] = s.value;
+  return {
+    p_device: map.device ?? null,
+    p_country: map.country ?? null,
+    p_utm_source: map.utm_source ?? null,
+    p_utm_medium: map.utm_medium ?? null,
+    p_utm_campaign: map.utm_campaign ?? null,
+    p_landing_path: map.landing_path ?? null,
+    p_referrer_host: map.referrer_host ?? null,
+  };
+}
+
 export default function AcquisitionTab({
   range,
   comparePrev,
@@ -100,6 +114,7 @@ export default function AcquisitionTab({
 
     const sinceISO = range.from.toISOString();
     const untilISO = range.to.toISOString();
+    const sa = segArgs(segments);
 
     const curCalls = GROUPS.map((g) =>
       Promise.resolve(
@@ -108,6 +123,7 @@ export default function AcquisitionTab({
           p_until: untilISO,
           p_dim: g.dim,
           p_limit: 25,
+          ...sa,
         })
       )
     );
@@ -119,6 +135,7 @@ export default function AcquisitionTab({
               p_until: sinceISO,
               p_dim: g.dim,
               p_limit: 25,
+              ...sa,
             })
           )
         )
@@ -161,7 +178,7 @@ export default function AcquisitionTab({
     return () => {
       cancelled = true;
     };
-  }, [range, prevRange]);
+  }, [range, prevRange, segments]);
 
   function isActiveSegment(dim: SegmentDim, value: string) {
     return segments.some((s) => s.dim === dim && s.value === value);
