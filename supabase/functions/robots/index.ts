@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
   const txt =
     `# robots.txt — gerado dinamicamente\n` +
     `User-agent: *\n` +
-    (disallowAll ? `Disallow: /\n` : `Allow: /\nDisallow: /admin\nDisallow: /#/admin\n`) +
+    (disallowAll ? `Disallow: /\n` : `Allow: /\nDisallow: /admin\n`) +
     `\nSitemap: ${base}/sitemap.xml\nSitemap: ${sitemapUrl}\n`;
 
   return new Response(txt, {

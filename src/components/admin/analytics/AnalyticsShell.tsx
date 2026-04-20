@@ -5,7 +5,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useAuth } from "@/lib/useAuth";
-import { routes } from "@/lib/useHashRoute";
+import { navigate, routes } from "@/lib/useHashRoute";
 import { ALL_TABS } from "./types";
 import type { AnalyticsState } from "./useAnalyticsState";
 import DateRangePicker from "./DateRangePicker";
@@ -167,7 +167,7 @@ export default function AnalyticsShell({ state, children }: Props) {
               data-variant="ghost"
               onClick={async () => {
                 await signOut();
-                window.location.hash = routes.adminLogin.replace(/^#/, "");
+                navigate(routes.adminLogin);
               }}
             >
               sair

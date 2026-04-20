@@ -23,7 +23,7 @@ export default function PortfolioPage() {
     title: "Portfólio — lorenaalves arq",
     description:
       "Casas, interiores e lugares que guardam vida. Seleção curada de projetos do estúdio Lorena Alves Arquitetura.",
-    canonicalPath: "/#/portfolio",
+    canonicalPath: "/portfolio",
     ogType: "website",
   });
 

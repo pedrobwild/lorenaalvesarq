@@ -25,7 +25,7 @@ export default function ProjectPage({ slug }: Props) {
       ? `${project.title} ${project.em} — lorenaalves arq`
       : "Projeto — lorenaalves arq",
     description: project?.summary || project?.intro || undefined,
-    canonicalPath: `/#/projeto/${slug}`,
+    canonicalPath: `/projeto/${slug}`,
     ogImage: project?.cover,
     ogType: "article",
     jsonLd: settings && project ? projectJsonLd(settings, project) : undefined,
