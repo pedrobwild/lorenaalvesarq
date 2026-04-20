@@ -330,10 +330,8 @@ function ServerHeatmap({ cells }: { cells: HourCell[] }) {
           </div>
         ))}
         {DAYS.map((label, d) => (
-          <>
-            <div key={`l-${d}`} style={{ textAlign: "right", paddingRight: 4 }}>
-              {label}
-            </div>
+          <div key={`day-${d}`} style={{ display: "contents" }}>
+            <div style={{ textAlign: "right", paddingRight: 4 }}>{label}</div>
             {matrix[d].map((v, h) => {
               const isPeak = peak.day === d && peak.hour === h && v > 0;
               const intensity = max ? v / max : 0;
@@ -355,7 +353,7 @@ function ServerHeatmap({ cells }: { cells: HourCell[] }) {
                 />
               );
             })}
-          </>
+          </div>
         ))}
       </div>
       <aside
