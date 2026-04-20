@@ -767,10 +767,10 @@ button {
 .section__title {
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: var(--t-3xl);
-  line-height: 0.95;
+  font-size: clamp(2rem, 4.2vw, 3.6rem);
+  line-height: 1;
   letter-spacing: -0.025em;
-  max-width: 18ch;
+  max-width: 20ch;
 }
 
 .section__title em {
@@ -1663,8 +1663,8 @@ button {
 .cta__title {
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: clamp(3rem, 8vw, 7rem);
-  line-height: 0.95;
+  font-size: clamp(2.4rem, 6vw, 5.2rem);
+  line-height: 1;
   letter-spacing: -0.035em;
 }
 .cta__title em { font-style: italic; color: var(--clay); }
