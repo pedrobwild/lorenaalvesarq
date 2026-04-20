@@ -108,7 +108,6 @@ export default function AcquisitionTab({
 
     const sinceISO = range.from.toISOString();
     const untilISO = range.to.toISOString();
-    const sa = segArgs(segments);
 
     const curCalls = GROUPS.map((g) =>
       Promise.resolve(
@@ -117,7 +116,6 @@ export default function AcquisitionTab({
           p_until: untilISO,
           p_dim: g.dim,
           p_limit: 25,
-          ...sa,
         })
       )
     );
@@ -129,7 +127,6 @@ export default function AcquisitionTab({
               p_until: sinceISO,
               p_dim: g.dim,
               p_limit: 25,
-              ...sa,
             })
           )
         )
