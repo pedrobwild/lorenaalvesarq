@@ -826,9 +826,6 @@ export default function App() {
             </ul>
           </div>
         </div>
-        <div className="footer__mega">
-          <span className="brand-lockup brand-lockup--mega">lorena<b>alves</b><sup>arq</sup></span>
-        </div>
         <div className="footer__bottom">
           <span>© 2026 Lorena Alves Arquitetura. Todos os direitos reservados.</span>
           <span>
