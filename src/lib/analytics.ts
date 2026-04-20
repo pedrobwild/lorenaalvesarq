@@ -83,7 +83,7 @@ function getSessionId(): { id: string; isNew: boolean } {
     const now = Date.now();
     const lastTs = Number(sessionStorage.getItem(SID_TS_KEY) || 0);
     let sid = sessionStorage.getItem(SID_KEY);
-    const expired = lastTs && now - lastTs > SID_IDLE;
+    const expired = lastTs > 0 && now - lastTs > SID_IDLE;
     const isNew = !sid || expired;
     if (isNew) {
       sid = uuid();
