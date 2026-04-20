@@ -8,7 +8,6 @@ import AcquisitionTab from "@/components/admin/analytics/AcquisitionTab";
 import BehaviorTab from "@/components/admin/analytics/BehaviorTab";
 import ConversionTab from "@/components/admin/analytics/ConversionTab";
 import RetentionTab from "@/components/admin/analytics/RetentionTab";
-import ProtectedRoute from "@/components/admin/ProtectedRoute";
 
 function ComingSoon({ name }: { name: string }) {
   return (
@@ -19,7 +18,7 @@ function ComingSoon({ name }: { name: string }) {
   );
 }
 
-function AnalyticsContent() {
+export default function AnalyticsPage() {
   const state = useAnalyticsState();
 
   return (
@@ -55,18 +54,8 @@ function AnalyticsContent() {
           comparePrev={state.comparePrev}
         />
       )}
-      {state.tab === "retention" && (
-        <RetentionTab range={state.range} segments={state.segments} />
-      )}
+      {state.tab === "retention" && <RetentionTab range={state.range} segments={state.segments} />}
       {state.tab === "realtime" && <ComingSoon name="Tempo real" />}
     </AnalyticsShell>
-  );
-}
-
-export default function AnalyticsPage() {
-  return (
-    <ProtectedRoute>
-      <AnalyticsContent />
-    </ProtectedRoute>
   );
 }

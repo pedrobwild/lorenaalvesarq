@@ -18,28 +18,30 @@ function parseHash(hash: string): Route {
   // aceita #/portfolio, #/projeto/slug e rotas /admin/*. âncoras legadas (#projetos, #estudio…)
   // ficam para o scroll da home e são tratadas como rota "home" com anchor.
   const h = hash.replace(/^#/, "");
+  const path = h.split("?")[0] || "";
 
-  if (h === "" || h === "/") return { name: "home" };
+  if (path === "" || path === "/") return { name: "home" };
 
-  if (h.startsWith("/portfolio")) return { name: "portfolio" };
+  if (path.startsWith("/portfolio")) return { name: "portfolio" };
 
-  const projMatch = h.match(/^\/projeto\/([a-z0-9-]+)\/?$/);
+  const projMatch = path.match(/^\/projeto\/([a-z0-9-]+)\/?$/);
   if (projMatch) return { name: "project", slug: projMatch[1] };
 
   // Admin
-  if (h === "/admin/login") return { name: "admin-login" };
-  if (h === "/admin" || h === "/admin/") return { name: "admin-dashboard" };
-  if (h === "/admin/analytics" || h === "/admin/analytics/")
+  if (path === "/admin/login") return { name: "admin-login" };
+  if (path === "/admin" || path === "/admin/") return { name: "admin-dashboard" };
+  if (path === "/admin/analytics" || path === "/admin/analytics/") {
     return { name: "admin-analytics" };
-  if (h === "/admin/seo" || h === "/admin/seo/") return { name: "admin-seo" };
-  if (h === "/admin/settings" || h === "/admin/settings/") return { name: "admin-settings" };
-  if (h === "/admin/projects" || h === "/admin/projects/") return { name: "admin-projects" };
-  if (h === "/admin/projects/new") return { name: "admin-project-new" };
-  const adminEdit = h.match(/^\/admin\/projects\/([a-z0-9-]+)\/?$/);
+  }
+  if (path === "/admin/seo" || path === "/admin/seo/") return { name: "admin-seo" };
+  if (path === "/admin/settings" || path === "/admin/settings/") return { name: "admin-settings" };
+  if (path === "/admin/projects" || path === "/admin/projects/") return { name: "admin-projects" };
+  if (path === "/admin/projects/new") return { name: "admin-project-new" };
+  const adminEdit = path.match(/^\/admin\/projects\/([a-z0-9-]+)\/?$/);
   if (adminEdit) return { name: "admin-project-edit", slug: adminEdit[1] };
 
   // anchor legacy (#projetos, #estudio, #metodo, #contato, #hero…)
-  if (!h.startsWith("/")) return { name: "home", anchor: h };
+  if (!path.startsWith("/")) return { name: "home", anchor: path };
 
   return { name: "not-found" };
 }
