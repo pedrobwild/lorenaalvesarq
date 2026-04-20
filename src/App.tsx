@@ -417,9 +417,11 @@ export default function App() {
           <div className="mono" style={{ marginBottom: "0.8rem" }}>
             Sobre
           </div>
-          <p style={{ fontFamily: "var(--font-display)", fontSize: "1.35rem" }}>
-            contato@lorenaalves.arq.br
-          </p>
+          {settings?.contact_email && (
+            <p style={{ fontFamily: "var(--font-display)", fontSize: "1.35rem" }}>
+              {settings.contact_email}
+            </p>
+          )}
         </div>
       </div>
 
@@ -697,26 +699,53 @@ export default function App() {
             Vamos projetar o seu próximo <em>modo de viver</em>?
           </h2>
           <div className="cta__details">
-            <div className="cta__detail">
-              <span className="label">Escreva</span>
-              <a href="mailto:contato@lorenaalves.arq.br" onClick={() => track("click_contact", { value: { kind: "email", from: "cta" } })}>contato@lorenaalves.arq.br</a>
-            </div>
-            <div className="cta__detail">
-              <span className="label">Telefone</span>
-              <a href="tel:+5511999999999" onClick={() => track("click_whatsapp", { value: { kind: "tel", from: "cta" } })}>+55 11 9 9999 9999</a>
-            </div>
-            <div className="cta__detail">
-              <span className="label">Estúdio</span>
-              <p>
-                Rua Jerônimo da Veiga, 164
-                <br />
-                Itaim Bibi, São Paulo — SP
-              </p>
-            </div>
-            <a href="mailto:contato@lorenaalves.arq.br" className="btn-big" data-cursor="hover" onClick={() => track("click_contact", { value: { kind: "email", from: "cta-button" } })}>
-              <span>ENTRE EM CONTATO</span>
-              <span className="btn-big__arrow"></span>
-            </a>
+            {settings?.contact_email && (
+              <div className="cta__detail">
+                <span className="label">Escreva</span>
+                <a
+                  href={`mailto:${settings.contact_email}`}
+                  onClick={() => track("click_contact", { value: { kind: "email", from: "cta" } })}
+                >
+                  {settings.contact_email}
+                </a>
+              </div>
+            )}
+            {settings?.contact_phone && (
+              <div className="cta__detail">
+                <span className="label">Telefone</span>
+                <a
+                  href={`tel:${settings.contact_phone.replace(/[^+\d]/g, "")}`}
+                  onClick={() => track("click_whatsapp", { value: { kind: "tel", from: "cta" } })}
+                >
+                  {settings.contact_phone}
+                </a>
+              </div>
+            )}
+            {(settings?.address_street || settings?.address_city) && (
+              <div className="cta__detail">
+                <span className="label">Estúdio</span>
+                <p>
+                  {settings.address_street}
+                  {settings.address_street && (settings.address_city || settings.address_region) && (
+                    <br />
+                  )}
+                  {[settings.address_city, settings.address_region].filter(Boolean).join(" — ")}
+                </p>
+              </div>
+            )}
+            {settings?.contact_email && (
+              <a
+                href={`mailto:${settings.contact_email}`}
+                className="btn-big"
+                data-cursor="hover"
+                onClick={() =>
+                  track("click_contact", { value: { kind: "email", from: "cta-button" } })
+                }
+              >
+                <span>ENTRE EM CONTATO</span>
+                <span className="btn-big__arrow"></span>
+              </a>
+            )}
           </div>
         </div>
       </section>
@@ -747,32 +776,60 @@ export default function App() {
           <div className="footer__col">
             <h4>Social</h4>
             <ul>
-              <li>
-                <a href="#" aria-label="Instagram" rel="noopener" onClick={() => track("click_instagram", { value: { from: "footer" } })}>
-                  Instagram
-                </a>
-              </li>
-              <li>
-                <a href="#" aria-label="Pinterest" rel="noopener">
-                  Pinterest
-                </a>
-              </li>
-              <li>
-                <a href="#" aria-label="LinkedIn" rel="noopener">
-                  LinkedIn
-                </a>
-              </li>
+              {settings?.instagram_url && (
+                <li>
+                  <a
+                    href={settings.instagram_url}
+                    aria-label="Instagram"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track("click_instagram", { value: { from: "footer" } })}
+                  >
+                    Instagram
+                  </a>
+                </li>
+              )}
+              {settings?.pinterest_url && (
+                <li>
+                  <a
+                    href={settings.pinterest_url}
+                    aria-label="Pinterest"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Pinterest
+                  </a>
+                </li>
+              )}
+              {settings?.linkedin_url && (
+                <li>
+                  <a
+                    href={settings.linkedin_url}
+                    aria-label="LinkedIn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    LinkedIn
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
           <div className="footer__col">
             <h4>Sobre</h4>
             <ul>
-              <li>
-                <a href="mailto:contato@lorenaalves.arq.br">contato@lorenaalves.arq.br</a>
-              </li>
-              <li>
-                <a href="tel:+5511999999999">+55 11 9 9999 9999</a>
-              </li>
+              {settings?.contact_email && (
+                <li>
+                  <a href={`mailto:${settings.contact_email}`}>{settings.contact_email}</a>
+                </li>
+              )}
+              {settings?.contact_phone && (
+                <li>
+                  <a href={`tel:${settings.contact_phone.replace(/[^+\d]/g, "")}`}>
+                    {settings.contact_phone}
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
         </div>
