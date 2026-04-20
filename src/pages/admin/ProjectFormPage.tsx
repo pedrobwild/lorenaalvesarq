@@ -40,6 +40,9 @@ type Form = {
   intro: string;
   materials: string; // edited as comma-separated string in UI
   cover_url: string;
+  cover_url_md: string;
+  cover_url_sm: string;
+  cover_blur_data_url: string;
   cover_alt: string;
   visible: boolean;
   seo_title: string;
@@ -49,8 +52,11 @@ type Form = {
 
 type GalleryRow = {
   id?: string;
-  uid: string; // id estável usado pelo dnd (id do banco ou gerado client-side)
+  uid: string;
   url: string;
+  url_md: string | null;
+  url_sm: string | null;
+  blur_data_url: string | null;
   alt: string;
   caption: string | null;
   format: string;
@@ -75,6 +81,9 @@ const EMPTY: Form = {
   intro: "",
   materials: "",
   cover_url: "",
+  cover_url_md: "",
+  cover_url_sm: "",
+  cover_blur_data_url: "",
   cover_alt: "",
   visible: true,
   seo_title: "",
