@@ -5,13 +5,20 @@ import {
   CartesianGrid,
   Line,
   LineChart,
+  ComposedChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 
-export type DailyPoint = { day: string; sessions: number; pageviews: number };
+export type DailyPoint = {
+  day: string;
+  sessions: number;
+  pageviews: number;
+  prevSessions?: number;
+  prevPageviews?: number;
+};
 
 type Props = {
   data: DailyPoint[];
@@ -19,6 +26,7 @@ type Props = {
   showAxes?: boolean;
   showTooltip?: boolean;
   variant?: "line" | "area";
+  showPrev?: boolean;
 };
 
 export default function SessionsChart({
@@ -27,6 +35,7 @@ export default function SessionsChart({
   showAxes = true,
   showTooltip = true,
   variant = "area",
+  showPrev = false,
 }: Props) {
   const safe = useMemo(
     () =>
@@ -89,7 +98,7 @@ export default function SessionsChart({
 
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <AreaChart data={safe} margin={{ top: 8, right: 8, bottom: 4, left: 4 }}>
+      <ComposedChart data={safe} margin={{ top: 8, right: 8, bottom: 4, left: 4 }}>
         <defs>
           <linearGradient id="grad-sessions" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="currentColor" stopOpacity={0.25} />
@@ -148,7 +157,19 @@ export default function SessionsChart({
           fill="url(#grad-sessions)"
           name="sessions"
         />
-      </AreaChart>
+        {showPrev && (
+          <Line
+            type="monotone"
+            dataKey="prevSessions"
+            stroke="currentColor"
+            strokeWidth={1.2}
+            strokeOpacity={0.55}
+            strokeDasharray="3 4"
+            dot={false}
+            name="sessões (anterior)"
+          />
+        )}
+      </ComposedChart>
     </ResponsiveContainer>
   );
 }

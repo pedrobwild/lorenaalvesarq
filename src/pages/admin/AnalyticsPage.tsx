@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import SessionsChart, { type DailyPoint } from "@/components/admin/SessionsChart";
+import HoursHeatmap from "@/components/admin/HoursHeatmap";
 import { supabase } from "@/integrations/supabase/client";
 import { routes } from "@/lib/useHashRoute";
 
 type RangeKey = "7d" | "30d" | "90d" | "12m";
 const RANGE_DAYS: Record<RangeKey, number> = { "7d": 7, "30d": 30, "90d": 90, "12m": 365 };
+
+type DeviceFilter = "all" | "desktop" | "mobile" | "tablet";
 
 type RawEvent = {
   id?: string;
@@ -19,6 +22,8 @@ type RawEvent = {
   project_slug: string | null;
   created_at: string;
 };
+
+type DailyPointWithPrev = DailyPoint & { prevSessions?: number; prevPageviews?: number };
 
 type KpiSet = {
   sessions: number;
@@ -35,7 +40,7 @@ type KpiSet = {
     avgDurationMs: number;
     contactConversion: number;
   };
-  daily: DailyPoint[];
+  daily: DailyPointWithPrev[];
   sparkline: DailyPoint[];
 };
 
@@ -76,6 +81,39 @@ function buildDaily(rows: RawEvent[], days: number): DailyPoint[] {
   }));
 }
 
+/** Produz daily com sobreposição do período anterior (mesmo número de dias). */
+function buildDailyWithPrev(
+  rows: RawEvent[],
+  prevRows: RawEvent[],
+  days: number
+): DailyPointWithPrev[] {
+  const cur = buildDaily(rows, days);
+  // Para o período anterior, contamos por offset relativo (i dias antes do fim)
+  const prevMap = new Map<number, { sessions: Set<string>; pageviews: number }>();
+  for (let i = 0; i < days; i++) prevMap.set(i, { sessions: new Set(), pageviews: 0 });
+  const periodStart = Date.now() - days * 86400_000; // início do período atual
+  const prevStart = periodStart - days * 86400_000;
+  for (const r of prevRows) {
+    const t = new Date(r.created_at).getTime();
+    if (t < prevStart || t >= periodStart) continue;
+    const dayOffset = Math.floor((t - prevStart) / 86400_000); // 0..days-1
+    const bucket = prevMap.get(dayOffset);
+    if (!bucket) continue;
+    if (r.event_type === "pageview") {
+      bucket.pageviews++;
+      if (r.session_id) bucket.sessions.add(r.session_id);
+    }
+  }
+  return cur.map((d, i) => {
+    const p = prevMap.get(i);
+    return {
+      ...d,
+      prevSessions: p ? p.sessions.size : 0,
+      prevPageviews: p ? p.pageviews : 0,
+    };
+  });
+}
+
 function computeKpis(rows: RawEvent[], prevRows: RawEvent[], days: number): KpiSet {
   const calc = (set: RawEvent[]) => {
     const sessionIds = new Set<string>();
@@ -109,7 +147,7 @@ function computeKpis(rows: RawEvent[], prevRows: RawEvent[], days: number): KpiS
 
   const cur = calc(rows);
   const prev = calc(prevRows);
-  const daily = buildDaily(rows, days);
+  const daily = buildDailyWithPrev(rows, prevRows, days);
   const sparkline = buildDaily(rows, Math.min(14, days));
 
   return {
@@ -140,22 +178,33 @@ function fmtDelta(cur: number, prev: number): { txt: string; dir: "up" | "down" 
   return { txt: `${d > 0 ? "+" : ""}${d.toFixed(1)}%`, dir };
 }
 
+/** Normaliza o device do evento para um dos buckets do filtro. */
+function normalizeDevice(d: string | null): DeviceFilter {
+  const v = (d || "").toLowerCase();
+  if (v.includes("mobile") || v === "phone") return "mobile";
+  if (v.includes("tablet") || v.includes("ipad")) return "tablet";
+  return "desktop";
+}
+
+function matchesDevice(r: RawEvent, filter: DeviceFilter): boolean {
+  if (filter === "all") return true;
+  return normalizeDevice(r.device) === filter;
+}
+
 export default function AnalyticsPage() {
   const [range, setRange] = useState<RangeKey>("30d");
+  const [deviceFilter, setDeviceFilter] = useState<DeviceFilter>("all");
+  const [showPrev, setShowPrev] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [kpis, setKpis] = useState<KpiSet | null>(null);
-  const [topPaths, setTopPaths] = useState<TopPath[]>([]);
-  const [topProjects, setTopProjects] = useState<TopProject[]>([]);
-  const [topReferrers, setTopReferrers] = useState<TopReferrer[]>([]);
-  const [devices, setDevices] = useState<{ name: string; value: number }[]>([]);
-  const [utmRows, setUtmRows] = useState<{ utm_source: string; sessions: number }[]>([]);
-  const [funnel, setFunnel] = useState<{ sessions: number; viewed: number; clicked: number }>({
-    sessions: 0,
-    viewed: 0,
-    clicked: 0,
-  });
+  const [csvOpen, setCsvOpen] = useState(false);
+
+  // Dados brutos do período (atual + anterior) — filtragem por dispositivo é client-side
+  const [rawCur, setRawCur] = useState<RawEvent[]>([]);
+  const [rawPrev, setRawPrev] = useState<RawEvent[]>([]);
+
   const cacheRef = useRef<Map<RangeKey, unknown>>(new Map());
 
+  // Fetch (refaz somente quando o range muda)
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -165,7 +214,7 @@ export default function AnalyticsPage() {
       const prevSince = daysAgoIso(days * 2);
 
       try {
-        const [evRes, prevRes, pathsRes, projsRes, refsRes] = await Promise.all([
+        const [evRes, prevRes] = await Promise.all([
           supabase
             .from("analytics_events")
             .select(
@@ -182,63 +231,13 @@ export default function AnalyticsPage() {
             .gte("created_at", prevSince)
             .lt("created_at", since)
             .limit(50000),
-          supabase.rpc("analytics_top_paths", { p_since: since, p_limit: 10 }),
-          supabase.rpc("analytics_top_projects", { p_since: since, p_limit: 10 }),
-          supabase.rpc("analytics_top_referrers", { p_since: since, p_limit: 10 }),
         ]);
 
         if (cancelled) return;
 
-        const events = (evRes.data ?? []) as RawEvent[];
-        const prevEvents = (prevRes.data ?? []) as RawEvent[];
-
-        const k = computeKpis(events, prevEvents, days);
-        setKpis(k);
-
-        // devices donut + utm table + funil a partir dos eventos do período
-        const devCount = new Map<string, Set<string>>();
-        const utmCount = new Map<string, Set<string>>();
-        const sessionsAll = new Set<string>();
-        const sessionsViewedProject = new Set<string>();
-        const sessionsClickedContact = new Set<string>();
-        for (const r of events) {
-          if (r.session_id) sessionsAll.add(r.session_id);
-          if (r.event_type === "project_view" && r.session_id)
-            sessionsViewedProject.add(r.session_id);
-          if (r.event_type === "click_contact" && r.session_id)
-            sessionsClickedContact.add(r.session_id);
-          if (r.event_type === "pageview") {
-            const dev = r.device || "desktop";
-            if (!devCount.has(dev)) devCount.set(dev, new Set());
-            if (r.session_id) devCount.get(dev)!.add(r.session_id);
-            const utm = r.utm_source || "(direto)";
-            if (!utmCount.has(utm)) utmCount.set(utm, new Set());
-            if (r.session_id) utmCount.get(utm)!.add(r.session_id);
-          }
-        }
-
-        setDevices(
-          Array.from(devCount.entries())
-            .map(([name, s]) => ({ name, value: s.size }))
-            .sort((a, b) => b.value - a.value)
-        );
-        setUtmRows(
-          Array.from(utmCount.entries())
-            .map(([utm_source, s]) => ({ utm_source, sessions: s.size }))
-            .sort((a, b) => b.sessions - a.sessions)
-            .slice(0, 8)
-        );
-        setFunnel({
-          sessions: sessionsAll.size,
-          viewed: sessionsViewedProject.size,
-          clicked: sessionsClickedContact.size,
-        });
-
-        setTopPaths((pathsRes.data ?? []) as TopPath[]);
-        setTopProjects((projsRes.data ?? []) as TopProject[]);
-        setTopReferrers((refsRes.data ?? []) as TopReferrer[]);
+        setRawCur((evRes.data ?? []) as RawEvent[]);
+        setRawPrev((prevRes.data ?? []) as RawEvent[]);
       } catch (err) {
-        // silencioso
         // eslint-disable-next-line no-console
         console.error(err);
       } finally {
@@ -251,9 +250,140 @@ export default function AnalyticsPage() {
     };
   }, [range]);
 
-  async function exportCsv() {
-    const days = RANGE_DAYS[range];
-    const since = daysAgoIso(days);
+  // Aplica filtro de dispositivo a tudo
+  const events = useMemo(
+    () => (deviceFilter === "all" ? rawCur : rawCur.filter((r) => matchesDevice(r, deviceFilter))),
+    [rawCur, deviceFilter]
+  );
+  const prevEvents = useMemo(
+    () => (deviceFilter === "all" ? rawPrev : rawPrev.filter((r) => matchesDevice(r, deviceFilter))),
+    [rawPrev, deviceFilter]
+  );
+
+  const days = RANGE_DAYS[range];
+  const kpis = useMemo<KpiSet | null>(
+    () => (events.length || prevEvents.length ? computeKpis(events, prevEvents, days) : null),
+    [events, prevEvents, days]
+  );
+
+  // Agregações derivadas (top paths/projects/referrers, devices, utm, funil) — agora client-side
+  const { topPaths, topProjects, topReferrers, devices, utmRows, funnel } = useMemo(() => {
+    const pathMap = new Map<string, { pv: number; s: Set<string> }>();
+    const projMap = new Map<string, { v: number; s: Set<string> }>();
+    const refMap = new Map<string, Set<string>>();
+    const devMap = new Map<string, Set<string>>();
+    const utmMap = new Map<string, Set<string>>();
+    const sessionsAll = new Set<string>();
+    const sessionsViewedProject = new Set<string>();
+    const sessionsClickedContact = new Set<string>();
+
+    for (const r of events) {
+      if (r.session_id) sessionsAll.add(r.session_id);
+      if (r.event_type === "project_view" && r.session_id)
+        sessionsViewedProject.add(r.session_id);
+      if (r.event_type === "click_contact" && r.session_id)
+        sessionsClickedContact.add(r.session_id);
+
+      if (r.event_type === "pageview") {
+        // top paths
+        if (r.path) {
+          if (!pathMap.has(r.path)) pathMap.set(r.path, { pv: 0, s: new Set() });
+          const p = pathMap.get(r.path)!;
+          p.pv++;
+          if (r.session_id) p.s.add(r.session_id);
+        }
+        // referrers
+        const ref = r.referrer && r.referrer.trim() ? r.referrer : "(direto)";
+        if (!refMap.has(ref)) refMap.set(ref, new Set());
+        if (r.session_id) refMap.get(ref)!.add(r.session_id);
+
+        // devices
+        const dev = normalizeDevice(r.device);
+        if (!devMap.has(dev)) devMap.set(dev, new Set());
+        if (r.session_id) devMap.get(dev)!.add(r.session_id);
+
+        // utm
+        const utm = r.utm_source || "(direto)";
+        if (!utmMap.has(utm)) utmMap.set(utm, new Set());
+        if (r.session_id) utmMap.get(utm)!.add(r.session_id);
+      }
+
+      if (r.event_type === "project_view" && r.project_slug) {
+        if (!projMap.has(r.project_slug)) projMap.set(r.project_slug, { v: 0, s: new Set() });
+        const p = projMap.get(r.project_slug)!;
+        p.v++;
+        if (r.session_id) p.s.add(r.session_id);
+      }
+    }
+
+    return {
+      topPaths: Array.from(pathMap.entries())
+        .map(([path, x]) => ({ path, pageviews: x.pv, sessions: x.s.size }))
+        .sort((a, b) => b.pageviews - a.pageviews)
+        .slice(0, 10) as TopPath[],
+      topProjects: Array.from(projMap.entries())
+        .map(([project_slug, x]) => ({ project_slug, views: x.v, sessions: x.s.size }))
+        .sort((a, b) => b.views - a.views)
+        .slice(0, 10) as TopProject[],
+      topReferrers: Array.from(refMap.entries())
+        .map(([referrer, s]) => ({ referrer, sessions: s.size }))
+        .sort((a, b) => b.sessions - a.sessions)
+        .slice(0, 10) as TopReferrer[],
+      devices: Array.from(devMap.entries())
+        .map(([name, s]) => ({ name, value: s.size }))
+        .sort((a, b) => b.value - a.value),
+      utmRows: Array.from(utmMap.entries())
+        .map(([utm_source, s]) => ({ utm_source, sessions: s.size }))
+        .sort((a, b) => b.sessions - a.sessions)
+        .slice(0, 8),
+      funnel: {
+        sessions: sessionsAll.size,
+        viewed: sessionsViewedProject.size,
+        clicked: sessionsClickedContact.size,
+      },
+    };
+  }, [events]);
+
+  // ========== CSV exports ==========
+  function downloadBlob(filename: string, content: string, mime = "text/csv;charset=utf-8") {
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function rowsToCsv(rows: Record<string, unknown>[]): string {
+    if (!rows.length) return "";
+    const headers = Object.keys(rows[0]);
+    return [
+      headers.join(","),
+      ...rows.map((r) =>
+        headers
+          .map((h) => {
+            const v = r[h];
+            if (v == null) return "";
+            const s = typeof v === "object" ? JSON.stringify(v) : String(v);
+            return `"${s.replace(/"/g, '""')}"`;
+          })
+          .join(",")
+      ),
+    ].join("\n");
+  }
+
+  function fileSuffix(): string {
+    const today = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    const dev = deviceFilter === "all" ? "" : `-${deviceFilter}`;
+    return `${range}${dev}-${today}`;
+  }
+
+  async function exportRawCsv() {
+    setCsvOpen(false);
+    const since = daysAgoIso(RANGE_DAYS[range]);
     const PAGE = 1000;
     let from = 0;
     let all: Record<string, unknown>[] = [];
@@ -265,37 +395,72 @@ export default function AnalyticsPage() {
         .order("created_at", { ascending: true })
         .range(from, from + PAGE - 1);
       if (error) break;
-      const batch = data ?? [];
-      all = all.concat(batch as Record<string, unknown>[]);
+      const batch = (data ?? []) as Record<string, unknown>[];
+      all = all.concat(batch);
       if (batch.length < PAGE) break;
       from += PAGE;
       if (from > 50000) break;
     }
+    if (deviceFilter !== "all") {
+      all = all.filter((r) => normalizeDevice((r as RawEvent).device) === deviceFilter);
+    }
     if (!all.length) return;
-    const headers = Object.keys(all[0]);
-    const csv = [
-      headers.join(","),
-      ...all.map((r) =>
-        headers
-          .map((h) => {
-            const v = r[h];
-            if (v == null) return "";
-            const s = typeof v === "object" ? JSON.stringify(v) : String(v);
-            return `"${s.replace(/"/g, '""')}"`;
-          })
-          .join(",")
-      ),
-    ].join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    const today = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-    a.download = `analytics-${today}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+    downloadBlob(`analytics-eventos-${fileSuffix()}.csv`, rowsToCsv(all));
+  }
+
+  function exportSummaryCsv() {
+    setCsvOpen(false);
+    if (!kpis) return;
+    const summary = [
+      { metric: "Sessões", atual: kpis.sessions, anterior: kpis.prev.sessions },
+      {
+        metric: "Visitantes únicos",
+        atual: kpis.uniqueVisitors,
+        anterior: kpis.prev.uniqueVisitors,
+      },
+      { metric: "Pageviews", atual: kpis.pageviews, anterior: kpis.prev.pageviews },
+      {
+        metric: "Páginas/sessão",
+        atual: kpis.pagesPerSession.toFixed(2),
+        anterior: kpis.prev.pagesPerSession.toFixed(2),
+      },
+      {
+        metric: "Tempo médio (s)",
+        atual: Math.round(kpis.avgDurationMs / 1000),
+        anterior: Math.round(kpis.prev.avgDurationMs / 1000),
+      },
+      {
+        metric: "Conv. contato (%)",
+        atual: kpis.contactConversion.toFixed(2),
+        anterior: kpis.prev.contactConversion.toFixed(2),
+      },
+    ];
+
+    const sections: string[] = [];
+    sections.push(`# Analytics — ${range} — dispositivo: ${deviceFilter}`);
+    sections.push("");
+    sections.push("## KPIs");
+    sections.push(rowsToCsv(summary));
+    sections.push("");
+    sections.push("## Sessões e pageviews por dia");
+    sections.push(rowsToCsv(kpis.daily as unknown as Record<string, unknown>[]));
+    sections.push("");
+    sections.push("## Top páginas");
+    sections.push(rowsToCsv(topPaths as unknown as Record<string, unknown>[]));
+    sections.push("");
+    sections.push("## Top projetos");
+    sections.push(rowsToCsv(topProjects as unknown as Record<string, unknown>[]));
+    sections.push("");
+    sections.push("## Referenciadores");
+    sections.push(rowsToCsv(topReferrers as unknown as Record<string, unknown>[]));
+    sections.push("");
+    sections.push("## Dispositivos");
+    sections.push(rowsToCsv(devices as unknown as Record<string, unknown>[]));
+    sections.push("");
+    sections.push("## UTMs");
+    sections.push(rowsToCsv(utmRows as unknown as Record<string, unknown>[]));
+
+    downloadBlob(`analytics-resumo-${fileSuffix()}.csv`, sections.join("\n"));
   }
 
   const cards = useMemo(() => {
@@ -334,28 +499,91 @@ export default function AnalyticsPage() {
     ];
   }, [kpis]);
 
-  // suprime warning de cache não usado (preparado para refinos futuros)
   void cacheRef;
 
   return (
     <AdminLayout active="analytics">
       <section className="admin-toolbar">
-        <div className="admin-pills" role="group" aria-label="Intervalo">
-          {(Object.keys(RANGE_DAYS) as RangeKey[]).map((k) => (
-            <button
-              key={k}
-              type="button"
-              className={`admin-pill ${range === k ? "is-active" : ""}`}
-              aria-pressed={range === k}
-              onClick={() => setRange(k)}
-            >
-              {k}
-            </button>
-          ))}
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+          <div className="admin-pills" role="group" aria-label="Intervalo">
+            {(Object.keys(RANGE_DAYS) as RangeKey[]).map((k) => (
+              <button
+                key={k}
+                type="button"
+                className={`admin-pill ${range === k ? "is-active" : ""}`}
+                aria-pressed={range === k}
+                onClick={() => setRange(k)}
+              >
+                {k}
+              </button>
+            ))}
+          </div>
+          <div className="admin-pills" role="group" aria-label="Dispositivo">
+            {(["all", "desktop", "mobile", "tablet"] as DeviceFilter[]).map((k) => (
+              <button
+                key={k}
+                type="button"
+                className={`admin-pill ${deviceFilter === k ? "is-active" : ""}`}
+                aria-pressed={deviceFilter === k}
+                onClick={() => setDeviceFilter(k)}
+              >
+                {k === "all" ? "todos" : k}
+              </button>
+            ))}
+          </div>
+          <label
+            className="mono"
+            style={{
+              fontSize: 11,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              opacity: 0.85,
+              cursor: "pointer",
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={showPrev}
+              onChange={(e) => setShowPrev(e.target.checked)}
+            />
+            comparar com período anterior
+          </label>
         </div>
-        <button type="button" className="admin-btn admin-btn--ghost" onClick={exportCsv}>
-          ↓ exportar CSV
-        </button>
+
+        <div style={{ position: "relative" }}>
+          <button
+            type="button"
+            className="admin-btn admin-btn--ghost"
+            onClick={() => setCsvOpen((v) => !v)}
+            aria-haspopup="menu"
+            aria-expanded={csvOpen}
+          >
+            ↓ exportar CSV
+          </button>
+          {csvOpen && (
+            <div className="admin-csv-menu" role="menu">
+              <button
+                type="button"
+                className="admin-csv-menu__item"
+                onClick={exportSummaryCsv}
+                role="menuitem"
+              >
+                <strong>Resumo</strong>
+                <span>KPIs, top páginas, projetos, devices, utm</span>
+              </button>
+              <button
+                type="button"
+                className="admin-csv-menu__item"
+                onClick={exportRawCsv}
+                role="menuitem"
+              >
+                <strong>Eventos brutos</strong>
+                <span>Todos os registros do período</span>
+              </button>
+            </div>
+          )}
+        </div>
       </section>
 
       <section className="admin-cards admin-cards--6">
@@ -400,10 +628,27 @@ export default function AnalyticsPage() {
       <section className="admin-section">
         <header className="admin-section__head">
           <h2 className="admin-section__title">Sessões e pageviews ao longo do tempo</h2>
+          {showPrev && (
+            <span className="mono" style={{ fontSize: 11, opacity: 0.6 }}>
+              linha pontilhada = período anterior
+            </span>
+          )}
         </header>
         <div className="admin-chart">
-          {kpis && <SessionsChart data={kpis.daily} height={280} />}
+          {kpis && (
+            <SessionsChart data={kpis.daily} height={280} showPrev={showPrev} />
+          )}
         </div>
+      </section>
+
+      <section className="admin-section">
+        <header className="admin-section__head">
+          <h2 className="admin-section__title">Mapa de calor — visitas por hora e dia da semana</h2>
+          <span className="mono" style={{ fontSize: 11, opacity: 0.6 }}>
+            horário do navegador
+          </span>
+        </header>
+        <HoursHeatmap events={events} />
       </section>
 
       <section className="admin-grid-2">
@@ -582,9 +827,7 @@ export default function AnalyticsPage() {
         <div className="admin-funnel">
           <FunnelStep label="Sessão" value={funnel.sessions} />
           <FunnelArrow
-            pct={
-              funnel.sessions ? Math.round((funnel.viewed / funnel.sessions) * 100) : 0
-            }
+            pct={funnel.sessions ? Math.round((funnel.viewed / funnel.sessions) * 100) : 0}
           />
           <FunnelStep label="Viu projeto" value={funnel.viewed} />
           <FunnelArrow
