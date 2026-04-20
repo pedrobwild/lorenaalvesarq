@@ -650,20 +650,7 @@ export default function App() {
 
       {/* Credos removidos */}
 
-      {/* Fullbleed 2 */}
-      <section className="fullbleed reveal">
-        <img
-          src="/images/intro-texture.png"
-          alt="Detalhe de luz entre brise de madeira e parede de concreto"
-          loading="lazy"
-        />
-        <div className="fullbleed__caption">
-          <p className="fullbleed__quote">
-            A matéria é linguagem. <br />O tempo, <em>o maior dos arquitetos</em>.
-          </p>
-          <p className="mono">— Filosofia do estúdio</p>
-        </div>
-      </section>
+      {/* Fullbleed removido */}
 
       {/* Process */}
       <section className="section process" id="metodo">
