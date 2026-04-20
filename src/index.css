@@ -844,7 +844,8 @@ button {
   position: relative;
   background: var(--ink);
   color: var(--bone);
-  padding-block: var(--section);
+  padding-top: calc(var(--section) * 0.55);
+  padding-bottom: var(--section);
   overflow: hidden;
 }
 
