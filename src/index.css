@@ -4354,10 +4354,23 @@ textarea.admin-field__input {
   object-fit: cover;
   object-position: center;
   z-index: 0;
-  transform: scale(1.02);
+  transform: scale(1.08);
   transition: transform 1.6s cubic-bezier(.2,.7,.2,1);
 }
-.cta-hero:hover .cta-hero__bg { transform: scale(1.06); }
+.cta-hero:hover .cta-hero__bg { transform: scale(1.12); }
+
+/* Fade-in suave da imagem ao entrar na viewport (sobrescreve .reveal padrão) */
+.cta-hero__bg.reveal {
+  opacity: 0;
+  transform: scale(1.08);
+  transition: opacity 1.6s var(--ease), transform 2.2s var(--ease);
+  will-change: opacity, transform;
+}
+.cta-hero__bg.reveal.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.cta-hero:hover .cta-hero__bg.reveal.is-visible { transform: scale(1.04); }
 
 .cta-hero__overlay {
   position: absolute;

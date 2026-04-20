@@ -688,7 +688,7 @@ export default function App() {
         <img
           src="/images/cta-projetos-vida.jpg"
           alt="Ambiente residencial projetado pelo estúdio Lorena Alves — onde projetos ganham vida"
-          className="cta-hero__bg"
+          className="cta-hero__bg reveal"
           loading="lazy"
           decoding="async"
         />
