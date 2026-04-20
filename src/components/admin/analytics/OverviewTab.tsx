@@ -236,27 +236,27 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
     const sinceISO = range.from.toISOString();
     const untilISO = range.to.toISOString();
 
-    const promises: Promise<unknown>[] = [
-      supabase
-        .from("analytics_events")
-        .select(cols)
-        .gte("created_at", sinceISO)
-        .lte("created_at", untilISO)
-        .order("created_at", { ascending: true })
-        .limit(50000),
-    ];
-    if (prevRange) {
-      promises.push(
-        supabase
+    const curQuery = supabase
+      .from("analytics_events")
+      .select(cols)
+      .gte("created_at", sinceISO)
+      .lte("created_at", untilISO)
+      .order("created_at", { ascending: true })
+      .limit(50000);
+
+    const prevQuery = prevRange
+      ? supabase
           .from("analytics_events")
           .select(cols)
           .gte("created_at", prevRange.from.toISOString())
           .lt("created_at", sinceISO)
           .limit(50000)
-      );
-    }
+      : null;
 
-    Promise.all(promises)
+    Promise.all([
+      Promise.resolve(curQuery),
+      prevQuery ? Promise.resolve(prevQuery) : Promise.resolve({ data: [] as RawEvent[] }),
+    ])
       .then((results) => {
         if (cancelled) return;
         const cur = (results[0] as { data?: RawEvent[] }).data ?? [];
