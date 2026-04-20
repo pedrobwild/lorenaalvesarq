@@ -433,7 +433,6 @@ export default function App() {
               key={src}
               src={src}
               alt="Residência contemporânea brasileira projetada pelo estúdio Lorena Alves"
-              fetchpriority={i === 0 ? "high" : "low"}
               loading={i === 0 ? "eager" : "lazy"}
               className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
               aria-hidden={i === heroIdx ? "false" : "true"}
