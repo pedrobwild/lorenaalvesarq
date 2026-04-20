@@ -14,17 +14,14 @@ export type HeatmapEvent = {
 const DAYS = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
 
 export default function HoursHeatmap({ events }: { events: HeatmapEvent[] }) {
-  const { matrix, max, totalByDay, totalByHour, peak } = useMemo(() => {
-    // matrix[day][hour] = Set<session_id>
+  const { matrix, max, totalByDay, peak } = useMemo(() => {
     const m: Set<string>[][] = Array.from({ length: 7 }, () =>
       Array.from({ length: 24 }, () => new Set<string>())
     );
     for (const r of events) {
       if (r.event_type !== "pageview" || !r.session_id) continue;
       const d = new Date(r.created_at);
-      const day = d.getDay();
-      const hour = d.getHours();
-      m[day][hour].add(r.session_id);
+      m[d.getDay()][d.getHours()].add(r.session_id);
     }
     const counts: number[][] = m.map((row) => row.map((s) => s.size));
     let max = 0;
@@ -36,34 +33,35 @@ export default function HoursHeatmap({ events }: { events: HeatmapEvent[] }) {
       }
     }
     const totalByDay = counts.map((row) => row.reduce((a, b) => a + b, 0));
-    const totalByHour: number[] = Array.from({ length: 24 }, (_, h) =>
-      counts.reduce((acc, row) => acc + row[h], 0)
-    );
-    return { matrix: counts, max, totalByDay, totalByHour, peak };
+    return { matrix: counts, max, totalByDay, peak };
   }, [events]);
 
   if (max === 0) {
     return (
-      <p className="mono" style={{ opacity: 0.6 }}>
+      <p style={{ fontFamily: "JetBrains Mono, monospace", fontSize: 11, color: "#9a9a93" }}>
         sem dados de visitas no período
       </p>
     );
   }
 
+  const bestDayIdx = totalByDay.indexOf(Math.max(...totalByDay));
+
   return (
-    <div className="admin-heatmap">
-      <div className="admin-heatmap__grid" role="img" aria-label="mapa de calor de visitas por dia e hora">
-        {/* Header de horas (eixo X) */}
-        <div className="admin-heatmap__corner" />
+    <div className="analytics-heatmap">
+      <div
+        className="analytics-heatmap__grid"
+        role="img"
+        aria-label="mapa de calor de visitas por dia e hora"
+      >
+        <div className="analytics-heatmap__corner" />
         {Array.from({ length: 24 }, (_, h) => (
-          <div key={`h-${h}`} className="admin-heatmap__hhead mono">
+          <div key={`h-${h}`} className="analytics-heatmap__hhead">
             {h % 3 === 0 ? String(h).padStart(2, "0") : ""}
           </div>
         ))}
 
-        {/* Linhas */}
         {DAYS.map((label, dayIdx) => (
-          <FragmentRow
+          <Row
             key={dayIdx}
             label={label}
             cells={matrix[dayIdx]}
@@ -73,29 +71,25 @@ export default function HoursHeatmap({ events }: { events: HeatmapEvent[] }) {
             peakHour={peak.hour}
           />
         ))}
-
-        {/* Rodapé (totais por hora) */}
-        <div className="admin-heatmap__rowtotal mono">Σ</div>
-        {totalByHour.map((t, h) => (
-          <div key={`tt-${h}`} className="admin-heatmap__hourtotal mono" title={`${t} sessões às ${h}h`}>
-            {t || ""}
-          </div>
-        ))}
       </div>
 
-      <aside className="admin-heatmap__legend mono">
+      <aside className="analytics-heatmap__legend">
         <span>menos</span>
-        <span className="admin-heatmap__legend-bar" />
+        <span className="analytics-heatmap__legend-bar" />
         <span>mais</span>
-        <span className="admin-heatmap__legend-spacer" />
+        <span className="analytics-heatmap__legend-sep" />
         <span>
-          pico: <strong>{DAYS[peak.day]} {String(peak.hour).padStart(2, "0")}h</strong> ({peak.value} sessões)
+          pico:{" "}
+          <strong>
+            {DAYS[peak.day]} {String(peak.hour).padStart(2, "0")}h
+          </strong>{" "}
+          ({peak.value} sessões)
         </span>
-        <span className="admin-heatmap__legend-spacer" />
+        <span className="analytics-heatmap__legend-sep" />
         <span>
           dia mais ativo:{" "}
           <strong>
-            {DAYS[totalByDay.indexOf(Math.max(...totalByDay))]} ({Math.max(...totalByDay)})
+            {DAYS[bestDayIdx]} ({totalByDay[bestDayIdx]})
           </strong>
         </span>
       </aside>
@@ -103,7 +97,7 @@ export default function HoursHeatmap({ events }: { events: HeatmapEvent[] }) {
   );
 }
 
-function FragmentRow({
+function Row({
   label,
   cells,
   max,
@@ -120,20 +114,19 @@ function FragmentRow({
 }) {
   return (
     <>
-      <div className="admin-heatmap__rowlabel mono">{label}</div>
+      <div className="analytics-heatmap__rowlabel">{label}</div>
       {cells.map((v, h) => {
         const intensity = max ? v / max : 0;
         const isPeak = isPeakDay && h === peakHour && v > 0;
         return (
           <div
             key={`c-${dayIdx}-${h}`}
-            className={`admin-heatmap__cell ${isPeak ? "is-peak" : ""}`}
+            className={`analytics-heatmap__cell ${isPeak ? "is-peak" : ""}`}
             style={{
-              // intensity 0..1 → opacidade do fundo escuro
               background:
                 v === 0
-                  ? "transparent"
-                  : `rgba(17, 17, 17, ${0.08 + intensity * 0.85})`,
+                  ? undefined
+                  : `rgba(17, 17, 17, ${0.1 + intensity * 0.85})`,
             }}
             title={`${label} ${String(h).padStart(2, "0")}h — ${v} sessões`}
             aria-label={`${label} ${h} horas: ${v} sessões`}
