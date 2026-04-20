@@ -4,6 +4,7 @@
 import { useAnalyticsState } from "@/components/admin/analytics/useAnalyticsState";
 import AnalyticsShell from "@/components/admin/analytics/AnalyticsShell";
 import OverviewTab from "@/components/admin/analytics/OverviewTab";
+import AcquisitionTab from "@/components/admin/analytics/AcquisitionTab";
 import ProtectedRoute from "@/components/admin/ProtectedRoute";
 
 function ComingSoon({ name }: { name: string }) {
@@ -27,7 +28,15 @@ function AnalyticsContent() {
           comparePrev={state.comparePrev}
         />
       )}
-      {state.tab === "acquisition" && <ComingSoon name="Aquisição" />}
+      {state.tab === "acquisition" && (
+        <AcquisitionTab
+          range={state.range}
+          comparePrev={state.comparePrev}
+          segments={state.segments}
+          onAddSegment={state.addSegment}
+          onRemoveSegment={state.removeSegment}
+        />
+      )}
       {state.tab === "behavior" && <ComingSoon name="Comportamento" />}
       {state.tab === "conversion" && <ComingSoon name="Conversão" />}
       {state.tab === "retention" && <ComingSoon name="Retenção" />}
