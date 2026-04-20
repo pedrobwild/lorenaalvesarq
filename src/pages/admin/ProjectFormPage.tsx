@@ -111,7 +111,8 @@ export default function ProjectFormPage({ slug }: Props) {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [slugDirty, setSlugDirty] = useState(false);
-  const [genAlt, setGenAlt] = useState<{ kind: "cover" | "gallery"; key: string } | null>(null);
+  const [coverAltLoading, setCoverAltLoading] = useState(false);
+  const [galleryAltLoading, setGalleryAltLoading] = useState<Record<string, boolean>>({});
 
   async function generateAltText(imageUrl: string): Promise<string> {
     const context = [form.title, form.em, form.tag].filter(Boolean).join(" ");
@@ -123,33 +124,31 @@ export default function ProjectFormPage({ slug }: Props) {
     return data.alt as string;
   }
 
-  async function handleGenerateCoverAlt() {
-    if (!form.cover_url) {
-      setMsg({ kind: "err", text: "envie a capa antes de gerar o alt-text." });
-      return;
-    }
-    setGenAlt({ kind: "cover", key: "cover" });
+  async function autoFillCoverAlt(imageUrl: string) {
+    setCoverAltLoading(true);
     try {
-      const alt = await generateAltText(form.cover_url);
-      set("cover_alt", alt);
+      const alt = await generateAltText(imageUrl);
+      setForm((f) => ({ ...f, cover_alt: alt }));
     } catch (err) {
-      setMsg({ kind: "err", text: err instanceof Error ? err.message : "erro" });
+      console.error("auto cover alt failed:", err);
     } finally {
-      setGenAlt(null);
+      setCoverAltLoading(false);
     }
   }
 
-  async function handleGenerateGalleryAlt(idx: number) {
-    const item = gallery[idx];
-    if (!item?.url) return;
-    setGenAlt({ kind: "gallery", key: item.uid });
+  async function autoFillGalleryAlt(uid: string, imageUrl: string) {
+    setGalleryAltLoading((s) => ({ ...s, [uid]: true }));
     try {
-      const alt = await generateAltText(item.url);
-      updateImg(idx, { alt });
+      const alt = await generateAltText(imageUrl);
+      setGallery((g) => g.map((it) => (it.uid === uid ? { ...it, alt } : it)));
     } catch (err) {
-      setMsg({ kind: "err", text: err instanceof Error ? err.message : "erro" });
+      console.error("auto gallery alt failed:", err);
     } finally {
-      setGenAlt(null);
+      setGalleryAltLoading((s) => {
+        const next = { ...s };
+        delete next[uid];
+        return next;
+      });
     }
   }
 
