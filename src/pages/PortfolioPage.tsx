@@ -7,7 +7,8 @@ import { useProjects } from "../lib/useProjects";
 import { routes } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
 import { shouldUseSmoothScroll } from "../lib/device";
-import { useSeo } from "../lib/useSeo";
+import { useSeo, breadcrumbJsonLd, itemListJsonLd } from "../lib/useSeo";
+import { useSiteSettings } from "../lib/useSiteSettings";
 import SmartImage from "../components/SmartImage";
 
 const TAGS = ["Todos", "Residencial", "Interiores", "Comercial", "Rural"] as const;
@@ -15,16 +16,33 @@ type Tag = (typeof TAGS)[number];
 
 export default function PortfolioPage() {
   const { projects } = useProjects();
+  const { settings } = useSiteSettings();
   const [filter, setFilter] = useState<Tag>("Todos");
   const [hovered, setHovered] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
   useSeo({
-    title: "Portfólio — lorenaalves arq",
+    title: "Portfólio de Arquitetura e Interiores em Uberlândia | Lorena Alves Arquitetura",
     description:
-      "Casas, interiores e lugares que guardam vida. Seleção curada de projetos do estúdio Lorena Alves Arquitetura.",
+      "Conheça o portfólio do estúdio Lorena Alves Arquitetura: projetos residenciais, comerciais e de interiores em Uberlândia, MG e no Triângulo Mineiro. Casas, apartamentos e espaços autorais.",
     canonicalPath: "/portfolio",
     ogType: "website",
+    jsonLd: settings
+      ? [
+          breadcrumbJsonLd(settings, [
+            { name: "Início", path: "/" },
+            { name: "Portfólio", path: "/portfolio" },
+          ]),
+          itemListJsonLd(
+            settings,
+            projects.map((p) => ({
+              name: `${p.title} ${p.em}`.trim(),
+              path: `/projeto/${p.slug}`,
+              image: p.cover,
+            }))
+          ),
+        ]
+      : undefined,
   });
 
   const filtered = useMemo<Project[]>(() => {
