@@ -153,7 +153,9 @@ export const PROJECTS: Project[] = [
     location: "Guarujá, SP",
     area: "560 m²",
     status: "Concluído",
-    cover: "/images/project-04.png",
+    cover: "/images/project-04.jpg",
+    coverMd: "/images/project-04-md.jpg",
+    coverSm: "/images/project-04-sm.jpg",
     alt: "Casa Pau-Brasil — residência de praia com volume cantilevered",
     summary:
       "Casa de praia em cantiléver de concreto, voltada para o horizonte do Atlântico.",
