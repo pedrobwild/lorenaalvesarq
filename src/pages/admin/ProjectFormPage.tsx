@@ -254,6 +254,7 @@ export default function ProjectFormPage({ slug }: Props) {
       cover_url_sm: result.urlSm,
       cover_blur_data_url: result.blurDataUrl,
     }));
+    autoFillCoverAlt(result.url);
   }
 
   async function uploadGalleryFiles(files: FileList) {
@@ -267,7 +268,7 @@ export default function ProjectFormPage({ slug }: Props) {
         url_md: result.urlMd,
         url_sm: result.urlSm,
         blur_data_url: result.blurDataUrl,
-        alt: form.title ? `${form.title} ${form.em}` : "imagem",
+        alt: "",
         caption: null,
         format: "full",
         order_index: gallery.length + items.length + 1,
@@ -275,6 +276,9 @@ export default function ProjectFormPage({ slug }: Props) {
       });
     }
     setGallery((g) => [...g, ...items]);
+    for (const it of items) {
+      autoFillGalleryAlt(it.uid, it.url);
+    }
   }
 
   function handleGalleryDragEnd(event: DragEndEvent) {
