@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { useAuth } from "@/lib/useAuth";
-import { routes } from "@/lib/useHashRoute";
+import { navigate, routes } from "@/lib/useHashRoute";
 
 type Props = {
   children: ReactNode;
