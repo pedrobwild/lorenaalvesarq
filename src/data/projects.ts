@@ -84,7 +84,9 @@ export const PROJECTS: Project[] = [
     location: "Jardim Europa, São Paulo, SP",
     area: "380 m²",
     status: "Concluído",
-    cover: "/images/project-02.png",
+    cover: "/images/project-02.jpg",
+    coverMd: "/images/project-02-md.jpg",
+    coverSm: "/images/project-02-sm.jpg",
     alt: "Casa Jequitibá — interior contemporâneo brasileiro",
     summary:
       "Retrofit de interiores que devolve à casa a brasilidade que ela sempre teve.",
