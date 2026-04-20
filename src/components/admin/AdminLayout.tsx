@@ -4,7 +4,7 @@ import { routes } from "@/lib/useHashRoute";
 
 type Props = {
   children: ReactNode;
-  active?: "dashboard" | "projects";
+  active?: "dashboard" | "projects" | "analytics";
 };
 
 export default function AdminLayout({ children, active }: Props) {
@@ -12,6 +12,7 @@ export default function AdminLayout({ children, active }: Props) {
 
   const navItems = [
     { key: "dashboard", label: "Dashboard", href: routes.adminDashboard },
+    { key: "analytics", label: "Analytics", href: routes.adminAnalytics },
     { key: "projects", label: "Projetos", href: routes.adminProjects },
   ];
 
@@ -51,7 +52,11 @@ export default function AdminLayout({ children, active }: Props) {
       <div className="admin__main">
         <header className="admin__topbar">
           <span className="admin__topbar-title mono">
-            {active === "projects" ? "Projetos" : "Dashboard"}
+            {active === "projects"
+              ? "Projetos"
+              : active === "analytics"
+                ? "Analytics"
+                : "Dashboard"}
           </span>
           <div className="admin__topbar-right">
             {user?.email && <span className="admin__user mono">{user.email}</span>}

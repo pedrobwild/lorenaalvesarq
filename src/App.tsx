@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { useProjects } from "./lib/useProjects";
 import { routes } from "./lib/useHashRoute";
+import { track } from "./lib/analytics";
 import { shouldRunParallax, shouldUseSmoothScroll } from "./lib/device";
 import { useCustomCursor } from "./lib/useCustomCursor";
 import heroImg1 from "./assets/hero/hero-1.webp";
@@ -381,7 +382,7 @@ export default function App() {
           <a href="#metodo">Método</a>
           <a href="#contato">Sobre</a>
         </nav>
-        <a className="nav__cta" href="#contato">
+        <a className="nav__cta" href="#contato" onClick={() => track("click_contact", { value: { from: "nav" } })}>
           ENTRE EM CONTATO
         </a>
         <button
@@ -447,6 +448,7 @@ export default function App() {
                 className="hero__cta"
                 data-cursor="hover"
                 aria-label="Ver portfólio completo"
+                onClick={() => track("click_cta", { value: { label: "ver portfolio" } })}
               >
                 <span className="hero__cta-label">Ver portfólio</span>
                 <span className="hero__cta-arrow" aria-hidden="true">→</span>
@@ -500,7 +502,7 @@ export default function App() {
           <p className="mono" style={{ opacity: 0.6, maxWidth: "34ch" }}>
             Cada obra é um manuscrito — desenhada à mão, do primeiro risco ao último detalhe.
           </p>
-          <a href={routes.portfolio} className="btn-big" data-cursor="hover">
+          <a href={routes.portfolio} className="btn-big" data-cursor="hover" onClick={() => track("click_cta", { value: { label: "visitar galeria completa" } })}>
             <span>VISITAR GALERIA COMPLETA</span>
             <span className="btn-big__arrow"></span>
           </a>
@@ -688,11 +690,11 @@ export default function App() {
           <div className="cta__details">
             <div className="cta__detail">
               <span className="label">Escreva</span>
-              <a href="mailto:contato@lorenaalves.arq.br">contato@lorenaalves.arq.br</a>
+              <a href="mailto:contato@lorenaalves.arq.br" onClick={() => track("click_contact", { value: { kind: "email", from: "cta" } })}>contato@lorenaalves.arq.br</a>
             </div>
             <div className="cta__detail">
               <span className="label">Telefone</span>
-              <a href="tel:+5511999999999">+55 11 9 9999 9999</a>
+              <a href="tel:+5511999999999" onClick={() => track("click_whatsapp", { value: { kind: "tel", from: "cta" } })}>+55 11 9 9999 9999</a>
             </div>
             <div className="cta__detail">
               <span className="label">Estúdio</span>
@@ -702,7 +704,7 @@ export default function App() {
                 Itaim Bibi, São Paulo — SP
               </p>
             </div>
-            <a href="mailto:contato@lorenaalves.arq.br" className="btn-big" data-cursor="hover">
+            <a href="mailto:contato@lorenaalves.arq.br" className="btn-big" data-cursor="hover" onClick={() => track("click_contact", { value: { kind: "email", from: "cta-button" } })}>
               <span>ENTRE EM CONTATO</span>
               <span className="btn-big__arrow"></span>
             </a>
@@ -737,7 +739,7 @@ export default function App() {
             <h4>Social</h4>
             <ul>
               <li>
-                <a href="#" aria-label="Instagram" rel="noopener">
+                <a href="#" aria-label="Instagram" rel="noopener" onClick={() => track("click_instagram", { value: { from: "footer" } })}>
                   Instagram
                 </a>
               </li>

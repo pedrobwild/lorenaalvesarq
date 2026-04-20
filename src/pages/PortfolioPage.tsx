@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import { type Project } from "../data/projects";
 import { useProjects } from "../lib/useProjects";
 import { routes } from "../lib/useHashRoute";
+import { track } from "../lib/analytics";
 import { shouldUseSmoothScroll } from "../lib/device";
 
 const TAGS = ["Todos", "Residencial", "Interiores", "Comercial", "Rural"] as const;
@@ -23,6 +24,7 @@ export default function PortfolioPage() {
 
   // Smooth scroll + revelação
   useEffect(() => {
+    track("portfolio_view");
     const useLenis = shouldUseSmoothScroll();
     let lenis: Lenis | null = null;
     let rafId: number | null = null;

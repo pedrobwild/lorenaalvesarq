@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
+import SessionsChart, { type DailyPoint } from "@/components/admin/SessionsChart";
 import { supabase } from "@/integrations/supabase/client";
 import { routes } from "@/lib/useHashRoute";
 
@@ -15,6 +16,7 @@ type RecentProject = { slug: string; title: string; em: string | null; updated_a
 export default function DashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [recent, setRecent] = useState<RecentProject[]>([]);
+  const [daily14, setDaily14] = useState<DailyPoint[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -63,6 +65,18 @@ export default function DashboardPage() {
         <Card label="Sessões (30d)" value={stats?.pageviews30 ?? "—"} />
         <Card label="Visitantes únicos (30d)" value={stats?.uniqueVisitors30 ?? "—"} />
         <Card label="Cliques em contato (30d)" value={stats?.contactClicks30 ?? "—"} />
+      </section>
+
+      <section className="admin-section">
+        <header className="admin-section__head">
+          <h2 className="admin-section__title">Sessões — últimos 14 dias</h2>
+          <a className="admin-link" href={routes.adminAnalytics}>
+            ver analytics completo →
+          </a>
+        </header>
+        <div className="admin-chart" style={{ height: 180 }}>
+          {daily14.length > 0 && <SessionsChart data={daily14} height={180} />}
+        </div>
       </section>
 
       <section className="admin-section">
