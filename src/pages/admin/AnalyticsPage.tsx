@@ -6,6 +6,7 @@ import AnalyticsShell from "@/components/admin/analytics/AnalyticsShell";
 import OverviewTab from "@/components/admin/analytics/OverviewTab";
 import AcquisitionTab from "@/components/admin/analytics/AcquisitionTab";
 import BehaviorTab from "@/components/admin/analytics/BehaviorTab";
+import ConversionTab from "@/components/admin/analytics/ConversionTab";
 import ProtectedRoute from "@/components/admin/ProtectedRoute";
 
 function ComingSoon({ name }: { name: string }) {
