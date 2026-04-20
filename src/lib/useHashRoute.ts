@@ -8,6 +8,7 @@ export type Route =
   | { name: "admin-dashboard" }
   | { name: "admin-analytics" }
   | { name: "admin-seo" }
+  | { name: "admin-settings" }
   | { name: "admin-projects" }
   | { name: "admin-project-new" }
   | { name: "admin-project-edit"; slug: string }
