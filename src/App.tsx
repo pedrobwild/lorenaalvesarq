@@ -449,8 +449,8 @@ export default function App() {
           </h1>
           <div className="hero__meta">
             <p className="hero__lede">
-              Arquitetura vai muito além de forma &mdash; é sobre criar <em>futuro</em>,{" "}
-              <em>propósito</em> e <em>legado</em>.
+              Escritório de arquitetura e design de interiores em <em>Uberlândia, MG</em> &mdash;
+              criando <em>futuro</em>, <em>propósito</em> e <em>legado</em> em cada projeto.
             </p>
             <div className="hero__actions">
               <a
@@ -476,7 +476,7 @@ export default function App() {
           <div>
             <div className="section__eyebrow">Manifesto</div>
             <h2 className="section__title" style={{ marginTop: "1.2rem", fontSize: "clamp(1.4rem, 2.2vw, 2rem)", lineHeight: 1.3, maxWidth: "60ch" }}>
-              Projetar é, antes de tudo, um ato de <em>escuta</em> e <em>empatia</em>. Arquitetura de verdade, toma histórias como ponto de partida, e as converte em espaço, luz, matéria e medida, para <em>transformar</em> a vida, não apenas construir.
+              Projetar é, antes de tudo, um ato de <em>escuta</em> e <em>empatia</em>. Arquitetura de verdade toma histórias como ponto de partida e as converte em espaço, luz, matéria e medida, para <em>transformar</em> a vida &mdash; em Uberlândia e no Triângulo Mineiro.
             </h2>
           </div>
           <div className="projects__count mono">Selecionados · 2024 — 2026</div>
