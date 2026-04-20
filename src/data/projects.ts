@@ -119,7 +119,9 @@ export const PROJECTS: Project[] = [
     location: "Higienópolis, São Paulo, SP",
     area: "210 m²",
     status: "Concluído",
-    cover: "/images/project-03.png",
+    cover: "/images/project-03.jpg",
+    coverMd: "/images/project-03-md.jpg",
+    coverSm: "/images/project-03-sm.jpg",
     alt: "Apartamento Higienópolis — sala com estante em walnut",
     summary:
       "Apartamento em edifício histórico com estante-escultura em walnut e travertino.",
