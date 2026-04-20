@@ -122,7 +122,9 @@ export default function ProjectFormPage({ slug }: Props) {
     (async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("*, project_images(id, url, alt, caption, format, order_index)")
+        .select(
+          "*, project_images(id, url, url_md, url_sm, blur_data_url, alt, caption, format, order_index)"
+        )
         .eq("slug", slug)
         .maybeSingle();
       if (error || !data) {
@@ -148,18 +150,43 @@ export default function ProjectFormPage({ slug }: Props) {
         intro: data.intro ?? "",
         materials: (data.materials ?? []).join(", "),
         cover_url: data.cover_url ?? "",
+        cover_url_md: data.cover_url_md ?? "",
+        cover_url_sm: data.cover_url_sm ?? "",
+        cover_blur_data_url: data.cover_blur_data_url ?? "",
         cover_alt: data.cover_alt ?? "",
         visible: !!data.visible,
         seo_title: data.seo_title ?? "",
         seo_description: data.seo_description ?? "",
         og_image_url: data.og_image_url ?? "",
       });
-      const imgs = (data.project_images ?? []) as Array<Omit<GalleryRow, "uid">>;
+      type DbImg = {
+        id: string;
+        url: string;
+        url_md: string | null;
+        url_sm: string | null;
+        blur_data_url: string | null;
+        alt: string;
+        caption: string | null;
+        format: string | null;
+        order_index: number | null;
+      };
+      const imgs = (data.project_images ?? []) as DbImg[];
       setGallery(
         imgs
           .slice()
           .sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0))
-          .map((i) => ({ ...i, uid: i.id ?? crypto.randomUUID(), format: i.format ?? "full" }))
+          .map((i) => ({
+            id: i.id,
+            uid: i.id ?? crypto.randomUUID(),
+            url: i.url,
+            url_md: i.url_md,
+            url_sm: i.url_sm,
+            blur_data_url: i.blur_data_url,
+            alt: i.alt,
+            caption: i.caption,
+            format: i.format ?? "full",
+            order_index: i.order_index ?? 0,
+          }))
       );
       setSlugDirty(true);
       setLoading(false);
@@ -179,18 +206,27 @@ export default function ProjectFormPage({ slug }: Props) {
 
   async function uploadCover(file: File) {
     const slugSafe = form.slug || slugify(form.title) || "novo";
-    const { url } = await uploadImage(file, "project-covers", slugSafe);
-    set("cover_url", url);
+    const result = await uploadImage(file, "project-covers", slugSafe);
+    setForm((f) => ({
+      ...f,
+      cover_url: result.url,
+      cover_url_md: result.urlMd,
+      cover_url_sm: result.urlSm,
+      cover_blur_data_url: result.blurDataUrl,
+    }));
   }
 
   async function uploadGalleryFiles(files: FileList) {
     const slugSafe = form.slug || slugify(form.title) || "novo";
     const items: GalleryRow[] = [];
     for (const f of Array.from(files)) {
-      const { url } = await uploadImage(f, "project-gallery", slugSafe);
+      const result = await uploadImage(f, "project-gallery", slugSafe);
       items.push({
         uid: crypto.randomUUID(),
-        url,
+        url: result.url,
+        url_md: result.urlMd,
+        url_sm: result.urlSm,
+        blur_data_url: result.blurDataUrl,
         alt: form.title ? `${form.title} ${form.em}` : "imagem",
         caption: null,
         format: "full",
