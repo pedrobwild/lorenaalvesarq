@@ -12,9 +12,11 @@ import ProjectsListPage from "./pages/admin/ProjectsListPage";
 import ProjectFormPage from "./pages/admin/ProjectFormPage";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import { useCustomCursor } from "./lib/useCustomCursor";
-import { useHashRoute, type Route } from "./lib/useHashRoute";
+import { useHashRoute, installLinkInterceptor, type Route } from "./lib/useHashRoute";
 import { initAnalytics } from "./lib/analytics";
 import "./index.css";
+
+installLinkInterceptor();
 
 const TRANSITION_MS = 380;
 

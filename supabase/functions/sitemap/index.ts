@@ -29,11 +29,11 @@ Deno.serve(async (req) => {
 
   const staticUrls = [
     { loc: `${base}/`, priority: "1.0", changefreq: "weekly", lastmod: today },
-    { loc: `${base}/#/portfolio`, priority: "0.9", changefreq: "weekly", lastmod: today },
+    { loc: `${base}/portfolio`, priority: "0.9", changefreq: "weekly", lastmod: today },
   ];
 
   const projectUrls = (projects ?? []).map((p) => ({
-    loc: `${base}/#/projeto/${p.slug}`,
+    loc: `${base}/projeto/${p.slug}`,
     priority: "0.8",
     changefreq: "monthly",
     lastmod: (p.updated_at ?? new Date().toISOString()).slice(0, 10),
