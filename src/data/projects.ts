@@ -35,6 +35,11 @@ export type Project = {
   team: string;
   photographer: string;
   gallery: ProjectImage[];
+  // SEO opcional por projeto (vem do admin)
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  ogImage?: string | null;
+  updatedAt?: string | null;
 };
 
 export const PROJECTS: Project[] = [
