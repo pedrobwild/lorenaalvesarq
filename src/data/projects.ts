@@ -48,7 +48,9 @@ export const PROJECTS: Project[] = [
     location: "Itaim da Serra, SP",
     area: "420 m²",
     status: "Em obra",
-    cover: "/images/project-01.png",
+    cover: "/images/project-01.jpg",
+    coverMd: "/images/project-01-md.jpg",
+    coverSm: "/images/project-01-sm.jpg",
     alt: "Casa Paineira — pavilhão horizontal de concreto e ipê",
     summary:
       "Pavilhão horizontal de concreto e ipê que se abre para uma paineira centenária.",
