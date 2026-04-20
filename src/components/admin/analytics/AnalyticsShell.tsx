@@ -47,9 +47,7 @@ export default function AnalyticsShell({ state, children }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [state]);
 
-  function toggleTheme() {
-    state.setTheme(state.theme === "dark" ? "light" : "dark");
-  }
+  // toggleTheme removido — admin sempre em light mode.
 
   function handleSave() {
     if (!savedName.trim()) return;
@@ -161,15 +159,7 @@ export default function AnalyticsShell({ state, children }: Props) {
               </DropdownMenu.Portal>
             </DropdownMenu.Root>
 
-            <button
-              type="button"
-              className="admin-analytics__icon-btn"
-              onClick={toggleTheme}
-              title={state.theme === "dark" ? "modo claro" : "modo escuro"}
-              aria-label="alternar tema"
-            >
-              {state.theme === "dark" ? "☀" : "☾"}
-            </button>
+            {/* Toggle de tema removido — admin é sempre light. */}
 
             <button
               type="button"

@@ -80,7 +80,8 @@ function routeKeyOf(route: Route) {
 
 function Root() {
   const route = useHashRoute();
-  useCustomCursor();
+  const isAdmin = route.name.startsWith("admin");
+  useCustomCursor(!isAdmin);
 
   // Inicializa analytics uma vez no mount
   useEffect(() => {

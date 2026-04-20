@@ -9,8 +9,9 @@ import { useEffect } from "react";
  * Self-contained: cria/remove o elemento .cursor automaticamente, então cada
  * página pode chamar este hook sem precisar renderizar markup extra.
  */
-export function useCustomCursor() {
+export function useCustomCursor(enabled: boolean = true) {
   useEffect(() => {
+    if (!enabled) return;
     const hasFineHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     if (!hasFineHover) return;
 
@@ -85,5 +86,5 @@ export function useCustomCursor() {
       document.body.classList.remove("has-custom-cursor");
       if (createdHere && c?.parentNode) c.parentNode.removeChild(c);
     };
-  }, []);
+  }, [enabled]);
 }
