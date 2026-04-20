@@ -65,6 +65,7 @@ export const routes = {
   adminDashboard: "#/admin",
   adminAnalytics: "#/admin/analytics",
   adminSeo: "#/admin/seo",
+  adminSettings: "#/admin/settings",
   adminProjects: "#/admin/projects",
   adminProjectNew: "#/admin/projects/new",
   adminProjectEdit: (slug: string) => `#/admin/projects/${slug}`,
