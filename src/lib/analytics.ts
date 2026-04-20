@@ -213,7 +213,7 @@ function getLandingPath(isNewSession: boolean, currentPath: string): string {
 
 function isAdminContext(): boolean {
   try {
-    return window.location.hash.startsWith("#/admin");
+    return window.location.pathname.startsWith("/admin");
   } catch {
     return false;
   }
@@ -303,7 +303,7 @@ function buildRow(eventType: EventType, payload?: TrackPayload) {
   const { id: session_id, isNew } = getSessionId();
   const path =
     payload?.path ??
-    (typeof window !== "undefined" ? window.location.hash || "/" : null);
+    (typeof window !== "undefined" ? window.location.pathname || "/" : null);
   const utms = getOrPersistUtms(isNew);
   const referrer_host = getReferrerHost(isNew);
   const landing_path = path ? getLandingPath(isNew, path) : null;
@@ -415,7 +415,7 @@ function emitPageview() {
     pendingDurationMs = now - lastPageviewAt;
   }
 
-  const path = window.location.hash || "/";
+  const path = window.location.pathname || "/";
   const key = path;
 
   if (pageviewDebounceTimer) {
