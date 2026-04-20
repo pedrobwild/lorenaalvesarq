@@ -3858,3 +3858,89 @@ textarea.admin-field__input {
 .seo-preview__og-img--empty { display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.4); font-size: 12px; }
 .seo-preview__og-meta { padding: 14px 18px; border-top: 1px solid rgba(255,255,255,0.06); }
 .seo-preview__og-domain { font-size: 11px; text-transform: uppercase; opacity: 0.55; margin-bottom: 6px; }
+
+/* ===========================================================
+   SmartImage — wrapper responsivo com blur placeholder
+   O wrapper <span data-smart-img-wrap> assume o lugar do <img>
+   nos contêineres existentes, e o <img> interno preserva o
+   comportamento de cover/parallax/scale-on-hover.
+   =========================================================== */
+[data-smart-img-wrap] {
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hero do projeto */
+.pp-hero__img [data-smart-img-wrap] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.pp-hero__img [data-smart-img-wrap] img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.95);
+}
+
+/* Tile da galeria do projeto */
+.pp-tile__btn [data-smart-img-wrap] {
+  position: absolute;
+  inset: -8% 0;
+  width: 100%;
+  height: 116%;
+}
+.pp-tile__btn [data-smart-img-wrap] img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.92);
+  transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.9s ease;
+}
+.pp-tile__btn:hover [data-smart-img-wrap] img {
+  transform: scale(1.04);
+  filter: saturate(1);
+}
+
+/* Card do portfólio */
+.pf-card__media [data-smart-img-wrap] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.pf-card__media [data-smart-img-wrap] img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.9s ease;
+  filter: saturate(0.94) contrast(1.02);
+}
+.pf-card:hover .pf-card__media [data-smart-img-wrap] img {
+  transform: scale(1.08);
+  filter: saturate(1) contrast(1.04);
+}
+
+/* Em touch devices, congelar transforms */
+@media (hover: none) {
+  .pf-card__media [data-smart-img-wrap] img,
+  .pp-tile__btn [data-smart-img-wrap] img {
+    transform: none !important;
+  }
+}
+
+/* Mobile: tile sem -8% (paridade com regra existente) */
+@media (max-width: 700px) {
+  .pp-tile__btn [data-smart-img-wrap] {
+    inset: 0;
+    height: 100%;
+  }
+}
