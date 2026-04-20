@@ -11,7 +11,13 @@ import {
   YAxis,
 } from "recharts";
 
-export type DailyPoint = { day: string; sessions: number; pageviews: number };
+export type DailyPoint = {
+  day: string;
+  sessions: number;
+  pageviews: number;
+  prevSessions?: number;
+  prevPageviews?: number;
+};
 
 type Props = {
   data: DailyPoint[];
@@ -19,6 +25,7 @@ type Props = {
   showAxes?: boolean;
   showTooltip?: boolean;
   variant?: "line" | "area";
+  showPrev?: boolean;
 };
 
 export default function SessionsChart({
@@ -27,6 +34,7 @@ export default function SessionsChart({
   showAxes = true,
   showTooltip = true,
   variant = "area",
+  showPrev = false,
 }: Props) {
   const safe = useMemo(
     () =>
