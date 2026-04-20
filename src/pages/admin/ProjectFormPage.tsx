@@ -111,6 +111,47 @@ export default function ProjectFormPage({ slug }: Props) {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [slugDirty, setSlugDirty] = useState(false);
+  const [genAlt, setGenAlt] = useState<{ kind: "cover" | "gallery"; key: string } | null>(null);
+
+  async function generateAltText(imageUrl: string): Promise<string> {
+    const context = [form.title, form.em, form.tag].filter(Boolean).join(" ");
+    const { data, error } = await supabase.functions.invoke("generate-alt-text", {
+      body: { imageUrl, context },
+    });
+    if (error) throw new Error(error.message || "falha ao gerar");
+    if (!data?.alt) throw new Error("resposta vazia da IA");
+    return data.alt as string;
+  }
+
+  async function handleGenerateCoverAlt() {
+    if (!form.cover_url) {
+      setMsg({ kind: "err", text: "envie a capa antes de gerar o alt-text." });
+      return;
+    }
+    setGenAlt({ kind: "cover", key: "cover" });
+    try {
+      const alt = await generateAltText(form.cover_url);
+      set("cover_alt", alt);
+    } catch (err) {
+      setMsg({ kind: "err", text: err instanceof Error ? err.message : "erro" });
+    } finally {
+      setGenAlt(null);
+    }
+  }
+
+  async function handleGenerateGalleryAlt(idx: number) {
+    const item = gallery[idx];
+    if (!item?.url) return;
+    setGenAlt({ kind: "gallery", key: item.uid });
+    try {
+      const alt = await generateAltText(item.url);
+      updateImg(idx, { alt });
+    } catch (err) {
+      setMsg({ kind: "err", text: err instanceof Error ? err.message : "erro" });
+    } finally {
+      setGenAlt(null);
+    }
+  }
 
   const gallerySensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
