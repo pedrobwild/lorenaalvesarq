@@ -77,19 +77,13 @@ const EMPTY_DATA: Record<SegmentDim, Row[]> = {
   landing_path: [],
 };
 
-function segArgs(segments: Segment[]): Record<string, string | null> {
-  const map: Partial<Record<SegmentDim, string>> = {};
-  for (const s of segments) map[s.dim] = s.value;
-  return {
-    p_device: map.device ?? null,
-    p_country: map.country ?? null,
-    p_utm_source: map.utm_source ?? null,
-    p_utm_medium: map.utm_medium ?? null,
-    p_utm_campaign: map.utm_campaign ?? null,
-    p_landing_path: map.landing_path ?? null,
-    p_referrer_host: map.referrer_host ?? null,
-  };
-}
+/**
+ * Nota: a RPC `analytics_breakdown` (assinatura atual) aceita apenas
+ * (p_since, p_until, p_dim, p_limit). Segmentos do shell são respeitados
+ * apenas para destaque visual (linha ativa) — drill-down adiciona o segmento
+ * à URL e o resto do painel filtra normalmente. Para filtrar a própria tabela
+ * por segmentos cruzados, será necessário criar `analytics_breakdown_v2`.
+ */
 
 export default function AcquisitionTab({
   range,
