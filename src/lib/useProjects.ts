@@ -26,6 +26,10 @@ type DbProject = {
   photographer: string | null;
   order_index: number | null;
   visible: boolean | null;
+  seo_title: string | null;
+  seo_description: string | null;
+  og_image_url: string | null;
+  updated_at: string | null;
   project_images?: Array<{
     url: string;
     url_md: string | null;
