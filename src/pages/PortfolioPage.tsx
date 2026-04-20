@@ -7,6 +7,7 @@ import { useProjects } from "../lib/useProjects";
 import { routes } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
 import { shouldUseSmoothScroll } from "../lib/device";
+import { useSeo } from "../lib/useSeo";
 
 const TAGS = ["Todos", "Residencial", "Interiores", "Comercial", "Rural"] as const;
 type Tag = (typeof TAGS)[number];
@@ -16,6 +17,14 @@ export default function PortfolioPage() {
   const [filter, setFilter] = useState<Tag>("Todos");
   const [hovered, setHovered] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  useSeo({
+    title: "Portfólio — lorenaalves arq",
+    description:
+      "Casas, interiores e lugares que guardam vida. Seleção curada de projetos do estúdio Lorena Alves Arquitetura.",
+    canonicalPath: "/#/portfolio",
+    ogType: "website",
+  });
 
   const filtered = useMemo<Project[]>(() => {
     if (filter === "Todos") return projects;
