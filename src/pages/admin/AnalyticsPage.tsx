@@ -55,7 +55,9 @@ function AnalyticsContent() {
           comparePrev={state.comparePrev}
         />
       )}
-      {state.tab === "retention" && <ComingSoon name="Retenção" />}
+      {state.tab === "retention" && (
+        <RetentionTab range={state.range} segments={state.segments} />
+      )}
       {state.tab === "realtime" && <ComingSoon name="Tempo real" />}
     </AnalyticsShell>
   );
