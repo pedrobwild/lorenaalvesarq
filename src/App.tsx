@@ -648,20 +648,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Credos */}
-      <section className="credos" aria-label="Princípios do estúdio">
-        {[
-          { m: "I", text: <>Projetar é <em>escutar</em> antes de desenhar.</> },
-          { m: "II", text: <>Poucas obras por ano, <em>cada uma inteira</em>.</> },
-          { m: "III", text: <>O detalhe serve a <em>quem vai viver</em> — não a si mesmo.</> },
-          { m: "IV", text: <>Desenhar para <em>transformar</em>, não para o aplauso.</> },
-        ].map((c) => (
-          <div className="credo reveal" key={c.m}>
-            <div className="credo__mark">{c.m}</div>
-            <p className="credo__text">{c.text}</p>
-          </div>
-        ))}
-      </section>
+      {/* Credos removidos */}
 
       {/* Fullbleed 2 */}
       <section className="fullbleed reveal">
