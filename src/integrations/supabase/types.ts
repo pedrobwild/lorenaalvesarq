@@ -14,13 +14,242 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_users: {
+        Row: {
+          created_at: string | null
+          email: string
+          role: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          role?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          role?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      analytics_events: {
+        Row: {
+          country: string | null
+          created_at: string | null
+          event_type: string
+          id: string
+          path: string | null
+          project_slug: string | null
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string | null
+          event_type: string
+          id?: string
+          path?: string | null
+          project_slug?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          country?: string | null
+          created_at?: string | null
+          event_type?: string
+          id?: string
+          path?: string | null
+          project_slug?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      project_images: {
+        Row: {
+          alt: string
+          caption: string | null
+          created_at: string | null
+          format: string | null
+          id: string
+          order_index: number | null
+          project_id: string
+          url: string
+        }
+        Insert: {
+          alt: string
+          caption?: string | null
+          created_at?: string | null
+          format?: string | null
+          id?: string
+          order_index?: number | null
+          project_id: string
+          url: string
+        }
+        Update: {
+          alt?: string
+          caption?: string | null
+          created_at?: string | null
+          format?: string | null
+          id?: string
+          order_index?: number | null
+          project_id?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_images_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          area: string | null
+          cover_alt: string | null
+          cover_url: string | null
+          created_at: string | null
+          em: string | null
+          id: string
+          intro: string | null
+          location: string | null
+          materials: string[] | null
+          number: string | null
+          og_image_url: string | null
+          order_index: number | null
+          photographer: string | null
+          program: string | null
+          seo_description: string | null
+          seo_title: string | null
+          slug: string
+          status: string | null
+          summary: string | null
+          tag: string
+          team: string | null
+          title: string
+          updated_at: string | null
+          visible: boolean | null
+          year: string | null
+        }
+        Insert: {
+          area?: string | null
+          cover_alt?: string | null
+          cover_url?: string | null
+          created_at?: string | null
+          em?: string | null
+          id?: string
+          intro?: string | null
+          location?: string | null
+          materials?: string[] | null
+          number?: string | null
+          og_image_url?: string | null
+          order_index?: number | null
+          photographer?: string | null
+          program?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
+          slug: string
+          status?: string | null
+          summary?: string | null
+          tag: string
+          team?: string | null
+          title: string
+          updated_at?: string | null
+          visible?: boolean | null
+          year?: string | null
+        }
+        Update: {
+          area?: string | null
+          cover_alt?: string | null
+          cover_url?: string | null
+          created_at?: string | null
+          em?: string | null
+          id?: string
+          intro?: string | null
+          location?: string | null
+          materials?: string[] | null
+          number?: string | null
+          og_image_url?: string | null
+          order_index?: number | null
+          photographer?: string | null
+          program?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
+          slug?: string
+          status?: string | null
+          summary?: string | null
+          tag?: string
+          team?: string | null
+          title?: string
+          updated_at?: string | null
+          visible?: boolean | null
+          year?: string | null
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          address_city: string | null
+          address_region: string | null
+          address_street: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          default_og_image: string | null
+          id: number
+          instagram_url: string | null
+          linkedin_url: string | null
+          pinterest_url: string | null
+          site_description: string | null
+          site_title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          address_city?: string | null
+          address_region?: string | null
+          address_street?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          default_og_image?: string | null
+          id?: number
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          pinterest_url?: string | null
+          site_description?: string | null
+          site_title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          address_city?: string | null
+          address_region?: string | null
+          address_street?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          default_og_image?: string | null
+          id?: number
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          pinterest_url?: string | null
+          site_description?: string | null
+          site_title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
