@@ -446,6 +446,22 @@ export function itemListJsonLd(
   };
 }
 
+/** FAQPage JSON-LD — habilita rich result de FAQ no Google (perguntas expansíveis na SERP). */
+export function faqJsonLd(items: Array<{ q: string; a: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((it) => ({
+      "@type": "Question",
+      name: it.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: it.a,
+      },
+    })),
+  };
+}
+
 /** WebSite JSON-LD com SearchAction (ajuda a aparecer caixa de busca no Google). */
 export function websiteJsonLd(s: SiteSettings) {
   const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
