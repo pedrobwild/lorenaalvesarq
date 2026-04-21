@@ -50,6 +50,11 @@ export default function BrandLogo({
     <img
       src={LOGO_SRC[variant]}
       alt={alt}
+      width={320}
+      height={88}
+      loading="eager"
+      decoding="async"
+      fetchPriority="high"
       className={`brand-logo brand-logo--${variant} ${className}`.trim()}
       onError={() => setFailed(true)}
       style={{
@@ -83,6 +88,10 @@ export function BrandSeal({
       src={src}
       alt={alt}
       aria-hidden="true"
+      width={256}
+      height={256}
+      loading="lazy"
+      decoding="async"
       className={`brand-seal brand-seal--${variant} ${className}`.trim()}
       style={{
         width: `${sizeRem}rem`,
