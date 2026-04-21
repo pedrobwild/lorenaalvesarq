@@ -12,6 +12,7 @@ import {
   professionalServiceJsonLd,
   websiteJsonLd,
   organizationJsonLd,
+  faqJsonLd,
 } from "./lib/useSeo";
 import { useSiteSettings } from "./lib/useSiteSettings";
 import BrandLogo, { BrandSeal } from "./components/BrandLogo";
