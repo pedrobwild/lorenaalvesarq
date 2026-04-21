@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties, type ImgHTMLAttributes } from "react";
 
-type Props = Omit<ImgHTMLAttributes<HTMLImageElement>, "src" | "srcSet" | "sizes"> & {
+type Props = Omit<ImgHTMLAttributes<HTMLImageElement>, "src" | "srcSet" | "sizes" | "alt"> & {
   /** URL da maior versão (fallback) */
   src: string;
   /** URL da versão média (1280px) */
@@ -11,14 +11,32 @@ type Props = Omit<ImgHTMLAttributes<HTMLImageElement>, "src" | "srcSet" | "sizes
   blurDataUrl?: string | null;
   /** sizes attribute para o navegador escolher a variante certa */
   sizes?: string;
-  alt: string;
+  /** Texto alternativo descritivo. Pode vir vazio/null — usaremos `altFallback`. */
+  alt?: string | null;
+  /**
+   * Fallback semântico (ex: título do projeto/página). Usado quando `alt`
+   * está ausente ou em branco. Garante que NUNCA renderizamos `<img>` sem
+   * alt útil para SEO/acessibilidade.
+   */
+  altFallback?: string | null;
   /** Classe aplicada ao wrapper externo */
   wrapperClassName?: string;
   /** Estilo do wrapper (útil para aspect-ratio) */
   wrapperStyle?: CSSProperties;
   /** prioridade alta para hero/LCP — desativa lazy e marca fetchpriority=high */
   priority?: boolean;
+  /**
+   * Marca a imagem como puramente decorativa: emite `alt=""` e
+   * `role="presentation"`. Quando true, ignora `alt`/`altFallback`.
+   */
+  decorative?: boolean;
 };
+
+/** Normaliza qualquer string para uso como `alt` (trim + colapsa espaços). */
+function normalizeAlt(value?: string | null): string {
+  if (!value) return "";
+  return value.replace(/\s+/g, " ").trim();
+}
 
 /**
  * Imagem responsiva com:
