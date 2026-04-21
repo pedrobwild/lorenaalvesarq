@@ -702,7 +702,13 @@ export default function App() {
             >
               <div className="project-card__media">
                 <span className="project-card__number mono">{p.number} / 06</span>
-                <img src={p.cover} alt={p.alt} loading="lazy" decoding="async" width={1280} height={1600} />
+                <Picture
+                  src={p.cover}
+                  alt={p.alt}
+                  width={1280}
+                  height={1600}
+                  sizes="(max-width: 700px) 88vw, (max-width: 1200px) 44vw, 30vw"
+                />
                 <span className="project-card__go mono">ver projeto →</span>
               </div>
               <div className="project-card__meta">
@@ -733,13 +739,12 @@ export default function App() {
       <section className="section about" id="estudio">
         <div className="about__grid">
           <div className="about__portrait reveal">
-            <img
+            <Picture
               src="/images/lorena-alves-arquiteta-uberlandia-retrato.png"
               alt="Retrato de Lorena Alves, arquiteta e urbanista formada pela UFU, fundadora do estúdio Lorena Alves Arquitetura em Uberlândia/MG"
-              loading="lazy"
-              decoding="async"
               width={900}
               height={1200}
+              sizes="(max-width: 900px) 90vw, 480px"
             />
           </div>
           <div className="about__body">
@@ -830,7 +835,13 @@ export default function App() {
                 aria-roledescription="slide"
               >
                 <div className="ensaio-slide__media">
-                  <img src={e.img} alt={e.alt} loading="lazy" decoding="async" width={1600} height={2000} />
+                  <Picture
+                    src={e.img}
+                    alt={e.alt}
+                    width={1600}
+                    height={2000}
+                    sizes="(max-width: 900px) 100vw, 50vw"
+                  />
                 </div>
                 <div className="ensaio-slide__panel">
                   <span className="ensaio-slide__vertical mono">{e.vertical}</span>
@@ -927,14 +938,13 @@ export default function App() {
 
       {/* CTA visual full-bleed */}
       <section className="cta-hero" id="cta-hero" aria-label="Vamos projetar seu próximo modo de viver">
-        <img
+        <Picture
           src="/images/projetos-arquitetura-vida-lorena-alves-uberlandia.jpg"
           alt="Ambiente residencial projetado pelo estúdio Lorena Alves Arquitetura — onde projetos ganham vida"
           className="cta-hero__bg reveal"
-          loading="lazy"
-          decoding="async"
           width={1920}
           height={1080}
+          sizes="100vw"
         />
         <div className="cta-hero__overlay" aria-hidden="true"></div>
         <div className="cta-hero__content reveal">
