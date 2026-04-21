@@ -71,17 +71,23 @@ Deno.serve(async (req) => {
   ];
 
   const projectUrls: UrlEntry[] = ((projects ?? []) as Array<{
+    id: string;
     slug: string;
     title: string;
     em: string | null;
-    cover: string | null;
+    cover_url: string | null;
     updated_at: string | null;
-    id?: string;
   }>).map((p) => {
     const images: Array<{ url: string; caption?: string }> = [];
-    if (p.cover) images.push({ url: p.cover, caption: `${p.title} ${p.em ?? ""}`.trim() });
-    // Nota: imagesByProject é keyed por project_id; os projects retornados aqui não têm id —
-    // se quiser enriquecer depois, basta incluir p.id no SELECT e mapear.
+    if (p.cover_url) {
+      images.push({ url: p.cover_url, caption: `${p.title} ${p.em ?? ""}`.trim() });
+    }
+    const gallery = imagesByProject.get(p.id) ?? [];
+    for (const g of gallery) {
+      if (g.url && g.url !== p.cover_url) {
+        images.push({ url: g.url, caption: g.alt });
+      }
+    }
     return {
       loc: `${base}/projeto/${p.slug}`,
       priority: "0.8",
