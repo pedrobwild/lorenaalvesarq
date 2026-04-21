@@ -875,6 +875,23 @@ export default function App() {
             </ul>
           </div>
           <div className="footer__col">
+            <h4>Projetos</h4>
+            <ul>
+              {PROJECTS.map((p) => (
+                <li key={p.slug}>
+                  <a href={routes.project(p.slug)} title={`${p.title} ${p.em} — ${p.tag}`}>
+                    {p.title} {p.em}
+                  </a>
+                </li>
+              ))}
+              <li>
+                <a href={routes.portfolio}>
+                  <span className="mono">→ ver todos</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div className="footer__col">
             <h4>Social</h4>
             <ul>
               {settings?.instagram_url && (
