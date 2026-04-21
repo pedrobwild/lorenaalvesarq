@@ -432,12 +432,27 @@ export default function App() {
 
       {/* Mobile menu */}
       <div className="mobile-menu" id="mobile-menu" aria-hidden="true">
-        <nav>
+        <nav aria-label="Menu principal">
           <a href={routes.portfolio}>Portfólio</a>
           <a href="#estudio">Sobre</a>
           <a href="#metodo">Método</a>
           <a href={routes.faq}>FAQ</a>
         </nav>
+        {PROJECTS.length > 0 && (
+          <nav className="mobile-menu__projects" aria-label="Projetos em destaque">
+            <div className="mono mobile-menu__label">Projetos</div>
+            <ul>
+              {PROJECTS.map((p) => (
+                <li key={p.slug}>
+                  <a href={routes.project(p.slug)}>
+                    {p.title} <em>{p.em}</em>
+                    <span className="mono mobile-menu__tag"> · {p.tag}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
         <div>
           <div className="mono" style={{ marginBottom: "0.8rem" }}>
             Sobre
