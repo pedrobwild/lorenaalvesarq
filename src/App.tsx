@@ -37,7 +37,14 @@ import heroAvif5Md from "./assets/hero/hero-5-md.avif";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HERO_IMAGES = [heroImg1, heroImg2, heroImg3, heroImg4, heroImg5];
+type HeroSlide = { webp: string; avifLg: string; avifMd: string };
+const HERO_IMAGES: HeroSlide[] = [
+  { webp: heroImg1, avifLg: heroAvif1Lg, avifMd: heroAvif1Md },
+  { webp: heroImg2, avifLg: heroAvif2Lg, avifMd: heroAvif2Md },
+  { webp: heroImg3, avifLg: heroAvif3Lg, avifMd: heroAvif3Md },
+  { webp: heroImg4, avifLg: heroAvif4Lg, avifMd: heroAvif4Md },
+  { webp: heroImg5, avifLg: heroAvif5Lg, avifMd: heroAvif5Md },
+];
 
 /**
  * Mapeamento único entre itens do menu e ids de seção da home.
@@ -620,7 +627,7 @@ export default function App() {
       {/* Hero */}
       <section className="hero" id="inicio">
         <div className="hero__media">
-          {HERO_IMAGES.map((src, i) => {
+          {HERO_IMAGES.map((slide, i) => {
             const heroAlts = [
               "Residência contemporânea brasileira projetada por Lorena Alves Arquitetura em Uberlândia, MG — fachada principal com brises em madeira e jardim tropical",
               "Interior residencial autoral com pé-direito duplo, mobiliário brasileiro contemporâneo e luz natural — projeto de Lorena Alves Arquitetura",
@@ -629,18 +636,24 @@ export default function App() {
               "Casa contemporânea em Uberlândia/MG ao entardecer com iluminação cênica e materiais autorais — arquitetura por Lorena Alves Arquitetura",
             ];
             return (
-              <img
-                key={src}
-                src={src}
-                alt={heroAlts[i] || heroAlts[0]}
-                loading={i === 0 ? "eager" : "lazy"}
-                fetchPriority={i === 0 ? "high" : "auto"}
-                decoding={i === 0 ? "sync" : "async"}
-                width={1920}
-                height={1080}
-                className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
-                aria-hidden={i === heroIdx ? "false" : "true"}
-              />
+              <picture key={slide.webp}>
+                <source
+                  type="image/avif"
+                  srcSet={`${slide.avifMd} 1280w, ${slide.avifLg} 1920w`}
+                  sizes="100vw"
+                />
+                <img
+                  src={slide.webp}
+                  alt={heroAlts[i] || heroAlts[0]}
+                  loading={i === 0 ? "eager" : "lazy"}
+                  fetchPriority={i === 0 ? "high" : "auto"}
+                  decoding={i === 0 ? "sync" : "async"}
+                  width={1920}
+                  height={1080}
+                  className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
+                  aria-hidden={i === heroIdx ? "false" : "true"}
+                />
+              </picture>
             );
           })}
         </div>
