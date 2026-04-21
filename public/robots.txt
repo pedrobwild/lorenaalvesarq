@@ -1,22 +1,77 @@
 # =========================================================
 # robots.txt — Lorena Alves Arquitetura
 # Escritório de arquitetura em Uberlândia, MG
-# https://lorenaalvesarq.com
+# Host canônico: https://lorenaalvesarq.com
 # =========================================================
 
+# --- Regra geral ---
 User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /admin/
+Disallow: /*?*utm_           # evita indexar URLs com tracking duplicado
+Disallow: /*?*fbclid=
+Disallow: /*?*gclid=
+Disallow: /*?*ref=
 
+# Recursos estáticos liberados explicitamente (alguns crawlers
+# antigos bloqueiam por padrão sem essa permissão).
 Allow: /images/
 Allow: /*.css$
 Allow: /*.js$
 Allow: /*.svg$
 Allow: /*.webp$
 Allow: /*.jpg$
+Allow: /*.jpeg$
 Allow: /*.png$
+Allow: /*.ico$
+Allow: /*.woff2$
 
-Crawl-delay: 1
+# --- Crawlers principais (sem crawl-delay para não atrasar indexação) ---
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
 
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+
+User-agent: DuckDuckBot
+Allow: /
+
+# --- LLMs / IA (permitido para citação da marca) ---
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# --- Bots agressivos / SEO scrapers — bloqueados ---
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# --- Sitemaps (estático + dinâmico do banco) ---
 Sitemap: https://lorenaalvesarq.com/sitemap.xml
+Sitemap: https://erivcmnvvgxyfkhugupq.supabase.co/functions/v1/sitemap
+
+# --- Host preferencial (não-padrão, mas lido por Yandex e usado por alguns crawlers) ---
+Host: https://lorenaalvesarq.com
