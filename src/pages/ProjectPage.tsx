@@ -10,6 +10,7 @@ import { shouldRunParallax, shouldUseSmoothScroll } from "../lib/device";
 import { useSeo, projectJsonLd, breadcrumbJsonLd, organizationJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import SmartImage from "../components/SmartImage";
+import InternalNav from "../components/InternalNav";
 
 type Props = { slug: string };
 

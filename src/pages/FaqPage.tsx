@@ -3,6 +3,7 @@ import { useSeo, breadcrumbJsonLd, faqJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import { FAQ_ITEMS } from "../components/FaqSection";
 import { track } from "../lib/analytics";
+import InternalNav from "../components/InternalNav";
 
 /**
  * Página dedicada /faq.
