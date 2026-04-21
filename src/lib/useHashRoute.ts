@@ -95,6 +95,7 @@ export const routes = {
   adminProjects: "/admin/projects",
   adminProjectNew: "/admin/projects/new",
   adminProjectEdit: (slug: string) => `/admin/projects/${slug}`,
+  adminFaq: "/admin/faq",
 };
 
 // Navega programaticamente sem recarregar a página.
