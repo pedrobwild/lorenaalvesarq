@@ -45,6 +45,13 @@ Deno.serve(async (req) => {
   const base = (settings?.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
   const today = new Date().toISOString().slice(0, 10);
 
+  // Garante URL absoluta para imagens (Google Image Sitemap exige)
+  const absUrl = (u: string | null | undefined): string | undefined => {
+    if (!u) return undefined;
+    if (/^https?:\/\//i.test(u)) return u;
+    return `${base}${u.startsWith("/") ? "" : "/"}${u}`;
+  };
+
   // Agrupa imagens por project_id
   const imagesByProject = new Map<string, Array<{ url: string; alt?: string }>>();
   for (const img of (projectImages ?? []) as Array<{
