@@ -15,6 +15,7 @@ export type Route =
   | { name: "admin-projects" }
   | { name: "admin-project-new" }
   | { name: "admin-project-edit"; slug: string }
+  | { name: "admin-faq" }
   | { name: "not-found" };
 
 function parsePath(rawPath: string): Route {
@@ -35,6 +36,7 @@ function parsePath(rawPath: string): Route {
   if (path === "/admin/analytics") return { name: "admin-analytics" };
   if (path === "/admin/seo") return { name: "admin-seo" };
   if (path === "/admin/settings") return { name: "admin-settings" };
+  if (path === "/admin/faq") return { name: "admin-faq" };
   if (path === "/admin/projects") return { name: "admin-projects" };
   if (path === "/admin/projects/new") return { name: "admin-project-new" };
   const adminEdit = path.match(/^\/admin\/projects\/([a-z0-9-]+)$/);
@@ -93,6 +95,7 @@ export const routes = {
   adminProjects: "/admin/projects",
   adminProjectNew: "/admin/projects/new",
   adminProjectEdit: (slug: string) => `/admin/projects/${slug}`,
+  adminFaq: "/admin/faq",
 };
 
 // Navega programaticamente sem recarregar a página.

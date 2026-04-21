@@ -10,11 +10,18 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Menu,
+  HelpCircle,
 } from "lucide-react";
 import { useAuth } from "@/lib/useAuth";
 import { navigate, routes } from "@/lib/useHashRoute";
 
-type ActiveKey = "dashboard" | "projects" | "analytics" | "seo" | "settings";
+type ActiveKey =
+  | "dashboard"
+  | "projects"
+  | "analytics"
+  | "seo"
+  | "settings"
+  | "faq";
 
 type Props = {
   children: ReactNode;
@@ -31,6 +38,7 @@ const NAV: { key: ActiveKey; label: string; href: string; icon: typeof LayoutDas
   { key: "dashboard", label: "Dashboard", href: routes.adminDashboard, icon: LayoutDashboard },
   { key: "analytics", label: "Analytics", href: routes.adminAnalytics, icon: BarChart3 },
   { key: "projects", label: "Projetos", href: routes.adminProjects, icon: FolderKanban },
+  { key: "faq", label: "FAQ", href: routes.adminFaq, icon: HelpCircle },
   { key: "seo", label: "SEO", href: routes.adminSeo, icon: Search },
   { key: "settings", label: "Configurações", href: routes.adminSettings, icon: Settings },
 ];
