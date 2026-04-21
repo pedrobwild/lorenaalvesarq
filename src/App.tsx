@@ -404,6 +404,7 @@ export default function App() {
           <a href={routes.portfolio}>Portfólio</a>
           <a href="#estudio">Sobre</a>
           <a href="#metodo">Método</a>
+          <a href={routes.faq}>FAQ</a>
         </nav>
         <a
           className="nav__cta"
@@ -435,6 +436,7 @@ export default function App() {
           <a href={routes.portfolio}>Portfólio</a>
           <a href="#estudio">Sobre</a>
           <a href="#metodo">Método</a>
+          <a href={routes.faq}>FAQ</a>
         </nav>
         <div>
           <div className="mono" style={{ marginBottom: "0.8rem" }}>
