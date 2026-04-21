@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Sitemap estático — Lorena Alves Arquitetura
-  Atualizado em 2026-04-21. A versão dinâmica (com imagens e projetos do banco)
-  é servida pela edge function /functions/v1/sitemap e referenciada no robots.txt.
+  Atualizado em 2026-04-21.
+  Inclui imagens de capa (image-sitemap.xsd) e hreflang.
+  A versão dinâmica (com galeria completa e dados em tempo real do banco)
+  é servida pela edge function /functions/v1/sitemap, declarada no robots.txt.
 -->
 <urlset
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -26,9 +28,6 @@
 
   <!-- FAQ — página dedicada (canonical próprio) -->
   <!-- Nota: /#faq é âncora da home; não consta no sitemap para evitar duplicidade com /faq. -->
-
-
-  <!-- FAQ — página dedicada (canonical próprio) -->
   <url>
     <loc>https://lorenaalvesarq.com/faq</loc>
     <lastmod>2026-04-21</lastmod>
@@ -45,49 +44,121 @@
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/portfolio" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/portfolio" />
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/project-01.jpg</image:loc>
+      <image:title>Casa Paineira — Lorena Alves Arquitetura</image:title>
+      <image:caption>Casa Paineira — pavilhão horizontal de concreto e ipê</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/project-02.jpg</image:loc>
+      <image:title>Casa Jequitibá — Lorena Alves Arquitetura</image:title>
+      <image:caption>Casa Jequitibá — interior contemporâneo brasileiro</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/project-03.jpg</image:loc>
+      <image:title>Apartamento Higienópolis — Lorena Alves Arquitetura</image:title>
+      <image:caption>Apartamento Higienópolis — sala com estante em walnut</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/project-04.jpg</image:loc>
+      <image:title>Casa Pau-Brasil — Lorena Alves Arquitetura</image:title>
+      <image:caption>Casa Pau-Brasil — residência de praia com volume cantilevered</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/project-05.jpg</image:loc>
+      <image:title>Restaurante Takka — Lorena Alves Arquitetura</image:title>
+      <image:caption>Restaurante Takka — interior sofisticado com banquettes em couro</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/project-06.jpg</image:loc>
+      <image:title>Fazenda Porto — Lorena Alves Arquitetura</image:title>
+      <image:caption>Fazenda Porto — pavilhão rural em taipa e telha cerâmica</image:caption>
+    </image:image>
   </url>
 
-  <!-- Projetos -->
+  <!-- Projetos individuais -->
   <url>
     <loc>https://lorenaalvesarq.com/projeto/casa-paineira</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-paineira" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/projeto/casa-paineira" />
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/project-01.jpg</image:loc>
+      <image:title>Casa Paineira — projeto residencial em Uberlândia/MG</image:title>
+      <image:caption>Casa Paineira — pavilhão horizontal de concreto e ipê</image:caption>
+    </image:image>
   </url>
+
   <url>
     <loc>https://lorenaalvesarq.com/projeto/casa-jequitiba</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-jequitiba" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/projeto/casa-jequitiba" />
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/project-02.jpg</image:loc>
+      <image:title>Casa Jequitibá — projeto residencial em Uberlândia/MG</image:title>
+      <image:caption>Casa Jequitibá — interior contemporâneo brasileiro</image:caption>
+    </image:image>
   </url>
+
   <url>
     <loc>https://lorenaalvesarq.com/projeto/apto-higienopolis</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/apto-higienopolis" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/projeto/apto-higienopolis" />
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/project-03.jpg</image:loc>
+      <image:title>Apartamento Higienópolis — projeto de interiores</image:title>
+      <image:caption>Apartamento Higienópolis — sala com estante em walnut</image:caption>
+    </image:image>
   </url>
+
   <url>
     <loc>https://lorenaalvesarq.com/projeto/casa-pau-brasil</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-pau-brasil" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/projeto/casa-pau-brasil" />
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/project-04.jpg</image:loc>
+      <image:title>Casa Pau-Brasil — residência de praia</image:title>
+      <image:caption>Casa Pau-Brasil — residência de praia com volume cantilevered</image:caption>
+    </image:image>
   </url>
+
   <url>
     <loc>https://lorenaalvesarq.com/projeto/restaurante-takka</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/restaurante-takka" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/projeto/restaurante-takka" />
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/project-05.jpg</image:loc>
+      <image:title>Restaurante Takka — projeto comercial e gastronômico</image:title>
+      <image:caption>Restaurante Takka — interior sofisticado com banquettes em couro</image:caption>
+    </image:image>
   </url>
+
   <url>
     <loc>https://lorenaalvesarq.com/projeto/fazenda-porto</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-04-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/fazenda-porto" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/projeto/fazenda-porto" />
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/project-06.jpg</image:loc>
+      <image:title>Fazenda Porto — projeto rural em Minas Gerais</image:title>
+      <image:caption>Fazenda Porto — pavilhão rural em taipa e telha cerâmica</image:caption>
+    </image:image>
   </url>
 </urlset>
