@@ -738,6 +738,9 @@ export default function App() {
         </div>
       </section>
 
+      {/* FAQ — perguntas frequentes (SEO local + processo) */}
+      <FaqSection />
+
       {/* CTA visual full-bleed */}
       <section className="cta-hero" id="cta-hero" aria-label="Vamos projetar seu próximo modo de viver">
         <img
