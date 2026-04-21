@@ -617,19 +617,32 @@ export default function App() {
               "Sala integrada com cozinha em projeto de design de interiores residencial assinado por Lorena Alves Arquitetura no Triângulo Mineiro",
               "Casa contemporânea em Uberlândia/MG ao entardecer com iluminação cênica e materiais autorais — arquitetura por Lorena Alves Arquitetura",
             ];
+            // Deriva caminhos AVIF/WebP/JPG a partir do src original (.png ou .jpg)
+            const dot = src.lastIndexOf(".");
+            const stem = src.slice(0, dot);
+            const ext = src.slice(dot);
+            const fallbackExt = ext === ".png" ? ".jpg" : ext;
+            const avifSet = `${stem}-sm.avif 640w, ${stem}-md.avif 1280w, ${stem}-lg.avif 1920w`;
+            const webpSet = `${stem}-sm.webp 640w, ${stem}-md.webp 1280w, ${stem}-lg.webp 1920w`;
+            const jpgSet = `${stem}-sm${fallbackExt} 640w, ${stem}-md${fallbackExt} 1280w, ${stem}-lg${fallbackExt} 1920w`;
             return (
-              <img
-                key={src}
-                src={src}
-                alt={heroAlts[i] || heroAlts[0]}
-                loading={i === 0 ? "eager" : "lazy"}
-                fetchPriority={i === 0 ? "high" : "auto"}
-                decoding={i === 0 ? "sync" : "async"}
-                width={1920}
-                height={1080}
-                className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
-                aria-hidden={i === heroIdx ? "false" : "true"}
-              />
+              <picture key={src}>
+                <source type="image/avif" srcSet={avifSet} sizes="100vw" />
+                <source type="image/webp" srcSet={webpSet} sizes="100vw" />
+                <img
+                  src={`${stem}-lg${fallbackExt}`}
+                  srcSet={jpgSet}
+                  sizes="100vw"
+                  alt={heroAlts[i] || heroAlts[0]}
+                  loading={i === 0 ? "eager" : "lazy"}
+                  fetchPriority={i === 0 ? "high" : "auto"}
+                  decoding={i === 0 ? "sync" : "async"}
+                  width={1920}
+                  height={1080}
+                  className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
+                  aria-hidden={i === heroIdx ? "false" : "true"}
+                />
+              </picture>
             );
           })}
         </div>
