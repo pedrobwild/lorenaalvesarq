@@ -4,6 +4,7 @@ export type Route =
   | { name: "home"; anchor?: string }
   | { name: "portfolio" }
   | { name: "faq" }
+  | { name: "privacidade" }
   | { name: "project"; slug: string }
   | { name: "admin-login" }
   | { name: "admin-dashboard" }
@@ -21,6 +22,7 @@ function parsePath(rawPath: string): Route {
   if (path === "/" || path === "") return { name: "home" };
   if (path === "/portfolio") return { name: "portfolio" };
   if (path === "/faq") return { name: "faq" };
+  if (path === "/privacidade") return { name: "privacidade" };
 
   const projMatch = path.match(/^\/projeto\/([a-z0-9-]+)$/);
   if (projMatch) return { name: "project", slug: projMatch[1] };
@@ -78,6 +80,7 @@ export const routes = {
   home: "/",
   portfolio: "/portfolio",
   faq: "/faq",
+  privacidade: "/privacidade",
   project: (slug: string) => `/projeto/${slug}`,
   adminLogin: "/admin/login",
   adminDashboard: "/admin",

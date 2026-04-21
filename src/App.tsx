@@ -872,6 +872,9 @@ export default function App() {
               <li>
                 <a href={routes.faq}>FAQ</a>
               </li>
+              <li>
+                <a href={routes.privacidade}>Política de Privacidade</a>
+              </li>
             </ul>
           </div>
           <div className="footer__col">

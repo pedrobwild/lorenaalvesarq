@@ -4,6 +4,7 @@ import App from "./App";
 import PortfolioPage from "./pages/PortfolioPage";
 import ProjectPage from "./pages/ProjectPage";
 import FaqPage from "./pages/FaqPage";
+import PrivacidadePage from "./pages/PrivacidadePage";
 import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import AnalyticsPage from "./pages/admin/AnalyticsPage";
@@ -12,6 +13,7 @@ import SettingsPage from "./pages/admin/SettingsPage";
 import ProjectsListPage from "./pages/admin/ProjectsListPage";
 import ProjectFormPage from "./pages/admin/ProjectFormPage";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
+import CookieBanner from "./components/CookieBanner";
 import { useCustomCursor } from "./lib/useCustomCursor";
 import { useHashRoute, installLinkInterceptor, type Route } from "./lib/useHashRoute";
 import { initAnalytics } from "./lib/analytics";
@@ -25,6 +27,7 @@ function renderRoute(route: Route) {
   if (route.name === "portfolio") return <PortfolioPage />;
   if (route.name === "project") return <ProjectPage slug={route.slug} />;
   if (route.name === "faq") return <FaqPage />;
+  if (route.name === "privacidade") return <PrivacidadePage />;
   if (route.name === "admin-login") return <LoginPage />;
   if (route.name === "admin-dashboard")
     return (
@@ -128,6 +131,7 @@ function Root() {
       >
         {renderRoute(displayed)}
       </div>
+      {!adminMode && <CookieBanner />}
     </>
   );
 }
