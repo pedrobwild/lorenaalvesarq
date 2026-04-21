@@ -203,7 +203,7 @@ function applySeo(settings: SiteSettings, seo: SeoInput) {
   setMeta('meta[property="og:title"]', { property: "og:title", content: title });
   setMeta('meta[property="og:description"]', { property: "og:description", content: description });
   setMeta('meta[property="og:type"]', { property: "og:type", content: ogType });
-  setMeta('meta[property="og:url"]', { property: "og:url", content: canonical });
+  setMeta('meta[property="og:url"]', { property: "og:url", content: canonicalUrl });
   setMeta('meta[property="og:locale"]', { property: "og:locale", content: "pt_BR" });
   setMeta('meta[property="og:site_name"]', {
     property: "og:site_name",
