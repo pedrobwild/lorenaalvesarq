@@ -7,6 +7,7 @@ import {
   type SiteSettings,
 } from "@/lib/useSiteSettings";
 import { runSeoAudit, type SeoAuditResult } from "@/lib/seoAudit";
+import { refreshSeoEverywhere } from "@/lib/useSeo";
 
 const SITEMAP_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sitemap`;
 const ROBOTS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/robots`;
@@ -26,6 +27,7 @@ const TABS: Array<{ key: TabKey; label: string }> = [
 export default function SeoPage() {
   const [s, setS] = useState<SiteSettings | null>(null);
   const [saving, setSaving] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [msg, setMsg] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [tab, setTab] = useState<TabKey>("global");
   const [audit, setAudit] = useState<SeoAuditResult | null>(null);
@@ -121,6 +123,32 @@ export default function SeoPage() {
     setMsg({ kind: "ok", text: "marcado como enviado." });
   }
 
+  async function refreshSeo() {
+    setRefreshing(true);
+    setMsg(null);
+    try {
+      const result = await refreshSeoEverywhere({ pingSearchEngines: true });
+      // Recarrega o snapshot local também
+      const fresh = await fetchSiteSettings(true);
+      setS(fresh);
+
+      const pingOk = result.ping?.results?.every((r) => r.ok);
+      const pingMsg = result.ping
+        ? pingOk
+          ? " Google e Bing notificados."
+          : " (ping aos buscadores falhou — pode tentar de novo depois)"
+        : "";
+      setMsg({
+        kind: "ok",
+        text: `SEO atualizado em todas as páginas.${pingMsg}`,
+      });
+    } catch (err) {
+      setMsg({ kind: "err", text: `falha ao atualizar SEO: ${String(err)}` });
+    } finally {
+      setRefreshing(false);
+    }
+  }
+
   if (!s) {
     return (
       <AdminLayout active="seo">
@@ -135,7 +163,15 @@ export default function SeoPage() {
         <h1 className="admin-form-head__title">SEO</h1>
         <div className="admin-form-head__actions">
           {msg && <span className={`admin-flash admin-flash--${msg.kind} mono`}>{msg.text}</span>}
-          <button className="admin-btn admin-btn--primary" onClick={save} disabled={saving}>
+          <button
+            className="admin-btn"
+            onClick={refreshSeo}
+            disabled={refreshing || saving}
+            title="Recarrega configurações, reaplica meta tags e JSON-LD em todas as páginas e notifica Google/Bing sobre o sitemap"
+          >
+            {refreshing ? "atualizando…" : "atualizar SEO"}
+          </button>
+          <button className="admin-btn admin-btn--primary" onClick={save} disabled={saving || refreshing}>
             {saving ? "salvando…" : "salvar"}
           </button>
         </div>
