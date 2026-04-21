@@ -540,14 +540,13 @@ export default function App() {
             </h3>
             <div className="about__bio">
               <p>
-                Lorena projeta obras como quem escreve — devagar, com intenção e memória. Sua
-                prática une a escola modernista brasileira, a precisão construtiva europeia e uma
-                sensibilidade material para os trópicos.
+                Enxergo a arquitetura e o design como agentes transformadores do mundo, capazes
+                de influenciar positivamente a vida das pessoas.
               </p>
               <p>
-                O estúdio trabalha em poucas obras por ano, com dedicação integral. Do conceito às
-                especificações finais: arquitetura, interiores, mobiliário autoral e paisagem —
-                uma única linguagem, cuidada em cada detalhe.
+                Cada projeto é único, mas tomo cada um deles como meus. Porque, sonhando juntos,
+                tornamos essas aspirações reais e concretas, prontas para serem experimentadas e
+                vividas.
               </p>
             </div>
 
