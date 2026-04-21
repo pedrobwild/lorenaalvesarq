@@ -554,9 +554,14 @@ button {
   transition: transform 0.5s var(--ease);
 }
 
-.nav__menu a:hover::after {
+.nav__menu a:hover::after,
+.nav__menu a.is-active::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+.nav__menu a.is-active {
+  opacity: 1;
 }
 
 .nav__cta {
