@@ -122,6 +122,36 @@ export type Database = {
         }
         Relationships: []
       }
+      faq_items: {
+        Row: {
+          answer: string
+          created_at: string
+          id: string
+          order_index: number
+          question: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          id?: string
+          order_index?: number
+          question: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          id?: string
+          order_index?: number
+          question?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       project_images: {
         Row: {
           alt: string
