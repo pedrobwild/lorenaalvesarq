@@ -336,7 +336,15 @@ function GlobalTab({
         <h2 className="admin-section__title">Preview Open Graph (Facebook / WhatsApp)</h2>
         <div className="seo-preview seo-preview--og">
           {s.seo_og_image ? (
-            <img className="seo-preview__og-img" src={s.seo_og_image} alt="" />
+            <img
+              className="seo-preview__og-img"
+              src={s.seo_og_image}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              width={1200}
+              height={630}
+            />
           ) : (
             <div className="seo-preview__og-img seo-preview__og-img--empty mono">
               sem imagem padrão

@@ -181,7 +181,15 @@ export default function ProjectsListPage() {
                         </td>
                         <td style={{ width: 64 }}>
                           {r.cover_url ? (
-                            <img src={r.cover_url} alt="" className="admin-thumb" />
+                            <img
+                              src={r.cover_url}
+                              alt=""
+                              className="admin-thumb"
+                              loading="lazy"
+                              decoding="async"
+                              width={64}
+                              height={64}
+                            />
                           ) : (
                             <div className="admin-thumb admin-thumb--empty" />
                           )}

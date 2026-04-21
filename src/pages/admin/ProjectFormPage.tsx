@@ -601,7 +601,14 @@ export default function ProjectFormPage({ slug }: Props) {
             <div className="admin-cover">
               <div className="admin-cover__preview">
                 {form.cover_url ? (
-                  <img src={form.cover_url} alt="" />
+                  <img
+                    src={form.cover_url}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    width={400}
+                    height={300}
+                  />
                 ) : (
                   <div className="admin-cover__empty mono">sem capa</div>
                 )}
@@ -671,7 +678,14 @@ export default function ProjectFormPage({ slug }: Props) {
                               label="arrastar imagem"
                             />
                           </div>
-                          <img src={g.url} alt={g.alt} />
+                          <img
+                            src={g.url}
+                            alt={g.alt}
+                            loading="lazy"
+                            decoding="async"
+                            width={200}
+                            height={150}
+                          />
                           <div className="admin-gallery__fields">
                             <input
                               className="admin-field__input"
