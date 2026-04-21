@@ -186,6 +186,7 @@ export default function ProjectPage({ slug }: Props) {
             srcSm={project.coverSm}
             blurDataUrl={project.coverBlurDataUrl}
             alt={project.alt}
+            altFallback={`${project.title} ${project.em} — ${project.tag} em ${project.location}`}
             sizes="(max-width: 900px) 100vw, 60vw"
             priority
             wrapperClassName="pp-hero__img-wrap"
@@ -220,6 +221,8 @@ export default function ProjectPage({ slug }: Props) {
             <GalleryTile
               key={`${project.slug}-${i}`}
               img={img}
+              index={i}
+              projectTitle={`${project.title} ${project.em}`}
               onOpen={() => setLightboxIdx(i)}
             />
           ))}
@@ -259,6 +262,7 @@ export default function ProjectPage({ slug }: Props) {
         <Lightbox
           images={project.gallery}
           index={lightboxIdx}
+          projectTitle={`${project.title} ${project.em}`}
           onClose={() => setLightboxIdx(null)}
           onPrev={() =>
             setLightboxIdx((i) => (i! - 1 + project.gallery.length) % project.gallery.length)
@@ -279,7 +283,17 @@ function SpecRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function GalleryTile({ img, onOpen }: { img: ProjectImage; onOpen: () => void }) {
+function GalleryTile({
+  img,
+  index,
+  projectTitle,
+  onOpen,
+}: {
+  img: ProjectImage;
+  index: number;
+  projectTitle: string;
+  onOpen: () => void;
+}) {
   const klass = `pp-tile pp-tile--${img.format ?? "full"} pp-reveal`;
   return (
     <figure className={klass}>
@@ -290,6 +304,7 @@ function GalleryTile({ img, onOpen }: { img: ProjectImage; onOpen: () => void })
           srcSm={img.srcSm}
           blurDataUrl={img.blurDataUrl}
           alt={img.alt}
+          altFallback={`${projectTitle} — imagem ${index + 1}`}
           sizes="(max-width: 700px) 100vw, (max-width: 1200px) 50vw, 800px"
           wrapperClassName="pp-tile__img-wrap"
         />
@@ -303,17 +318,21 @@ function GalleryTile({ img, onOpen }: { img: ProjectImage; onOpen: () => void })
 function Lightbox({
   images,
   index,
+  projectTitle,
   onClose,
   onPrev,
   onNext,
 }: {
   images: ProjectImage[];
   index: number;
+  projectTitle: string;
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
 }) {
   const img = images[index];
+  const fallback = `${projectTitle} — imagem ${index + 1}`;
+  const altText = (img.alt && img.alt.trim()) || fallback;
   return (
     <div className="pp-lb" role="dialog" aria-modal="true" aria-label="Visualizador de imagem">
       <button type="button" className="pp-lb__backdrop" onClick={onClose} aria-label="Fechar" />
@@ -324,9 +343,9 @@ function Lightbox({
         ←
       </button>
       <figure className="pp-lb__fig" data-cursor="zoom">
-        <img src={img.src} alt={img.alt} />
+        <img src={img.src} alt={altText} />
         <figcaption className="pp-lb__cap mono">
-          {index + 1} / {images.length} — {img.alt}
+          {index + 1} / {images.length} — {altText}
         </figcaption>
       </figure>
       <button type="button" className="pp-lb__nav pp-lb__nav--next" onClick={onNext} aria-label="Próxima">

@@ -171,6 +171,7 @@ export default function PortfolioPage() {
                   srcSm={p.coverSm}
                   blurDataUrl={p.coverBlurDataUrl}
                   alt={p.alt}
+                  altFallback={`${p.title} ${p.em} — ${p.tag} em ${p.location}`}
                   sizes="(max-width: 700px) 100vw, (max-width: 1200px) 50vw, 600px"
                   wrapperClassName="pf-card__img-wrap"
                   priority={i === 0}
