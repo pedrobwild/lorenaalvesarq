@@ -10,6 +10,7 @@ import { shouldUseSmoothScroll } from "../lib/device";
 import { useSeo, breadcrumbJsonLd, itemListJsonLd, organizationJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import SmartImage from "../components/SmartImage";
+import InternalNav from "../components/InternalNav";
 
 const TAGS = ["Todos", "Residencial", "Interiores", "Comercial", "Rural"] as const;
 type Tag = (typeof TAGS)[number];
@@ -108,15 +109,8 @@ export default function PortfolioPage() {
   return (
     <div className="pf-page">
       {/* Top nav minimal */}
-      <nav className="pf-nav">
-        <a className="pf-nav__brand" href={routes.home} aria-label="lorenaalves arq — início">
-          <span className="brand-lockup">lorena<b>alves</b><sup>arq</sup></span>
-        </a>
-        <a className="pf-nav__back" href={routes.home} data-cursor="hover">
-          <span className="pf-nav__arrow">←</span>
-          <span>voltar ao início</span>
-        </a>
-      </nav>
+      <InternalNav active="portfolio" backLabel="voltar ao início" />
+
 
       {/* Header */}
       <header className="pf-head">
