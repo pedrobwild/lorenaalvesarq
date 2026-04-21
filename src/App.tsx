@@ -27,6 +27,31 @@ gsap.registerPlugin(ScrollTrigger);
 
 const HERO_IMAGES = [heroImg1, heroImg2, heroImg3, heroImg4, heroImg5];
 
+/**
+ * Mapeamento único entre itens do menu e ids de seção da home.
+ * Esta é a *fonte de verdade* usada pelo scroll-spy e pelo render do menu
+ * (desktop + mobile), garantindo que o destaque ativo sempre corresponda
+ * ao label correto. Para alterar/adicionar uma seção, edite só este array.
+ */
+type NavItem = {
+  /** Id da seção na home — também a chave do scroll-spy */
+  id: "projetos" | "estudio" | "metodo" | "faq" | "contato";
+  /** Texto exibido no menu */
+  label: string;
+  /** Destino do link (rota dedicada ou âncora na home) */
+  href: string;
+};
+
+const NAV_ITEMS: NavItem[] = [
+  { id: "projetos", label: "Portfólio", href: routes.portfolio },
+  { id: "estudio", label: "Sobre", href: routes.sobre },
+  { id: "metodo", label: "Método", href: "#metodo" },
+  { id: "faq", label: "FAQ", href: routes.faq },
+];
+
+/** Ids observados pelo scroll-spy — derivado do mapeamento + "contato" no fim */
+const SPY_IDS: NavItem["id"][] = [...NAV_ITEMS.map((n) => n.id), "contato"];
+
 // ---------- Ensaios slideshow data ----------
 const ENSAIOS = [
   {
@@ -112,16 +137,17 @@ export default function App() {
   // Isso evita os artefatos de intersectionRatio entre seções de tamanhos
   // muito diferentes (o problema anterior).
   useEffect(() => {
-    const ids = ["projetos", "estudio", "metodo", "faq", "contato"];
+    const ids = SPY_IDS;
 
     const computeActive = () => {
+      type SpyId = NavItem["id"];
       const sections = ids
         .map((id) => {
           const el = document.getElementById(id);
           if (!el) return null;
           return { id, top: el.getBoundingClientRect().top };
         })
-        .filter((s): s is { id: string; top: number } => !!s);
+        .filter((s): s is { id: SpyId; top: number } => s !== null);
 
       if (sections.length === 0) return;
 
@@ -143,7 +169,7 @@ export default function App() {
       }
 
       // Última seção cujo topo já cruzou a linha de referência.
-      let current = "";
+      let current: SpyId | "" = "";
       for (const s of sections) {
         if (s.top - line <= 0) current = s.id;
         else break;
@@ -467,34 +493,19 @@ export default function App() {
           <BrandLogo variant="light" />
         </a>
         <nav className="nav__menu" aria-label="Principal">
-          <a
-            href={routes.portfolio}
-            className={activeSection === "projetos" ? "is-active" : ""}
-            aria-current={activeSection === "projetos" ? "page" : undefined}
-          >
-            Portfólio
-          </a>
-          <a
-            href={routes.sobre}
-            className={activeSection === "estudio" ? "is-active" : ""}
-            aria-current={activeSection === "estudio" ? "true" : undefined}
-          >
-            Sobre
-          </a>
-          <a
-            href="#metodo"
-            className={activeSection === "metodo" ? "is-active" : ""}
-            aria-current={activeSection === "metodo" ? "true" : undefined}
-          >
-            Método
-          </a>
-          <a
-            href={routes.faq}
-            className={activeSection === "faq" ? "is-active" : ""}
-            aria-current={activeSection === "faq" ? "true" : undefined}
-          >
-            FAQ
-          </a>
+          {NAV_ITEMS.map((item) => {
+            const isActive = activeSection === item.id;
+            return (
+              <a
+                key={item.id}
+                href={item.href}
+                className={isActive ? "is-active" : ""}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </nav>
         <a
           className="nav__cta"
@@ -523,30 +534,19 @@ export default function App() {
       {/* Mobile menu */}
       <div className="mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav aria-label="Menu principal">
-          <a
-            href={routes.portfolio}
-            className={activeSection === "projetos" ? "is-active" : ""}
-          >
-            Portfólio
-          </a>
-          <a
-            href={routes.sobre}
-            className={activeSection === "estudio" ? "is-active" : ""}
-          >
-            Sobre
-          </a>
-          <a
-            href="#metodo"
-            className={activeSection === "metodo" ? "is-active" : ""}
-          >
-            Método
-          </a>
-          <a
-            href={routes.faq}
-            className={activeSection === "faq" ? "is-active" : ""}
-          >
-            FAQ
-          </a>
+          {NAV_ITEMS.map((item) => {
+            const isActive = activeSection === item.id;
+            return (
+              <a
+                key={item.id}
+                href={item.href}
+                className={isActive ? "is-active" : ""}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </nav>
         {PROJECTS.length > 0 && (
           <nav className="mobile-menu__projects" aria-label="Projetos em destaque">
