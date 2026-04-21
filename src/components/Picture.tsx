@@ -75,18 +75,28 @@ export default function Picture({
 
   const avifSet = buildSrcSet(dir, stem, ".avif");
   const webpSet = buildSrcSet(dir, stem, ".webp");
-  // Fallback: usa o jpg derivado se o original era png; senão usa o próprio ext
-  const fallbackExt = ext === ".png" ? ".jpg" : ext;
-  const fallbackSet = buildSrcSet(dir, stem, fallbackExt);
+
+  // Fallback raster universal: SEMPRE .jpg para navegadores legados
+  // (IE11, Safari < 14, Android < 5 etc. que não suportam AVIF nem WebP).
+  // Se o original já era .jpg/.jpeg, mantemos a extensão; caso contrário (.png/.webp/.avif),
+  // assumimos que existe a variante .jpg gerada pelo pipeline de imagens.
+  const isJpegOriginal = ext === ".jpg" || ext === ".jpeg";
+  const fallbackExt = isJpegOriginal ? ext : ".jpg";
+
+  // srcSet completo (sm/md/lg) + src apontando para o md como "âncora" segura
+  const jpgSet = buildSrcSet(dir, stem, fallbackExt);
   const fallbackSrc = `${dir}${stem}-md${fallbackExt}`;
 
   return (
     <picture className={pictureClassName}>
       <source type="image/avif" srcSet={avifSet} sizes={sizes} />
       <source type="image/webp" srcSet={webpSet} sizes={sizes} />
+      {/* Source JPG explícito: garante que o browser escolha a melhor resolução
+          mesmo quando ignora <img srcSet> (alguns crawlers / leitores antigos). */}
+      <source type="image/jpeg" srcSet={jpgSet} sizes={sizes} />
       <img
         src={fallbackSrc}
-        srcSet={fallbackSet}
+        srcSet={jpgSet}
         sizes={sizes}
         alt={alt}
         width={width}
