@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { routes } from "../lib/useHashRoute";
 import { useSeo, breadcrumbJsonLd, faqJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
@@ -32,10 +31,6 @@ export default function FaqPage() {
         ]
       : undefined,
   });
-
-  useEffect(() => {
-    track("faq_page_view");
-  }, []);
 
   return (
     <div className="pf-page faq-page">
