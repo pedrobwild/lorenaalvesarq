@@ -223,7 +223,7 @@ export default function SettingsPage() {
               className="admin-field__input"
               value={s.instagram_url ?? ""}
               onChange={(e) => patch("instagram_url", e.target.value)}
-              placeholder="https://instagram.com/lorenaalves.arq"
+              placeholder="https://instagram.com/lorenaalves_arq"
             />
           </Field>
           <Field label="LinkedIn" error={errors.linkedin_url}>

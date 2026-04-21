@@ -69,7 +69,7 @@ const DEFAULTS: SiteSettings = {
   address_street: null,
   address_city: null,
   address_region: null,
-  instagram_url: "https://instagram.com/lorenaalves.arq",
+  instagram_url: "https://instagram.com/lorenaalves_arq",
   linkedin_url: null,
   pinterest_url: null,
   default_og_image: null,
