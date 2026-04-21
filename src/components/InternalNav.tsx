@@ -36,6 +36,9 @@ export default function InternalNav({
       </a>
 
       <div className="pf-nav__menu" role="navigation" aria-label="Principal">
+        <a href={routes.home} data-cursor="hover">
+          Início
+        </a>
         <a
           href={routes.portfolio}
           className={active === "portfolio" || active === "project" ? "is-active" : ""}
@@ -43,11 +46,7 @@ export default function InternalNav({
         >
           Portfólio
         </a>
-        <a
-          href="/#estudio"
-          className={active === "home" ? "is-active" : ""}
-          data-cursor="hover"
-        >
+        <a href="/#estudio" data-cursor="hover">
           Sobre
         </a>
         <a href="/#metodo" data-cursor="hover">
