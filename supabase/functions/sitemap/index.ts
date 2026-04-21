@@ -33,12 +33,13 @@ Deno.serve(async (req) => {
       .maybeSingle(),
     supabase
       .from("projects")
-      .select("slug, title, em, cover, updated_at")
+      .select("id, slug, title, em, cover_url, updated_at")
       .eq("visible", true)
       .order("order_index", { ascending: true }),
     supabase
       .from("project_images")
-      .select("project_id, url, alt, order_index"),
+      .select("project_id, url, alt, order_index")
+      .order("order_index", { ascending: true }),
   ]);
 
   const base = (settings?.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
