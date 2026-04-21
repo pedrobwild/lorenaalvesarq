@@ -140,13 +140,14 @@ export default function App() {
     const ids = SPY_IDS;
 
     const computeActive = () => {
+      type SpyId = NavItem["id"];
       const sections = ids
         .map((id) => {
           const el = document.getElementById(id);
           if (!el) return null;
           return { id, top: el.getBoundingClientRect().top };
         })
-        .filter((s): s is { id: string; top: number } => !!s);
+        .filter((s): s is { id: SpyId; top: number } => s !== null);
 
       if (sections.length === 0) return;
 
@@ -168,7 +169,7 @@ export default function App() {
       }
 
       // Última seção cujo topo já cruzou a linha de referência.
-      let current = "";
+      let current: SpyId | "" = "";
       for (const s of sections) {
         if (s.top - line <= 0) current = s.id;
         else break;
