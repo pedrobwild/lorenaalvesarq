@@ -27,6 +27,31 @@ gsap.registerPlugin(ScrollTrigger);
 
 const HERO_IMAGES = [heroImg1, heroImg2, heroImg3, heroImg4, heroImg5];
 
+/**
+ * Mapeamento único entre itens do menu e ids de seção da home.
+ * Esta é a *fonte de verdade* usada pelo scroll-spy e pelo render do menu
+ * (desktop + mobile), garantindo que o destaque ativo sempre corresponda
+ * ao label correto. Para alterar/adicionar uma seção, edite só este array.
+ */
+type NavItem = {
+  /** Id da seção na home — também a chave do scroll-spy */
+  id: "projetos" | "estudio" | "metodo" | "faq" | "contato";
+  /** Texto exibido no menu */
+  label: string;
+  /** Destino do link (rota dedicada ou âncora na home) */
+  href: string;
+};
+
+const NAV_ITEMS: NavItem[] = [
+  { id: "projetos", label: "Portfólio", href: routes.portfolio },
+  { id: "estudio", label: "Sobre", href: routes.sobre },
+  { id: "metodo", label: "Método", href: "#metodo" },
+  { id: "faq", label: "FAQ", href: routes.faq },
+];
+
+/** Ids observados pelo scroll-spy — derivado do mapeamento + "contato" no fim */
+const SPY_IDS: NavItem["id"][] = [...NAV_ITEMS.map((n) => n.id), "contato"];
+
 // ---------- Ensaios slideshow data ----------
 const ENSAIOS = [
   {
