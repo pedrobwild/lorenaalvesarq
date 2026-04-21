@@ -8,10 +8,10 @@
 <!-- =========================================================
      SEO PRIMÁRIO — Estúdio Lorena Alves · Arquitetura em Uberlândia/MG
      ========================================================= -->
-<title>Arquiteta em Uberlândia — Lorena Alves Arquitetura e Interiores | MG</title>
+<title>Arquiteta em Uberlândia/MG — Lorena Alves Arquitetura e Interiores</title>
 <meta
   name="description"
-  content="Escritório de arquitetura em Uberlândia (MG). Projetos autorais de residências, interiores e arquitetura comercial no Triângulo Mineiro. Atendemos Uberlândia e região com projeto integral: do conceito à obra."
+  content="Escritório autoral de arquitetura em Uberlândia (MG): residências, interiores e projetos comerciais no Triângulo Mineiro. Veja portfólio, processo e respostas às dúvidas mais comuns sobre prazos, valores e atendimento."
 />
 <meta
   name="keywords"
@@ -58,15 +58,18 @@
 <meta name="twitter:image" content="https://lorenaalvesarq.com/images/og-default.jpg" />
 <meta name="twitter:image:alt" content="Lorena Alves Arquitetura — Uberlândia/MG" />
 
-<!-- Favicon + PWA -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230A0A0A'/%3E%3Ctext x='50%25' y='58%25' text-anchor='middle' font-family='Helvetica, Arial, sans-serif' font-size='30' font-weight='700' fill='%23FFFFFF'%3Ela%3C/text%3E%3C/svg%3E" />
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230A0A0A'/%3E%3Ctext x='50%25' y='58%25' text-anchor='middle' font-family='Helvetica, Arial, sans-serif' font-size='84' font-weight='700' fill='%23FFFFFF'%3Ela%3C/text%3E%3C/svg%3E" />
+<!-- Favicon + PWA — gerados a partir do selo oficial da marca -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
 <link rel="manifest" href="/site.webmanifest" />
 <meta name="apple-mobile-web-app-title" content="Lorena Alves Arq" />
 <meta name="application-name" content="Lorena Alves Arq" />
 
 <!-- Performance hints -->
-<link rel="preload" as="image" href="/images/hero-main.png" fetchpriority="high" />
+<!-- Preconnect ao backend (Supabase) — acelera primeira chamada de site_settings + projects -->
+<link rel="preconnect" href="https://erivcmnvvgxyfkhugupq.supabase.co" crossorigin />
+<link rel="dns-prefetch" href="https://erivcmnvvgxyfkhugupq.supabase.co" />
 <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
 <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -94,6 +97,7 @@
       "logo": "https://lorenaalvesarq.com/images/og-default.jpg",
       "image": "https://lorenaalvesarq.com/images/og-default.jpg",
       "email": "contato@lorenaalvesarq.com",
+      "telephone": "+5534999298215",
       "priceRange": "$$$",
       "currenciesAccepted": "BRL",
       "paymentAccepted": "Transferência bancária, Pix",

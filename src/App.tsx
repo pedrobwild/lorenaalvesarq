@@ -12,8 +12,11 @@ import {
   professionalServiceJsonLd,
   websiteJsonLd,
   organizationJsonLd,
+  faqJsonLd,
 } from "./lib/useSeo";
 import { useSiteSettings } from "./lib/useSiteSettings";
+import BrandLogo, { BrandSeal } from "./components/BrandLogo";
+import FaqSection, { FAQ_ITEMS } from "./components/FaqSection";
 import heroImg1 from "./assets/hero/hero-1.webp";
 import heroImg2 from "./assets/hero/hero-2.webp";
 import heroImg3 from "./assets/hero/hero-3.webp";
@@ -75,6 +78,7 @@ export default function App() {
           professionalServiceJsonLd(settings),
           websiteJsonLd(settings),
           organizationJsonLd(settings),
+          faqJsonLd(FAQ_ITEMS),
         ]
       : undefined,
   });
@@ -383,7 +387,7 @@ export default function App() {
         <div className="loader__inner">
           <div className="loader__mark">
             <span>
-              <span className="brand-lockup brand-lockup--hero">lorena<b>alves</b><sup>arq</sup></span>
+              <BrandLogo variant="light" />
             </span>
           </div>
           <div className="loader__counter">000</div>
@@ -394,12 +398,13 @@ export default function App() {
       {/* Nav */}
       <header className="nav">
         <a className="nav__brand" href="/" aria-label="lorenaalves arq — Arquitetura">
-          <span className="brand-lockup">lorena<b>alves</b><sup>arq</sup></span>
+          <BrandLogo variant="light" />
         </a>
         <nav className="nav__menu" aria-label="Principal">
           <a href={routes.portfolio}>Portfólio</a>
           <a href="#estudio">Sobre</a>
           <a href="#metodo">Método</a>
+          <a href={routes.faq}>FAQ</a>
         </nav>
         <a
           className="nav__cta"
@@ -431,6 +436,7 @@ export default function App() {
           <a href={routes.portfolio}>Portfólio</a>
           <a href="#estudio">Sobre</a>
           <a href="#metodo">Método</a>
+          <a href={routes.faq}>FAQ</a>
         </nav>
         <div>
           <div className="mono" style={{ marginBottom: "0.8rem" }}>
@@ -451,8 +457,12 @@ export default function App() {
             <img
               key={src}
               src={src}
-              alt="Residência contemporânea brasileira projetada pelo estúdio Lorena Alves"
+              alt="Residência contemporânea brasileira projetada pelo estúdio Lorena Alves Arquitetura em Uberlândia, MG"
               loading={i === 0 ? "eager" : "lazy"}
+              fetchPriority={i === 0 ? "high" : "auto"}
+              decoding={i === 0 ? "sync" : "async"}
+              width={1920}
+              height={1080}
               className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
               aria-hidden={i === heroIdx ? "false" : "true"}
             />
@@ -463,7 +473,10 @@ export default function App() {
         <div className="hero__content">
           <h1 className="hero__title">
             <span className="word">
-              <span className="brand-lockup brand-lockup--hero">lorena<b>alves</b><sup>arq</sup></span>
+              <BrandLogo
+                variant="light"
+                alt="lorenaalves arq — arquitetura em Uberlândia"
+              />
             </span>
           </h1>
           <div className="hero__meta">
@@ -511,7 +524,7 @@ export default function App() {
             >
               <div className="project-card__media">
                 <span className="project-card__number mono">{p.number} / 06</span>
-                <img src={p.cover} alt={p.alt} loading="lazy" />
+                <img src={p.cover} alt={p.alt} loading="lazy" decoding="async" width={1280} height={1600} />
                 <span className="project-card__go mono">ver projeto →</span>
               </div>
               <div className="project-card__meta">
@@ -544,8 +557,11 @@ export default function App() {
           <div className="about__portrait reveal">
             <img
               src="/images/portrait.png"
-              alt="Retrato de Lorena Alves, arquiteta fundadora do estúdio"
+              alt="Retrato de Lorena Alves, arquiteta fundadora do estúdio em Uberlândia"
               loading="lazy"
+              decoding="async"
+              width={900}
+              height={1200}
             />
           </div>
           <div className="about__body">
@@ -582,6 +598,34 @@ export default function App() {
         </div>
       </section>
 
+      {/* Conceito — valores do brandbook: Seriedade · Compromisso · Simplicidade · Sofisticação · Inovação · Modernidade */}
+      <section className="concept reveal" id="conceito" aria-label="Valores do estúdio">
+        <div className="concept__seal-wrap" aria-hidden="true">
+          <BrandSeal variant="light" sizeRem={16} />
+        </div>
+        <div className="concept__header">
+          <span className="concept__eyebrow">Conceito · 03</span>
+          <h2 className="concept__lead">
+            Simplicidade como a<br />forma mais pura de <em>sofisticação</em>.
+          </h2>
+        </div>
+        <div className="concept__grid" role="list">
+          {[
+            { n: "01", word: "Seriedade" },
+            { n: "02", word: "Compromisso" },
+            { n: "03", word: "Simplicidade" },
+            { n: "04", word: "Sofisticação" },
+            { n: "05", word: "Inovação" },
+            { n: "06", word: "Modernidade" },
+          ].map((c) => (
+            <div className="concept__cell" role="listitem" key={c.n}>
+              <span className="concept__num">{c.n}</span>
+              <span className="concept__word">{c.word}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Ensaios — slideshow editorial */}
       <section
         className="ensaios reveal"
@@ -608,12 +652,12 @@ export default function App() {
                 aria-roledescription="slide"
               >
                 <div className="ensaio-slide__media">
-                  <img src={e.img} alt={e.alt} loading="lazy" />
+                  <img src={e.img} alt={e.alt} loading="lazy" decoding="async" width={1600} height={2000} />
                 </div>
                 <div className="ensaio-slide__panel">
                   <span className="ensaio-slide__vertical mono">{e.vertical}</span>
                   <span className="ensaio-slide__dots" aria-hidden="true"></span>
-                  <h2 className="ensaio-slide__word">{e.word}</h2>
+                  <p className="ensaio-slide__word" aria-hidden="true">{e.word}</p>
                   <div className="ensaio-slide__body">
                     <h3 className="ensaio-slide__title">{e.title}</h3>
                     <p className="ensaio-slide__text">{e.text}</p>
@@ -707,10 +751,12 @@ export default function App() {
       <section className="cta-hero" id="cta-hero" aria-label="Vamos projetar seu próximo modo de viver">
         <img
           src="/images/cta-projetos-vida.jpg"
-          alt="Ambiente residencial projetado pelo estúdio Lorena Alves — onde projetos ganham vida"
+          alt="Ambiente residencial projetado pelo estúdio Lorena Alves Arquitetura — onde projetos ganham vida"
           className="cta-hero__bg reveal"
           loading="lazy"
           decoding="async"
+          width={1920}
+          height={1080}
         />
         <div className="cta-hero__overlay" aria-hidden="true"></div>
         <div className="cta-hero__content reveal">
@@ -723,6 +769,9 @@ export default function App() {
           </p>
         </div>
       </section>
+
+      {/* FAQ — perguntas frequentes (SEO local + processo) */}
+      <FaqSection />
 
       {/* CTA contatos */}
       <section className="section cta" id="contato">
@@ -783,9 +832,12 @@ export default function App() {
 
       {/* Footer */}
       <footer className="footer">
+        <div className="footer__seal" aria-hidden="true">
+          <BrandSeal variant="light" sizeRem={10} />
+        </div>
         <div className="footer__top">
           <div>
-            <div className="footer__brand"><span className="brand-lockup">lorena<b>alves</b><sup>arq</sup></span></div>
+            <div className="footer__brand"><BrandLogo variant="light" /></div>
             <p className="footer__tag">
               Futuro, propósito e legado. Brasilidade contemporânea, desenhada para permanecer.
             </p>
@@ -801,6 +853,9 @@ export default function App() {
               </li>
               <li>
                 <a href={routes.portfolio}>Portfólio</a>
+              </li>
+              <li>
+                <a href={routes.faq}>FAQ</a>
               </li>
             </ul>
           </div>
@@ -854,20 +909,40 @@ export default function App() {
                   <a href={`mailto:${settings.contact_email}`}>{settings.contact_email}</a>
                 </li>
               )}
-              {settings?.contact_phone && (
-                <li>
-                  <a href={`tel:${settings.contact_phone.replace(/[^+\d]/g, "")}`}>
-                    {settings.contact_phone}
-                  </a>
-                </li>
-              )}
+              {settings?.contact_phone && (() => {
+                const digits = settings.contact_phone.replace(/\D/g, "");
+                const formatted =
+                  digits.length === 13
+                    ? `+${digits.slice(0, 2)} ${digits.slice(2, 4)} ${digits.slice(4, 9)}-${digits.slice(9)}`
+                    : settings.contact_phone;
+                const waMsg = encodeURIComponent(
+                  "Olá, Lorena! Vim pelo site e gostaria de saber mais sobre os projetos."
+                );
+                return (
+                  <li>
+                    <a
+                      href={`https://wa.me/${digits}?text=${waMsg}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`WhatsApp ${formatted}`}
+                      onClick={() =>
+                        track("click_whatsapp", { value: { kind: "wa", from: "footer" } })
+                      }
+                    >
+                      <span aria-hidden="true">WhatsApp · </span>
+                      {formatted}
+                    </a>
+                  </li>
+                );
+              })()}
             </ul>
           </div>
         </div>
         <div className="footer__bottom">
           <span>© 2026 Lorena Alves Arquitetura. Todos os direitos reservados.</span>
+          <span>CNPJ 05.119.224/0001-30</span>
+          <span>CAU A66583-5</span>
           <span>
-            CAU BR ·{" "}
             <a
               href="#/admin/login"
               className="footer__admin-link"

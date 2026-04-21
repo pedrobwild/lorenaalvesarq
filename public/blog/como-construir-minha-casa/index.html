@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO Primary -->
+  <title>Como Construir Minha Casa: Por Onde Começar e Como Escolher o Arquiteto Certo</title>
+  <meta name="description" content="Guia completo para quem quer construir a própria casa: terreno, orçamento, projeto, licenças e como escolher o arquiteto ideal para transformar seu sonho em realidade." />
+  <meta name="keywords" content="como construir minha casa, construir casa do zero, por onde começar construção casa, como escolher arquiteto, projeto arquitetônico residencial, etapas construção casa, arquiteto residencial, construção residencial brasil" />
+  <link rel="canonical" href="https://lorenaalvesarq.com.br/blog/como-construir-minha-casa/" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Como Construir Minha Casa: Por Onde Começar e Como Escolher o Arquiteto Certo" />
+  <meta property="og:description" content="Guia completo para quem quer construir a própria casa: terreno, orçamento, projeto, licenças e como escolher o arquiteto ideal." />
+  <meta property="og:image" content="https://lorenaalvesarq.com.br/images/blog-hero-construcao.jpg" />
+  <meta property="og:url" content="https://lorenaalvesarq.com.br/blog/como-construir-minha-casa/" />
+  <meta property="og:site_name" content="Lorena Alves Arquitetura" />
+  <meta property="article:published_time" content="2026-04-21" />
+  <meta property="article:author" content="Lorena Alves" />
+  <meta property="article:section" content="Arquitetura Residencial" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Como Construir Minha Casa: Por Onde Começar" />
+  <meta name="twitter:description" content="Guia completo: terreno, orçamento, projeto e como escolher o arquiteto ideal para sua casa." />
+  <meta name="twitter:image" content="https://lorenaalvesarq.com.br/images/blog-hero-construcao.jpg" />
+
+  <!-- Schema.org Article JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Como Construir Minha Casa: Por Onde Começar e Como Escolher o Arquiteto Certo",
+    "description": "Guia completo para quem quer construir a própria casa: terreno, orçamento, projeto, licenças e como escolher o arquiteto ideal.",
+    "image": "https://lorenaalvesarq.com.br/images/blog-hero-construcao.jpg",
+    "author": {
+      "@type": "Person",
+      "name": "Lorena Alves",
+      "url": "https://lorenaalvesarq.com.br"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Lorena Alves Arquitetura",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://lorenaalvesarq.com.br/images/og-default.jpg"
+      }
+    },
+    "datePublished": "2026-04-21",
+    "dateModified": "2026-04-21",
+    "mainEntityOfPage": "https://lorenaalvesarq.com.br/blog/como-construir-minha-casa/"
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ========================================
+       DESIGN TOKENS — Lorena Alves Arq
+    ======================================== */
+    :root {
+      --ink: #0A0A0A;
+      --ink-900: #121212;
+      --ink-800: #1A1A1A;
+      --ink-700: #242424;
+      --bone: #FFFFFF;
+      --bone-soft: #E8E8E8;
+      --bone-warm: #CFCFCF;
+      --clay: #9A9A9A;
+      --clay-deep: #6E6E6E;
+      --sand: #B8B8B8;
+      --line: rgba(255,255,255,0.10);
+      --line-strong: rgba(255,255,255,0.22);
+
+      --font-display: 'Manrope', 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+      --gutter: clamp(1.25rem, 4vw, 3.5rem);
+      --edge: clamp(1.5rem, 6vw, 5rem);
+      --section: clamp(4rem, 10vw, 8rem);
+
+      --t-xs:   clamp(0.70rem, 0.66rem + 0.10vw, 0.76rem);
+      --t-sm:   clamp(0.80rem, 0.76rem + 0.20vw, 0.90rem);
+      --t-base: clamp(0.95rem, 0.90rem + 0.25vw, 1.05rem);
+      --t-lg:   clamp(1.05rem, 0.95rem + 0.50vw, 1.25rem);
+      --t-xl:   clamp(1.35rem, 1.10rem + 1.20vw, 1.75rem);
+      --t-2xl:  clamp(1.80rem, 1.20rem + 2.50vw, 2.80rem);
+      --t-3xl:  clamp(2.60rem, 1.60rem + 4.00vw, 4.50rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 16px; background: var(--ink); scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-display);
+      font-size: var(--t-base);
+      line-height: 1.65;
+      color: var(--bone);
+      background: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img, video { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ========================================
+       NAV
+    ======================================== */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem var(--edge);
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand-lockup {
+      font-size: var(--t-sm);
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      text-transform: lowercase;
+    }
+    .brand-lockup b { font-weight: 700; }
+    .brand-lockup sup { font-size: 0.6em; vertical-align: super; font-weight: 400; }
+
+    .nav__menu { display: flex; gap: 2rem; }
+    .nav__menu a {
+      font-size: var(--t-xs);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--bone-warm);
+      transition: color 0.2s;
+    }
+    .nav__menu a:hover { color: var(--bone); }
+
+    .nav__cta {
+      font-size: var(--t-xs);
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      border: 1px solid var(--line-strong);
+      padding: 0.55rem 1.1rem;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .nav__cta:hover { background: var(--bone); color: var(--ink); border-color: var(--bone); }
+
+    @media (max-width: 640px) {
+      .nav__menu { display: none; }
+    }
+
+    /* ========================================
+       BLOG HERO
+    ======================================== */
+    .blog-hero {
+      padding-top: 80px;
+      position: relative;
+      height: min(75vh, 680px);
+      overflow: hidden;
+    }
+
+    .blog-hero__media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .blog-hero__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .blog-hero__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(10,10,10,0.25) 0%,
+        rgba(10,10,10,0.55) 60%,
+        rgba(10,10,10,0.90) 100%
+      );
+    }
+    .blog-hero__content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0 var(--edge) clamp(2.5rem, 6vw, 4rem);
+      max-width: 900px;
+    }
+    .blog-hero__eyebrow {
+      font-family: var(--font-mono);
+      font-size: var(--t-xs);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+    }
+    .blog-hero__eyebrow::after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 40px;
+      background: var(--clay);
+      flex-shrink: 0;
+    }
+    .blog-hero__title {
+      font-size: var(--t-3xl);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--bone);
+      max-width: 18ch;
+    }
+    .blog-hero__title em {
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    /* ========================================
+       ARTICLE LAYOUT
+    ======================================== */
+    .article-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: clamp(3rem, 8vw, 6rem) var(--gutter);
+    }
+
+    /* Intro lead */
+    .article-lead {
+      font-size: var(--t-xl);
+      font-weight: 300;
+      line-height: 1.4;
+      color: var(--bone-soft);
+      border-left: 2px solid var(--clay);
+      padding-left: 1.5rem;
+      margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    }
+
+    /* Section heading */
+    .article-wrap h2 {
+      font-size: var(--t-2xl);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--bone);
+      margin-top: clamp(3rem, 8vw, 5.5rem);
+      margin-bottom: 1.25rem;
+    }
+    .article-wrap h2 em {
+      font-style: italic;
+    }
+
+    .article-wrap h3 {
+      font-size: var(--t-lg);
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: var(--bone);
+      margin-top: 2.2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-wrap p {
+      font-size: var(--t-base);
+      font-weight: 400;
+      line-height: 1.75;
+      color: var(--bone-warm);
+      margin-bottom: 1.25rem;
+    }
+
+    .article-wrap strong {
+      font-weight: 600;
+      color: var(--bone);
+    }
+
+    /* Images */
+    .article-img {
+      margin: clamp(2rem, 6vw, 3.5rem) calc(-1 * var(--gutter));
+      overflow: hidden;
+    }
+    .article-img img {
+      width: 100%;
+      height: clamp(220px, 40vw, 480px);
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .article-img figcaption {
+      font-family: var(--font-mono);
+      font-size: var(--t-xs);
+      color: var(--clay);
+      padding: 0.6rem var(--gutter) 0;
+      letter-spacing: 0.06em;
+    }
+
+    /* Pull quote */
+    .pull-quote {
+      border-left: 2px solid var(--bone-warm);
+      padding: 1.2rem 1.6rem;
+      margin: 2.5rem 0;
+      background: var(--ink-800);
+    }
+    .pull-quote p {
+      font-size: var(--t-xl);
+      font-weight: 300;
+      line-height: 1.4;
+      font-style: italic;
+      color: var(--bone-soft);
+      margin: 0;
+    }
+
+    /* Checklist */
+    .checklist {
+      list-style: none;
+      margin: 1.5rem 0 2rem;
+    }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--line);
+      font-size: var(--t-base);
+      color: var(--bone-warm);
+      line-height: 1.55;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before {
+      content: '→';
+      font-family: var(--font-mono);
+      font-size: var(--t-sm);
+      color: var(--clay);
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    /* Steps */
+    .steps {
+      counter-reset: step;
+      margin: 1.5rem 0 2rem;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: 2.5rem 1fr;
+      gap: 1rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--line);
+    }
+    .step:last-child { border-bottom: 1px solid var(--line); }
+    .step__num {
+      font-family: var(--font-mono);
+      font-size: var(--t-sm);
+      color: var(--clay);
+      padding-top: 0.15rem;
+    }
+    .step__body h4 {
+      font-size: var(--t-lg);
+      font-weight: 600;
+      color: var(--bone);
+      margin-bottom: 0.4rem;
+    }
+    .step__body p {
+      font-size: var(--t-sm);
+      color: var(--clay-deep);
+      margin: 0;
+    }
+
+    /* Criteria grid */
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin: 1.5rem 0 2.5rem;
+      overflow: hidden;
+    }
+    .criteria-item {
+      background: var(--ink-800);
+      padding: 1.5rem 1.4rem;
+    }
+    .criteria-item__num {
+      font-family: var(--font-mono);
+      font-size: var(--t-xs);
+      color: var(--clay);
+      letter-spacing: 0.10em;
+      margin-bottom: 0.5rem;
+    }
+    .criteria-item h4 {
+      font-size: var(--t-base);
+      font-weight: 600;
+      color: var(--bone);
+      margin-bottom: 0.4rem;
+    }
+    .criteria-item p {
+      font-size: var(--t-sm);
+      color: var(--clay-deep);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* Separator */
+    .sep {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: clamp(2.5rem, 6vw, 4rem) 0;
+    }
+    .sep::before, .sep::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+    .sep__text {
+      font-family: var(--font-mono);
+      font-size: var(--t-xs);
+      color: var(--clay);
+      letter-spacing: 0.10em;
+      white-space: nowrap;
+    }
+
+    /* CTA Block */
+    .cta-block {
+      margin-top: clamp(4rem, 10vw, 7rem);
+      padding: clamp(2rem, 5vw, 3.5rem);
+      border: 1px solid var(--line-strong);
+      text-align: center;
+      background: var(--ink-800);
+    }
+    .cta-block__eyebrow {
+      font-family: var(--font-mono);
+      font-size: var(--t-xs);
+      color: var(--clay);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .cta-block h3 {
+      font-size: var(--t-2xl);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin-bottom: 0.8rem;
+      color: var(--bone);
+    }
+    .cta-block h3 em { font-style: italic; }
+    .cta-block p {
+      font-size: var(--t-base);
+      color: var(--clay);
+      max-width: 44ch;
+      margin: 0 auto 1.8rem;
+    }
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--bone);
+      color: var(--ink);
+      font-size: var(--t-xs);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 1rem 2rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-cta:hover { background: var(--clay); color: var(--ink); }
+
+    /* Author bio */
+    .author-bio {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-top: clamp(3rem, 8vw, 5rem);
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+    .author-bio__avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: var(--ink-700);
+    }
+    .author-bio__avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .author-bio__name {
+      font-size: var(--t-base);
+      font-weight: 600;
+      color: var(--bone);
+      margin-bottom: 0.2rem;
+    }
+    .author-bio__role {
+      font-family: var(--font-mono);
+      font-size: var(--t-xs);
+      color: var(--clay);
+      letter-spacing: 0.08em;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: clamp(4rem, 10vw, 7rem);
+      border-top: 1px solid var(--line);
+      padding: 2rem var(--edge);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer span {
+      font-family: var(--font-mono);
+      font-size: var(--t-xs);
+      color: var(--clay-deep);
+      letter-spacing: 0.06em;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      padding: 5.5rem var(--edge) 0;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: var(--t-xs);
+      color: var(--clay-deep);
+      letter-spacing: 0.06em;
+    }
+    .breadcrumb a { color: var(--clay); transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--bone); }
+    .breadcrumb__sep { color: var(--ink-700); }
+
+    /* Responsive tweaks */
+    @media (max-width: 640px) {
+      .blog-hero__title { font-size: clamp(2rem, 8vw, 3rem); }
+      .article-img { margin: 2rem -1.25rem; }
+      .criteria-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <header class="nav">
+    <a href="/" aria-label="lorenaalves arq — Arquitetura">
+      <span class="brand-lockup">lorena<b>alves</b><sup>arq</sup></span>
+    </a>
+    <nav class="nav__menu" aria-label="Principal">
+      <a href="/#projetos">Portfólio</a>
+      <a href="/#estudio">Sobre</a>
+      <a href="/#metodo">Método</a>
+    </nav>
+    <a class="nav__cta" href="https://wa.me/5534996668215" target="_blank" rel="noopener noreferrer">
+      Entre em contato
+    </a>
+  </header>
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="Localização na página">
+    <a href="/">Início</a>
+    <span class="breadcrumb__sep">/</span>
+    <a href="/blog/">Blog</a>
+    <span class="breadcrumb__sep">/</span>
+    <span>Como construir minha casa</span>
+  </nav>
+
+  <!-- Hero -->
+  <section class="blog-hero" aria-label="Artigo: Como construir minha casa">
+    <div class="blog-hero__media">
+      <img
+        src="/images/blog-hero-construcao.jpg"
+        alt="Casa residencial contemporânea brasileira ao entardecer com vegetação tropical"
+        loading="eager"
+        decoding="async"
+        width="1440"
+        height="810"
+      />
+    </div>
+    <div class="blog-hero__overlay" aria-hidden="true"></div>
+    <div class="blog-hero__content">
+      <div class="blog-hero__eyebrow">Blog · Arquitetura Residencial · 21 abr 2026</div>
+      <h1 class="blog-hero__title">
+        Quero construir minha casa. Por onde <em>começar</em>?
+      </h1>
+    </div>
+  </section>
+
+  <!-- Article -->
+  <article class="article-wrap">
+
+    <p class="article-lead">
+      Construir a própria casa é um dos projetos mais significativos da vida de uma pessoa. Também é um dos mais complexos — envolve decisões técnicas, financeiras e emocionais que se sobrepõem a cada etapa. Este guia existe para te ajudar a entrar nessa jornada com clareza.
+    </p>
+
+    <!-- SEÇÃO 1 -->
+    <h2>Antes de tudo: o que você precisa <em>saber</em></h2>
+
+    <p>
+      Construir não é apenas escolher um terreno e contratar uma construtora. É um processo que começa muito antes da fundação — começa na <strong>escuta de você mesmo</strong>: como você vive, quais rituais fazem parte do seu cotidiano, quem vai habitar aquela casa com você, e qual a vida que você quer tornar possível dentro daquele espaço.
+    </p>
+
+    <p>
+      Antes de qualquer contrato ou planta, vale refletir sobre alguns pontos fundamentais:
+    </p>
+
+    <ul class="checklist">
+      <li><strong>Qual é o seu orçamento real?</strong> Inclua margem de imprevistos (normalmente entre 15% e 20%).</li>
+      <li><strong>Você já tem o terreno?</strong> Se sim, conhece suas limitações legais e topográficas? Se não, qual região ou cidade faz sentido?</li>
+      <li><strong>Qual é o prazo?</strong> Construções residenciais bem-feitas levam tempo. Um projeto de qualidade raramente é entregue em menos de 18 meses.</li>
+      <li><strong>Como você quer viver?</strong> Ambientes integrados ou separados? Quintal, piscina, jardim? Espaço para home office?</li>
+      <li><strong>Você vai acompanhar a obra pessoalmente?</strong> Isso impacta diretamente a escolha do arquiteto e da construtora.</li>
+    </ul>
+
+    <figure class="article-img">
+      <img
+        src="/images/blog-terreno.jpg"
+        alt="Vista aérea de terreno demarcado para construção residencial no interior do Brasil"
+        loading="lazy"
+        width="1440"
+        height="810"
+      />
+      <figcaption>A escolha e análise do terreno é a primeira grande decisão — e uma das mais definitivas.</figcaption>
+    </figure>
+
+    <!-- SEÇÃO 2 -->
+    <h2>O terreno: a <em>fundação</em> de tudo</h2>
+
+    <p>
+      O terreno não é apenas o chão onde sua casa vai ser construída — ele é um agente ativo do projeto. A topografia, a orientação solar, o entorno, a vegetação existente, as características do solo e as regras do município vão moldar, limitar e inspirar cada decisão de projeto.
+    </p>
+
+    <h3>O que verificar antes de comprar um terreno</h3>
+
+    <p>
+      Muita gente compra o terreno sem fazer a devida diligência e descobre, durante o projeto, que há restrições que limitam gravemente o que pode ser construído. Evite esse caminho consultando:
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <span class="step__num">01</span>
+        <div class="step__body">
+          <h4>Legislação urbanística municipal</h4>
+          <p>Recuo obrigatório, taxa de ocupação máxima, índice de aproveitamento, gabarito (altura máxima permitida) e zoneamento. Cada município tem suas regras — consulte a Prefeitura ou o plano diretor.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step__num">02</span>
+        <div class="step__body">
+          <h4>Registro e matrícula no cartório</h4>
+          <p>Verifique se não há ônus, hipotecas, litígios ou irregularidades na matrícula do imóvel. Consulte um advogado especialista em direito imobiliário.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step__num">03</span>
+        <div class="step__body">
+          <h4>Sondagem de solo</h4>
+          <p>O laudo SPT (Standard Penetration Test) revela a capacidade de carga do solo e define o tipo de fundação necessária — um dado que impacta diretamente o custo da obra.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step__num">04</span>
+        <div class="step__body">
+          <h4>Orientação solar e topografia</h4>
+          <p>Um terreno com boa orientação solar (sul ou leste nos quartos, norte para as áreas de estar) reduz gastos com climatização e aumenta o conforto da casa ao longo de décadas.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step__num">05</span>
+        <div class="step__body">
+          <h4>Infraestrutura disponível</h4>
+          <p>Água, esgoto, luz elétrica, acesso asfaltado. Em áreas rurais ou condomínios novos, a ausência de infraestrutura pode elevar significativamente o custo da construção.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <p>"O terreno não é apenas o chão onde a casa vai repousar. É o primeiro traço do projeto — e o mais definitivo de todos."</p>
+    </div>
+
+    <!-- SEÇÃO 3 -->
+    <div class="sep"><span class="sep__text">Planejamento financeiro</span></div>
+
+    <h2>Orçamento: construir com <em>clareza</em></h2>
+
+    <p>
+      O maior erro de quem inicia uma construção é subestimar os custos. O <strong>CUB (Custo Unitário Básico)</strong>, publicado mensalmente pelo Sinduscon de cada estado, é a referência mais utilizada para estimar o custo por metro quadrado de construção — mas é apenas um ponto de partida.
+    </p>
+
+    <p>
+      Em projetos residenciais de padrão médio-alto, com arquitetura autoral e acabamentos diferenciados, o custo por m² tende a superar consideravelmente o CUB padrão. Além do custo de obra, considere:
+    </p>
+
+    <ul class="checklist">
+      <li><strong>Projeto de arquitetura e complementares</strong> (estrutural, elétrico, hidráulico, SPDA, ar-condicionado, etc.) — normalmente de 8% a 15% do custo total da obra.</li>
+      <li><strong>Taxas e licenças</strong> — aprovação na Prefeitura, RRT/ART, alvarás de construção e habite-se.</li>
+      <li><strong>Compra e transporte de materiais</strong> — especialmente para locais com difícil acesso.</li>
+      <li><strong>Mobiliário e decoração</strong> — frequentemente ignorados no planejamento inicial.</li>
+      <li><strong>Imprevistos</strong> — reserve sempre ao menos 15% do orçamento para variações que surgem durante a execução.</li>
+    </ul>
+
+    <figure class="article-img">
+      <img
+        src="/images/blog-planta-projeto.jpg"
+        alt="Arquiteta trabalhando em plantas baixas e cortes de projeto residencial"
+        loading="lazy"
+        width="1440"
+        height="810"
+      />
+      <figcaption>O projeto executivo completo é o documento que guia a execução e evita retrabalhos custosos.</figcaption>
+    </figure>
+
+    <!-- SEÇÃO 4 -->
+    <h2>O projeto arquitetônico: da <em>escuta</em> ao traço</h2>
+
+    <p>
+      Um projeto bem desenvolvido é o maior investimento de proteção que você pode fazer em uma construção. Ele não é apenas uma planta — é um documento completo que orienta cada profissional envolvido na obra e previne conflitos, atrasos e gastos desnecessários.
+    </p>
+
+    <p>
+      O processo de projeto profissional geralmente se divide em fases:
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <span class="step__num">01</span>
+        <div class="step__body">
+          <h4>Levantamento e programa de necessidades</h4>
+          <p>Reuniões de escuta com o cliente para entender o modo de vida, as necessidades funcionais e os desejos — antes de qualquer traço.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step__num">02</span>
+        <div class="step__body">
+          <h4>Estudo preliminar</h4>
+          <p>Primeiras propostas de implantação, distribuição de ambientes e partido arquitetônico. É a fase das grandes decisões conceituais.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step__num">03</span>
+        <div class="step__body">
+          <h4>Anteprojeto</h4>
+          <p>Definição dos volumes, aberturas, materiais e sistema construtivo com mais precisão. É apresentado ao cliente para validação antes do aprofundamento técnico.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step__num">04</span>
+        <div class="step__body">
+          <h4>Projeto executivo</h4>
+          <p>Detalhamento técnico completo: plantas, cortes, elevações, detalhes construtivos, especificação de materiais. É o documento que vai para a obra.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step__num">05</span>
+        <div class="step__body">
+          <h4>Projetos complementares</h4>
+          <p>Estrutural, instalações elétricas, hidrossanitárias, SPDA, ar-condicionado. Cada disciplina tem seu especialista, coordenado pelo arquiteto.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 5 -->
+    <div class="sep"><span class="sep__text">Escolhendo o arquiteto</span></div>
+
+    <figure class="article-img">
+      <img
+        src="/images/blog-reuniao-arquiteto.jpg"
+        alt="Arquiteta desenhando plantas baixas em caderno de projeto em estúdio com luz natural"
+        loading="lazy"
+        width="1440"
+        height="810"
+      />
+      <figcaption>A escolha do arquiteto começa antes da reunião — começa no estudo de seu trabalho e de sua forma de pensar.</figcaption>
+    </figure>
+
+    <h2>Como escolher o arquiteto <em>certo</em> para o seu projeto</h2>
+
+    <p>
+      Escolher o arquiteto é talvez a decisão mais importante de todo o processo. Você vai dividir com essa pessoa meses de conversas, decisões, ajustes e expectativas — e o resultado final carrega inevitavelmente a identidade de quem projetou.
+    </p>
+
+    <p>
+      Não existe um único critério correto, mas existe uma combinação de fatores que, juntos, aumentam muito a probabilidade de uma parceria bem-sucedida:
+    </p>
+
+    <div class="criteria-grid">
+      <div class="criteria-item">
+        <div class="criteria-item__num">01</div>
+        <h4>Repertório e portfólio</h4>
+        <p>Estude os projetos realizados. Você se identifica com a linguagem? A qualidade dos espaços te inspira? O portfólio revela valores e prioridades que palavras não traduzem.</p>
+      </div>
+      <div class="criteria-item">
+        <div class="criteria-item__num">02</div>
+        <h4>Capacidade de escuta</h4>
+        <p>Um bom arquiteto faz mais perguntas do que afirmações na primeira conversa. Ele quer entender como você vive — não impor sua assinatura.</p>
+      </div>
+      <div class="criteria-item">
+        <div class="criteria-item__num">03</div>
+        <h4>Clareza contratual</h4>
+        <p>O escopo de serviços, honorários, prazos e entregas precisam estar descritos em contrato com clareza. Desconfie de propostas vagas ou combinações informais.</p>
+      </div>
+      <div class="criteria-item">
+        <div class="criteria-item__num">04</div>
+        <h4>Registro no CAU</h4>
+        <p>Verifique se o profissional tem registro ativo no Conselho de Arquitetura e Urbanismo (CAU BR). Isso é requisito legal e garante responsabilidade técnica.</p>
+      </div>
+      <div class="criteria-item">
+        <div class="criteria-item__num">05</div>
+        <h4>Presença em obra</h4>
+        <p>Pergunte como funciona o acompanhamento de obra. Visitas regulares ao canteiro são essenciais para garantir que o projeto seja executado conforme projetado.</p>
+      </div>
+      <div class="criteria-item">
+        <div class="criteria-item__num">06</div>
+        <h4>Compatibilidade humana</h4>
+        <p>Confiança e comunicação aberta são tão importantes quanto técnica. Você precisa se sentir confortável para questionar, discordar e sonhar junto.</p>
+      </div>
+    </div>
+
+    <h3>O que perguntar na primeira conversa com um arquiteto</h3>
+
+    <ul class="checklist">
+      <li>Quais projetos do seu portfólio têm as maiores semelhanças com o que estou buscando?</li>
+      <li>Como você organiza as fases de projeto e quais as entregas de cada fase?</li>
+      <li>Você acompanha a execução da obra? Com qual frequência visita o canteiro?</li>
+      <li>Quem são os profissionais parceiros para os projetos complementares?</li>
+      <li>Qual é seu processo para lidar com imprevistos de obra ou mudanças de escopo?</li>
+      <li>Posso falar com clientes de projetos anteriores?</li>
+    </ul>
+
+    <div class="pull-quote">
+      <p>"O arquiteto certo não é o mais premiado nem o mais caro. É aquele que entende seu modo de viver — e tem o repertório para traduzi-lo em espaço."</p>
+    </div>
+
+    <!-- SEÇÃO 6 -->
+    <div class="sep"><span class="sep__text">Execução</span></div>
+
+    <figure class="article-img">
+      <img
+        src="/images/blog-obra.jpg"
+        alt="Obra residencial em andamento com estrutura de concreto e madeira no interior do Brasil"
+        loading="lazy"
+        width="1440"
+        height="810"
+      />
+      <figcaption>A obra é a fase de maior complexidade — e onde um projeto bem desenvolvido faz toda a diferença.</figcaption>
+    </figure>
+
+    <h2>Da planta à obra: o que esperar da <em>execução</em></h2>
+
+    <p>
+      Com o projeto aprovado na prefeitura e o alvará de construção em mãos, começa a fase de execução. Aqui, a qualidade do projeto executivo se traduz diretamente em eficiência, menos retrabalho e custos mais previsíveis.
+    </p>
+
+    <p>
+      Algumas práticas que fazem diferença nessa fase:
+    </p>
+
+    <ul class="checklist">
+      <li><strong>Escolha a construtora ou empreiteira com cuidado.</strong> Peça referências, visite obras em andamento, verifique se os contratos incluem cronograma e memória de cálculo de materiais.</li>
+      <li><strong>Mantenha comunicação constante com o arquiteto.</strong> Qualquer desvio no projeto deve ser discutido antes de ser executado — não depois.</li>
+      <li><strong>Registre tudo por escrito.</strong> Mudanças solicitadas durante a obra geram custos adicionais. Formalize alterações em termos aditivos ao contrato.</li>
+      <li><strong>Visite a obra regularmente.</strong> Mesmo com arquiteto presente, o cliente atento é um aliado importante para identificar não-conformidades rapidamente.</li>
+      <li><strong>Não antecipe pagamentos além do acordado.</strong> Vincule pagamentos a etapas concluídas e verificadas.</li>
+    </ul>
+
+    <!-- SEÇÃO FINAL -->
+    <div class="sep"><span class="sep__text">Considerações finais</span></div>
+
+    <h2>Construir é um ato de <em>confiança</em></h2>
+
+    <p>
+      Construir sua casa é, no fundo, um ato de confiança: em si mesmo, nas escolhas que você fez, nas pessoas com quem você decidiu trabalhar — e no projeto que vai guiar cada tijolo.
+    </p>
+
+    <p>
+      O caminho tem complexidade, imprevistos e decisões difíceis. Mas quando o projeto nasce de uma escuta verdadeira, quando o arquiteto entende o que você quer viver ali dentro, e quando a execução é feita com rigor — o resultado é uma casa que envelhece com beleza, que forma memória, e que se torna melhor com o tempo.
+    </p>
+
+    <p>
+      É exatamente esse o objetivo de qualquer projeto de arquitetura que valha a pena: criar um lugar onde a vida aconteça melhor, todos os dias.
+    </p>
+
+    <!-- CTA -->
+    <div class="cta-block">
+      <p class="cta-block__eyebrow">Próximo passo</p>
+      <h3>Vamos projetar o seu próximo <em>modo de viver</em>?</h3>
+      <p>Conte sobre seu projeto e seu terreno. A primeira conversa é o começo de tudo.</p>
+      <a
+        class="btn-cta"
+        href="https://wa.me/5534996668215"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Falar com a Lorena →
+      </a>
+    </div>
+
+    <!-- Author -->
+    <div class="author-bio">
+      <div class="author-bio__avatar">
+        <img
+          src="/images/portrait.png"
+          alt="Lorena Alves, arquiteta"
+          loading="lazy"
+          width="64"
+          height="64"
+        />
+      </div>
+      <div>
+        <div class="author-bio__name">Lorena Alves</div>
+        <div class="author-bio__role">Arquiteta fundadora · CAU BR · Uberlândia, MG</div>
+      </div>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <a href="/" aria-label="Ir para a página inicial">
+      <span class="brand-lockup">lorena<b>alves</b><sup>arq</sup></span>
+    </a>
+    <span>© 2026 Lorena Alves Arquitetura. Todos os direitos reservados.</span>
+  </footer>
+
+</body>
+</html>

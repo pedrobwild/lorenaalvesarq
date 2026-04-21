@@ -33,16 +33,24 @@ Deno.serve(async (req) => {
       .maybeSingle(),
     supabase
       .from("projects")
-      .select("slug, title, em, cover, updated_at")
+      .select("id, slug, title, em, cover_url, updated_at")
       .eq("visible", true)
       .order("order_index", { ascending: true }),
     supabase
       .from("project_images")
-      .select("project_id, url, alt, order_index"),
+      .select("project_id, url, alt, order_index")
+      .order("order_index", { ascending: true }),
   ]);
 
   const base = (settings?.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
   const today = new Date().toISOString().slice(0, 10);
+
+  // Garante URL absoluta para imagens (Google Image Sitemap exige)
+  const absUrl = (u: string | null | undefined): string | undefined => {
+    if (!u) return undefined;
+    if (/^https?:\/\//i.test(u)) return u;
+    return `${base}${u.startsWith("/") ? "" : "/"}${u}`;
+  };
 
   // Agrupa imagens por project_id
   const imagesByProject = new Map<string, Array<{ url: string; alt?: string }>>();
@@ -66,21 +74,30 @@ Deno.serve(async (req) => {
 
   const staticUrls: UrlEntry[] = [
     { loc: `${base}/`, priority: "1.0", changefreq: "weekly", lastmod: today },
+    { loc: `${base}/faq`, priority: "0.8", changefreq: "monthly", lastmod: today },
     { loc: `${base}/portfolio`, priority: "0.9", changefreq: "weekly", lastmod: today },
   ];
 
   const projectUrls: UrlEntry[] = ((projects ?? []) as Array<{
+    id: string;
     slug: string;
     title: string;
     em: string | null;
-    cover: string | null;
+    cover_url: string | null;
     updated_at: string | null;
-    id?: string;
   }>).map((p) => {
     const images: Array<{ url: string; caption?: string }> = [];
-    if (p.cover) images.push({ url: p.cover, caption: `${p.title} ${p.em ?? ""}`.trim() });
-    // Nota: imagesByProject é keyed por project_id; os projects retornados aqui não têm id —
-    // se quiser enriquecer depois, basta incluir p.id no SELECT e mapear.
+    const coverAbs = absUrl(p.cover_url);
+    if (coverAbs) {
+      images.push({ url: coverAbs, caption: `${p.title} ${p.em ?? ""}`.trim() });
+    }
+    const gallery = imagesByProject.get(p.id) ?? [];
+    for (const g of gallery) {
+      const abs = absUrl(g.url);
+      if (abs && abs !== coverAbs) {
+        images.push({ url: abs, caption: g.alt });
+      }
+    }
     return {
       loc: `${base}/projeto/${p.slug}`,
       priority: "0.8",

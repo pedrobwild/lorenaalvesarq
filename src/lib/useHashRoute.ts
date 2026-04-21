@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 export type Route =
   | { name: "home"; anchor?: string }
   | { name: "portfolio" }
+  | { name: "faq" }
   | { name: "project"; slug: string }
   | { name: "admin-login" }
   | { name: "admin-dashboard" }
@@ -19,6 +20,7 @@ function parsePath(rawPath: string): Route {
 
   if (path === "/" || path === "") return { name: "home" };
   if (path === "/portfolio") return { name: "portfolio" };
+  if (path === "/faq") return { name: "faq" };
 
   const projMatch = path.match(/^\/projeto\/([a-z0-9-]+)$/);
   if (projMatch) return { name: "project", slug: projMatch[1] };
@@ -75,6 +77,7 @@ export function useHashRoute(): Route {
 export const routes = {
   home: "/",
   portfolio: "/portfolio",
+  faq: "/faq",
   project: (slug: string) => `/projeto/${slug}`,
   adminLogin: "/admin/login",
   adminDashboard: "/admin",

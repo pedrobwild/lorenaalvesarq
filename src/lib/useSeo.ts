@@ -141,9 +141,18 @@ function applySeo(settings: SiteSettings, seo: SeoInput) {
   const description =
     seo.description || settings.seo_default_description || settings.site_description || "";
   const ogImage = seo.ogImage || settings.seo_og_image || settings.default_og_image || "";
-  const canonical = seo.canonicalPath
-    ? `${base}${seo.canonicalPath.startsWith("/") ? seo.canonicalPath : `/${seo.canonicalPath}`}`
-    : base + "/";
+
+  // Canonical: ignora âncoras (#faq) e querystring para evitar duplicidade
+  // Ex.: /#faq → canonical da home (/), /faq → canonical próprio
+  const rawPath = seo.canonicalPath || "/";
+  const cleanPath = rawPath.split("#")[0].split("?")[0] || "/";
+  const canonical = `${base}${cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`}`.replace(
+    /(.+)\/$/,
+    "$1"
+  ) || `${base}/`;
+  // Garante barra final apenas para a raiz
+  const canonicalUrl = cleanPath === "/" ? `${base}/` : canonical;
+
   const robots = seo.noindex ? "noindex, nofollow" : settings.seo_robots || "index, follow";
   const ogType = seo.ogType || "website";
 
@@ -151,7 +160,26 @@ function applySeo(settings: SiteSettings, seo: SeoInput) {
 
   setMeta('meta[name="description"]', { name: "description", content: description });
   setMeta('meta[name="robots"]', { name: "robots", content: robots });
-  setMeta('link[rel="canonical"]', { rel: "canonical", href: canonical });
+  setMeta('link[rel="canonical"]', { rel: "canonical", href: canonicalUrl });
+
+  // hreflang — pt-BR + x-default apontando para o canonical da rota atual.
+  // Remove duplicatas estáticas do index.html (que apontam só para a home)
+  // e injeta as corretas conforme a página.
+  document.head
+    .querySelectorAll('link[rel="alternate"][hreflang]')
+    .forEach((n) => n.remove());
+  const hrefPt = document.createElement("link");
+  hrefPt.setAttribute("rel", "alternate");
+  hrefPt.setAttribute("hreflang", "pt-BR");
+  hrefPt.setAttribute("href", canonicalUrl);
+  hrefPt.setAttribute(MANAGED_ATTR, "true");
+  document.head.appendChild(hrefPt);
+  const hrefDefault = document.createElement("link");
+  hrefDefault.setAttribute("rel", "alternate");
+  hrefDefault.setAttribute("hreflang", "x-default");
+  hrefDefault.setAttribute("href", canonicalUrl);
+  hrefDefault.setAttribute(MANAGED_ATTR, "true");
+  document.head.appendChild(hrefDefault);
 
   // SEO extras (autor, keywords, geo)
   if (settings.seo_keywords)
@@ -175,7 +203,7 @@ function applySeo(settings: SiteSettings, seo: SeoInput) {
   setMeta('meta[property="og:title"]', { property: "og:title", content: title });
   setMeta('meta[property="og:description"]', { property: "og:description", content: description });
   setMeta('meta[property="og:type"]', { property: "og:type", content: ogType });
-  setMeta('meta[property="og:url"]', { property: "og:url", content: canonical });
+  setMeta('meta[property="og:url"]', { property: "og:url", content: canonicalUrl });
   setMeta('meta[property="og:locale"]', { property: "og:locale", content: "pt_BR" });
   setMeta('meta[property="og:site_name"]', {
     property: "og:site_name",
@@ -296,23 +324,76 @@ export function professionalServiceJsonLd(s: SiteSettings) {
         }
       : undefined;
 
-  const sameAs = [
-    s.instagram_url,
-    s.linkedin_url,
-    s.pinterest_url,
-    s.google_business_profile_url,
-  ].filter(Boolean);
+  const absUrl = (u: string | null | undefined) => {
+    if (!u) return undefined;
+    if (/^https?:\/\//i.test(u)) return u;
+    return `${base}${u.startsWith("/") ? "" : "/"}${u}`;
+  };
+
+  const logoUrl = absUrl(s.seo_og_image || s.default_og_image);
+
+  const sameAs = Array.from(
+    new Set(
+      [
+        s.instagram_url,
+        s.linkedin_url,
+        s.pinterest_url,
+        s.google_business_profile_url,
+        s.google_maps_url,
+      ]
+        .filter((x): x is string => Boolean(x))
+        .map((x) => x.trim())
+    )
+  );
 
   return {
     "@context": "https://schema.org",
     "@type": type,
+    "@id": `${base}/#business`,
+    parentOrganization: { "@id": `${base}/#organization` },
     name: s.site_title || "Lorena Alves Arquitetura",
+    legalName: "Lorena Alves Arquitetura",
     description: s.seo_default_description || s.site_description || "",
     url: base,
-    image: s.seo_og_image || s.default_og_image || undefined,
-    logo: s.seo_og_image || s.default_og_image || undefined,
+    image: logoUrl,
+    logo: logoUrl
+      ? {
+          "@type": "ImageObject",
+          url: logoUrl,
+          caption: s.site_title || "Lorena Alves Arquitetura",
+        }
+      : undefined,
     email: s.contact_email || undefined,
     telephone: s.contact_phone || undefined,
+    contactPoint: s.contact_phone
+      ? {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          telephone: s.contact_phone,
+          email: s.contact_email || undefined,
+          areaServed: "BR",
+          availableLanguage: ["Portuguese", "pt-BR"],
+        }
+      : undefined,
+    taxID: "05.119.224/0001-30",
+    vatID: "05.119.224/0001-30",
+    iso6523Code: "0007:05119224000130",
+    identifier: [
+      { "@type": "PropertyValue", propertyID: "CNPJ", value: "05.119.224/0001-30" },
+      { "@type": "PropertyValue", propertyID: "CAU", value: "A66583-5" },
+    ],
+    hasCredential: {
+      "@type": "EducationalOccupationalCredential",
+      name: "Registro Profissional CAU",
+      credentialCategory: "Professional Registration",
+      identifier: "A66583-5",
+      recognizedBy: {
+        "@type": "Organization",
+        name: "Conselho de Arquitetura e Urbanismo do Brasil",
+        alternateName: "CAU/BR",
+        url: "https://www.caubr.gov.br",
+      },
+    },
     priceRange: s.business_price_range || undefined,
     foundingDate: s.business_founding_year || undefined,
     openingHours: s.business_opening_hours || undefined,
@@ -393,40 +474,127 @@ export function itemListJsonLd(
   };
 }
 
+/** FAQPage JSON-LD — habilita rich result de FAQ no Google (perguntas expansíveis na SERP). */
+export function faqJsonLd(items: Array<{ q: string; a: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((it) => ({
+      "@type": "Question",
+      name: it.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: it.a,
+      },
+    })),
+  };
+}
+
 /** WebSite JSON-LD com SearchAction (ajuda a aparecer caixa de busca no Google). */
 export function websiteJsonLd(s: SiteSettings) {
   const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${base}/#website`,
     name: s.site_title || "Lorena Alves Arquitetura",
     url: base,
     inLanguage: "pt-BR",
-    publisher: {
-      "@type": "Organization",
-      name: s.site_title || "Lorena Alves Arquitetura",
-      url: base,
-    },
+    publisher: { "@id": `${base}/#organization` },
   };
 }
 
 /** Organization JSON-LD — reforça entidade para o Knowledge Graph. */
 export function organizationJsonLd(s: SiteSettings) {
   const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
-  const sameAs = [
-    s.instagram_url,
-    s.linkedin_url,
-    s.pinterest_url,
-    s.google_business_profile_url,
-  ].filter(Boolean);
+
+  const absUrl = (u: string | null | undefined) => {
+    if (!u) return undefined;
+    if (/^https?:\/\//i.test(u)) return u;
+    return `${base}${u.startsWith("/") ? "" : "/"}${u}`;
+  };
+  const logoUrl = absUrl(s.seo_og_image || s.default_og_image);
+
+  const sameAs = Array.from(
+    new Set(
+      [
+        s.instagram_url,
+        s.linkedin_url,
+        s.pinterest_url,
+        s.google_business_profile_url,
+        s.google_maps_url,
+      ]
+        .filter((x): x is string => Boolean(x))
+        .map((x) => x.trim())
+    )
+  );
+
+  const address =
+    s.address_street || s.address_city
+      ? {
+          "@type": "PostalAddress",
+          streetAddress: s.address_street || undefined,
+          addressLocality: s.address_city || undefined,
+          addressRegion: s.address_region || undefined,
+          postalCode: s.business_postal_code || undefined,
+          addressCountry: "BR",
+        }
+      : undefined;
+
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${base}/#organization`,
     name: s.site_title || "Lorena Alves Arquitetura",
+    legalName: "Lorena Alves Arquitetura",
     url: base,
-    logo: s.seo_og_image || s.default_og_image || undefined,
+    logo: logoUrl
+      ? {
+          "@type": "ImageObject",
+          url: logoUrl,
+          caption: s.site_title || "Lorena Alves Arquitetura",
+        }
+      : undefined,
+    image: logoUrl,
     email: s.contact_email || undefined,
     telephone: s.contact_phone || undefined,
+    foundingDate: s.business_founding_year || undefined,
+    founder: {
+      "@type": "Person",
+      name: "Lorena Alves",
+      jobTitle: "Arquiteta e Urbanista",
+      hasCredential: {
+        "@type": "EducationalOccupationalCredential",
+        name: "Registro Profissional CAU",
+        credentialCategory: "Professional Registration",
+        identifier: "A66583-5",
+        recognizedBy: {
+          "@type": "Organization",
+          name: "Conselho de Arquitetura e Urbanismo do Brasil",
+          alternateName: "CAU/BR",
+          url: "https://www.caubr.gov.br",
+        },
+      },
+    },
+    taxID: "05.119.224/0001-30",
+    vatID: "05.119.224/0001-30",
+    iso6523Code: "0007:05119224000130",
+    identifier: [
+      { "@type": "PropertyValue", propertyID: "CNPJ", value: "05.119.224/0001-30" },
+      { "@type": "PropertyValue", propertyID: "CAU", value: "A66583-5" },
+    ],
+    address,
+    contactPoint: s.contact_phone
+      ? {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          telephone: s.contact_phone,
+          email: s.contact_email || undefined,
+          areaServed: "BR",
+          availableLanguage: ["Portuguese", "pt-BR"],
+        }
+      : undefined,
+    subOrganization: { "@id": `${base}/#business` },
     sameAs: sameAs.length ? sameAs : undefined,
   };
 }

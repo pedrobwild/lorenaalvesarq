@@ -265,6 +265,33 @@ export type Database = {
         }
         Relationships: []
       }
+      seo_audit_log: {
+        Row: {
+          created_at: string | null
+          id: number
+          issues: Json | null
+          kind: string
+          notes: string | null
+          score: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          issues?: Json | null
+          kind: string
+          notes?: string | null
+          score?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          issues?: Json | null
+          kind?: string
+          notes?: string | null
+          score?: number | null
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           address_city: string | null
@@ -406,33 +433,6 @@ export type Database = {
           site_title?: string | null
           updated_at?: string | null
           yandex_verification?: string | null
-        }
-        Relationships: []
-      }
-      seo_audit_log: {
-        Row: {
-          created_at: string | null
-          id: number
-          issues: Json | null
-          kind: string
-          notes: string | null
-          score: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: number
-          issues?: Json | null
-          kind: string
-          notes?: string | null
-          score?: number | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          issues?: Json | null
-          kind?: string
-          notes?: string | null
-          score?: number | null
         }
         Relationships: []
       }
