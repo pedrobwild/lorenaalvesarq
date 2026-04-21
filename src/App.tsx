@@ -442,10 +442,34 @@ export default function App() {
           <BrandLogo variant="light" />
         </a>
         <nav className="nav__menu" aria-label="Principal">
-          <a href={routes.portfolio}>Portfólio</a>
-          <a href="#estudio">Sobre</a>
-          <a href="#metodo">Método</a>
-          <a href={routes.faq}>FAQ</a>
+          <a
+            href={routes.portfolio}
+            className={activeSection === "projetos" ? "is-active" : ""}
+            aria-current={activeSection === "projetos" ? "page" : undefined}
+          >
+            Portfólio
+          </a>
+          <a
+            href="#estudio"
+            className={activeSection === "estudio" ? "is-active" : ""}
+            aria-current={activeSection === "estudio" ? "true" : undefined}
+          >
+            Sobre
+          </a>
+          <a
+            href="#metodo"
+            className={activeSection === "metodo" ? "is-active" : ""}
+            aria-current={activeSection === "metodo" ? "true" : undefined}
+          >
+            Método
+          </a>
+          <a
+            href={routes.faq}
+            className={activeSection === "faq" ? "is-active" : ""}
+            aria-current={activeSection === "faq" ? "true" : undefined}
+          >
+            FAQ
+          </a>
         </nav>
         <a
           className="nav__cta"
@@ -474,10 +498,30 @@ export default function App() {
       {/* Mobile menu */}
       <div className="mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav aria-label="Menu principal">
-          <a href={routes.portfolio}>Portfólio</a>
-          <a href="#estudio">Sobre</a>
-          <a href="#metodo">Método</a>
-          <a href={routes.faq}>FAQ</a>
+          <a
+            href={routes.portfolio}
+            className={activeSection === "projetos" ? "is-active" : ""}
+          >
+            Portfólio
+          </a>
+          <a
+            href="#estudio"
+            className={activeSection === "estudio" ? "is-active" : ""}
+          >
+            Sobre
+          </a>
+          <a
+            href="#metodo"
+            className={activeSection === "metodo" ? "is-active" : ""}
+          >
+            Método
+          </a>
+          <a
+            href={routes.faq}
+            className={activeSection === "faq" ? "is-active" : ""}
+          >
+            FAQ
+          </a>
         </nav>
         {PROJECTS.length > 0 && (
           <nav className="mobile-menu__projects" aria-label="Projetos em destaque">
