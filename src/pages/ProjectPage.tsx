@@ -341,7 +341,14 @@ function Lightbox({
         ←
       </button>
       <figure className="pp-lb__fig" data-cursor="zoom">
-        <img src={img.src} alt={altText} />
+        <img
+          src={img.src}
+          alt={altText}
+          loading="lazy"
+          decoding="async"
+          width={1920}
+          height={1280}
+        />
         <figcaption className="pp-lb__cap mono">
           {index + 1} / {images.length} — {altText}
         </figcaption>
