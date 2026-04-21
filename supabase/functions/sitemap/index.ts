@@ -86,13 +86,15 @@ Deno.serve(async (req) => {
     updated_at: string | null;
   }>).map((p) => {
     const images: Array<{ url: string; caption?: string }> = [];
-    if (p.cover_url) {
-      images.push({ url: p.cover_url, caption: `${p.title} ${p.em ?? ""}`.trim() });
+    const coverAbs = absUrl(p.cover_url);
+    if (coverAbs) {
+      images.push({ url: coverAbs, caption: `${p.title} ${p.em ?? ""}`.trim() });
     }
     const gallery = imagesByProject.get(p.id) ?? [];
     for (const g of gallery) {
-      if (g.url && g.url !== p.cover_url) {
-        images.push({ url: g.url, caption: g.alt });
+      const abs = absUrl(g.url);
+      if (abs && abs !== coverAbs) {
+        images.push({ url: abs, caption: g.alt });
       }
     }
     return {
