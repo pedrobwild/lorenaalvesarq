@@ -534,30 +534,19 @@ export default function App() {
       {/* Mobile menu */}
       <div className="mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav aria-label="Menu principal">
-          <a
-            href={routes.portfolio}
-            className={activeSection === "projetos" ? "is-active" : ""}
-          >
-            Portfólio
-          </a>
-          <a
-            href={routes.sobre}
-            className={activeSection === "estudio" ? "is-active" : ""}
-          >
-            Sobre
-          </a>
-          <a
-            href="#metodo"
-            className={activeSection === "metodo" ? "is-active" : ""}
-          >
-            Método
-          </a>
-          <a
-            href={routes.faq}
-            className={activeSection === "faq" ? "is-active" : ""}
-          >
-            FAQ
-          </a>
+          {NAV_ITEMS.map((item) => {
+            const isActive = activeSection === item.id;
+            return (
+              <a
+                key={item.id}
+                href={item.href}
+                className={isActive ? "is-active" : ""}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </nav>
         {PROJECTS.length > 0 && (
           <nav className="mobile-menu__projects" aria-label="Projetos em destaque">
