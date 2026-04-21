@@ -67,6 +67,44 @@ const SOFTWARES = [
   "Adobe Creative Suite",
 ];
 
+const REGIOES = [
+  {
+    cidade: "Uberlândia",
+    uf: "MG",
+    destaque: "Sede do estúdio",
+    desc: "Base de operações da Lorena Alves Arquitetura. Atendimento presencial completo em toda a cidade — regiões centrais, zona sul e condomínios fechados — com acompanhamento de obra frequente e reuniões de projeto no estúdio.",
+  },
+  {
+    cidade: "Uberaba",
+    uf: "MG",
+    destaque: "Atendimento recorrente",
+    desc: "Projetos residenciais e comerciais com atendimento em regiões centrais, bairros consolidados e condomínios. Visitas técnicas periódicas ao canteiro e reuniões presenciais com clientes da cidade.",
+  },
+  {
+    cidade: "Araguari",
+    uf: "MG",
+    destaque: "Triângulo Mineiro",
+    desc: "Atendimento em áreas centrais e loteamentos em expansão. A proximidade com Uberlândia permite visitas frequentes ao canteiro e resposta rápida em imprevistos de obra.",
+  },
+  {
+    cidade: "Patos de Minas",
+    uf: "MG",
+    destaque: "Alto Paranaíba",
+    desc: "Atendimento em áreas centrais e bairros em desenvolvimento. Roteiro de visitas técnicas estruturado para garantir presença regular no canteiro ao longo de toda a obra.",
+  },
+];
+
+const REGIOES_EXTRA = [
+  "Monte Carmelo",
+  "Tupaciguara",
+  "Itumbiara",
+  "Ituiutaba",
+  "Coromandel",
+  "Prata",
+  "Três Ranchos",
+  "Indianópolis",
+];
+
 const SERVICOS = [
   {
     titulo: "Projeto arquitetônico completo",
@@ -109,7 +147,7 @@ export default function SobrePage() {
   useSeo({
     title: "Sobre — Lorena Alves, arquiteta em Uberlândia | Lorena Alves Arquitetura",
     description:
-      "Conheça a Lorena Alves, arquiteta formada pela UFU, com pós-graduações em Design de Interiores, Lighting Design (IPOG) e Gestão Empresarial (USP). Atua com arquitetura residencial, comercial, corporativa, clínicas, interiores e iluminação em Uberlândia e no Triângulo Mineiro.",
+      "Conheça a Lorena Alves, arquiteta formada pela UFU com pós-graduações em Design de Interiores, Lighting Design (IPOG) e Gestão Empresarial (USP). Atua em arquitetura residencial, comercial, corporativa, clínicas, interiores e iluminação em Uberlândia, Uberaba, Araguari, Patos de Minas e todo o Triângulo Mineiro e Alto Paranaíba.",
     canonicalPath: "/sobre",
     ogType: "website",
     jsonLd: settings
@@ -153,6 +191,30 @@ export default function SobrePage() {
               "@type": "Organization",
               name: "Lorena Alves Arquitetura",
             },
+            areaServed: [
+              {
+                "@type": "City",
+                name: "Uberlândia",
+                containedInPlace: { "@type": "State", name: "Minas Gerais" },
+              },
+              {
+                "@type": "City",
+                name: "Uberaba",
+                containedInPlace: { "@type": "State", name: "Minas Gerais" },
+              },
+              {
+                "@type": "City",
+                name: "Araguari",
+                containedInPlace: { "@type": "State", name: "Minas Gerais" },
+              },
+              {
+                "@type": "City",
+                name: "Patos de Minas",
+                containedInPlace: { "@type": "State", name: "Minas Gerais" },
+              },
+              { "@type": "Place", name: "Triângulo Mineiro" },
+              { "@type": "Place", name: "Alto Paranaíba" },
+            ],
           },
         ]
       : undefined,
@@ -186,9 +248,10 @@ export default function SobrePage() {
         </h1>
         <p className="pf-head__lede">
           Lorena Alves é arquiteta e urbanista, fundadora do estúdio sediado em
-          Uberlândia/MG, com atuação no Triângulo Mineiro e em todo o Brasil. O
-          trabalho une rigor técnico, sensibilidade de projeto e uma visão
-          autoral da brasilidade contemporânea — pensada para permanecer.
+          Uberlândia/MG, com atuação em Uberaba, Araguari, Patos de Minas e
+          demais cidades do Triângulo Mineiro e Alto Paranaíba. O trabalho une
+          rigor técnico, sensibilidade de projeto e uma visão autoral da
+          brasilidade contemporânea — pensada para permanecer.
         </p>
       </header>
 
@@ -324,6 +387,66 @@ export default function SobrePage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      {/* Atendimento por região */}
+      <section
+        className="sobre-page__section"
+        aria-label="Atendimento por região"
+      >
+        <div className="sobre-page__section-head">
+          <p className="sobre-page__eyebrow mono">05 · Atendimento</p>
+          <h2 className="sobre-page__section-title">
+            Onde <em>atendemos</em>.
+          </h2>
+          <p className="sobre-page__section-lede">
+            O estúdio fica sediado em Uberlândia e atende clientes em todo o
+            Triângulo Mineiro e Alto Paranaíba — com visitas técnicas ao canteiro
+            e reuniões presenciais sempre que o projeto pede. Para cidades fora
+            desse raio, trabalhamos com acompanhamento híbrido (presencial em
+            marcos críticos da obra e digital para decisões do dia a dia).
+          </p>
+        </div>
+
+        <div className="sobre-page__regioes">
+          {REGIOES.map((r) => (
+            <article className="sobre-page__regiao" key={r.cidade}>
+              <div className="sobre-page__regiao-head">
+                <h3 className="sobre-page__regiao-cidade">
+                  {r.cidade}
+                  <span className="sobre-page__regiao-uf mono">/{r.uf}</span>
+                </h3>
+                <span className="sobre-page__regiao-tag mono">
+                  {r.destaque}
+                </span>
+              </div>
+              <p className="sobre-page__regiao-desc">{r.desc}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="sobre-page__regioes-extra">
+          <p className="sobre-page__regioes-extra-label mono">
+            Também atendemos
+          </p>
+          <ul className="sobre-page__regioes-extra-list">
+            {REGIOES_EXTRA.map((c) => (
+              <li className="sobre-page__regiao-chip" key={c}>
+                {c}
+              </li>
+            ))}
+            <li className="sobre-page__regiao-chip sobre-page__regiao-chip--more">
+              + Triângulo Mineiro e Alto Paranaíba
+            </li>
+          </ul>
+          <p className="sobre-page__regioes-note">
+            Não encontrou sua cidade?{" "}
+            <a href={`${routes.home}#contato`} data-cursor="hover">
+              Fale com o estúdio
+            </a>{" "}
+            — avaliamos cada projeto caso a caso.
+          </p>
+        </div>
       </section>
 
       {/* CTA final */}

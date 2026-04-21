@@ -5620,3 +5620,149 @@ textarea.admin-field__input {
   .sobre-page__servico-num { padding-top: 0; }
   .sobre-page__esp-card { padding: 1.4rem 1.2rem; }
 }
+
+/* ---------- Sobre Page · Atendimento por região ---------- */
+.sobre-page__regioes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(1.2rem, 2.5vw, 2rem);
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.sobre-page__regiao {
+  padding: 1.8rem 1.6rem;
+  border: 1px solid rgba(15, 14, 12, 0.1);
+  background: var(--bone);
+  transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), background 0.35s var(--ease);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.sobre-page__regiao:hover {
+  transform: translateY(-2px);
+  border-color: var(--ink);
+  background: var(--bone-soft);
+}
+
+.sobre-page__regiao-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.sobre-page__regiao-cidade {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.sobre-page__regiao-uf {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--clay);
+  font-weight: 400;
+}
+
+.sobre-page__regiao-tag {
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--clay-deep);
+  padding: 0.3rem 0.6rem;
+  border: 1px solid rgba(15, 14, 12, 0.14);
+  white-space: nowrap;
+}
+
+.sobre-page__regiao-desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--ink);
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* Lista extra de cidades */
+.sobre-page__regioes-extra {
+  padding-top: clamp(1.5rem, 3vw, 2.2rem);
+  border-top: 1px solid rgba(15, 14, 12, 0.1);
+}
+
+.sobre-page__regioes-extra-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--clay-deep);
+  margin: 0 0 1.2rem;
+}
+
+.sobre-page__regioes-extra-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sobre-page__regiao-chip {
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: var(--ink);
+  padding: 0.5rem 0.95rem;
+  border: 1px solid rgba(15, 14, 12, 0.16);
+  background: transparent;
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+.sobre-page__regiao-chip:hover {
+  background: var(--bone-soft);
+  border-color: var(--ink);
+}
+
+.sobre-page__regiao-chip--more {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--clay-deep);
+  background: var(--bone-soft);
+}
+
+.sobre-page__regioes-note {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--ink);
+  opacity: 0.72;
+  margin: 0;
+}
+
+.sobre-page__regioes-note a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  opacity: 1;
+  transition: opacity 0.2s var(--ease);
+}
+
+.sobre-page__regioes-note a:hover { opacity: 0.7; }
+
+@media (max-width: 720px) {
+  .sobre-page__regiao { padding: 1.4rem 1.2rem; }
+  .sobre-page__regiao-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+}
