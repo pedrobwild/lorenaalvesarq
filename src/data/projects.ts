@@ -56,7 +56,7 @@ export const PROJECTS: Project[] = [
     cover: "/images/casa-paineira-pavilhao-concreto-ipe-uberlandia.jpg",
     coverMd: "/images/casa-paineira-pavilhao-concreto-ipe-uberlandia-md.jpg",
     coverSm: "/images/casa-paineira-pavilhao-concreto-ipe-uberlandia-sm.jpg",
-    alt: "Casa Paineira — pavilhão horizontal de concreto e ipê",
+    alt: "Casa Paineira em Itaim da Serra/SP — pavilhão residencial horizontal em concreto aparente apicoado e ipê tauari, projetado por Lorena Alves Arquitetura, estúdio de Uberlândia/MG",
     summary:
       "Pavilhão horizontal de concreto e ipê que se abre para uma paineira centenária.",
     intro:
@@ -71,12 +71,12 @@ export const PROJECTS: Project[] = [
     team: "Lorena Alves Arquitetura · Paisagismo Gilberto Elkis",
     photographer: "Fran Parente",
     gallery: [
-      { src: "/images/casa-paineira-pavilhao-concreto-ipe-uberlandia.png", alt: "Fachada principal em concreto e ipê", format: "full" },
-      { src: "/images/varanda-deck-ipe-casa-uberlandia.png", alt: "Varanda suspensa com deck em ipê", format: "wide" },
-      { src: "/images/corredor-iluminacao-natural-arquitetura-residencial.png", alt: "Corredor interno iluminado por luz rasante", format: "tall" },
-      { src: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png", alt: "Detalhe construtivo com taipa e madeira", format: "half" },
-      { src: "/images/escada-escultorica-madeira-macica-design-interiores.png", alt: "Escada escultórica em madeira maciça", format: "half" },
-      { src: "/images/textura-concreto-apicoado-arquitetura-contemporanea.png", alt: "Textura de parede em concreto apicoado", format: "full" },
+      { src: "/images/casa-paineira-pavilhao-concreto-ipe-uberlandia.png", alt: "Fachada principal da Casa Paineira em concreto aparente apicoado com pilares e brises em ipê tauari, vista frontal ao entardecer", format: "full" },
+      { src: "/images/varanda-deck-ipe-casa-uberlandia.png", alt: "Varanda suspensa da Casa Paineira com piso em deck de ipê e guarda-corpo metálico fino, integrada ao jardim tropical", format: "wide" },
+      { src: "/images/corredor-iluminacao-natural-arquitetura-residencial.png", alt: "Corredor interno residencial banhado por luz rasante natural vinda de rasgo zenital, paredes em concreto aparente", format: "tall" },
+      { src: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png", alt: "Detalhe construtivo da Casa Paineira mostrando encontro entre parede em taipa, viga de madeira maciça e piso em cerâmica artesanal", format: "half" },
+      { src: "/images/escada-escultorica-madeira-macica-design-interiores.png", alt: "Escada escultórica em madeira maciça de ipê com degraus em balanço, integrada ao volume residencial", format: "half" },
+      { src: "/images/textura-concreto-apicoado-arquitetura-contemporanea.png", alt: "Textura macro de parede em concreto aparente apicoado artesanalmente, com nuances de cor e profundidade", format: "full" },
     ],
   },
   {
@@ -92,7 +92,7 @@ export const PROJECTS: Project[] = [
     cover: "/images/casa-jequitiba-interior-contemporaneo-brasileiro.jpg",
     coverMd: "/images/casa-jequitiba-interior-contemporaneo-brasileiro-md.jpg",
     coverSm: "/images/casa-jequitiba-interior-contemporaneo-brasileiro-sm.jpg",
-    alt: "Casa Jequitibá — interior contemporâneo brasileiro",
+    alt: "Casa Jequitibá no Jardim Europa, São Paulo/SP — projeto de design de interiores em residência modernista dos anos 70 com curadoria de mobiliário brasileiro contemporâneo, por Lorena Alves Arquitetura",
     summary:
       "Retrofit de interiores que devolve à casa a brasilidade que ela sempre teve.",
     intro:
@@ -107,11 +107,11 @@ export const PROJECTS: Project[] = [
     team: "Lorena Alves Arquitetura · Styling Babi Teixeira",
     photographer: "Maíra Acayaba",
     gallery: [
-      { src: "/images/casa-jequitiba-interior-contemporaneo-brasileiro.png", alt: "Sala de estar com curadoria de mobiliário brasileiro", format: "full" },
-      { src: "/images/corredor-iluminacao-natural-arquitetura-residencial.png", alt: "Hall com piso em taco de madeira envelhecido", format: "half" },
-      { src: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png", alt: "Detalhe de marcenaria em jequitibá", format: "half" },
-      { src: "/images/escada-escultorica-madeira-macica-design-interiores.png", alt: "Escada existente com guarda-corpo restaurado", format: "tall" },
-      { src: "/images/varanda-deck-ipe-casa-uberlandia.png", alt: "Varanda com vista para o jardim", format: "wide" },
+      { src: "/images/casa-jequitiba-interior-contemporaneo-brasileiro.png", alt: "Sala de estar da Casa Jequitibá com curadoria de mobiliário autoral brasileiro contemporâneo, sofá em linho cru e mesa de centro em jequitibá-rosa", format: "full" },
+      { src: "/images/corredor-iluminacao-natural-arquitetura-residencial.png", alt: "Hall de entrada com piso em taco de madeira envelhecido restaurado e parede em estuque queimado", format: "half" },
+      { src: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png", alt: "Detalhe de marcenaria em jequitibá-rosa com puxador em bronze escovado, projeto de interiores residencial", format: "half" },
+      { src: "/images/escada-escultorica-madeira-macica-design-interiores.png", alt: "Escada modernista existente da Casa Jequitibá com guarda-corpo em ferro restaurado e degraus em granito preto", format: "tall" },
+      { src: "/images/varanda-deck-ipe-casa-uberlandia.png", alt: "Varanda integrada ao jardim residencial com piso em pedra portuguesa e mobiliário de exterior em corda náutica", format: "wide" },
     ],
   },
   {
@@ -127,7 +127,7 @@ export const PROJECTS: Project[] = [
     cover: "/images/apartamento-higienopolis-design-interiores-walnut.jpg",
     coverMd: "/images/apartamento-higienopolis-design-interiores-walnut-md.jpg",
     coverSm: "/images/apartamento-higienopolis-design-interiores-walnut-sm.jpg",
-    alt: "Apartamento Higienópolis — sala com estante em walnut",
+    alt: "Apartamento em Higienópolis, São Paulo/SP — projeto residencial de 210 m² em edifício modernista com estante-escultura em american walnut e travertino clássico, por Lorena Alves Arquitetura",
     summary:
       "Apartamento em edifício histórico com estante-escultura em walnut e travertino.",
     intro:
@@ -142,10 +142,10 @@ export const PROJECTS: Project[] = [
     team: "Lorena Alves Arquitetura",
     photographer: "Ruy Teixeira",
     gallery: [
-      { src: "/images/apartamento-higienopolis-design-interiores-walnut.png", alt: "Sala com estante em walnut", format: "full" },
-      { src: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png", alt: "Detalhe da estante com travertino", format: "half" },
-      { src: "/images/corredor-iluminacao-natural-arquitetura-residencial.png", alt: "Corredor com boiserie contemporânea", format: "half" },
-      { src: "/images/textura-concreto-apicoado-arquitetura-contemporanea.png", alt: "Textura de madeira em escala macro", format: "wide" },
+      { src: "/images/apartamento-higienopolis-design-interiores-walnut.png", alt: "Sala social do Apartamento Higienópolis com estante-escultura em american walnut atravessando todo o ambiente, sofá baixo em linho cru e tapete em cortiça natural", format: "full" },
+      { src: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png", alt: "Detalhe da estante em american walnut com prateleiras em travertino clássico, projeto de design de interiores residencial", format: "half" },
+      { src: "/images/corredor-iluminacao-natural-arquitetura-residencial.png", alt: "Corredor do apartamento com boiserie contemporânea em walnut e iluminação rasante embutida no rodapé", format: "half" },
+      { src: "/images/textura-concreto-apicoado-arquitetura-contemporanea.png", alt: "Textura macro de painel em american walnut com veios naturais marcantes, marcenaria autoral", format: "wide" },
     ],
   },
   {
@@ -161,7 +161,7 @@ export const PROJECTS: Project[] = [
     cover: "/images/casa-pau-brasil-residencia-praia-cantilever.jpg",
     coverMd: "/images/casa-pau-brasil-residencia-praia-cantilever-md.jpg",
     coverSm: "/images/casa-pau-brasil-residencia-praia-cantilever-sm.jpg",
-    alt: "Casa Pau-Brasil — residência de praia com volume cantilevered",
+    alt: "Casa Pau-Brasil em Guarujá/SP — residência de praia de 560 m² em estrutura de concreto protendido com volume social em cantiléver de 12 metros sobre o mar, projeto de Lorena Alves Arquitetura",
     summary:
       "Casa de praia em cantiléver de concreto, voltada para o horizonte do Atlântico.",
     intro:
@@ -176,11 +176,11 @@ export const PROJECTS: Project[] = [
     team: "Lorena Alves Arquitetura · Estrutura Kurkdjian+Fruchtengarten",
     photographer: "Fernando Guerra",
     gallery: [
-      { src: "/images/casa-pau-brasil-residencia-praia-cantilever.png", alt: "Volume em cantilever sobre a encosta", format: "full" },
-      { src: "/images/varanda-deck-ipe-casa-uberlandia.png", alt: "Varanda voltada para o mar", format: "wide" },
-      { src: "/images/escada-escultorica-madeira-macica-design-interiores.png", alt: "Escada esculpida em pedra bruta", format: "tall" },
-      { src: "/images/corredor-iluminacao-natural-arquitetura-residencial.png", alt: "Corredor interno em penumbra", format: "half" },
-      { src: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png", alt: "Detalhe de encontro concreto-madeira", format: "half" },
+      { src: "/images/casa-pau-brasil-residencia-praia-cantilever.png", alt: "Volume social da Casa Pau-Brasil em cantiléver de concreto protendido sobre a encosta de Guarujá/SP, com vão livre de 12 metros voltado para o oceano Atlântico", format: "full" },
+      { src: "/images/varanda-deck-ipe-casa-uberlandia.png", alt: "Varanda da casa de praia com piso em pau-brasil de reflorestamento e parapeito em vidro voltado para o mar", format: "wide" },
+      { src: "/images/escada-escultorica-madeira-macica-design-interiores.png", alt: "Escada esculpida em pedra bruta da região conectando a piscina natural ao volume residencial", format: "tall" },
+      { src: "/images/corredor-iluminacao-natural-arquitetura-residencial.png", alt: "Corredor interno em penumbra controlada com paredes em concreto e teto baixo, conduzindo às suítes", format: "half" },
+      { src: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png", alt: "Detalhe de encontro entre concreto aparente e ripado de pau-brasil em residência de praia", format: "half" },
     ],
   },
   {
@@ -196,7 +196,7 @@ export const PROJECTS: Project[] = [
     cover: "/images/restaurante-takka-arquitetura-comercial-gastronomica.jpg",
     coverMd: "/images/restaurante-takka-arquitetura-comercial-gastronomica-md.jpg",
     coverSm: "/images/restaurante-takka-arquitetura-comercial-gastronomica-sm.jpg",
-    alt: "Restaurante Takka — interior sofisticado com banquettes em couro",
+    alt: "Restaurante Takka em Pinheiros, São Paulo/SP — arquitetura comercial e gastronômica de 280 m² com banquettes em couro caramelo, balcão em travertino escuro e marcenaria em carvalho fumê, por Lorena Alves Arquitetura",
     summary:
       "Restaurante autoral com banquettes em couro caramelo e balcão em travertino.",
     intro:
@@ -211,10 +211,10 @@ export const PROJECTS: Project[] = [
     team: "Lorena Alves Arquitetura · Iluminação Ricardo Heder",
     photographer: "Pedro Kok",
     gallery: [
-      { src: "/images/restaurante-takka-arquitetura-comercial-gastronomica.png", alt: "Salão principal com banquettes em couro", format: "full" },
-      { src: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png", alt: "Detalhe de banqueta com latão", format: "half" },
-      { src: "/images/corredor-iluminacao-natural-arquitetura-residencial.png", alt: "Corredor para sala privada", format: "half" },
-      { src: "/images/textura-concreto-apicoado-arquitetura-contemporanea.png", alt: "Textura de couro em detalhe", format: "wide" },
+      { src: "/images/restaurante-takka-arquitetura-comercial-gastronomica.png", alt: "Salão principal do Restaurante Takka em Pinheiros/SP com banquettes corridas em couro caramelo, mesas em carvalho fumê e iluminação pontual sobre cada lugar", format: "full" },
+      { src: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png", alt: "Detalhe de banqueta em couro caramelo com costuras aparentes e estrutura em latão envelhecido, projeto de arquitetura comercial", format: "half" },
+      { src: "/images/corredor-iluminacao-natural-arquitetura-residencial.png", alt: "Corredor que conduz à sala privada do restaurante com paredes em estuque escuro e iluminação rasante baixa", format: "half" },
+      { src: "/images/textura-concreto-apicoado-arquitetura-contemporanea.png", alt: "Textura macro de couro caramelo natural com veios e marcas, revestimento de banquette em projeto gastronômico", format: "wide" },
     ],
   },
   {
@@ -230,7 +230,7 @@ export const PROJECTS: Project[] = [
     cover: "/images/fazenda-porto-arquitetura-rural-taipa-minas-gerais.jpg",
     coverMd: "/images/fazenda-porto-arquitetura-rural-taipa-minas-gerais-md.jpg",
     coverSm: "/images/fazenda-porto-arquitetura-rural-taipa-minas-gerais-sm.jpg",
-    alt: "Fazenda Porto — pavilhão rural em taipa e telha cerâmica",
+    alt: "Fazenda Porto na Serra da Canastra/MG — conjunto rural de 1.200 m² em taipa de pilão, pau-a-pique e telha cerâmica artesanal, em diálogo com a arquitetura colonial mineira, por Lorena Alves Arquitetura",
     summary:
       "Conjunto rural em taipa de pilão e telha cerâmica, em diálogo com a arquitetura colonial mineira.",
     intro:
@@ -245,11 +245,11 @@ export const PROJECTS: Project[] = [
     team: "Lorena Alves Arquitetura · Mestres construtores da Canastra",
     photographer: "Leonardo Finotti",
     gallery: [
-      { src: "/images/fazenda-porto-arquitetura-rural-taipa-minas-gerais.png", alt: "Pavilhão principal em taipa de pilão", format: "full" },
-      { src: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png", alt: "Detalhe de parede em taipa e madeira", format: "half" },
-      { src: "/images/escada-escultorica-madeira-macica-design-interiores.png", alt: "Escada em madeira maciça", format: "half" },
-      { src: "/images/varanda-deck-ipe-casa-uberlandia.png", alt: "Varanda coberta com telha cerâmica", format: "wide" },
-      { src: "/images/corredor-iluminacao-natural-arquitetura-residencial.png", alt: "Corredor interno com piso de ladrilho", format: "full" },
+      { src: "/images/fazenda-porto-arquitetura-rural-taipa-minas-gerais.png", alt: "Pavilhão principal da Fazenda Porto na Serra da Canastra/MG com paredes em taipa de pilão, cobertura em telha cerâmica artesanal e estrutura aparente em madeira de lei", format: "full" },
+      { src: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png", alt: "Detalhe construtivo de parede em taipa de pilão com viga em peroba aparente, técnica colonial mineira aplicada em arquitetura rural contemporânea", format: "half" },
+      { src: "/images/escada-escultorica-madeira-macica-design-interiores.png", alt: "Escada em madeira maciça de peroba com degraus brutos, conectando pavimentos em pavilhão rural mineiro", format: "half" },
+      { src: "/images/varanda-deck-ipe-casa-uberlandia.png", alt: "Varanda coberta da Fazenda Porto com cobertura em telha cerâmica artesanal, piso em pedra da região e cadeiras de balanço em madeira", format: "wide" },
+      { src: "/images/corredor-iluminacao-natural-arquitetura-residencial.png", alt: "Corredor interno do pavilhão rural com piso em ladrilho hidráulico de padrão colonial e paredes caiadas", format: "full" },
     ],
   },
 ];
