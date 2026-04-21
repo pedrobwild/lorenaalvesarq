@@ -324,11 +324,14 @@ function Lightbox({
 }: {
   images: ProjectImage[];
   index: number;
+  projectTitle: string;
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
 }) {
   const img = images[index];
+  const fallback = `${projectTitle} — imagem ${index + 1}`;
+  const altText = (img.alt && img.alt.trim()) || fallback;
   return (
     <div className="pp-lb" role="dialog" aria-modal="true" aria-label="Visualizador de imagem">
       <button type="button" className="pp-lb__backdrop" onClick={onClose} aria-label="Fechar" />
@@ -339,9 +342,9 @@ function Lightbox({
         ←
       </button>
       <figure className="pp-lb__fig" data-cursor="zoom">
-        <img src={img.src} alt={img.alt} />
+        <img src={img.src} alt={altText} />
         <figcaption className="pp-lb__cap mono">
-          {index + 1} / {images.length} — {img.alt}
+          {index + 1} / {images.length} — {altText}
         </figcaption>
       </figure>
       <button type="button" className="pp-lb__nav pp-lb__nav--next" onClick={onNext} aria-label="Próxima">
