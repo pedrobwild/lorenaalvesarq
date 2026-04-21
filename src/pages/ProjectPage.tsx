@@ -318,6 +318,7 @@ function GalleryTile({
 function Lightbox({
   images,
   index,
+  projectTitle,
   onClose,
   onPrev,
   onNext,
