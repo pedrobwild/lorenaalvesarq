@@ -124,6 +124,8 @@ export default function SmartImage({
         loading={priority ? "eager" : "lazy"}
         decoding="async"
         fetchPriority={priority ? "high" : "auto"}
+        width={rest.width ?? 1920}
+        height={rest.height ?? 1280}
         onLoad={() => setLoaded(true)}
         className={className}
         style={imgStyle}
