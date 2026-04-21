@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import PortfolioPage from "./pages/PortfolioPage";
 import ProjectPage from "./pages/ProjectPage";
+import FaqPage from "./pages/FaqPage";
 import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import AnalyticsPage from "./pages/admin/AnalyticsPage";
@@ -23,6 +24,7 @@ const TRANSITION_MS = 380;
 function renderRoute(route: Route) {
   if (route.name === "portfolio") return <PortfolioPage />;
   if (route.name === "project") return <ProjectPage slug={route.slug} />;
+  if (route.name === "faq") return <FaqPage />;
   if (route.name === "admin-login") return <LoginPage />;
   if (route.name === "admin-dashboard")
     return (
