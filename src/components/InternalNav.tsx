@@ -6,7 +6,7 @@ type Props = {
   /** rótulo do link "voltar" */
   backLabel?: string;
   /** rota atualmente ativa, para destacar o item do menu */
-  active?: "portfolio" | "faq" | "home" | "project";
+  active?: "portfolio" | "faq" | "home" | "project" | "sobre" | "metodo";
   /** classe extra no <nav> (ex.: pp-nav para variante de fundo) */
   extraClassName?: string;
 };
