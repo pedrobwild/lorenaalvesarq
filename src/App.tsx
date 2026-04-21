@@ -67,6 +67,7 @@ export default function App() {
   const [ensaioIdx, setEnsaioIdx] = useState(0);
   const ensaiosPaused = useRef(false);
   const [heroIdx, setHeroIdx] = useState(0);
+  const [activeSection, setActiveSection] = useState<string>("");
 
   useCustomCursor();
 
@@ -104,6 +105,46 @@ export default function App() {
     }, 6500);
     return () => window.clearInterval(id);
   }, []);
+
+  // Scroll-spy: marca o item de menu da seção visível.
+  // Usa IntersectionObserver com rootMargin que privilegia a seção
+  // cujo topo cruzou ~30% da viewport.
+  useEffect(() => {
+    const ids = ["projetos", "estudio", "metodo", "faq", "contato"];
+    const sections = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => !!el);
+    if (sections.length === 0) return;
+
+    const visibility = new Map<string, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          visibility.set(e.target.id, e.intersectionRatio);
+        }
+        // Escolhe a seção com maior interseção atual.
+        let bestId = "";
+        let bestRatio = 0;
+        visibility.forEach((ratio, id) => {
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            bestId = id;
+          }
+        });
+        // Se nada está visível o suficiente, mantém o último — evita flicker.
+        if (bestRatio > 0.15) setActiveSection(bestId);
+      },
+      {
+        // Considera "ativa" a seção que ocupa o terço central da viewport.
+        rootMargin: "-35% 0px -55% 0px",
+        threshold: [0, 0.15, 0.35, 0.6, 0.9],
+      }
+    );
+
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
+
 
   useEffect(() => {
     // ---------- Smooth scroll (Lenis) ----------
@@ -401,10 +442,34 @@ export default function App() {
           <BrandLogo variant="light" />
         </a>
         <nav className="nav__menu" aria-label="Principal">
-          <a href={routes.portfolio}>Portfólio</a>
-          <a href={routes.sobre}>Sobre</a>
-          <a href="#metodo">Método</a>
-          <a href={routes.faq}>FAQ</a>
+          <a
+            href={routes.portfolio}
+            className={activeSection === "projetos" ? "is-active" : ""}
+            aria-current={activeSection === "projetos" ? "page" : undefined}
+          >
+            Portfólio
+          </a>
+          <a
+            href={routes.sobre}
+            className={activeSection === "estudio" ? "is-active" : ""}
+            aria-current={activeSection === "estudio" ? "true" : undefined}
+          >
+            Sobre
+          </a>
+          <a
+            href="#metodo"
+            className={activeSection === "metodo" ? "is-active" : ""}
+            aria-current={activeSection === "metodo" ? "true" : undefined}
+          >
+            Método
+          </a>
+          <a
+            href={routes.faq}
+            className={activeSection === "faq" ? "is-active" : ""}
+            aria-current={activeSection === "faq" ? "true" : undefined}
+          >
+            FAQ
+          </a>
         </nav>
         <a
           className="nav__cta"
@@ -433,10 +498,30 @@ export default function App() {
       {/* Mobile menu */}
       <div className="mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav aria-label="Menu principal">
-          <a href={routes.portfolio}>Portfólio</a>
-          <a href={routes.sobre}>Sobre</a>
-          <a href="#metodo">Método</a>
-          <a href={routes.faq}>FAQ</a>
+          <a
+            href={routes.portfolio}
+            className={activeSection === "projetos" ? "is-active" : ""}
+          >
+            Portfólio
+          </a>
+          <a
+            href={routes.sobre}
+            className={activeSection === "estudio" ? "is-active" : ""}
+          >
+            Sobre
+          </a>
+          <a
+            href="#metodo"
+            className={activeSection === "metodo" ? "is-active" : ""}
+          >
+            Método
+          </a>
+          <a
+            href={routes.faq}
+            className={activeSection === "faq" ? "is-active" : ""}
+          >
+            FAQ
+          </a>
         </nav>
         {PROJECTS.length > 0 && (
           <nav className="mobile-menu__projects" aria-label="Projetos em destaque">

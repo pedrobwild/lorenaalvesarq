@@ -10,6 +10,7 @@ import { shouldRunParallax, shouldUseSmoothScroll } from "../lib/device";
 import { useSeo, projectJsonLd, breadcrumbJsonLd, organizationJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import SmartImage from "../components/SmartImage";
+import InternalNav from "../components/InternalNav";
 
 type Props = { slug: string };
 
@@ -158,15 +159,12 @@ export default function ProjectPage({ slug }: Props) {
   return (
     <div className="pp-page" ref={pageRef}>
       {/* Nav topo */}
-      <nav className="pf-nav pp-nav">
-        <a className="pf-nav__brand" href={routes.home} aria-label="lorenaalves arq — início">
-          <span className="brand-lockup">lorena<b>alves</b><sup>arq</sup></span>
-        </a>
-        <a className="pf-nav__back" href={routes.portfolio} data-cursor="hover">
-          <span className="pf-nav__arrow">←</span>
-          <span>todos os projetos</span>
-        </a>
-      </nav>
+      <InternalNav
+        active="project"
+        extraClassName="pp-nav"
+        backHref={routes.portfolio}
+        backLabel="todos os projetos"
+      />
 
       {/* Hero */}
       <header className="pp-hero">

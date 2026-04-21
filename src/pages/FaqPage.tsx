@@ -3,6 +3,7 @@ import { useSeo, breadcrumbJsonLd, faqJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import { FAQ_ITEMS } from "../components/FaqSection";
 import { track } from "../lib/analytics";
+import InternalNav from "../components/InternalNav";
 
 /**
  * Página dedicada /faq.
@@ -35,18 +36,7 @@ export default function FaqPage() {
   return (
     <div className="pf-page faq-page">
       {/* Top nav minimal — mesmo padrão do Portfolio */}
-      <nav className="pf-nav">
-        <a className="pf-nav__brand" href={routes.home} aria-label="lorenaalves arq — início">
-          <span className="brand-lockup">
-            lorena<b>alves</b>
-            <sup>arq</sup>
-          </span>
-        </a>
-        <a className="pf-nav__back" href={routes.home} data-cursor="hover">
-          <span className="pf-nav__arrow">←</span>
-          <span>voltar ao início</span>
-        </a>
-      </nav>
+      <InternalNav active="faq" backLabel="voltar ao início" />
 
       {/* Header — H1 da página */}
       <header className="pf-head">
