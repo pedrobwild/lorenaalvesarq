@@ -137,7 +137,7 @@ export default function App() {
   // antecipamos o estado para evitar flicker do indicador "→" do mobile e
   // do underline do desktop.
   useEffect(() => {
-    const HASH_TO_ID: Record<string, NavItem["id"]> = {
+    const HASH_TO_ID: Record<string, string> = {
       projetos: "projetos",
       estudio: "estudio",
       metodo: "metodo",
