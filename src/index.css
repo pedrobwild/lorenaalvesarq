@@ -1812,10 +1812,119 @@ button {
     text-align: left;
     opacity: 0.78;
     font-size: 0.92rem;
-  }
 }
 
-/* ---------- CTA / Contact ---------- */
+/* ---------- FAQ ---------- */
+.faq {
+  background: var(--bone);
+  color: var(--ink);
+  border-top: 1px solid var(--line);
+}
+
+.faq__list {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding: 0 var(--edge);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  max-width: 980px;
+}
+
+.faq__item {
+  border-top: 1px solid var(--line);
+  padding: 0;
+  transition: background 0.4s var(--ease);
+}
+
+.faq__item:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq__item[open] {
+  background: color-mix(in srgb, var(--clay) 6%, transparent);
+}
+
+.faq__q {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1.5rem;
+  align-items: baseline;
+  padding: 1.75rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  transition: color 0.4s var(--ease);
+}
+
+.faq__q::-webkit-details-marker {
+  display: none;
+}
+
+.faq__q:hover,
+.faq__q:focus-visible {
+  color: var(--clay);
+}
+
+.faq__q:focus-visible {
+  outline: 1px dashed var(--clay);
+  outline-offset: 4px;
+}
+
+.faq__q-num {
+  font-size: var(--t-xs);
+  letter-spacing: 0.2em;
+  color: var(--clay);
+  min-width: 2.5rem;
+  align-self: center;
+}
+
+.faq__q-text {
+  text-wrap: balance;
+}
+
+.faq__q-icon {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: var(--clay);
+  transition: transform 0.4s var(--ease);
+  align-self: center;
+  line-height: 1;
+}
+
+.faq__item[open] .faq__q-icon {
+  transform: rotate(45deg);
+}
+
+.faq__a {
+  padding: 0 0 1.75rem calc(2.5rem + 1.5rem);
+  max-width: 70ch;
+  animation: faq-fade 0.4s var(--ease);
+}
+
+.faq__a p {
+  font-size: clamp(0.98rem, 1.2vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--ink);
+  opacity: 0.78;
+}
+
+@keyframes faq-fade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__a { animation: none; }
+  .faq__q-icon { transition: none; }
+}
+
+
 .cta {
   background: var(--ink-900);
   color: var(--bone);
