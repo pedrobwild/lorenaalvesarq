@@ -43,7 +43,7 @@
   /* Spacing */
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
   --edge: clamp(1.5rem, 5vw, 4rem);
-  --section: clamp(6rem, 14vw, 12rem);
+  --section: clamp(3.5rem, 8vw, 7rem);
 
   /* Fluid type */
   --t-xs: clamp(0.72rem, 0.68rem + 0.1vw, 0.78rem);
