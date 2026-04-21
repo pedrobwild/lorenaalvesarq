@@ -480,7 +480,7 @@ export default function App() {
           <div>
             <div className="section__eyebrow">Manifesto</div>
             <h2 className="section__title" style={{ marginTop: "1.2rem", fontSize: "clamp(1.4rem, 2.2vw, 2rem)", lineHeight: 1.3, maxWidth: "60ch" }}>
-              Projetar é, antes de tudo, um ato de <em>escuta</em> e <em>empatia</em>. Arquitetura de verdade toma histórias como ponto de partida e as converte em espaço, luz, matéria e medida, para <em>transformar</em> a vida &mdash; em Uberlândia e no Triângulo Mineiro.
+              Projetar é, antes de tudo, um ato de <em>escuta</em> e <em>empatia</em>. Arquitetura de verdade toma histórias como ponto de partida e as converte em espaço, luz, matéria e medida, para <em>transformar</em> a vida.
             </h2>
           </div>
           <div className="projects__count mono">Selecionados · 2024 — 2026</div>
