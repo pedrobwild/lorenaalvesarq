@@ -7,7 +7,7 @@ import { useProjects } from "../lib/useProjects";
 import { routes } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
 import { shouldRunParallax, shouldUseSmoothScroll } from "../lib/device";
-import { useSeo, projectJsonLd, breadcrumbJsonLd } from "../lib/useSeo";
+import { useSeo, projectJsonLd, breadcrumbJsonLd, organizationJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import SmartImage from "../components/SmartImage";
 
@@ -35,6 +35,7 @@ export default function ProjectPage({ slug }: Props) {
 
   const jsonLd = settings && project
     ? [
+        organizationJsonLd(settings),
         projectJsonLd(settings, { ...project, tag: project.tag }),
         breadcrumbJsonLd(settings, [
           { name: "Início", path: "/" },

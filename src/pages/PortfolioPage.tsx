@@ -29,6 +29,7 @@ export default function PortfolioPage() {
     ogType: "website",
     jsonLd: settings
       ? [
+          organizationJsonLd(settings),
           breadcrumbJsonLd(settings, [
             { name: "Início", path: "/" },
             { name: "Portfólio", path: "/portfolio" },
