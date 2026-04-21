@@ -270,169 +270,64 @@ export type Database = {
           address_city: string | null
           address_region: string | null
           address_street: string | null
-          bing_site_verification: string | null
-          business_founding_year: string | null
-          business_opening_hours: string | null
-          business_postal_code: string | null
-          business_price_range: string | null
-          business_type: string | null
-          clarity_id: string | null
           contact_email: string | null
           contact_phone: string | null
           default_og_image: string | null
-          facebook_domain_verification: string | null
-          google_ads_conversion_id: string | null
-          google_analytics_id: string | null
-          google_business_profile_url: string | null
-          google_maps_url: string | null
-          google_site_verification: string | null
-          google_tag_manager_id: string | null
-          hotjar_id: string | null
           id: number
           instagram_url: string | null
           linkedin_url: string | null
-          meta_pixel_id: string | null
-          pinterest_site_verification: string | null
           pinterest_url: string | null
-          seo_author: string | null
           seo_canonical_base: string | null
-          seo_custom_head_html: string | null
           seo_default_description: string | null
           seo_default_title: string | null
-          seo_geo_placename: string | null
-          seo_geo_position: string | null
-          seo_geo_region: string | null
-          seo_keywords: string | null
-          seo_last_audit_at: string | null
-          seo_last_search_console_submit: string | null
           seo_og_image: string | null
           seo_robots: string | null
           seo_twitter_handle: string | null
           site_description: string | null
           site_title: string | null
           updated_at: string | null
-          yandex_verification: string | null
         }
         Insert: {
           address_city?: string | null
           address_region?: string | null
           address_street?: string | null
-          bing_site_verification?: string | null
-          business_founding_year?: string | null
-          business_opening_hours?: string | null
-          business_postal_code?: string | null
-          business_price_range?: string | null
-          business_type?: string | null
-          clarity_id?: string | null
           contact_email?: string | null
           contact_phone?: string | null
           default_og_image?: string | null
-          facebook_domain_verification?: string | null
-          google_ads_conversion_id?: string | null
-          google_analytics_id?: string | null
-          google_business_profile_url?: string | null
-          google_maps_url?: string | null
-          google_site_verification?: string | null
-          google_tag_manager_id?: string | null
-          hotjar_id?: string | null
           id?: number
           instagram_url?: string | null
           linkedin_url?: string | null
-          meta_pixel_id?: string | null
-          pinterest_site_verification?: string | null
           pinterest_url?: string | null
-          seo_author?: string | null
           seo_canonical_base?: string | null
-          seo_custom_head_html?: string | null
           seo_default_description?: string | null
           seo_default_title?: string | null
-          seo_geo_placename?: string | null
-          seo_geo_position?: string | null
-          seo_geo_region?: string | null
-          seo_keywords?: string | null
-          seo_last_audit_at?: string | null
-          seo_last_search_console_submit?: string | null
           seo_og_image?: string | null
           seo_robots?: string | null
           seo_twitter_handle?: string | null
           site_description?: string | null
           site_title?: string | null
           updated_at?: string | null
-          yandex_verification?: string | null
         }
         Update: {
           address_city?: string | null
           address_region?: string | null
           address_street?: string | null
-          bing_site_verification?: string | null
-          business_founding_year?: string | null
-          business_opening_hours?: string | null
-          business_postal_code?: string | null
-          business_price_range?: string | null
-          business_type?: string | null
-          clarity_id?: string | null
           contact_email?: string | null
           contact_phone?: string | null
           default_og_image?: string | null
-          facebook_domain_verification?: string | null
-          google_ads_conversion_id?: string | null
-          google_analytics_id?: string | null
-          google_business_profile_url?: string | null
-          google_maps_url?: string | null
-          google_site_verification?: string | null
-          google_tag_manager_id?: string | null
-          hotjar_id?: string | null
           id?: number
           instagram_url?: string | null
           linkedin_url?: string | null
-          meta_pixel_id?: string | null
-          pinterest_site_verification?: string | null
           pinterest_url?: string | null
-          seo_author?: string | null
           seo_canonical_base?: string | null
-          seo_custom_head_html?: string | null
           seo_default_description?: string | null
           seo_default_title?: string | null
-          seo_geo_placename?: string | null
-          seo_geo_position?: string | null
-          seo_geo_region?: string | null
-          seo_keywords?: string | null
-          seo_last_audit_at?: string | null
-          seo_last_search_console_submit?: string | null
           seo_og_image?: string | null
           seo_robots?: string | null
           seo_twitter_handle?: string | null
           site_description?: string | null
           site_title?: string | null
           updated_at?: string | null
-          yandex_verification?: string | null
-        }
-        Relationships: []
-      }
-      seo_audit_log: {
-        Row: {
-          created_at: string | null
-          id: number
-          issues: Json | null
-          kind: string
-          notes: string | null
-          score: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: number
-          issues?: Json | null
-          kind: string
-          notes?: string | null
-          score?: number | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          issues?: Json | null
-          kind?: string
-          notes?: string | null
-          score?: number | null
         }
         Relationships: []
       }
