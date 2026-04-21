@@ -202,6 +202,166 @@ button {
   margin-left: 0.25em;
   transform: translateY(0.9em);
 }
+
+/* ---------- Brand logo (imagem oficial vetorizada do brandbook) ---------- */
+.brand-logo {
+  user-select: none;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Default heights por contexto — sobrescritos via prop heightRem quando necessário */
+.nav .brand-logo { height: 1.35rem; }
+.loader .brand-logo { height: clamp(2.2rem, 5vw, 3.2rem); }
+.hero .brand-logo,
+.hero__title .brand-logo { height: clamp(3.8rem, 10vw, 9rem); }
+.footer .brand-logo { height: 1.4rem; }
+
+/* ---------- Brand seal (selo circular) ---------- */
+.brand-seal {
+  user-select: none;
+  pointer-events: none;
+  opacity: 0.92;
+}
+.brand-seal--spin {
+  animation: brand-seal-spin 32s linear infinite;
+}
+@keyframes brand-seal-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-seal--spin { animation: none; }
+}
+
+/* ---------- Concept section (Brandbook: Seriedade · Simplicidade · Sofisticação · Inovação) ---------- */
+.concept {
+  padding: var(--section) var(--edge);
+  position: relative;
+  background: var(--ink);
+  border-top: 1px solid var(--line);
+  overflow: hidden;
+}
+.concept__header {
+  max-width: 1400px;
+  margin: 0 auto 4rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 900px) {
+  .concept__header {
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+  }
+}
+.concept__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--clay);
+}
+.concept__lead {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  font-size: clamp(1.6rem, 3vw, 2.8rem);
+  color: var(--bone);
+  max-width: 22ch;
+}
+.concept__lead em {
+  font-style: italic;
+  color: var(--clay);
+  font-weight: 300;
+}
+.concept__grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+@media (min-width: 720px) {
+  .concept__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 1100px) {
+  .concept__grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+.concept__cell {
+  background: var(--ink);
+  padding: 2.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2.5rem;
+  min-height: 220px;
+  transition: background 0.5s var(--ease);
+}
+.concept__cell:hover {
+  background: var(--ink-800);
+}
+.concept__num {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.22em;
+  color: var(--clay-deep);
+}
+.concept__word {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  color: var(--bone);
+}
+.concept__seal-wrap {
+  position: absolute;
+  right: calc(var(--edge) * -0.2);
+  top: clamp(1rem, 4vw, 4rem);
+  width: clamp(10rem, 18vw, 16rem);
+  height: clamp(10rem, 18vw, 16rem);
+  opacity: 0.08;
+  pointer-events: none;
+}
+.concept__seal-wrap img {
+  width: 100%;
+  height: 100%;
+  animation: brand-seal-spin 60s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .concept__seal-wrap img { animation: none; }
+}
+
+/* Footer seal */
+.footer__seal {
+  position: absolute;
+  right: var(--edge);
+  bottom: 25%;
+  width: clamp(7rem, 11vw, 10rem);
+  height: clamp(7rem, 11vw, 10rem);
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 0;
+}
+.footer__seal img {
+  width: 100%;
+  height: 100%;
+  animation: brand-seal-spin 45s linear infinite;
+}
+@media (max-width: 720px) {
+  .footer__seal { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer__seal img { animation: none; }
+}
 .loader {
   position: fixed;
   inset: 0;

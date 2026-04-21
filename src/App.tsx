@@ -14,6 +14,7 @@ import {
   organizationJsonLd,
 } from "./lib/useSeo";
 import { useSiteSettings } from "./lib/useSiteSettings";
+import BrandLogo, { BrandSeal } from "./components/BrandLogo";
 import heroImg1 from "./assets/hero/hero-1.webp";
 import heroImg2 from "./assets/hero/hero-2.webp";
 import heroImg3 from "./assets/hero/hero-3.webp";
@@ -383,7 +384,7 @@ export default function App() {
         <div className="loader__inner">
           <div className="loader__mark">
             <span>
-              <span className="brand-lockup brand-lockup--hero">lorena<b>alves</b><sup>arq</sup></span>
+              <BrandLogo variant="light" />
             </span>
           </div>
           <div className="loader__counter">000</div>
@@ -394,7 +395,7 @@ export default function App() {
       {/* Nav */}
       <header className="nav">
         <a className="nav__brand" href="/" aria-label="lorenaalves arq — Arquitetura">
-          <span className="brand-lockup">lorena<b>alves</b><sup>arq</sup></span>
+          <BrandLogo variant="light" />
         </a>
         <nav className="nav__menu" aria-label="Principal">
           <a href={routes.portfolio}>Portfólio</a>
@@ -463,7 +464,10 @@ export default function App() {
         <div className="hero__content">
           <h1 className="hero__title">
             <span className="word">
-              <span className="brand-lockup brand-lockup--hero">lorena<b>alves</b><sup>arq</sup></span>
+              <BrandLogo
+                variant="light"
+                alt="lorenaalves arq — arquitetura em Uberlândia"
+              />
             </span>
           </h1>
           <div className="hero__meta">
@@ -579,6 +583,34 @@ export default function App() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Conceito — valores do brandbook: Seriedade · Compromisso · Simplicidade · Sofisticação · Inovação · Modernidade */}
+      <section className="concept reveal" id="conceito" aria-label="Valores do estúdio">
+        <div className="concept__seal-wrap" aria-hidden="true">
+          <BrandSeal variant="light" sizeRem={16} />
+        </div>
+        <div className="concept__header">
+          <span className="concept__eyebrow">Conceito · 03</span>
+          <h2 className="concept__lead">
+            Simplicidade como a<br />forma mais pura de <em>sofisticação</em>.
+          </h2>
+        </div>
+        <div className="concept__grid" role="list">
+          {[
+            { n: "01", word: "Seriedade" },
+            { n: "02", word: "Compromisso" },
+            { n: "03", word: "Simplicidade" },
+            { n: "04", word: "Sofisticação" },
+            { n: "05", word: "Inovação" },
+            { n: "06", word: "Modernidade" },
+          ].map((c) => (
+            <div className="concept__cell" role="listitem" key={c.n}>
+              <span className="concept__num">{c.n}</span>
+              <span className="concept__word">{c.word}</span>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -783,9 +815,12 @@ export default function App() {
 
       {/* Footer */}
       <footer className="footer">
+        <div className="footer__seal" aria-hidden="true">
+          <BrandSeal variant="light" sizeRem={10} />
+        </div>
         <div className="footer__top">
           <div>
-            <div className="footer__brand"><span className="brand-lockup">lorena<b>alves</b><sup>arq</sup></span></div>
+            <div className="footer__brand"><BrandLogo variant="light" /></div>
             <p className="footer__tag">
               Futuro, propósito e legado. Brasilidade contemporânea, desenhada para permanecer.
             </p>
