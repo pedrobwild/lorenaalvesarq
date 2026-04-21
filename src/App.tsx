@@ -7,7 +7,12 @@ import { routes } from "./lib/useHashRoute";
 import { track } from "./lib/analytics";
 import { shouldRunParallax, shouldUseSmoothScroll } from "./lib/device";
 import { useCustomCursor } from "./lib/useCustomCursor";
-import { useSeo, professionalServiceJsonLd } from "./lib/useSeo";
+import {
+  useSeo,
+  professionalServiceJsonLd,
+  websiteJsonLd,
+  organizationJsonLd,
+} from "./lib/useSeo";
 import { useSiteSettings } from "./lib/useSiteSettings";
 import heroImg1 from "./assets/hero/hero-1.webp";
 import heroImg2 from "./assets/hero/hero-2.webp";
@@ -65,7 +70,13 @@ export default function App() {
   useSeo({
     canonicalPath: "/",
     ogType: "website",
-    jsonLd: settings ? professionalServiceJsonLd(settings) : undefined,
+    jsonLd: settings
+      ? [
+          professionalServiceJsonLd(settings),
+          websiteJsonLd(settings),
+          organizationJsonLd(settings),
+        ]
+      : undefined,
   });
 
   // Hero slider — alterna a cada 4s

@@ -25,11 +25,31 @@ Deno.serve(async (req) => {
 
   const sitemapUrl = `${SUPABASE_URL}/functions/v1/sitemap`;
 
-  const txt =
-    `# robots.txt — gerado dinamicamente\n` +
-    `User-agent: *\n` +
-    (disallowAll ? `Disallow: /\n` : `Allow: /\nDisallow: /admin\n`) +
-    `\nSitemap: ${base}/sitemap.xml\nSitemap: ${sitemapUrl}\n`;
+  const txt = disallowAll
+    ? `# robots.txt — site oculto dos buscadores\n` +
+      `User-agent: *\n` +
+      `Disallow: /\n`
+    : `# robots.txt — gerado dinamicamente\n` +
+      `User-agent: *\n` +
+      `Allow: /\n` +
+      `Disallow: /admin\n` +
+      `Disallow: /admin/\n` +
+      `\n` +
+      `# Principais crawlers — taxa de crawl saudável\n` +
+      `User-agent: Googlebot\n` +
+      `Allow: /\n` +
+      `\n` +
+      `User-agent: Bingbot\n` +
+      `Allow: /\n` +
+      `\n` +
+      `User-agent: GPTBot\n` +
+      `Allow: /\n` +
+      `\n` +
+      `User-agent: Google-Extended\n` +
+      `Allow: /\n` +
+      `\n` +
+      `Sitemap: ${base}/sitemap.xml\n` +
+      `Sitemap: ${sitemapUrl}\n`;
 
   return new Response(txt, {
     headers: {
