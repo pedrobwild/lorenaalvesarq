@@ -118,7 +118,9 @@ export default function SmartImage({
         src={src}
         srcSet={srcSet}
         sizes={srcSet ? sizes : undefined}
-        alt={alt}
+        alt={resolvedAlt}
+        role={decorative ? "presentation" : undefined}
+        aria-hidden={decorative || undefined}
         loading={priority ? "eager" : "lazy"}
         decoding="async"
         fetchPriority={priority ? "high" : "auto"}
