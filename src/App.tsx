@@ -455,8 +455,12 @@ export default function App() {
             <img
               key={src}
               src={src}
-              alt="Residência contemporânea brasileira projetada pelo estúdio Lorena Alves"
+              alt="Residência contemporânea brasileira projetada pelo estúdio Lorena Alves Arquitetura em Uberlândia, MG"
               loading={i === 0 ? "eager" : "lazy"}
+              fetchPriority={i === 0 ? "high" : "auto"}
+              decoding={i === 0 ? "sync" : "async"}
+              width={1920}
+              height={1080}
               className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
               aria-hidden={i === heroIdx ? "false" : "true"}
             />
@@ -518,7 +522,7 @@ export default function App() {
             >
               <div className="project-card__media">
                 <span className="project-card__number mono">{p.number} / 06</span>
-                <img src={p.cover} alt={p.alt} loading="lazy" />
+                <img src={p.cover} alt={p.alt} loading="lazy" decoding="async" width={1280} height={1600} />
                 <span className="project-card__go mono">ver projeto →</span>
               </div>
               <div className="project-card__meta">
@@ -551,8 +555,11 @@ export default function App() {
           <div className="about__portrait reveal">
             <img
               src="/images/portrait.png"
-              alt="Retrato de Lorena Alves, arquiteta fundadora do estúdio"
+              alt="Retrato de Lorena Alves, arquiteta fundadora do estúdio em Uberlândia"
               loading="lazy"
+              decoding="async"
+              width={900}
+              height={1200}
             />
           </div>
           <div className="about__body">
@@ -643,12 +650,12 @@ export default function App() {
                 aria-roledescription="slide"
               >
                 <div className="ensaio-slide__media">
-                  <img src={e.img} alt={e.alt} loading="lazy" />
+                  <img src={e.img} alt={e.alt} loading="lazy" decoding="async" width={1600} height={2000} />
                 </div>
                 <div className="ensaio-slide__panel">
                   <span className="ensaio-slide__vertical mono">{e.vertical}</span>
                   <span className="ensaio-slide__dots" aria-hidden="true"></span>
-                  <h2 className="ensaio-slide__word">{e.word}</h2>
+                  <p className="ensaio-slide__word" aria-hidden="true">{e.word}</p>
                   <div className="ensaio-slide__body">
                     <h3 className="ensaio-slide__title">{e.title}</h3>
                     <p className="ensaio-slide__text">{e.text}</p>
@@ -742,10 +749,12 @@ export default function App() {
       <section className="cta-hero" id="cta-hero" aria-label="Vamos projetar seu próximo modo de viver">
         <img
           src="/images/cta-projetos-vida.jpg"
-          alt="Ambiente residencial projetado pelo estúdio Lorena Alves — onde projetos ganham vida"
+          alt="Ambiente residencial projetado pelo estúdio Lorena Alves Arquitetura — onde projetos ganham vida"
           className="cta-hero__bg reveal"
           loading="lazy"
           decoding="async"
+          width={1920}
+          height={1080}
         />
         <div className="cta-hero__overlay" aria-hidden="true"></div>
         <div className="cta-hero__content reveal">
