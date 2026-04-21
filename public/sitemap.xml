@@ -24,14 +24,9 @@
     </image:image>
   </url>
 
-  <!-- FAQ — âncora da home (rich result FAQPage) -->
-  <url>
-    <loc>https://lorenaalvesarq.com/#faq</loc>
-    <lastmod>2026-04-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/#faq" />
-  </url>
+  <!-- FAQ — página dedicada (canonical próprio) -->
+  <!-- Nota: /#faq é âncora da home; não consta no sitemap para evitar duplicidade com /faq. -->
+
 
   <!-- FAQ — página dedicada (canonical próprio) -->
   <url>
