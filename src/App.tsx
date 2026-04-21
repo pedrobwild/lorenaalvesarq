@@ -999,7 +999,7 @@ export default function App() {
             </p>
           </div>
           <div className="footer__col">
-            <h4>serviços</h4>
+            <h4>menu</h4>
             <ul>
               <li>
                 <a href={routes.sobre}>Sobre</a>
