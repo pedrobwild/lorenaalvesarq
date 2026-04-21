@@ -221,6 +221,8 @@ export default function ProjectPage({ slug }: Props) {
             <GalleryTile
               key={`${project.slug}-${i}`}
               img={img}
+              index={i}
+              projectTitle={`${project.title} ${project.em}`}
               onOpen={() => setLightboxIdx(i)}
             />
           ))}
@@ -260,6 +262,7 @@ export default function ProjectPage({ slug }: Props) {
         <Lightbox
           images={project.gallery}
           index={lightboxIdx}
+          projectTitle={`${project.title} ${project.em}`}
           onClose={() => setLightboxIdx(null)}
           onPrev={() =>
             setLightboxIdx((i) => (i! - 1 + project.gallery.length) % project.gallery.length)
@@ -280,7 +283,17 @@ function SpecRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function GalleryTile({ img, onOpen }: { img: ProjectImage; onOpen: () => void }) {
+function GalleryTile({
+  img,
+  index,
+  projectTitle,
+  onOpen,
+}: {
+  img: ProjectImage;
+  index: number;
+  projectTitle: string;
+  onOpen: () => void;
+}) {
   const klass = `pp-tile pp-tile--${img.format ?? "full"} pp-reveal`;
   return (
     <figure className={klass}>
@@ -291,6 +304,7 @@ function GalleryTile({ img, onOpen }: { img: ProjectImage; onOpen: () => void })
           srcSm={img.srcSm}
           blurDataUrl={img.blurDataUrl}
           alt={img.alt}
+          altFallback={`${projectTitle} — imagem ${index + 1}`}
           sizes="(max-width: 700px) 100vw, (max-width: 1200px) 50vw, 800px"
           wrapperClassName="pp-tile__img-wrap"
         />
