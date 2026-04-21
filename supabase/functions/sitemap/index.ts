@@ -74,6 +74,7 @@ Deno.serve(async (req) => {
 
   const staticUrls: UrlEntry[] = [
     { loc: `${base}/`, priority: "1.0", changefreq: "weekly", lastmod: today },
+    { loc: `${base}/#faq`, priority: "0.7", changefreq: "monthly", lastmod: today },
     { loc: `${base}/portfolio`, priority: "0.9", changefreq: "weekly", lastmod: today },
   ];
 

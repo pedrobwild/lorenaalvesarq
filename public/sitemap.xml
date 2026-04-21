@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Sitemap estático — Lorena Alves Arquitetura
+  Atualizado em 2026-04-21. A versão dinâmica (com imagens e projetos do banco)
+  é servida pela edge function /functions/v1/sitemap e referenciada no robots.txt.
+-->
 <urlset
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml"
   xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
+  <!-- Home -->
   <url>
     <loc>https://lorenaalvesarq.com/</loc>
-    <lastmod>2026-04-20</lastmod>
+    <lastmod>2026-04-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.00</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/" />
@@ -18,52 +24,63 @@
     </image:image>
   </url>
 
+  <!-- FAQ (âncora na home — útil para SiteLinks SearchBox e indexação do bloco FAQPage) -->
+  <url>
+    <loc>https://lorenaalvesarq.com/#faq</loc>
+    <lastmod>2026-04-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/#faq" />
+  </url>
+
+  <!-- Portfolio -->
   <url>
     <loc>https://lorenaalvesarq.com/portfolio</loc>
-    <lastmod>2026-04-20</lastmod>
+    <lastmod>2026-04-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/portfolio" />
   </url>
 
+  <!-- Projetos -->
   <url>
     <loc>https://lorenaalvesarq.com/projeto/casa-paineira</loc>
-    <lastmod>2026-04-20</lastmod>
+    <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-paineira" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/casa-jequitiba</loc>
-    <lastmod>2026-04-20</lastmod>
+    <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-jequitiba" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/apto-higienopolis</loc>
-    <lastmod>2026-04-20</lastmod>
+    <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/apto-higienopolis" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/casa-pau-brasil</loc>
-    <lastmod>2026-04-20</lastmod>
+    <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-pau-brasil" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/restaurante-takka</loc>
-    <lastmod>2026-04-20</lastmod>
+    <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/restaurante-takka" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/fazenda-porto</loc>
-    <lastmod>2026-04-20</lastmod>
+    <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/fazenda-porto" />
