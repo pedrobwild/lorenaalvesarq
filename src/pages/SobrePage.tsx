@@ -3,6 +3,7 @@ import { useSeo, breadcrumbJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import { track } from "../lib/analytics";
 import InternalNav from "../components/InternalNav";
+import Picture from "../components/Picture";
 
 /**
  * Página /sobre — Sobre a Lorena e o estúdio.
