@@ -131,6 +131,32 @@ export default function App() {
     return () => window.clearInterval(id);
   }, []);
 
+  // Atualização imediata do item ativo a partir do hash da URL.
+  // Quando o usuário toca em "Sobre" / "Método" / etc. no menu mobile, o link
+  // muda o hash para #estudio / #metodo antes do scroll terminar — então
+  // antecipamos o estado para evitar flicker do indicador "→" do mobile e
+  // do underline do desktop.
+  useEffect(() => {
+    const HASH_TO_ID: Record<string, NavItem["id"]> = {
+      projetos: "projetos",
+      estudio: "estudio",
+      metodo: "metodo",
+      faq: "faq",
+      contato: "contato",
+    };
+    const syncFromHash = () => {
+      const h = window.location.hash.replace(/^#/, "");
+      if (h && HASH_TO_ID[h]) setActiveSection(HASH_TO_ID[h]);
+    };
+    syncFromHash();
+    window.addEventListener("hashchange", syncFromHash);
+    window.addEventListener("lovable:navigate", syncFromHash);
+    return () => {
+      window.removeEventListener("hashchange", syncFromHash);
+      window.removeEventListener("lovable:navigate", syncFromHash);
+    };
+  }, []);
+
   // Scroll-spy: marca o item de menu da seção visível.
   // Estratégia: a cada scroll, escolhe a seção cujo topo está mais próximo
   // (mas já passou) de uma linha imaginária a ~30% do topo da viewport.
