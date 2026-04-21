@@ -4,6 +4,7 @@ import App from "./App";
 import PortfolioPage from "./pages/PortfolioPage";
 import ProjectPage from "./pages/ProjectPage";
 import FaqPage from "./pages/FaqPage";
+import SobrePage from "./pages/SobrePage";
 import PrivacidadePage from "./pages/PrivacidadePage";
 import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
@@ -27,6 +28,7 @@ function renderRoute(route: Route) {
   if (route.name === "portfolio") return <PortfolioPage />;
   if (route.name === "project") return <ProjectPage slug={route.slug} />;
   if (route.name === "faq") return <FaqPage />;
+  if (route.name === "sobre") return <SobrePage />;
   if (route.name === "privacidade") return <PrivacidadePage />;
   if (route.name === "admin-login") return <LoginPage />;
   if (route.name === "admin-dashboard")

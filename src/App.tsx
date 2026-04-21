@@ -402,7 +402,7 @@ export default function App() {
         </a>
         <nav className="nav__menu" aria-label="Principal">
           <a href={routes.portfolio}>Portfólio</a>
-          <a href="#estudio">Sobre</a>
+          <a href={routes.sobre}>Sobre</a>
           <a href="#metodo">Método</a>
           <a href={routes.faq}>FAQ</a>
         </nav>
@@ -434,7 +434,7 @@ export default function App() {
       <div className="mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav aria-label="Menu principal">
           <a href={routes.portfolio}>Portfólio</a>
-          <a href="#estudio">Sobre</a>
+          <a href={routes.sobre}>Sobre</a>
           <a href="#metodo">Método</a>
           <a href={routes.faq}>FAQ</a>
         </nav>
@@ -861,7 +861,7 @@ export default function App() {
             <h4>serviços</h4>
             <ul>
               <li>
-                <a href="#estudio">Sobre</a>
+                <a href={routes.sobre}>Sobre</a>
               </li>
               <li>
                 <a href="#metodo">Método</a>
