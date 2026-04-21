@@ -322,6 +322,18 @@ export function professionalServiceJsonLd(s: SiteSettings) {
       { "@type": "PropertyValue", propertyID: "CNPJ", value: "05.119.224/0001-30" },
       { "@type": "PropertyValue", propertyID: "CAU", value: "A66583-5" },
     ],
+    hasCredential: {
+      "@type": "EducationalOccupationalCredential",
+      name: "Registro Profissional CAU",
+      credentialCategory: "Professional Registration",
+      identifier: "A66583-5",
+      recognizedBy: {
+        "@type": "Organization",
+        name: "Conselho de Arquitetura e Urbanismo do Brasil",
+        alternateName: "CAU/BR",
+        url: "https://www.caubr.gov.br",
+      },
+    },
     priceRange: s.business_price_range || undefined,
     foundingDate: s.business_founding_year || undefined,
     openingHours: s.business_opening_hours || undefined,
