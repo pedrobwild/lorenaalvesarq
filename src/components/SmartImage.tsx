@@ -52,6 +52,8 @@ export default function SmartImage({
   blurDataUrl,
   sizes = "100vw",
   alt,
+  altFallback,
+  decorative = false,
   className,
   wrapperClassName,
   wrapperStyle,
@@ -61,6 +63,25 @@ export default function SmartImage({
 }: Props) {
   const [loaded, setLoaded] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
+
+  // Resolve alt final, NUNCA undefined: prioridade alt > fallback > "".
+  // `decorative` força alt vazio + role=presentation (acessibilidade correta).
+  const resolvedAlt = decorative
+    ? ""
+    : normalizeAlt(alt) || normalizeAlt(altFallback);
+
+  // Em dev, alerta quando a imagem fica sem alt útil — facilita auditoria.
+  if (
+    import.meta.env.DEV &&
+    !decorative &&
+    !resolvedAlt &&
+    typeof console !== "undefined"
+  ) {
+    console.warn(
+      `[SmartImage] imagem sem \`alt\` nem \`altFallback\`: ${src}. ` +
+        `Forneça um texto descritivo ou marque \`decorative\` se for puramente visual.`
+    );
+  }
 
   // Se a imagem já estiver no cache, o onLoad pode disparar antes do listener
   useEffect(() => {
