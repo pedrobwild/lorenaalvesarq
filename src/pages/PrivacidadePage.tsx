@@ -1,4 +1,3 @@
-import { routes } from "../lib/useHashRoute";
 import { useSeo, breadcrumbJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import { track } from "../lib/analytics";
