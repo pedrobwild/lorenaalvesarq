@@ -62,7 +62,7 @@ const ENSAIOS = [
     title: "Antes do traço",
     text:
       "Cada projeto começa antes do primeiro risco — começa no porquê. Na vida que vai acontecer ali, nos rituais de quem habita, no futuro que a obra torna possível.",
-    img: "/images/ensaio-proposito.jpg",
+    img: "/images/ensaio-arquitetura-autoral-lorena-alves-arquiteta.jpg",
     alt: "Ensaio propósito — atmosfera arquitetônica",
   },
   {
@@ -72,7 +72,7 @@ const ENSAIOS = [
     title: "Casa habitada",
     text:
       "A casa é o palco do cotidiano — o café de manhã, o silêncio da tarde, o encontro à noite. Desenhamos para que esse dia comum aconteça melhor, todos os dias.",
-    img: "/images/ambience-corridor.png",
+    img: "/images/corredor-iluminacao-natural-arquitetura-residencial.png",
     alt: "Corredor interno com luz rasante e piso em taco de madeira envelhecido",
   },
   {
@@ -82,7 +82,7 @@ const ENSAIOS = [
     title: "Permanência",
     text:
       "Obras feitas para atravessar o tempo — e permanecer na memória de quem as habita. Arquitetura que envelhece com beleza e se torna melhor com o uso.",
-    img: "/images/detail-materials.png",
+    img: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png",
     alt: "Detalhe construtivo com parede em taipa, madeira e luz natural rasante",
   },
 ];
@@ -712,7 +712,7 @@ export default function App() {
         <div className="about__grid">
           <div className="about__portrait reveal">
             <img
-              src="/images/portrait.png"
+              src="/images/lorena-alves-arquiteta-uberlandia-retrato.png"
               alt="Retrato de Lorena Alves, arquiteta fundadora do estúdio em Uberlândia"
               loading="lazy"
               decoding="async"
@@ -906,7 +906,7 @@ export default function App() {
       {/* CTA visual full-bleed */}
       <section className="cta-hero" id="cta-hero" aria-label="Vamos projetar seu próximo modo de viver">
         <img
-          src="/images/cta-projetos-vida.jpg"
+          src="/images/projetos-arquitetura-vida-lorena-alves-uberlandia.jpg"
           alt="Ambiente residencial projetado pelo estúdio Lorena Alves Arquitetura — onde projetos ganham vida"
           className="cta-hero__bg reveal"
           loading="lazy"
