@@ -16,6 +16,7 @@ import {
 } from "./lib/useSeo";
 import { useSiteSettings } from "./lib/useSiteSettings";
 import BrandLogo, { BrandSeal } from "./components/BrandLogo";
+import FaqSection, { FAQ_ITEMS } from "./components/FaqSection";
 import heroImg1 from "./assets/hero/hero-1.webp";
 import heroImg2 from "./assets/hero/hero-2.webp";
 import heroImg3 from "./assets/hero/hero-3.webp";
@@ -77,6 +78,7 @@ export default function App() {
           professionalServiceJsonLd(settings),
           websiteJsonLd(settings),
           organizationJsonLd(settings),
+          faqJsonLd(FAQ_ITEMS),
         ]
       : undefined,
   });
