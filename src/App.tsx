@@ -63,7 +63,7 @@ const ENSAIOS = [
     text:
       "Cada projeto começa antes do primeiro risco — começa no porquê. Na vida que vai acontecer ali, nos rituais de quem habita, no futuro que a obra torna possível.",
     img: "/images/ensaio-arquitetura-autoral-lorena-alves-arquiteta.jpg",
-    alt: "Ensaio propósito — atmosfera arquitetônica",
+    alt: "Ensaio editorial sobre o propósito do projeto arquitetônico autoral — atmosfera de estúdio com mesa de desenho, materiais e maquete, no escritório de Lorena Alves Arquitetura em Uberlândia/MG",
   },
   {
     id: "vida",
@@ -73,7 +73,7 @@ const ENSAIOS = [
     text:
       "A casa é o palco do cotidiano — o café de manhã, o silêncio da tarde, o encontro à noite. Desenhamos para que esse dia comum aconteça melhor, todos os dias.",
     img: "/images/corredor-iluminacao-natural-arquitetura-residencial.png",
-    alt: "Corredor interno com luz rasante e piso em taco de madeira envelhecido",
+    alt: "Corredor interno residencial com luz rasante natural sobre piso em taco de madeira envelhecido — projeto de arquitetura habitacional contemporânea por Lorena Alves Arquitetura",
   },
   {
     id: "legado",
@@ -83,7 +83,7 @@ const ENSAIOS = [
     text:
       "Obras feitas para atravessar o tempo — e permanecer na memória de quem as habita. Arquitetura que envelhece com beleza e se torna melhor com o uso.",
     img: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png",
-    alt: "Detalhe construtivo com parede em taipa, madeira e luz natural rasante",
+    alt: "Detalhe construtivo de parede em taipa, viga em madeira maciça e luz natural rasante — materialidade brasileira contemporânea em projeto de Lorena Alves Arquitetura, Uberlândia/MG",
   },
 ];
 
