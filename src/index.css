@@ -2250,6 +2250,14 @@ button {
   .process__item .process__num { font-size: 0.7rem; }
   .process__item .process__title { font-size: 1.1rem; }
 
+  /* ---------- FAQ ---------- */
+  .faq__list { padding: 0 var(--edge); margin-top: clamp(2rem, 8vw, 3rem); }
+  .faq__q { grid-template-columns: auto 1fr auto; gap: 0.75rem 1rem; padding: 1.35rem 0; font-size: 1.05rem; }
+  .faq__q-num { min-width: 2rem; font-size: 0.65rem; }
+  .faq__q-icon { font-size: 1.2rem; }
+  .faq__a { padding: 0 0 1.35rem calc(2rem + 1rem); }
+  .faq__a p { font-size: 0.95rem; line-height: 1.6; }
+
   /* ---------- CTA ---------- */
   .cta { padding: calc(var(--section) * 0.9) 0; }
   .cta__grid { padding: 0 var(--edge); gap: 2rem; }
