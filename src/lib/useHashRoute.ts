@@ -15,6 +15,7 @@ export type Route =
   | { name: "admin-projects" }
   | { name: "admin-project-new" }
   | { name: "admin-project-edit"; slug: string }
+  | { name: "admin-faq" }
   | { name: "not-found" };
 
 function parsePath(rawPath: string): Route {
