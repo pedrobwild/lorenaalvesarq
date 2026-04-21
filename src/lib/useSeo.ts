@@ -322,6 +322,7 @@ export function professionalServiceJsonLd(s: SiteSettings) {
     "@context": "https://schema.org",
     "@type": type,
     "@id": `${base}/#business`,
+    parentOrganization: { "@id": `${base}/#organization` },
     name: s.site_title || "Lorena Alves Arquitetura",
     legalName: "Lorena Alves Arquitetura",
     description: s.seo_default_description || s.site_description || "",
