@@ -63,7 +63,7 @@ const ENSAIOS = [
     text:
       "Cada projeto começa antes do primeiro risco — começa no porquê. Na vida que vai acontecer ali, nos rituais de quem habita, no futuro que a obra torna possível.",
     img: "/images/ensaio-arquitetura-autoral-lorena-alves-arquiteta.jpg",
-    alt: "Ensaio propósito — atmosfera arquitetônica",
+    alt: "Ensaio editorial sobre o propósito do projeto arquitetônico autoral — atmosfera de estúdio com mesa de desenho, materiais e maquete, no escritório de Lorena Alves Arquitetura em Uberlândia/MG",
   },
   {
     id: "vida",
@@ -73,7 +73,7 @@ const ENSAIOS = [
     text:
       "A casa é o palco do cotidiano — o café de manhã, o silêncio da tarde, o encontro à noite. Desenhamos para que esse dia comum aconteça melhor, todos os dias.",
     img: "/images/corredor-iluminacao-natural-arquitetura-residencial.png",
-    alt: "Corredor interno com luz rasante e piso em taco de madeira envelhecido",
+    alt: "Corredor interno residencial com luz rasante natural sobre piso em taco de madeira envelhecido — projeto de arquitetura habitacional contemporânea por Lorena Alves Arquitetura",
   },
   {
     id: "legado",
@@ -83,7 +83,7 @@ const ENSAIOS = [
     text:
       "Obras feitas para atravessar o tempo — e permanecer na memória de quem as habita. Arquitetura que envelhece com beleza e se torna melhor com o uso.",
     img: "/images/detalhe-materiais-madeira-concreto-arquitetura-brasileira.png",
-    alt: "Detalhe construtivo com parede em taipa, madeira e luz natural rasante",
+    alt: "Detalhe construtivo de parede em taipa, viga em madeira maciça e luz natural rasante — materialidade brasileira contemporânea em projeto de Lorena Alves Arquitetura, Uberlândia/MG",
   },
 ];
 
@@ -609,20 +609,29 @@ export default function App() {
       {/* Hero */}
       <section className="hero" id="inicio">
         <div className="hero__media">
-          {HERO_IMAGES.map((src, i) => (
-            <img
-              key={src}
-              src={src}
-              alt="Residência contemporânea brasileira projetada pelo estúdio Lorena Alves Arquitetura em Uberlândia, MG"
-              loading={i === 0 ? "eager" : "lazy"}
-              fetchPriority={i === 0 ? "high" : "auto"}
-              decoding={i === 0 ? "sync" : "async"}
-              width={1920}
-              height={1080}
-              className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
-              aria-hidden={i === heroIdx ? "false" : "true"}
-            />
-          ))}
+          {HERO_IMAGES.map((src, i) => {
+            const heroAlts = [
+              "Residência contemporânea brasileira projetada por Lorena Alves Arquitetura em Uberlândia, MG — fachada principal com brises em madeira e jardim tropical",
+              "Interior residencial autoral com pé-direito duplo, mobiliário brasileiro contemporâneo e luz natural — projeto de Lorena Alves Arquitetura",
+              "Detalhe arquitetônico de varanda em concreto aparente e deck em ipê em casa projetada pelo estúdio Lorena Alves em Uberlândia/MG",
+              "Sala integrada com cozinha em projeto de design de interiores residencial assinado por Lorena Alves Arquitetura no Triângulo Mineiro",
+              "Casa contemporânea em Uberlândia/MG ao entardecer com iluminação cênica e materiais autorais — arquitetura por Lorena Alves Arquitetura",
+            ];
+            return (
+              <img
+                key={src}
+                src={src}
+                alt={heroAlts[i] || heroAlts[0]}
+                loading={i === 0 ? "eager" : "lazy"}
+                fetchPriority={i === 0 ? "high" : "auto"}
+                decoding={i === 0 ? "sync" : "async"}
+                width={1920}
+                height={1080}
+                className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
+                aria-hidden={i === heroIdx ? "false" : "true"}
+              />
+            );
+          })}
         </div>
         <div className="hero__vignette"></div>
         <div className="hero__ticker">Uberlândia · 2026</div>
@@ -713,7 +722,7 @@ export default function App() {
           <div className="about__portrait reveal">
             <img
               src="/images/lorena-alves-arquiteta-uberlandia-retrato.png"
-              alt="Retrato de Lorena Alves, arquiteta fundadora do estúdio em Uberlândia"
+              alt="Retrato de Lorena Alves, arquiteta e urbanista formada pela UFU, fundadora do estúdio Lorena Alves Arquitetura em Uberlândia/MG"
               loading="lazy"
               decoding="async"
               width={900}
