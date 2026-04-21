@@ -24,6 +24,16 @@ import heroImg2 from "./assets/hero/hero-2.webp";
 import heroImg3 from "./assets/hero/hero-3.webp";
 import heroImg4 from "./assets/hero/hero-4.webp";
 import heroImg5 from "./assets/hero/hero-5.webp";
+import heroAvif1Lg from "./assets/hero/hero-1-lg.avif";
+import heroAvif1Md from "./assets/hero/hero-1-md.avif";
+import heroAvif2Lg from "./assets/hero/hero-2-lg.avif";
+import heroAvif2Md from "./assets/hero/hero-2-md.avif";
+import heroAvif3Lg from "./assets/hero/hero-3-lg.avif";
+import heroAvif3Md from "./assets/hero/hero-3-md.avif";
+import heroAvif4Lg from "./assets/hero/hero-4-lg.avif";
+import heroAvif4Md from "./assets/hero/hero-4-md.avif";
+import heroAvif5Lg from "./assets/hero/hero-5-lg.avif";
+import heroAvif5Md from "./assets/hero/hero-5-md.avif";
 
 gsap.registerPlugin(ScrollTrigger);
 
