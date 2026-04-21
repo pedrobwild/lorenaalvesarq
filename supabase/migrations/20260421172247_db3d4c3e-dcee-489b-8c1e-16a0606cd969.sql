@@ -1,0 +1,1 @@
+UPDATE public.site_settings SET contact_email = 'lorena@lorenaalvesarq.com' WHERE contact_email = 'contato@lorenaalvesarq.com';
