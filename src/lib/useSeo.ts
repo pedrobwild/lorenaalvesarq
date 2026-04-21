@@ -296,12 +296,27 @@ export function professionalServiceJsonLd(s: SiteSettings) {
         }
       : undefined;
 
-  const sameAs = [
-    s.instagram_url,
-    s.linkedin_url,
-    s.pinterest_url,
-    s.google_business_profile_url,
-  ].filter(Boolean);
+  const absUrl = (u: string | null | undefined) => {
+    if (!u) return undefined;
+    if (/^https?:\/\//i.test(u)) return u;
+    return `${base}${u.startsWith("/") ? "" : "/"}${u}`;
+  };
+
+  const logoUrl = absUrl(s.seo_og_image || s.default_og_image);
+
+  const sameAs = Array.from(
+    new Set(
+      [
+        s.instagram_url,
+        s.linkedin_url,
+        s.pinterest_url,
+        s.google_business_profile_url,
+        s.google_maps_url,
+      ]
+        .filter((x): x is string => Boolean(x))
+        .map((x) => x.trim())
+    )
+  );
 
   return {
     "@context": "https://schema.org",
@@ -311,10 +326,26 @@ export function professionalServiceJsonLd(s: SiteSettings) {
     legalName: "Lorena Alves Arquitetura",
     description: s.seo_default_description || s.site_description || "",
     url: base,
-    image: s.seo_og_image || s.default_og_image || undefined,
-    logo: s.seo_og_image || s.default_og_image || undefined,
+    image: logoUrl,
+    logo: logoUrl
+      ? {
+          "@type": "ImageObject",
+          url: logoUrl,
+          caption: s.site_title || "Lorena Alves Arquitetura",
+        }
+      : undefined,
     email: s.contact_email || undefined,
     telephone: s.contact_phone || undefined,
+    contactPoint: s.contact_phone
+      ? {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          telephone: s.contact_phone,
+          email: s.contact_email || undefined,
+          areaServed: "BR",
+          availableLanguage: ["Portuguese", "pt-BR"],
+        }
+      : undefined,
     taxID: "05.119.224/0001-30",
     vatID: "05.119.224/0001-30",
     iso6523Code: "0007:05119224000130",
