@@ -889,13 +889,32 @@ export default function App() {
                   <a href={`mailto:${settings.contact_email}`}>{settings.contact_email}</a>
                 </li>
               )}
-              {settings?.contact_phone && (
-                <li>
-                  <a href={`tel:${settings.contact_phone.replace(/[^+\d]/g, "")}`}>
-                    {settings.contact_phone}
-                  </a>
-                </li>
-              )}
+              {settings?.contact_phone && (() => {
+                const digits = settings.contact_phone.replace(/\D/g, "");
+                const formatted =
+                  digits.length === 13
+                    ? `+${digits.slice(0, 2)} ${digits.slice(2, 4)} ${digits.slice(4, 9)}-${digits.slice(9)}`
+                    : settings.contact_phone;
+                const waMsg = encodeURIComponent(
+                  "Olá, Lorena! Vim pelo site e gostaria de saber mais sobre os projetos."
+                );
+                return (
+                  <li>
+                    <a
+                      href={`https://wa.me/${digits}?text=${waMsg}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`WhatsApp ${formatted}`}
+                      onClick={() =>
+                        track("click_whatsapp", { value: { kind: "wa", from: "footer" } })
+                      }
+                    >
+                      <span aria-hidden="true">WhatsApp · </span>
+                      {formatted}
+                    </a>
+                  </li>
+                );
+              })()}
             </ul>
           </div>
         </div>
