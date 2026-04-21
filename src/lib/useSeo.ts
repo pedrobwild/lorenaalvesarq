@@ -141,9 +141,18 @@ function applySeo(settings: SiteSettings, seo: SeoInput) {
   const description =
     seo.description || settings.seo_default_description || settings.site_description || "";
   const ogImage = seo.ogImage || settings.seo_og_image || settings.default_og_image || "";
-  const canonical = seo.canonicalPath
-    ? `${base}${seo.canonicalPath.startsWith("/") ? seo.canonicalPath : `/${seo.canonicalPath}`}`
-    : base + "/";
+
+  // Canonical: ignora âncoras (#faq) e querystring para evitar duplicidade
+  // Ex.: /#faq → canonical da home (/), /faq → canonical próprio
+  const rawPath = seo.canonicalPath || "/";
+  const cleanPath = rawPath.split("#")[0].split("?")[0] || "/";
+  const canonical = `${base}${cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`}`.replace(
+    /(.+)\/$/,
+    "$1"
+  ) || `${base}/`;
+  // Garante barra final apenas para a raiz
+  const canonicalUrl = cleanPath === "/" ? `${base}/` : canonical;
+
   const robots = seo.noindex ? "noindex, nofollow" : settings.seo_robots || "index, follow";
   const ogType = seo.ogType || "website";
 
@@ -151,7 +160,26 @@ function applySeo(settings: SiteSettings, seo: SeoInput) {
 
   setMeta('meta[name="description"]', { name: "description", content: description });
   setMeta('meta[name="robots"]', { name: "robots", content: robots });
-  setMeta('link[rel="canonical"]', { rel: "canonical", href: canonical });
+  setMeta('link[rel="canonical"]', { rel: "canonical", href: canonicalUrl });
+
+  // hreflang — pt-BR + x-default apontando para o canonical da rota atual.
+  // Remove duplicatas estáticas do index.html (que apontam só para a home)
+  // e injeta as corretas conforme a página.
+  document.head
+    .querySelectorAll('link[rel="alternate"][hreflang]')
+    .forEach((n) => n.remove());
+  const hrefPt = document.createElement("link");
+  hrefPt.setAttribute("rel", "alternate");
+  hrefPt.setAttribute("hreflang", "pt-BR");
+  hrefPt.setAttribute("href", canonicalUrl);
+  hrefPt.setAttribute(MANAGED_ATTR, "true");
+  document.head.appendChild(hrefPt);
+  const hrefDefault = document.createElement("link");
+  hrefDefault.setAttribute("rel", "alternate");
+  hrefDefault.setAttribute("hreflang", "x-default");
+  hrefDefault.setAttribute("href", canonicalUrl);
+  hrefDefault.setAttribute(MANAGED_ATTR, "true");
+  document.head.appendChild(hrefDefault);
 
   // SEO extras (autor, keywords, geo)
   if (settings.seo_keywords)
@@ -175,7 +203,7 @@ function applySeo(settings: SiteSettings, seo: SeoInput) {
   setMeta('meta[property="og:title"]', { property: "og:title", content: title });
   setMeta('meta[property="og:description"]', { property: "og:description", content: description });
   setMeta('meta[property="og:type"]', { property: "og:type", content: ogType });
-  setMeta('meta[property="og:url"]', { property: "og:url", content: canonical });
+  setMeta('meta[property="og:url"]', { property: "og:url", content: canonicalUrl });
   setMeta('meta[property="og:locale"]', { property: "og:locale", content: "pt_BR" });
   setMeta('meta[property="og:site_name"]', {
     property: "og:site_name",
