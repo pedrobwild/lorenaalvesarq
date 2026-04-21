@@ -629,6 +629,19 @@ button {
   font-weight: 300;
   letter-spacing: -0.02em;
   line-height: 1;
+  position: relative;
+  transition: opacity 0.3s var(--ease);
+}
+.mobile-menu nav a.is-active {
+  font-style: italic;
+  opacity: 1;
+}
+.mobile-menu nav a.is-active::before {
+  content: "→";
+  display: inline-block;
+  margin-right: 0.5rem;
+  font-style: normal;
+  opacity: 0.7;
 }
 .mobile-menu .mono { opacity: 0.5; }
 
