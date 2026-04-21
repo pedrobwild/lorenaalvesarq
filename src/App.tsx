@@ -137,7 +137,7 @@ export default function App() {
   // Isso evita os artefatos de intersectionRatio entre seções de tamanhos
   // muito diferentes (o problema anterior).
   useEffect(() => {
-    const ids = ["projetos", "estudio", "metodo", "faq", "contato"];
+    const ids = SPY_IDS;
 
     const computeActive = () => {
       const sections = ids
