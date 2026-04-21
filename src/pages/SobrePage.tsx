@@ -3,6 +3,7 @@ import { useSeo, breadcrumbJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import { track } from "../lib/analytics";
 import InternalNav from "../components/InternalNav";
+import Picture from "../components/Picture";
 
 /**
  * Página /sobre — Sobre a Lorena e o estúdio.
@@ -244,13 +245,12 @@ export default function SobrePage() {
       {/* Retrato + bio */}
       <section className="sobre-page__intro" aria-label="Retrato e biografia">
         <div className="sobre-page__portrait">
-          <img
+          <Picture
             src="/images/lorena-alves-arquiteta-uberlandia-retrato.png"
             alt="Retrato de Lorena Alves, arquiteta e urbanista fundadora do estúdio de arquitetura em Uberlândia/MG, com pós-graduações em Design de Interiores, Lighting Design (IPOG) e Gestão Empresarial (USP)"
-            loading="lazy"
-            decoding="async"
             width={900}
             height={1200}
+            sizes="(max-width: 900px) 90vw, 480px"
           />
         </div>
         <div className="sobre-page__bio">

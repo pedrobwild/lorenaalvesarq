@@ -16,6 +16,7 @@ import {
 } from "./lib/useSeo";
 import { useSiteSettings } from "./lib/useSiteSettings";
 import BrandLogo, { BrandSeal } from "./components/BrandLogo";
+import Picture from "./components/Picture";
 import FaqSection from "./components/FaqSection";
 import { useFaq } from "./lib/useFaq";
 import heroImg1 from "./assets/hero/hero-1.webp";
@@ -23,10 +24,27 @@ import heroImg2 from "./assets/hero/hero-2.webp";
 import heroImg3 from "./assets/hero/hero-3.webp";
 import heroImg4 from "./assets/hero/hero-4.webp";
 import heroImg5 from "./assets/hero/hero-5.webp";
+import heroAvif1Lg from "./assets/hero/hero-1-lg.avif";
+import heroAvif1Md from "./assets/hero/hero-1-md.avif";
+import heroAvif2Lg from "./assets/hero/hero-2-lg.avif";
+import heroAvif2Md from "./assets/hero/hero-2-md.avif";
+import heroAvif3Lg from "./assets/hero/hero-3-lg.avif";
+import heroAvif3Md from "./assets/hero/hero-3-md.avif";
+import heroAvif4Lg from "./assets/hero/hero-4-lg.avif";
+import heroAvif4Md from "./assets/hero/hero-4-md.avif";
+import heroAvif5Lg from "./assets/hero/hero-5-lg.avif";
+import heroAvif5Md from "./assets/hero/hero-5-md.avif";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HERO_IMAGES = [heroImg1, heroImg2, heroImg3, heroImg4, heroImg5];
+type HeroSlide = { webp: string; avifLg: string; avifMd: string };
+const HERO_IMAGES: HeroSlide[] = [
+  { webp: heroImg1, avifLg: heroAvif1Lg, avifMd: heroAvif1Md },
+  { webp: heroImg2, avifLg: heroAvif2Lg, avifMd: heroAvif2Md },
+  { webp: heroImg3, avifLg: heroAvif3Lg, avifMd: heroAvif3Md },
+  { webp: heroImg4, avifLg: heroAvif4Lg, avifMd: heroAvif4Md },
+  { webp: heroImg5, avifLg: heroAvif5Lg, avifMd: heroAvif5Md },
+];
 
 /**
  * Mapeamento único entre itens do menu e ids de seção da home.
@@ -609,7 +627,7 @@ export default function App() {
       {/* Hero */}
       <section className="hero" id="inicio">
         <div className="hero__media">
-          {HERO_IMAGES.map((src, i) => {
+          {HERO_IMAGES.map((slide, i) => {
             const heroAlts = [
               "Residência contemporânea brasileira projetada por Lorena Alves Arquitetura em Uberlândia, MG — fachada principal com brises em madeira e jardim tropical",
               "Interior residencial autoral com pé-direito duplo, mobiliário brasileiro contemporâneo e luz natural — projeto de Lorena Alves Arquitetura",
@@ -618,18 +636,24 @@ export default function App() {
               "Casa contemporânea em Uberlândia/MG ao entardecer com iluminação cênica e materiais autorais — arquitetura por Lorena Alves Arquitetura",
             ];
             return (
-              <img
-                key={src}
-                src={src}
-                alt={heroAlts[i] || heroAlts[0]}
-                loading={i === 0 ? "eager" : "lazy"}
-                fetchPriority={i === 0 ? "high" : "auto"}
-                decoding={i === 0 ? "sync" : "async"}
-                width={1920}
-                height={1080}
-                className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
-                aria-hidden={i === heroIdx ? "false" : "true"}
-              />
+              <picture key={slide.webp}>
+                <source
+                  type="image/avif"
+                  srcSet={`${slide.avifMd} 1280w, ${slide.avifLg} 1920w`}
+                  sizes="100vw"
+                />
+                <img
+                  src={slide.webp}
+                  alt={heroAlts[i] || heroAlts[0]}
+                  loading={i === 0 ? "eager" : "lazy"}
+                  fetchPriority={i === 0 ? "high" : "auto"}
+                  decoding={i === 0 ? "sync" : "async"}
+                  width={1920}
+                  height={1080}
+                  className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
+                  aria-hidden={i === heroIdx ? "false" : "true"}
+                />
+              </picture>
             );
           })}
         </div>
@@ -689,7 +713,13 @@ export default function App() {
             >
               <div className="project-card__media">
                 <span className="project-card__number mono">{p.number} / 06</span>
-                <img src={p.cover} alt={p.alt} loading="lazy" decoding="async" width={1280} height={1600} />
+                <Picture
+                  src={p.cover}
+                  alt={p.alt}
+                  width={1280}
+                  height={1600}
+                  sizes="(max-width: 700px) 88vw, (max-width: 1200px) 44vw, 30vw"
+                />
                 <span className="project-card__go mono">ver projeto →</span>
               </div>
               <div className="project-card__meta">
@@ -720,13 +750,12 @@ export default function App() {
       <section className="section about" id="estudio">
         <div className="about__grid">
           <div className="about__portrait reveal">
-            <img
+            <Picture
               src="/images/lorena-alves-arquiteta-uberlandia-retrato.png"
               alt="Retrato de Lorena Alves, arquiteta e urbanista formada pela UFU, fundadora do estúdio Lorena Alves Arquitetura em Uberlândia/MG"
-              loading="lazy"
-              decoding="async"
               width={900}
               height={1200}
+              sizes="(max-width: 900px) 90vw, 480px"
             />
           </div>
           <div className="about__body">
@@ -817,7 +846,13 @@ export default function App() {
                 aria-roledescription="slide"
               >
                 <div className="ensaio-slide__media">
-                  <img src={e.img} alt={e.alt} loading="lazy" decoding="async" width={1600} height={2000} />
+                  <Picture
+                    src={e.img}
+                    alt={e.alt}
+                    width={1600}
+                    height={2000}
+                    sizes="(max-width: 900px) 100vw, 50vw"
+                  />
                 </div>
                 <div className="ensaio-slide__panel">
                   <span className="ensaio-slide__vertical mono">{e.vertical}</span>
@@ -914,14 +949,13 @@ export default function App() {
 
       {/* CTA visual full-bleed */}
       <section className="cta-hero" id="cta-hero" aria-label="Vamos projetar seu próximo modo de viver">
-        <img
+        <Picture
           src="/images/projetos-arquitetura-vida-lorena-alves-uberlandia.jpg"
           alt="Ambiente residencial projetado pelo estúdio Lorena Alves Arquitetura — onde projetos ganham vida"
           className="cta-hero__bg reveal"
-          loading="lazy"
-          decoding="async"
           width={1920}
           height={1080}
+          sizes="100vw"
         />
         <div className="cta-hero__overlay" aria-hidden="true"></div>
         <div className="cta-hero__content reveal">
