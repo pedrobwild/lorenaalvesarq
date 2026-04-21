@@ -390,7 +390,13 @@ export default function App() {
           <a href="#estudio">Sobre</a>
           <a href="#metodo">Método</a>
         </nav>
-        <a className="nav__cta" href="#contato" onClick={() => track("click_contact", { value: { from: "nav" } })}>
+        <a
+          className="nav__cta"
+          href="https://wa.me/5534996668215"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => track("click_contact", { value: { kind: "whatsapp", from: "nav" } })}
+        >
           ENTRE EM CONTATO
         </a>
         <button
@@ -742,19 +748,19 @@ export default function App() {
                 </p>
               </div>
             )}
-            {settings?.contact_email && (
-              <a
-                href={`mailto:${settings.contact_email}`}
-                className="btn-big"
-                data-cursor="hover"
-                onClick={() =>
-                  track("click_contact", { value: { kind: "email", from: "cta-button" } })
-                }
-              >
-                <span>ENTRE EM CONTATO</span>
-                <span className="btn-big__arrow"></span>
-              </a>
-            )}
+            <a
+              href="https://wa.me/5534996668215"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-big"
+              data-cursor="hover"
+              onClick={() =>
+                track("click_contact", { value: { kind: "whatsapp", from: "cta-button" } })
+              }
+            >
+              <span>ENTRE EM CONTATO</span>
+              <span className="btn-big__arrow"></span>
+            </a>
           </div>
         </div>
       </section>
