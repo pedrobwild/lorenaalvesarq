@@ -107,42 +107,67 @@ export default function App() {
   }, []);
 
   // Scroll-spy: marca o item de menu da seção visível.
-  // Usa IntersectionObserver com rootMargin que privilegia a seção
-  // cujo topo cruzou ~30% da viewport.
+  // Estratégia: a cada scroll, escolhe a seção cujo topo está mais próximo
+  // (mas já passou) de uma linha imaginária a ~30% do topo da viewport.
+  // Isso evita os artefatos de intersectionRatio entre seções de tamanhos
+  // muito diferentes (o problema anterior).
   useEffect(() => {
     const ids = ["projetos", "estudio", "metodo", "faq", "contato"];
-    const sections = ids
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => !!el);
-    if (sections.length === 0) return;
 
-    const visibility = new Map<string, number>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          visibility.set(e.target.id, e.intersectionRatio);
-        }
-        // Escolhe a seção com maior interseção atual.
-        let bestId = "";
-        let bestRatio = 0;
-        visibility.forEach((ratio, id) => {
-          if (ratio > bestRatio) {
-            bestRatio = ratio;
-            bestId = id;
-          }
-        });
-        // Se nada está visível o suficiente, mantém o último — evita flicker.
-        if (bestRatio > 0.15) setActiveSection(bestId);
-      },
-      {
-        // Considera "ativa" a seção que ocupa o terço central da viewport.
-        rootMargin: "-35% 0px -55% 0px",
-        threshold: [0, 0.15, 0.35, 0.6, 0.9],
+    const computeActive = () => {
+      const sections = ids
+        .map((id) => {
+          const el = document.getElementById(id);
+          if (!el) return null;
+          return { id, top: el.getBoundingClientRect().top };
+        })
+        .filter((s): s is { id: string; top: number } => !!s);
+
+      if (sections.length === 0) return;
+
+      const line = window.innerHeight * 0.3;
+
+      // Próximo da base da página → força última seção (contato).
+      const nearBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 4;
+      if (nearBottom) {
+        setActiveSection(sections[sections.length - 1].id);
+        return;
       }
-    );
 
-    sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
+      // Topo da página → nada ativo (logo/hero).
+      if (window.scrollY < 80) {
+        setActiveSection("");
+        return;
+      }
+
+      // Última seção cujo topo já cruzou a linha de referência.
+      let current = "";
+      for (const s of sections) {
+        if (s.top - line <= 0) current = s.id;
+        else break;
+      }
+      setActiveSection(current);
+    };
+
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        computeActive();
+      });
+    };
+
+    computeActive();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
 
 
