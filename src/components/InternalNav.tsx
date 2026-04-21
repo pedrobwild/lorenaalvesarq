@@ -6,7 +6,7 @@ type Props = {
   /** rótulo do link "voltar" */
   backLabel?: string;
   /** rota atualmente ativa, para destacar o item do menu */
-  active?: "portfolio" | "faq" | "home" | "project";
+  active?: "portfolio" | "faq" | "home" | "project" | "sobre" | "metodo";
   /** classe extra no <nav> (ex.: pp-nav para variante de fundo) */
   extraClassName?: string;
 };
@@ -36,25 +36,42 @@ export default function InternalNav({
       </a>
 
       <div className="pf-nav__menu" role="navigation" aria-label="Principal">
-        <a href={routes.home} data-cursor="hover">
+        <a
+          href={routes.home}
+          className={active === "home" ? "is-active" : ""}
+          aria-current={active === "home" ? "page" : undefined}
+          data-cursor="hover"
+        >
           Início
         </a>
         <a
           href={routes.portfolio}
           className={active === "portfolio" || active === "project" ? "is-active" : ""}
+          aria-current={active === "portfolio" || active === "project" ? "page" : undefined}
           data-cursor="hover"
         >
           Portfólio
         </a>
-        <a href="/#estudio" data-cursor="hover">
+        <a
+          href="/#estudio"
+          className={active === "sobre" ? "is-active" : ""}
+          aria-current={active === "sobre" ? "page" : undefined}
+          data-cursor="hover"
+        >
           Sobre
         </a>
-        <a href="/#metodo" data-cursor="hover">
+        <a
+          href="/#metodo"
+          className={active === "metodo" ? "is-active" : ""}
+          aria-current={active === "metodo" ? "page" : undefined}
+          data-cursor="hover"
+        >
           Método
         </a>
         <a
           href={routes.faq}
           className={active === "faq" ? "is-active" : ""}
+          aria-current={active === "faq" ? "page" : undefined}
           data-cursor="hover"
         >
           FAQ

@@ -2,6 +2,7 @@ import { routes } from "../lib/useHashRoute";
 import { useSeo, breadcrumbJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import { track } from "../lib/analytics";
+import InternalNav from "../components/InternalNav";
 
 /**
  * Página /sobre — Sobre a Lorena e o estúdio.
@@ -223,22 +224,7 @@ export default function SobrePage() {
   return (
     <div className="pf-page sobre-page">
       {/* Top nav */}
-      <nav className="pf-nav">
-        <a
-          className="pf-nav__brand"
-          href={routes.home}
-          aria-label="lorenaalves arq — início"
-        >
-          <span className="brand-lockup">
-            lorena<b>alves</b>
-            <sup>arq</sup>
-          </span>
-        </a>
-        <a className="pf-nav__back" href={routes.home} data-cursor="hover">
-          <span className="pf-nav__arrow">←</span>
-          <span>voltar ao início</span>
-        </a>
-      </nav>
+      <InternalNav active="sobre" backLabel="voltar ao início" />
 
       {/* Header */}
       <header className="pf-head">

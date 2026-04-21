@@ -1,7 +1,7 @@
-import { routes } from "../lib/useHashRoute";
 import { useSeo, breadcrumbJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import { track } from "../lib/analytics";
+import InternalNav from "../components/InternalNav";
 
 /**
  * Página /privacidade — Política de Privacidade (LGPD).
@@ -36,22 +36,7 @@ export default function PrivacidadePage() {
   return (
     <div className="pf-page privacidade-page">
       {/* Top nav minimal — mesmo padrão do Portfolio/FAQ */}
-      <nav className="pf-nav">
-        <a
-          className="pf-nav__brand"
-          href={routes.home}
-          aria-label="lorenaalves arq — início"
-        >
-          <span className="brand-lockup">
-            lorena<b>alves</b>
-            <sup>arq</sup>
-          </span>
-        </a>
-        <a className="pf-nav__back" href={routes.home} data-cursor="hover">
-          <span className="pf-nav__arrow">←</span>
-          <span>voltar ao início</span>
-        </a>
-      </nav>
+      <InternalNav backLabel="voltar ao início" />
 
       {/* Header — H1 */}
       <header className="pf-head">
