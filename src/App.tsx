@@ -394,8 +394,12 @@ export default function App() {
           className="nav__cta"
           href="https://wa.me/5534996668215"
           target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => track("click_contact", { value: { kind: "whatsapp", from: "nav" } })}
+          rel="noopener noreferrer external"
+          onClick={(e) => {
+            track("click_contact", { value: { kind: "whatsapp", from: "nav" } });
+            e.preventDefault();
+            window.open("https://wa.me/5534996668215", "_blank", "noopener,noreferrer");
+          }}
         >
           ENTRE EM CONTATO
         </a>
@@ -750,12 +754,14 @@ export default function App() {
             <a
               href="https://wa.me/5534996668215"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer external"
               className="btn-big"
               data-cursor="hover"
-              onClick={() =>
-                track("click_contact", { value: { kind: "whatsapp", from: "cta-button" } })
-              }
+              onClick={(e) => {
+                track("click_contact", { value: { kind: "whatsapp", from: "cta-button" } });
+                e.preventDefault();
+                window.open("https://wa.me/5534996668215", "_blank", "noopener,noreferrer");
+              }}
             >
               <span>ENTRE EM CONTATO</span>
               <span className="btn-big__arrow"></span>
