@@ -24,13 +24,23 @@
     </image:image>
   </url>
 
-  <!-- FAQ (âncora na home — útil para SiteLinks SearchBox e indexação do bloco FAQPage) -->
+  <!-- FAQ — âncora da home (rich result FAQPage) -->
   <url>
     <loc>https://lorenaalvesarq.com/#faq</loc>
     <lastmod>2026-04-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/#faq" />
+  </url>
+
+  <!-- FAQ — página dedicada (canonical próprio) -->
+  <url>
+    <loc>https://lorenaalvesarq.com/faq</loc>
+    <lastmod>2026-04-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/faq" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/faq" />
   </url>
 
   <!-- Portfolio -->

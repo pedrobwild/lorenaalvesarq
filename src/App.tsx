@@ -854,6 +854,9 @@ export default function App() {
               <li>
                 <a href={routes.portfolio}>Portfólio</a>
               </li>
+              <li>
+                <a href={routes.faq}>FAQ</a>
+              </li>
             </ul>
           </div>
           <div className="footer__col">
