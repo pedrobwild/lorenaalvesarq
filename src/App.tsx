@@ -90,6 +90,7 @@ const ENSAIOS = [
 export default function App() {
   const { projects: PROJECTS } = useProjects();
   const { settings } = useSiteSettings();
+  const { items: FAQ_ITEMS_DB } = useFaq();
   const [ensaioIdx, setEnsaioIdx] = useState(0);
   const ensaiosPaused = useRef(false);
   const [heroIdx, setHeroIdx] = useState(0);
@@ -100,14 +101,17 @@ export default function App() {
   useSeo({
     canonicalPath: "/",
     ogType: "website",
-    jsonLd: settings
-      ? [
-          professionalServiceJsonLd(settings),
-          websiteJsonLd(settings),
-          organizationJsonLd(settings),
-          faqJsonLd(FAQ_ITEMS),
-        ]
-      : undefined,
+    jsonLd:
+      settings && FAQ_ITEMS_DB.length > 0
+        ? [
+            professionalServiceJsonLd(settings),
+            websiteJsonLd(settings),
+            organizationJsonLd(settings),
+            faqJsonLd(
+              FAQ_ITEMS_DB.map((i) => ({ q: i.question, a: i.answer }))
+            ),
+          ]
+        : undefined,
   });
 
   // Hero slider — alterna a cada 4s
