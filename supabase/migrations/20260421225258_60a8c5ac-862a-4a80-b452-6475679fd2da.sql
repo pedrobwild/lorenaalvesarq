@@ -1,0 +1,1 @@
+UPDATE public.site_settings SET instagram_url='https://instagram.com/lorenaalves_arq' WHERE id=1;
