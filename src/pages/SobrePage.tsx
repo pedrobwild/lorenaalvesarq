@@ -246,7 +246,7 @@ export default function SobrePage() {
         <div className="sobre-page__portrait">
           <img
             src="/images/lorena-alves-arquiteta-uberlandia-retrato.png"
-            alt="Retrato de Lorena Alves, arquiteta fundadora do estúdio em Uberlândia"
+            alt="Retrato de Lorena Alves, arquiteta e urbanista fundadora do estúdio de arquitetura em Uberlândia/MG, com pós-graduações em Design de Interiores, Lighting Design (IPOG) e Gestão Empresarial (USP)"
             loading="lazy"
             decoding="async"
             width={900}

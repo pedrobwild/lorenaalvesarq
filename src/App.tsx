@@ -609,20 +609,29 @@ export default function App() {
       {/* Hero */}
       <section className="hero" id="inicio">
         <div className="hero__media">
-          {HERO_IMAGES.map((src, i) => (
-            <img
-              key={src}
-              src={src}
-              alt="Residência contemporânea brasileira projetada pelo estúdio Lorena Alves Arquitetura em Uberlândia, MG"
-              loading={i === 0 ? "eager" : "lazy"}
-              fetchPriority={i === 0 ? "high" : "auto"}
-              decoding={i === 0 ? "sync" : "async"}
-              width={1920}
-              height={1080}
-              className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
-              aria-hidden={i === heroIdx ? "false" : "true"}
-            />
-          ))}
+          {HERO_IMAGES.map((src, i) => {
+            const heroAlts = [
+              "Residência contemporânea brasileira projetada por Lorena Alves Arquitetura em Uberlândia, MG — fachada principal com brises em madeira e jardim tropical",
+              "Interior residencial autoral com pé-direito duplo, mobiliário brasileiro contemporâneo e luz natural — projeto de Lorena Alves Arquitetura",
+              "Detalhe arquitetônico de varanda em concreto aparente e deck em ipê em casa projetada pelo estúdio Lorena Alves em Uberlândia/MG",
+              "Sala integrada com cozinha em projeto de design de interiores residencial assinado por Lorena Alves Arquitetura no Triângulo Mineiro",
+              "Casa contemporânea em Uberlândia/MG ao entardecer com iluminação cênica e materiais autorais — arquitetura por Lorena Alves Arquitetura",
+            ];
+            return (
+              <img
+                key={src}
+                src={src}
+                alt={heroAlts[i] || heroAlts[0]}
+                loading={i === 0 ? "eager" : "lazy"}
+                fetchPriority={i === 0 ? "high" : "auto"}
+                decoding={i === 0 ? "sync" : "async"}
+                width={1920}
+                height={1080}
+                className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
+                aria-hidden={i === heroIdx ? "false" : "true"}
+              />
+            );
+          })}
         </div>
         <div className="hero__vignette"></div>
         <div className="hero__ticker">Uberlândia · 2026</div>
@@ -713,7 +722,7 @@ export default function App() {
           <div className="about__portrait reveal">
             <img
               src="/images/lorena-alves-arquiteta-uberlandia-retrato.png"
-              alt="Retrato de Lorena Alves, arquiteta fundadora do estúdio em Uberlândia"
+              alt="Retrato de Lorena Alves, arquiteta e urbanista formada pela UFU, fundadora do estúdio Lorena Alves Arquitetura em Uberlândia/MG"
               loading="lazy"
               decoding="async"
               width={900}
