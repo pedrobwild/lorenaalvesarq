@@ -13,6 +13,7 @@ import SeoPage from "./pages/admin/SeoPage";
 import SettingsPage from "./pages/admin/SettingsPage";
 import ProjectsListPage from "./pages/admin/ProjectsListPage";
 import ProjectFormPage from "./pages/admin/ProjectFormPage";
+import FaqAdminPage from "./pages/admin/FaqAdminPage";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import CookieBanner from "./components/CookieBanner";
 import { useCustomCursor } from "./lib/useCustomCursor";
@@ -71,6 +72,12 @@ function renderRoute(route: Route) {
     return (
       <ProtectedRoute>
         <ProjectFormPage slug={route.slug} />
+      </ProtectedRoute>
+    );
+  if (route.name === "admin-faq")
+    return (
+      <ProtectedRoute>
+        <FaqAdminPage />
       </ProtectedRoute>
     );
   // home (com ou sem âncora) e not-found caem na App (que trata âncoras legadas)

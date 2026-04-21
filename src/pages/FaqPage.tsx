@@ -1,19 +1,20 @@
 import { routes } from "../lib/useHashRoute";
 import { useSeo, breadcrumbJsonLd, faqJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
-import { FAQ_ITEMS } from "../components/FaqSection";
+import { useFaq } from "../lib/useFaq";
 import { track } from "../lib/analytics";
 import InternalNav from "../components/InternalNav";
 
 /**
  * Página dedicada /faq.
- * - Reaproveita FAQ_ITEMS (mesma fonte de verdade da home).
- * - Promove cada pergunta a H2 (página dedicada → cada pergunta é tópico próprio).
+ * - Lê os FAQs da tabela `faq_items` (gerenciada via /admin/faq).
+ * - Promove cada pergunta a H2 (cada pergunta é tópico próprio na página dedicada).
  * - JSON-LD: BreadcrumbList + FAQPage para rich result no Google.
  * - Canonical: /faq (a versão na home tem âncora /#faq, não compete).
  */
 export default function FaqPage() {
   const { settings } = useSiteSettings();
+  const { items } = useFaq();
 
   useSeo({
     title:
@@ -22,15 +23,16 @@ export default function FaqPage() {
       "Tire suas dúvidas sobre projetos de arquitetura e interiores: prazos, valores, atendimento em Uberlândia/MG e Triângulo Mineiro, processo de obra e contratação.",
     canonicalPath: "/faq",
     ogType: "website",
-    jsonLd: settings
-      ? [
-          breadcrumbJsonLd(settings, [
-            { name: "Início", path: "/" },
-            { name: "Perguntas frequentes", path: "/faq" },
-          ]),
-          faqJsonLd(FAQ_ITEMS),
-        ]
-      : undefined,
+    jsonLd:
+      settings && items.length > 0
+        ? [
+            breadcrumbJsonLd(settings, [
+              { name: "Início", path: "/" },
+              { name: "Perguntas frequentes", path: "/faq" },
+            ]),
+            faqJsonLd(items.map((i) => ({ q: i.question, a: i.answer }))),
+          ]
+        : undefined,
   });
 
   return (
@@ -58,19 +60,19 @@ export default function FaqPage() {
         itemScope
         itemType="https://schema.org/FAQPage"
       >
-        {FAQ_ITEMS.map((item, i) => (
+        {items.map((item, i) => (
           <article
             className="faq-page__item"
-            key={i}
+            key={item.id}
             itemScope
             itemProp="mainEntity"
             itemType="https://schema.org/Question"
           >
             <div className="faq-page__num mono">
-              {String(i + 1).padStart(2, "0")} / {String(FAQ_ITEMS.length).padStart(2, "0")}
+              {String(i + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
             </div>
             <h2 className="faq-page__q" itemProp="name">
-              {item.q}
+              {item.question}
             </h2>
             <div
               className="faq-page__a"
@@ -78,7 +80,7 @@ export default function FaqPage() {
               itemProp="acceptedAnswer"
               itemType="https://schema.org/Answer"
             >
-              <p itemProp="text">{item.a}</p>
+              <p itemProp="text">{item.answer}</p>
             </div>
           </article>
         ))}

@@ -16,7 +16,8 @@ import {
 } from "./lib/useSeo";
 import { useSiteSettings } from "./lib/useSiteSettings";
 import BrandLogo, { BrandSeal } from "./components/BrandLogo";
-import FaqSection, { FAQ_ITEMS } from "./components/FaqSection";
+import FaqSection from "./components/FaqSection";
+import { useFaq } from "./lib/useFaq";
 import heroImg1 from "./assets/hero/hero-1.webp";
 import heroImg2 from "./assets/hero/hero-2.webp";
 import heroImg3 from "./assets/hero/hero-3.webp";
