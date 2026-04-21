@@ -1,5 +1,7 @@
 import { useEffect } from "react";
-import { fetchSiteSettings, type SiteSettings } from "./useSiteSettings";
+import { fetchSiteSettings, invalidateSiteSettings, type SiteSettings } from "./useSiteSettings";
+
+export const SEO_REFRESH_EVENT = "seo:refresh";
 
 export type SeoInput = {
   title?: string;
@@ -280,15 +282,48 @@ export function useSeo(seo: SeoInput) {
   const dep = JSON.stringify(seo);
   useEffect(() => {
     let cancelled = false;
-    fetchSiteSettings().then((settings) => {
-      if (cancelled) return;
-      applySeo(settings, seo);
-    });
+    const apply = (force = false) =>
+      fetchSiteSettings(force).then((settings) => {
+        if (cancelled) return;
+        applySeo(settings, seo);
+      });
+    apply();
+    const onRefresh = () => apply(true);
+    window.addEventListener(SEO_REFRESH_EVENT, onRefresh);
     return () => {
       cancelled = true;
+      window.removeEventListener(SEO_REFRESH_EVENT, onRefresh);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dep]);
+}
+
+/**
+ * refreshSeoEverywhere — força reaplicação de meta tags + JSON-LD em todos os
+ * componentes que usam `useSeo`, além de invalidar o cache de site_settings
+ * e (opcionalmente) pingar buscadores com o sitemap atualizado.
+ */
+export async function refreshSeoEverywhere(opts?: { pingSearchEngines?: boolean }): Promise<{
+  ok: boolean;
+  ping?: { ok: boolean; results?: Array<{ name: string; ok: boolean; status?: number }> };
+}> {
+  invalidateSiteSettings();
+  // dispara reaplicação em todos os useSeo montados
+  window.dispatchEvent(new CustomEvent(SEO_REFRESH_EVENT));
+
+  if (!opts?.pingSearchEngines) return { ok: true };
+
+  try {
+    const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ping-sitemap`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await res.json();
+    return { ok: true, ping: data };
+  } catch {
+    return { ok: true, ping: { ok: false } };
+  }
 }
 
 // =============================================================
