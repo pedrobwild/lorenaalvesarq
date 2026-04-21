@@ -493,34 +493,19 @@ export default function App() {
           <BrandLogo variant="light" />
         </a>
         <nav className="nav__menu" aria-label="Principal">
-          <a
-            href={routes.portfolio}
-            className={activeSection === "projetos" ? "is-active" : ""}
-            aria-current={activeSection === "projetos" ? "page" : undefined}
-          >
-            Portfólio
-          </a>
-          <a
-            href={routes.sobre}
-            className={activeSection === "estudio" ? "is-active" : ""}
-            aria-current={activeSection === "estudio" ? "true" : undefined}
-          >
-            Sobre
-          </a>
-          <a
-            href="#metodo"
-            className={activeSection === "metodo" ? "is-active" : ""}
-            aria-current={activeSection === "metodo" ? "true" : undefined}
-          >
-            Método
-          </a>
-          <a
-            href={routes.faq}
-            className={activeSection === "faq" ? "is-active" : ""}
-            aria-current={activeSection === "faq" ? "true" : undefined}
-          >
-            FAQ
-          </a>
+          {NAV_ITEMS.map((item) => {
+            const isActive = activeSection === item.id;
+            return (
+              <a
+                key={item.id}
+                href={item.href}
+                className={isActive ? "is-active" : ""}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </nav>
         <a
           className="nav__cta"
