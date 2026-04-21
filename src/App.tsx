@@ -920,6 +920,7 @@ export default function App() {
         </div>
         <div className="footer__bottom">
           <span>© 2026 Lorena Alves Arquitetura. Todos os direitos reservados.</span>
+          <span>CNPJ 05.119.224/0001-30</span>
           <span>
             CAU BR ·{" "}
             <a
