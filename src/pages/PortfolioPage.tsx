@@ -7,7 +7,7 @@ import { useProjects } from "../lib/useProjects";
 import { routes } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
 import { shouldUseSmoothScroll } from "../lib/device";
-import { useSeo, breadcrumbJsonLd, itemListJsonLd } from "../lib/useSeo";
+import { useSeo, breadcrumbJsonLd, itemListJsonLd, organizationJsonLd } from "../lib/useSeo";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import SmartImage from "../components/SmartImage";
 
