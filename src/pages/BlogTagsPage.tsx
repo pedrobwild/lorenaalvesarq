@@ -82,7 +82,15 @@ export default function BlogTagsPage() {
           acompanhamento de obra e por que vale projetar antes de construir.
           Use os atalhos abaixo para começar pelo assunto que mais te interessa
           — ou volte para o{" "}
-          <a href={routes.blog} data-cursor="hover" className="link-underline">
+          <a
+            href={routes.blog}
+            data-cursor="hover"
+            style={{
+              color: "var(--clay-deep)",
+              borderBottom: "1px solid rgba(143, 84, 51, 0.35)",
+              textDecoration: "none",
+            }}
+          >
             índice cronológico do blog
           </a>
           .
