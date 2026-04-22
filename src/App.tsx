@@ -1064,12 +1064,13 @@ export default function App() {
                 <li>
                   <a
                     href={settings.instagram_url}
-                    aria-label="Instagram"
+                    aria-label="Instagram (abre em nova aba)"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer me"
                     onClick={() => track("click_instagram", { value: { from: "footer" } })}
                   >
                     Instagram
+                    <span className="sr-only"> (abre em nova aba)</span>
                   </a>
                 </li>
               )}
@@ -1077,11 +1078,12 @@ export default function App() {
                 <li>
                   <a
                     href={settings.pinterest_url}
-                    aria-label="Pinterest"
+                    aria-label="Pinterest (abre em nova aba)"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer me"
                   >
                     Pinterest
+                    <span className="sr-only"> (abre em nova aba)</span>
                   </a>
                 </li>
               )}
@@ -1089,19 +1091,21 @@ export default function App() {
                 <li>
                   <a
                     href={settings.linkedin_url}
-                    aria-label="LinkedIn"
+                    aria-label="LinkedIn (abre em nova aba)"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer me"
                   >
                     LinkedIn
+                    <span className="sr-only"> (abre em nova aba)</span>
                   </a>
                 </li>
               )}
             </ul>
           </div>
           <div className="footer__col">
-            <h4>Sobre</h4>
-            <ul>
+            <h4>Contato</h4>
+            <address className="footer__address" style={{ fontStyle: "normal" }}>
+              <ul>
               {settings?.contact_email && (
                 <li>
                   <a href={`mailto:${settings.contact_email}`}>{settings.contact_email}</a>
