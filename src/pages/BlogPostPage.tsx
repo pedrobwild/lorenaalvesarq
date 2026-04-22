@@ -161,32 +161,31 @@ export default function BlogPostPage({ slug }: Props) {
         { opacity: 0, y: 24 },
         { opacity: 1, y: 0, duration: 0.9, stagger: 0.06, ease: "power3.out" }
       );
-      const viewportH = window.innerHeight;
       gsap.utils.toArray<HTMLElement>(".blog-post__content > *").forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        // Se o elemento já está visível (ou acima do viewport) no momento do mount,
-        // anima imediatamente sem ScrollTrigger — caso contrário ele ficaria
-        // invisível para sempre porque o trigger nunca dispara.
-        if (rect.top < viewportH * 0.92) {
-          gsap.fromTo(
-            el,
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }
-          );
-        } else {
-          gsap.fromTo(
-            el,
-            { opacity: 0, y: 20 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.7,
-              ease: "power3.out",
-              scrollTrigger: { trigger: el, start: "top 92%", once: true },
-            }
-          );
-        }
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 95%",
+              once: true,
+              // Failsafe: se ao registrar o trigger ele já passou da posição,
+              // dispara imediatamente — evita conteúdo invisível por race condition
+              // entre dangerouslySetInnerHTML e ScrollTrigger.
+              onRefresh: (self) => {
+                if (self.progress > 0) gsap.set(el, { opacity: 1, y: 0 });
+              },
+            },
+          }
+        );
       });
+      // Recalcula triggers após o DOM injetado pelo dangerouslySetInnerHTML estar estável.
+      requestAnimationFrame(() => ScrollTrigger.refresh());
     });
     return () => ctx.revert();
   }, [post]);
