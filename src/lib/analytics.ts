@@ -24,6 +24,7 @@ type EventType =
   | "blog_tags_view"
   | "blog_tag_view"
   | "blog_tag_click"
+  | "blog_related_click"
   | "click_contact"
   | "click_whatsapp"
   | "click_instagram"
