@@ -124,6 +124,65 @@ export default function BlogTagsPage() {
         </ul>
       </section>
 
+      {!loading && tags.length > 0 && (
+        <section
+          className="blog-tags__guide"
+          aria-labelledby="blog-tags-guide-title"
+        >
+          <h2 id="blog-tags-guide-title" className="blog-tags__guide-title">
+            Como navegar pelo blog
+          </h2>
+          <p className="blog-tags__guide-lede">
+            Três caminhos comuns para começar — escolha o que mais se aproxima
+            do seu momento.
+          </p>
+          <ul className="blog-tags__guide-list">
+            <li>
+              <strong>Vai construir agora?</strong> Comece pelas tags{" "}
+              <a href={routes.blogTag("primeira-casa")} data-cursor="hover">
+                #primeira-casa
+              </a>{" "}
+              e{" "}
+              <a href={routes.blogTag("construcao")} data-cursor="hover">
+                #construcao
+              </a>{" "}
+              para entender o passo a passo, do terreno à entrega das chaves.
+            </li>
+            <li>
+              <strong>Está pesquisando referências?</strong> Os textos em{" "}
+              <a
+                href={routes.blogTag("arquitetura-residencial")}
+                data-cursor="hover"
+              >
+                #arquitetura-residencial
+              </a>{" "}
+              e{" "}
+              <a href={routes.blogTag("projeto-autoral")} data-cursor="hover">
+                #projeto-autoral
+              </a>{" "}
+              mostram como pensamos repertório, materialidade e autoria.
+            </li>
+            <li>
+              <strong>Pensa em renovar o que já existe?</strong> Acompanhe a
+              tag{" "}
+              <a href={routes.blogTag("reforma")} data-cursor="hover">
+                #reforma
+              </a>{" "}
+              — atualizamos com cuidados, prazos e o que considerar antes de
+              quebrar a primeira parede.
+            </li>
+          </ul>
+          <p className="blog-tags__guide-foot mono">
+            Os artigos são atualizados periodicamente. Se houver um tema que
+            você gostaria de ver por aqui,{" "}
+            <a href={`${routes.home}#contato`} data-cursor="hover">
+              escreva para o estúdio
+            </a>
+            .
+          </p>
+        </section>
+      )}
+
       <footer className="pf-foot">
         <div>
           <p className="pf-foot__quote">
