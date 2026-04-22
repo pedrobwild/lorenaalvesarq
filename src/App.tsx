@@ -527,8 +527,8 @@ export default function App() {
 
   return (
     <>
-      {/* Skip link */}
-      <a href="#inicio" className="skip-link">
+      {/* Skip link — leva direto ao conteúdo principal (a11y + SEO landmark) */}
+      <a href="#main" className="skip-link">
         Pular para o conteúdo
       </a>
 
@@ -632,6 +632,9 @@ export default function App() {
           )}
         </div>
       </div>
+
+      {/* Conteúdo principal — landmark <main> exigido para a11y/SEO */}
+      <main id="main" tabIndex={-1}>
 
       {/* Hero */}
       <section className="hero" id="inicio">
@@ -1002,8 +1005,11 @@ export default function App() {
         </div>
       </section>
 
+      </main>
+      {/* /main */}
+
       {/* Footer */}
-      <footer className="footer">
+      <footer className="footer" role="contentinfo">
         <div className="footer__seal" aria-hidden="true">
           <BrandSeal variant="light" sizeRem={10} />
         </div>
@@ -1058,12 +1064,13 @@ export default function App() {
                 <li>
                   <a
                     href={settings.instagram_url}
-                    aria-label="Instagram"
+                    aria-label="Instagram (abre em nova aba)"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer me"
                     onClick={() => track("click_instagram", { value: { from: "footer" } })}
                   >
                     Instagram
+                    <span className="sr-only"> (abre em nova aba)</span>
                   </a>
                 </li>
               )}
@@ -1071,11 +1078,12 @@ export default function App() {
                 <li>
                   <a
                     href={settings.pinterest_url}
-                    aria-label="Pinterest"
+                    aria-label="Pinterest (abre em nova aba)"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer me"
                   >
                     Pinterest
+                    <span className="sr-only"> (abre em nova aba)</span>
                   </a>
                 </li>
               )}
@@ -1083,19 +1091,21 @@ export default function App() {
                 <li>
                   <a
                     href={settings.linkedin_url}
-                    aria-label="LinkedIn"
+                    aria-label="LinkedIn (abre em nova aba)"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer me"
                   >
                     LinkedIn
+                    <span className="sr-only"> (abre em nova aba)</span>
                   </a>
                 </li>
               )}
             </ul>
           </div>
           <div className="footer__col">
-            <h4>Sobre</h4>
-            <ul>
+            <h4>Contato</h4>
+            <address className="footer__address" style={{ fontStyle: "normal" }}>
+              <ul>
               {settings?.contact_email && (
                 <li>
                   <a href={`mailto:${settings.contact_email}`}>{settings.contact_email}</a>
@@ -1127,7 +1137,8 @@ export default function App() {
                   </li>
                 );
               })()}
-            </ul>
+              </ul>
+            </address>
           </div>
         </div>
         <div className="footer__bottom">
@@ -1138,9 +1149,11 @@ export default function App() {
             <a
               href="#/admin/login"
               className="footer__admin-link"
-              aria-label="Área administrativa"
+              aria-label="Área administrativa do site"
+              title="Área administrativa"
             >
-              Brasil
+              <span aria-hidden="true">Brasil</span>
+              <span className="sr-only">Acessar área administrativa</span>
             </a>
           </span>
         </div>
