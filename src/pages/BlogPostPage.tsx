@@ -205,25 +205,52 @@ export default function BlogPostPage({ slug }: Props) {
           )}
         </header>
 
-        {post.cover_url && (
-          <figure className="blog-post__cover">
-            <img
-              src={post.cover_url_md || post.cover_url}
-              srcSet={
-                post.cover_url_sm && post.cover_url_md && post.cover_url
-                  ? `${post.cover_url_sm} 640w, ${post.cover_url_md} 1280w, ${post.cover_url} 1920w`
-                  : undefined
-              }
-              sizes="(max-width: 1100px) 100vw, 1100px"
-              alt={post.cover_alt || post.title}
-              width={1920}
-              height={1080}
-              loading="eager"
-              fetchPriority="high"
-              decoding="sync"
-            />
-          </figure>
-        )}
+        {post.cover_url && (() => {
+          const cover = derivePictureSources(post.cover_url);
+          const sizes = "(max-width: 1100px) 100vw, 1100px";
+          if (cover) {
+            return (
+              <figure className="blog-post__cover">
+                <picture>
+                  <source type="image/avif" srcSet={setToSrcset(cover.avif)} sizes={sizes} />
+                  <source type="image/webp" srcSet={setToSrcset(cover.webp)} sizes={sizes} />
+                  <source type="image/jpeg" srcSet={setToSrcset(cover.jpeg)} sizes={sizes} />
+                  <img
+                    src={cover.fallbackSrc}
+                    srcSet={setToSrcset(cover.jpeg)}
+                    sizes={sizes}
+                    alt={post.cover_alt || post.title}
+                    width={1920}
+                    height={1080}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="sync"
+                  />
+                </picture>
+              </figure>
+            );
+          }
+          // Fallback: imagens legadas que não seguem a convenção -sm/-md/-lg
+          return (
+            <figure className="blog-post__cover">
+              <img
+                src={post.cover_url_md || post.cover_url}
+                srcSet={
+                  post.cover_url_sm && post.cover_url_md && post.cover_url
+                    ? `${post.cover_url_sm} 640w, ${post.cover_url_md} 1280w, ${post.cover_url} 1920w`
+                    : undefined
+                }
+                sizes={sizes}
+                alt={post.cover_alt || post.title}
+                width={1920}
+                height={1080}
+                loading="eager"
+                fetchPriority="high"
+                decoding="sync"
+              />
+            </figure>
+          );
+        })()}
 
         <div
           className="blog-post__content"
