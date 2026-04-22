@@ -221,6 +221,6 @@ export default function PortfolioPage() {
           <span className="btn-big__arrow" />
         </a>
       </footer>
-    </div>
+    </main>
   );
 }

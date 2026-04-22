@@ -456,6 +456,6 @@ export default function SobrePage() {
           <span className="btn-big__arrow" />
         </a>
       </footer>
-    </div>
+    </main>
   );
 }

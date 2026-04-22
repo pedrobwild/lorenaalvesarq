@@ -292,6 +292,6 @@ export default function PrivacidadePage() {
           <span className="btn-big__arrow" />
         </a>
       </footer>
-    </div>
+    </main>
   );
 }

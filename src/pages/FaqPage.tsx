@@ -105,6 +105,6 @@ export default function FaqPage() {
           <span className="btn-big__arrow" />
         </a>
       </footer>
-    </div>
+    </main>
   );
 }

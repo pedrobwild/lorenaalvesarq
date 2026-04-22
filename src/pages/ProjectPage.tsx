@@ -268,7 +268,7 @@ export default function ProjectPage({ slug }: Props) {
           onNext={() => setLightboxIdx((i) => (i! + 1) % project.gallery.length)}
         />
       )}
-    </div>
+    </main>
   );
 }
 

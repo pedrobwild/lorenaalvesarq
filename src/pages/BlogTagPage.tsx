@@ -190,6 +190,6 @@ export default function BlogTagPage({ slug }: Props) {
           <span className="btn-big__arrow" />
         </a>
       </footer>
-    </div>
+    </main>
   );
 }

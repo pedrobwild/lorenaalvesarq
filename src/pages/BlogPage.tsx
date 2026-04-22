@@ -198,6 +198,6 @@ export default function BlogPage() {
           <span className="btn-big__arrow" />
         </a>
       </footer>
-    </div>
+    </main>
   );
 }

@@ -211,6 +211,6 @@ export default function BlogTagsPage() {
           <span className="btn-big__arrow" />
         </a>
       </footer>
-    </div>
+    </main>
   );
 }
