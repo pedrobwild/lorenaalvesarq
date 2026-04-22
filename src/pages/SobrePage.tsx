@@ -286,15 +286,15 @@ export default function SobrePage() {
         </div>
         <ul className="sobre-page__formacao">
           {FORMACOES.map((f, i) => (
-            <li className="sobre-page__formacao-item text-[#303030]/[0.46] bg-zinc-900" key={f.curso}>
+            <li className="sobre-page__formacao-item text-[#303030]/[0.46] bg-slate-50" key={f.curso}>
               <div className="sobre-page__formacao-num mono text-slate-50">
                 {String(i + 1).padStart(2, "0")}
               </div>
               <div className="sobre-page__formacao-body">
-                <h3 className="sobre-page__formacao-curso text-slate-50">{f.curso}</h3>
-                <p className="sobre-page__formacao-inst text-slate-50">
+                <h3 className="sobre-page__formacao-curso text-slate-950 font-bold">{f.curso}</h3>
+                <p className="sobre-page__formacao-inst text-slate-950">
                   {f.instituicao}
-                  {f.sigla ? <span className="mono text-slate-50"> · {f.sigla}</span> : null}
+                  {f.sigla ? <span className="mono text-slate-950"> · {f.sigla}</span> : null}
                 </p>
               </div>
             </li>
@@ -316,9 +316,9 @@ export default function SobrePage() {
         </div>
         <div className="sobre-page__especialidades">
           {ESPECIALIDADES.map((e) => (
-            <article className="sobre-page__esp-card border-slate-50 bg-slate-950 text-slate-100" key={e.titulo}>
-              <h3 className="sobre-page__esp-titulo">{e.titulo}</h3>
-              <p className="sobre-page__esp-desc font-medium text-slate-50">{e.desc}</p>
+            <article className="sobre-page__esp-card border-slate-50 bg-slate-950 text-slate-100 my-0 border-dotted rounded-2xl shadow-2xl" key={e.titulo}>
+              <h3 className="sobre-page__esp-titulo text-slate-50 font-semibold">{e.titulo}</h3>
+              <p className="sobre-page__esp-desc font-medium text-slate-50 my-0 py-0 border-dashed">{e.desc}</p>
             </article>
           ))}
         </div>
@@ -345,7 +345,7 @@ export default function SobrePage() {
                 {String(i + 1).padStart(2, "0")}
               </div>
               <div className="sobre-page__servico-body">
-                <h3 className="sobre-page__servico-titulo">{s.titulo}</h3>
+                <h3 className="sobre-page__servico-titulo opacity-100 bg-slate-50 text-slate-950 font-extrabold">{s.titulo}</h3>
                 <p className="sobre-page__servico-desc">{s.desc}</p>
               </div>
             </article>
@@ -367,9 +367,9 @@ export default function SobrePage() {
         </div>
         <ul className="sobre-page__softwares">
           {SOFTWARES.map((s) => (
-            <li className="sobre-page__soft" key={s}>
+            <li className="sobre-page__soft bg-slate-900" key={s}>
               <span className="mono sobre-page__soft-tag">SW</span>
-              <span className="sobre-page__soft-nome">{s}</span>
+              <span className="sobre-page__soft-nome text-slate-50">{s}</span>
             </li>
           ))}
         </ul>
