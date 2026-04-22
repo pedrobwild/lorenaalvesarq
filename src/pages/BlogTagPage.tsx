@@ -89,7 +89,7 @@ export default function BlogTagPage({ slug }: Props) {
   }, [slug, posts.length]);
 
   return (
-    <div className="pf-page blog-page">
+    <main id="main" tabIndex={-1} className="pf-page blog-page">
       <InternalNav active="blog" backHref={routes.blogTags} backLabel="ver todas as tags" />
 
       <header className="pf-head">
@@ -190,6 +190,6 @@ export default function BlogTagPage({ slug }: Props) {
           <span className="btn-big__arrow" />
         </a>
       </footer>
-    </div>
+    </main>
   );
 }

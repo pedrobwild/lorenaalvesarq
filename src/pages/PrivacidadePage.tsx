@@ -34,7 +34,7 @@ export default function PrivacidadePage() {
   });
 
   return (
-    <div className="pf-page privacidade-page">
+    <main id="main" tabIndex={-1} className="pf-page privacidade-page">
       {/* Top nav minimal — mesmo padrão do Portfolio/FAQ */}
       <InternalNav backLabel="voltar ao início" />
 
@@ -292,6 +292,6 @@ export default function PrivacidadePage() {
           <span className="btn-big__arrow" />
         </a>
       </footer>
-    </div>
+    </main>
   );
 }

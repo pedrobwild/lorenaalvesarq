@@ -84,7 +84,7 @@ export default function BlogPage() {
   }, [posts.length]);
 
   return (
-    <div className="pf-page blog-page">
+    <main id="main" tabIndex={-1} className="pf-page blog-page">
       <InternalNav active="blog" backLabel="voltar ao início" />
 
       <header className="pf-head">
@@ -198,6 +198,6 @@ export default function BlogPage() {
           <span className="btn-big__arrow" />
         </a>
       </footer>
-    </div>
+    </main>
   );
 }

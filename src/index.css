@@ -2314,20 +2314,39 @@ main:focus { outline: none; }
   transform: translateY(0);
 }
 
-/* ---------- Focus states ---------- */
+/* ---------- Focus states (acessibilidade — leitores de tela + teclado) ----------
+   Padrão WCAG 2.4.7: foco visível em TODOS elementos interativos, com contraste
+   suficiente (>=3:1) tanto no fundo escuro (--ink) quanto sobre imagens/overlays.
+   Mantemos o ring branco com halo escuro para visibilidade universal. */
 :focus-visible {
-  outline: 2px solid var(--clay);
-  outline-offset: 4px;
+  outline: 2px solid var(--bone);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(10, 10, 10, 0.55);
+  border-radius: 2px;
+}
+
+/* Mesmo com cursor customizado (cursor: none), o anel de foco do teclado
+   precisa aparecer — navegação por Tab e leitores de tela dependem disso. */
+body.has-custom-cursor *:focus-visible {
+  outline: 2px solid var(--bone) !important;
+  outline-offset: 3px !important;
 }
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
   .cursor { display: none; }
   body { cursor: auto; }
+  /* Desliga parallax e transforms decorativos */
+  .ensaios__track,
+  .hero__media,
+  .fullbleed img,
+  .ensaio-slide__media img { transform: none !important; }
 }
 
 /* =========================================================

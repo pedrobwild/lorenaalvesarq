@@ -107,7 +107,7 @@ export default function PortfolioPage() {
   }, [filter]);
 
   return (
-    <div className="pf-page">
+    <main id="main" tabIndex={-1} className="pf-page">
       {/* Top nav minimal */}
       <InternalNav active="portfolio" backLabel="voltar ao início" />
 
@@ -221,6 +221,6 @@ export default function PortfolioPage() {
           <span className="btn-big__arrow" />
         </a>
       </footer>
-    </div>
+    </main>
   );
 }
