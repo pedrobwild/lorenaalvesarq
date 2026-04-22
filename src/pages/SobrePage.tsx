@@ -223,7 +223,7 @@ export default function SobrePage() {
   });
 
   return (
-    <div className="pf-page sobre-page">
+    <main id="main" tabIndex={-1} className="pf-page sobre-page">
       {/* Top nav */}
       <InternalNav active="sobre" backLabel="voltar ao início" />
 

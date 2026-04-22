@@ -36,7 +36,7 @@ export default function FaqPage() {
   });
 
   return (
-    <div className="pf-page faq-page">
+    <main id="main" tabIndex={-1} className="pf-page faq-page">
       {/* Top nav minimal — mesmo padrão do Portfolio */}
       <InternalNav active="faq" backLabel="voltar ao início" />
 

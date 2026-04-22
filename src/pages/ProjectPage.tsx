@@ -157,7 +157,7 @@ export default function ProjectPage({ slug }: Props) {
   const next = projects[(i + 1) % projects.length] ?? project;
 
   return (
-    <div className="pp-page" ref={pageRef}>
+    <main id="main" tabIndex={-1} className="pp-page" ref={pageRef}>
       {/* Nav topo */}
       <InternalNav
         active="project"

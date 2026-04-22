@@ -60,7 +60,7 @@ export default function BlogTagsPage() {
   }, [tags.length]);
 
   return (
-    <div className="pf-page blog-page">
+    <main id="main" tabIndex={-1} className="pf-page blog-page">
       <InternalNav active="blog" backHref={routes.blog} backLabel="voltar ao blog" />
 
       <header className="pf-head">
