@@ -164,7 +164,7 @@ export default function SobrePage() {
             name: "Lorena Alves",
             jobTitle: "Arquiteta e Urbanista",
             email: contactEmail,
-            image: `${(settings.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "")}/images/lorena-alves-arquiteta-uberlandia-retrato.png`,
+            image: `${(settings.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "")}/images/lorena-alves-retrato-v2.jpg`,
             url: `${(settings.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "")}/sobre`,
             alumniOf: [
               {
@@ -246,7 +246,7 @@ export default function SobrePage() {
       <section className="sobre-page__intro" aria-label="Retrato e biografia">
         <div className="sobre-page__portrait">
           <Picture
-            src="/images/lorena-alves-arquiteta-uberlandia-retrato.png"
+            src="/images/lorena-alves-retrato-v2.jpg"
             alt="Retrato de Lorena Alves, arquiteta e urbanista fundadora do estúdio de arquitetura em Uberlândia/MG, com pós-graduações em Design de Interiores, Lighting Design (IPOG) e Gestão Empresarial (USP)"
             width={900}
             height={1200}
