@@ -64,7 +64,7 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { id: "projetos", label: "Portfólio", href: routes.portfolio },
   { id: "estudio", label: "Sobre", href: routes.sobre },
-  { id: "metodo", label: "Método", href: "#metodo" },
+  { id: "metodo", label: "Método", href: `${routes.home}#metodo` },
   { id: "blog", label: "Blog", href: routes.blog },
   { id: "faq", label: "FAQ", href: routes.faq },
 ];
@@ -171,7 +171,14 @@ export default function App() {
     };
     const syncFromHash = () => {
       const h = window.location.hash.replace(/^#/, "");
-      if (h && HASH_TO_ID[h]) setActiveSection(HASH_TO_ID[h]);
+      if (h && HASH_TO_ID[h]) {
+        setActiveSection(HASH_TO_ID[h]);
+        // Rola até a seção alvo (útil quando se chega de outra rota com hash).
+        requestAnimationFrame(() => {
+          const el = document.getElementById(HASH_TO_ID[h]);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
     };
     syncFromHash();
     window.addEventListener("hashchange", syncFromHash);
