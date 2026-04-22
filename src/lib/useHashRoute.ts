@@ -7,6 +7,8 @@ export type Route =
   | { name: "sobre" }
   | { name: "privacidade" }
   | { name: "project"; slug: string }
+  | { name: "blog" }
+  | { name: "blog-post"; slug: string }
   | { name: "admin-login" }
   | { name: "admin-dashboard" }
   | { name: "admin-analytics" }
@@ -16,6 +18,9 @@ export type Route =
   | { name: "admin-project-new" }
   | { name: "admin-project-edit"; slug: string }
   | { name: "admin-faq" }
+  | { name: "admin-blog" }
+  | { name: "admin-blog-new" }
+  | { name: "admin-blog-edit"; slug: string }
   | { name: "not-found" };
 
 function parsePath(rawPath: string): Route {
@@ -30,6 +35,11 @@ function parsePath(rawPath: string): Route {
   const projMatch = path.match(/^\/projeto\/([a-z0-9-]+)$/);
   if (projMatch) return { name: "project", slug: projMatch[1] };
 
+  // Blog (público)
+  if (path === "/blog") return { name: "blog" };
+  const blogMatch = path.match(/^\/blog\/([a-z0-9-]+)$/);
+  if (blogMatch) return { name: "blog-post", slug: blogMatch[1] };
+
   // Admin
   if (path === "/admin/login") return { name: "admin-login" };
   if (path === "/admin") return { name: "admin-dashboard" };
@@ -41,6 +51,10 @@ function parsePath(rawPath: string): Route {
   if (path === "/admin/projects/new") return { name: "admin-project-new" };
   const adminEdit = path.match(/^\/admin\/projects\/([a-z0-9-]+)$/);
   if (adminEdit) return { name: "admin-project-edit", slug: adminEdit[1] };
+  if (path === "/admin/blog") return { name: "admin-blog" };
+  if (path === "/admin/blog/new") return { name: "admin-blog-new" };
+  const adminBlogEdit = path.match(/^\/admin\/blog\/([a-z0-9-]+)$/);
+  if (adminBlogEdit) return { name: "admin-blog-edit", slug: adminBlogEdit[1] };
 
   return { name: "not-found" };
 }
@@ -87,6 +101,8 @@ export const routes = {
   sobre: "/sobre",
   privacidade: "/privacidade",
   project: (slug: string) => `/projeto/${slug}`,
+  blog: "/blog",
+  blogPost: (slug: string) => `/blog/${slug}`,
   adminLogin: "/admin/login",
   adminDashboard: "/admin",
   adminAnalytics: "/admin/analytics",
@@ -96,6 +112,9 @@ export const routes = {
   adminProjectNew: "/admin/projects/new",
   adminProjectEdit: (slug: string) => `/admin/projects/${slug}`,
   adminFaq: "/admin/faq",
+  adminBlog: "/admin/blog",
+  adminBlogNew: "/admin/blog/new",
+  adminBlogEdit: (slug: string) => `/admin/blog/${slug}`,
 };
 
 // Navega programaticamente sem recarregar a página.
