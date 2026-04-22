@@ -7,6 +7,7 @@ import { useSiteSettings } from "../lib/useSiteSettings";
 import { useSeo, breadcrumbJsonLd, organizationJsonLd } from "../lib/useSeo";
 import { routes } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
+import BlogCardCover from "../components/BlogCardCover";
 
 function formatDate(iso: string | null): string {
   if (!iso) return "";
