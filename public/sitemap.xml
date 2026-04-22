@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Sitemap estático — Lorena Alves Arquitetura
-  Atualizado em 2026-04-21 — após otimização de imagens (AVIF/WebP/JPG em 3 tamanhos).
-  Inclui imagens em -lg.jpg (1920px, ~200-450KB cada) — melhor para indexação Google Images
-  do que os PNGs originais de 6-8MB.
-  A versão dinâmica (com galeria completa e dados em tempo real do banco)
-  é servida pela edge function /functions/v1/sitemap, declarada no robots.txt.
+  Atualizado em 2026-04-22.
+  Lista TODAS as rotas indexáveis: home, sobre, portfólio, FAQ, privacidade,
+  blog (índice + tags + posts) e cada projeto individual visível.
+  A versão dinâmica (com galeria completa em tempo real) é servida pela
+  edge function /functions/v1/sitemap, declarada também no robots.txt.
 -->
 <urlset
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -15,7 +15,7 @@
   <!-- Home -->
   <url>
     <loc>https://lorenaalvesarq.com/</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-04-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.00</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/" />
@@ -30,22 +30,12 @@
       <image:title>Lorena Alves — arquiteta e urbanista em Uberlândia/MG</image:title>
       <image:caption>Retrato da arquiteta Lorena Alves, fundadora do estúdio.</image:caption>
     </image:image>
-    <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/projetos-arquitetura-vida-lorena-alves-uberlandia-lg.jpg</image:loc>
-      <image:title>Projetos de arquitetura que ganham vida — Lorena Alves Arquitetura</image:title>
-      <image:caption>Ambiente residencial autoral projetado pelo estúdio em Uberlândia/MG.</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/ensaio-arquitetura-autoral-lorena-alves-arquiteta.jpg</image:loc>
-      <image:title>Ensaio editorial — propósito antes do traço</image:title>
-      <image:caption>Atmosfera de estúdio com mesa de desenho e materiais autorais.</image:caption>
-    </image:image>
   </url>
 
   <!-- Sobre -->
   <url>
     <loc>https://lorenaalvesarq.com/sobre</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-04-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/sobre" />
@@ -57,20 +47,10 @@
     </image:image>
   </url>
 
-  <!-- FAQ — página dedicada (canonical próprio) -->
-  <url>
-    <loc>https://lorenaalvesarq.com/faq</loc>
-    <lastmod>2026-04-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/faq" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/faq" />
-  </url>
-
   <!-- Portfolio -->
   <url>
     <loc>https://lorenaalvesarq.com/portfolio</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-04-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/portfolio" />
@@ -78,167 +58,245 @@
     <image:image>
       <image:loc>https://lorenaalvesarq.com/images/casa-paineira-pavilhao-concreto-ipe-uberlandia-lg.jpg</image:loc>
       <image:title>Casa Paineira — Lorena Alves Arquitetura</image:title>
-      <image:caption>Casa Paineira em Itaim da Serra/SP — pavilhão residencial em concreto aparente apicoado e ipê tauari, projetado pelo estúdio de Uberlândia/MG.</image:caption>
+      <image:caption>Casa Paineira em Itaim da Serra/SP — pavilhão residencial em concreto aparente apicoado e ipê tauari.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://lorenaalvesarq.com/images/casa-jequitiba-interior-contemporaneo-brasileiro-lg.jpg</image:loc>
       <image:title>Casa Jequitibá — Lorena Alves Arquitetura</image:title>
-      <image:caption>Apartamento em Jardim Europa, São Paulo/SP — design de interiores em residência modernista dos anos 70 com curadoria de mobiliário brasileiro contemporâneo.</image:caption>
+      <image:caption>Apartamento em Jardim Europa, São Paulo/SP — design de interiores em residência modernista dos anos 70.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://lorenaalvesarq.com/images/apartamento-higienopolis-design-interiores-walnut-lg.jpg</image:loc>
       <image:title>Apartamento Higienópolis — Lorena Alves Arquitetura</image:title>
-      <image:caption>Apartamento em Higienópolis, São Paulo/SP — projeto residencial de 210 m² com estante-escultura em american walnut e travertino clássico.</image:caption>
+      <image:caption>Apartamento em Higienópolis, São Paulo/SP — projeto residencial de 210 m² com estante-escultura em american walnut.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://lorenaalvesarq.com/images/casa-pau-brasil-residencia-praia-cantilever-lg.jpg</image:loc>
       <image:title>Casa Pau-Brasil — Lorena Alves Arquitetura</image:title>
-      <image:caption>Casa de praia no Guarujá/SP — residência de 560 m² em concreto protendido com volume social em cantiléver de 12 metros sobre o mar.</image:caption>
+      <image:caption>Casa de praia no Guarujá/SP — residência em concreto protendido com cantiléver de 12 metros sobre o mar.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://lorenaalvesarq.com/images/restaurante-takka-arquitetura-comercial-gastronomica-lg.jpg</image:loc>
       <image:title>Restaurante Takka — Lorena Alves Arquitetura</image:title>
-      <image:caption>Restaurante em Pinheiros, São Paulo/SP — arquitetura comercial e gastronômica de 280 m² com banquettes em couro caramelo e marcenaria em carvalho fumê.</image:caption>
+      <image:caption>Restaurante em Pinheiros, São Paulo/SP — arquitetura comercial e gastronômica em couro caramelo e carvalho fumê.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://lorenaalvesarq.com/images/fazenda-porto-arquitetura-rural-taipa-minas-gerais-lg.jpg</image:loc>
       <image:title>Fazenda Porto — Lorena Alves Arquitetura</image:title>
-      <image:caption>Conjunto rural na Serra da Canastra/MG — 1.200 m² em taipa de pilão, pau-a-pique e telha cerâmica artesanal, em diálogo com a arquitetura colonial mineira.</image:caption>
+      <image:caption>Conjunto rural na Serra da Canastra/MG em taipa de pilão, pau-a-pique e telha cerâmica artesanal.</image:caption>
     </image:image>
   </url>
 
-  <!-- Projetos individuais -->
+  <!-- FAQ -->
   <url>
-    <loc>https://lorenaalvesarq.com/projeto/casa-paineira</loc>
-    <lastmod>2026-04-21</lastmod>
+    <loc>https://lorenaalvesarq.com/faq</loc>
+    <lastmod>2026-04-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-paineira" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/projeto/casa-paineira" />
-    <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/casa-paineira-pavilhao-concreto-ipe-uberlandia-lg.jpg</image:loc>
-      <image:title>Casa Paineira — projeto residencial em pavilhão de concreto e ipê</image:title>
-      <image:caption>Casa Paineira em Itaim da Serra/SP — pavilhão horizontal em concreto aparente apicoado e ipê tauari, por Lorena Alves Arquitetura.</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/varanda-deck-ipe-casa-uberlandia-lg.jpg</image:loc>
-      <image:title>Varanda da Casa Paineira — deck em ipê</image:title>
-      <image:caption>Varanda suspensa com piso em deck de ipê integrada ao jardim tropical.</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/corredor-iluminacao-natural-arquitetura-residencial-lg.jpg</image:loc>
-      <image:title>Corredor com luz rasante natural — Casa Paineira</image:title>
-      <image:caption>Corredor interno banhado por luz rasante natural sobre paredes em concreto aparente.</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/escada-escultorica-madeira-macica-design-interiores-lg.jpg</image:loc>
-      <image:title>Escada escultórica em madeira maciça — Casa Paineira</image:title>
-      <image:caption>Escada escultórica em ipê com degraus em balanço.</image:caption>
-    </image:image>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/faq" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/faq" />
   </url>
 
+  <!-- Privacidade -->
   <url>
-    <loc>https://lorenaalvesarq.com/projeto/casa-jequitiba</loc>
-    <lastmod>2026-04-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-jequitiba" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/projeto/casa-jequitiba" />
-    <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/casa-jequitiba-interior-contemporaneo-brasileiro-lg.jpg</image:loc>
-      <image:title>Casa Jequitibá — design de interiores em residência modernista</image:title>
-      <image:caption>Sala com curadoria de mobiliário autoral brasileiro contemporâneo, sofá em linho cru e mesa em jequitibá-rosa.</image:caption>
-    </image:image>
+    <loc>https://lorenaalvesarq.com/privacidade</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/privacidade" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/privacidade" />
+  </url>
+
+  <!-- ============================================================
+       BLOG — índice, tags e posts
+       ============================================================ -->
+  <url>
+    <loc>https://lorenaalvesarq.com/blog</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/blog" />
   </url>
 
   <url>
-    <loc>https://lorenaalvesarq.com/projeto/apto-higienopolis</loc>
-    <lastmod>2026-04-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/apto-higienopolis" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/projeto/apto-higienopolis" />
-    <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/apartamento-higienopolis-design-interiores-walnut-lg.jpg</image:loc>
-      <image:title>Apartamento Higienópolis — projeto de design de interiores</image:title>
-      <image:caption>Sala social com estante-escultura em american walnut atravessando todo o ambiente.</image:caption>
-    </image:image>
+    <loc>https://lorenaalvesarq.com/blog/tags</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.55</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tags" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/blog/tags" />
   </url>
 
+  <!-- Blog post: Como funciona um projeto arquitetônico -->
   <url>
-    <loc>https://lorenaalvesarq.com/projeto/casa-pau-brasil</loc>
-    <lastmod>2026-04-21</lastmod>
+    <loc>https://lorenaalvesarq.com/blog/como-funciona-projeto-arquitetonico</loc>
+    <lastmod>2026-04-22</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-pau-brasil" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/projeto/casa-pau-brasil" />
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/como-funciona-projeto-arquitetonico" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/blog/como-funciona-projeto-arquitetonico" />
     <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/casa-pau-brasil-residencia-praia-cantilever-lg.jpg</image:loc>
-      <image:title>Casa Pau-Brasil — residência de praia em cantiléver</image:title>
-      <image:caption>Volume social em cantiléver de concreto protendido sobre encosta no Guarujá/SP, com vão livre de 12 metros voltado para o oceano.</image:caption>
+      <image:loc>https://erivcmnvvgxyfkhugupq.supabase.co/storage/v1/object/public/blog-images/a6881713-21c5-4b4e-a992-ddfd4d29ee38.jpg</image:loc>
+      <image:title>Como funciona um projeto arquitetônico — etapas, prazos, requisitos e ferramentas</image:title>
+      <image:caption>Escritório de arquitetura com mesas de trabalho, monitores e projetos em andamento.</image:caption>
     </image:image>
   </url>
 
-  <url>
-    <loc>https://lorenaalvesarq.com/projeto/restaurante-takka</loc>
-    <lastmod>2026-04-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/restaurante-takka" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/projeto/restaurante-takka" />
-    <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/restaurante-takka-arquitetura-comercial-gastronomica-lg.jpg</image:loc>
-      <image:title>Restaurante Takka — arquitetura comercial e gastronômica</image:title>
-      <image:caption>Salão principal com banquettes corridas em couro caramelo, mesas em carvalho fumê e iluminação pontual.</image:caption>
-    </image:image>
-  </url>
-
-  <url>
-    <loc>https://lorenaalvesarq.com/projeto/fazenda-porto</loc>
-    <lastmod>2026-04-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/fazenda-porto" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/projeto/fazenda-porto" />
-    <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/fazenda-porto-arquitetura-rural-taipa-minas-gerais-lg.jpg</image:loc>
-      <image:title>Fazenda Porto — arquitetura rural mineira em taipa</image:title>
-      <image:caption>Pavilhão principal em taipa de pilão com cobertura em telha cerâmica artesanal, na Serra da Canastra/MG.</image:caption>
-    </image:image>
-  </url>
-
-  <!-- Blog: Como construir minha casa -->
+  <!-- Blog post: Como construir minha casa -->
   <url>
     <loc>https://lorenaalvesarq.com/blog/como-construir-minha-casa</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-04-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/como-construir-minha-casa" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/blog/como-construir-minha-casa" />
     <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/blog-como-construir-casa-arquitetura-residencial-lg.jpg</image:loc>
+      <image:loc>https://lorenaalvesarq.com/images/blog/construir-casa-1-cover.jpg</image:loc>
       <image:title>Como construir minha casa — guia de arquitetura residencial</image:title>
-      <image:caption>Casa residencial contemporânea brasileira ao entardecer.</image:caption>
+      <image:caption>Casa residencial autoral em construção — projeto Lorena Alves Arquitetura.</image:caption>
     </image:image>
+  </url>
+
+  <!-- Blog tags -->
+  <url>
+    <loc>https://lorenaalvesarq.com/blog/tag/arquitetura-residencial</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.50</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/arquitetura-residencial" />
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/blog/tag/briefing</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.50</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/briefing" />
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/blog/tag/construcao</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.50</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/construcao" />
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/blog/tag/etapas</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.50</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/etapas" />
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/blog/tag/prazo</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.50</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/prazo" />
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/blog/tag/primeira-casa</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.50</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/primeira-casa" />
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/blog/tag/projeto-arquitetonico</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.50</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/projeto-arquitetonico" />
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/blog/tag/projeto-autoral</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.50</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/projeto-autoral" />
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/blog/tag/reforma</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.50</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/reforma" />
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/blog/tag/uberlandia</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.50</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/uberlandia" />
+  </url>
+
+  <!-- ============================================================
+       PROJETOS — fichas individuais
+       ============================================================ -->
+  <url>
+    <loc>https://lorenaalvesarq.com/projeto/casa-paineira</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-paineira" />
     <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/blog-escolha-terreno-construcao-casa-lg.jpg</image:loc>
-      <image:title>Como escolher o terreno para construir sua casa</image:title>
-      <image:caption>Vista aérea de terreno demarcado para construção residencial.</image:caption>
+      <image:loc>https://lorenaalvesarq.com/images/casa-paineira-pavilhao-concreto-ipe-uberlandia-lg.jpg</image:loc>
+      <image:title>Casa Paineira — projeto residencial em pavilhão de concreto e ipê</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/projeto/casa-jequitiba</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-jequitiba" />
     <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/blog-planta-baixa-projeto-arquitetonico-residencial-lg.jpg</image:loc>
-      <image:title>Planta baixa e projeto arquitetônico residencial</image:title>
-      <image:caption>Arquiteta trabalhando em plantas baixas e cortes de projeto residencial.</image:caption>
+      <image:loc>https://lorenaalvesarq.com/images/casa-jequitiba-interior-contemporaneo-brasileiro-lg.jpg</image:loc>
+      <image:title>Casa Jequitibá — design de interiores em residência modernista</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/projeto/apto-higienopolis</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/apto-higienopolis" />
     <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/blog-reuniao-arquiteto-cliente-projeto-casa-lg.jpg</image:loc>
-      <image:title>Reunião com arquiteto para projeto da casa</image:title>
-      <image:caption>Arquiteta desenhando plantas em estúdio com luz natural.</image:caption>
+      <image:loc>https://lorenaalvesarq.com/images/apartamento-higienopolis-design-interiores-walnut-lg.jpg</image:loc>
+      <image:title>Apartamento Higienópolis — projeto de design de interiores</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/projeto/casa-pau-brasil</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-pau-brasil" />
     <image:image>
-      <image:loc>https://lorenaalvesarq.com/images/blog-acompanhamento-obra-construcao-residencial-lg.jpg</image:loc>
-      <image:title>Acompanhamento de obra residencial</image:title>
-      <image:caption>Obra residencial em andamento com estrutura de concreto e madeira.</image:caption>
+      <image:loc>https://lorenaalvesarq.com/images/casa-pau-brasil-residencia-praia-cantilever-lg.jpg</image:loc>
+      <image:title>Casa Pau-Brasil — residência de praia em cantiléver</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/projeto/restaurante-takka</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/restaurante-takka" />
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/restaurante-takka-arquitetura-comercial-gastronomica-lg.jpg</image:loc>
+      <image:title>Restaurante Takka — arquitetura comercial e gastronômica</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://lorenaalvesarq.com/projeto/fazenda-porto</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/fazenda-porto" />
+    <image:image>
+      <image:loc>https://lorenaalvesarq.com/images/fazenda-porto-arquitetura-rural-taipa-minas-gerais-lg.jpg</image:loc>
+      <image:title>Fazenda Porto — arquitetura rural mineira em taipa</image:title>
     </image:image>
   </url>
 </urlset>
