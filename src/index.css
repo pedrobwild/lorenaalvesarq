@@ -215,7 +215,7 @@ button {
 .loader .brand-logo { height: clamp(2.2rem, 5vw, 3.2rem); }
 .hero .brand-logo,
 .hero__title .brand-logo {
-  height: clamp(3.8rem, 10vw, 9rem);
+  height: clamp(2.8rem, 7.5vw, 6.6rem);
   display: block;
 }
 .footer .brand-logo { height: 1.4rem; }
