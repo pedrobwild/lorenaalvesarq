@@ -108,3 +108,66 @@ export function slugify(input: string): string {
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
 }
+
+export type BlogTag = {
+  /** Rótulo original como armazenado no banco (ex: "arquitetura residencial") */
+  label: string;
+  /** Slug seguro para URL (ex: "arquitetura-residencial") */
+  slug: string;
+  /** Quantos posts visíveis carregam essa tag */
+  count: number;
+};
+
+/**
+ * Agrega todas as tags de posts visíveis em uma lista única,
+ * com contagem e slug — usado pela página /blog/tags.
+ */
+export function useBlogTags() {
+  const { posts, loading } = useBlogPosts();
+  const tagMap = new Map<string, BlogTag>();
+
+  for (const p of posts) {
+    for (const raw of p.tags ?? []) {
+      const label = (raw ?? "").trim();
+      if (!label) continue;
+      const slug = slugify(label);
+      if (!slug) continue;
+      const existing = tagMap.get(slug);
+      if (existing) {
+        existing.count += 1;
+      } else {
+        tagMap.set(slug, { label, slug, count: 1 });
+      }
+    }
+  }
+
+  const tags = Array.from(tagMap.values()).sort(
+    (a, b) => b.count - a.count || a.label.localeCompare(b.label, "pt-BR")
+  );
+
+  return { tags, loading };
+}
+
+/**
+ * Posts filtrados por slug de tag.
+ * O slug é comparado contra `slugify(tag)` de cada item, para tolerar
+ * tags armazenadas com acentos / maiúsculas / espaços.
+ */
+export function useBlogPostsByTag(tagSlug: string | undefined) {
+  const { posts, loading } = useBlogPosts();
+  if (!tagSlug) return { posts: [], label: "", loading };
+
+  const filtered = posts.filter((p) =>
+    (p.tags ?? []).some((t) => slugify(t) === tagSlug)
+  );
+  // Recupera o rótulo original a partir do primeiro match (preserva acentos/caixa)
+  let label = tagSlug.replace(/-/g, " ");
+  for (const p of filtered) {
+    const original = (p.tags ?? []).find((t) => slugify(t) === tagSlug);
+    if (original) {
+      label = original;
+      break;
+    }
+  }
+  return { posts: filtered, label, loading };
+}

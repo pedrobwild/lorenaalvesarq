@@ -8,6 +8,8 @@ export type Route =
   | { name: "privacidade" }
   | { name: "project"; slug: string }
   | { name: "blog" }
+  | { name: "blog-tags" }
+  | { name: "blog-tag"; slug: string }
   | { name: "blog-post"; slug: string }
   | { name: "admin-login" }
   | { name: "admin-dashboard" }
@@ -37,6 +39,9 @@ function parsePath(rawPath: string): Route {
 
   // Blog (público)
   if (path === "/blog") return { name: "blog" };
+  if (path === "/blog/tags") return { name: "blog-tags" };
+  const blogTagMatch = path.match(/^\/blog\/tag\/([a-z0-9-]+)$/);
+  if (blogTagMatch) return { name: "blog-tag", slug: blogTagMatch[1] };
   const blogMatch = path.match(/^\/blog\/([a-z0-9-]+)$/);
   if (blogMatch) return { name: "blog-post", slug: blogMatch[1] };
 
@@ -102,6 +107,8 @@ export const routes = {
   privacidade: "/privacidade",
   project: (slug: string) => `/projeto/${slug}`,
   blog: "/blog",
+  blogTags: "/blog/tags",
+  blogTag: (slug: string) => `/blog/tag/${slug}`,
   blogPost: (slug: string) => `/blog/${slug}`,
   adminLogin: "/admin/login",
   adminDashboard: "/admin",
