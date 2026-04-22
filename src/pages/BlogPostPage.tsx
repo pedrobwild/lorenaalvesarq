@@ -266,7 +266,7 @@ export default function BlogPostPage({ slug }: Props) {
             {post.subtitle && (
               <>
                 <br />
-                <em className="py-0 my-[10px] text-3xl">{post.subtitle}</em>
+                <em>{post.subtitle}</em>
               </>
             )}
           </h1>
