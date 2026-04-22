@@ -8,6 +8,8 @@ import SobrePage from "./pages/SobrePage";
 import PrivacidadePage from "./pages/PrivacidadePage";
 import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
+import BlogTagsPage from "./pages/BlogTagsPage";
+import BlogTagPage from "./pages/BlogTagPage";
 import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import AnalyticsPage from "./pages/admin/AnalyticsPage";
@@ -36,6 +38,8 @@ function renderRoute(route: Route) {
   if (route.name === "sobre") return <SobrePage />;
   if (route.name === "privacidade") return <PrivacidadePage />;
   if (route.name === "blog") return <BlogPage />;
+  if (route.name === "blog-tags") return <BlogTagsPage />;
+  if (route.name === "blog-tag") return <BlogTagPage slug={route.slug} />;
   if (route.name === "blog-post") return <BlogPostPage slug={route.slug} />;
   if (route.name === "admin-login") return <LoginPage />;
   if (route.name === "admin-dashboard")
@@ -116,6 +120,7 @@ function routeKeyOf(route: Route) {
   if (route.name === "project") return `project:${route.slug}`;
   if (route.name === "admin-project-edit") return `admin-edit:${route.slug}`;
   if (route.name === "blog-post") return `blog:${route.slug}`;
+  if (route.name === "blog-tag") return `blog-tag:${route.slug}`;
   if (route.name === "admin-blog-edit") return `admin-blog-edit:${route.slug}`;
   return route.name;
 }
