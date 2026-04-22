@@ -6021,6 +6021,69 @@ textarea.admin-field__input {
   transition: color 0.3s var(--ease);
 }
 
+/* ===== Guia de navegação por tags (SEO + UX) ===== */
+.blog-tags__guide {
+  max-width: 760px;
+  margin: clamp(3rem, 7vw, 5.5rem) auto 0;
+  padding: clamp(1.75rem, 3.5vw, 2.5rem);
+  background: rgba(10, 10, 10, 0.025);
+  border-radius: 6px;
+  border-left: 3px solid var(--clay-deep);
+}
+.blog-tags__guide-title {
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.6rem;
+  color: var(--ink);
+}
+.blog-tags__guide-lede {
+  margin: 0 0 1.6rem;
+  color: var(--ink);
+  opacity: 0.78;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.blog-tags__guide-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  display: grid;
+  gap: 1.1rem;
+}
+.blog-tags__guide-list li {
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--ink);
+  opacity: 0.88;
+}
+.blog-tags__guide-list strong {
+  font-weight: 500;
+  color: var(--ink);
+  opacity: 1;
+}
+.blog-tags__guide-list a {
+  color: var(--clay-deep);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(143, 84, 51, 0.35);
+  transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+}
+.blog-tags__guide-list a:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+.blog-tags__guide-foot {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  opacity: 0.6;
+  margin: 0;
+}
+.blog-tags__guide-foot a {
+  color: inherit;
+  border-bottom: 1px solid currentColor;
+  text-decoration: none;
+}
+
 /* Tag chips dentro do post viram links clicáveis */
 .blog-post__tags a.blog-post__tag {
   text-decoration: none;
