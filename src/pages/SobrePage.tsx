@@ -286,7 +286,7 @@ export default function SobrePage() {
         </div>
         <ul className="sobre-page__formacao">
           {FORMACOES.map((f, i) => (
-            <li className="sobre-page__formacao-item text-[#303030]/[0.46] bg-slate-50" key={f.curso}>
+            <li className="sobre-page__formacao-item text-slate-100 shadow-md bg-slate-950/[0.21]" key={f.curso}>
               <div className="sobre-page__formacao-num mono text-slate-50">
                 {String(i + 1).padStart(2, "0")}
               </div>
@@ -316,9 +316,9 @@ export default function SobrePage() {
         </div>
         <div className="sobre-page__especialidades">
           {ESPECIALIDADES.map((e) => (
-            <article className="sobre-page__esp-card border-slate-50 bg-slate-950 text-slate-100 my-0 border-dotted rounded-2xl shadow-2xl" key={e.titulo}>
-              <h3 className="sobre-page__esp-titulo text-slate-50 font-semibold">{e.titulo}</h3>
-              <p className="sobre-page__esp-desc font-medium text-slate-50 my-0 py-0 border-dashed">{e.desc}</p>
+            <article className="sobre-page__esp-card border-slate-50 text-slate-100 my-0 shadow-2xl rounded-none border-solid bg-slate-950/[0.21]" key={e.titulo}>
+              <h3 className="sobre-page__esp-titulo font-semibold text-slate-900">{e.titulo}</h3>
+              <p className="sobre-page__esp-desc font-medium my-0 py-0 border-dashed text-slate-900">{e.desc}</p>
             </article>
           ))}
         </div>
