@@ -3775,6 +3775,8 @@ textarea.admin-field__input {
   font-family: "Manrope", system-ui, sans-serif;
   color: #111;
 }
+.admin--collapsed { grid-template-columns: 64px 1fr; }
+
 .admin__sidebar {
   background: #f5f5f3;
   color: #111;
@@ -3786,20 +3788,73 @@ textarea.admin-field__input {
   position: sticky;
   top: 0;
   height: 100vh;
+  overflow-y: auto;
+}
+.admin__brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 .admin__brand {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
   font-size: 16px;
+  min-width: 0;
 }
-.admin__brand .brand-lockup b { font-weight: 700; }
+.admin__brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #111;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.admin__brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.admin__brand-name {
+  font-size: 14px;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.admin__brand-name b { font-weight: 700; }
+.admin__brand-name sup {
+  font-size: 0.55em;
+  margin-left: 2px;
+  opacity: 0.7;
+}
 .admin__brand-tag {
   font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   opacity: 0.55;
 }
+.admin__collapse {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #555;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.admin__collapse:hover { background: rgba(0,0,0,0.05); color: #111; }
+
 .admin__nav {
   display: flex;
   flex-direction: column;
@@ -3813,11 +3868,72 @@ textarea.admin-field__input {
   border-radius: 6px;
   font-size: 13px;
   transition: background 0.15s ease, color 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: 0;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+.admin__nav-icon { flex-shrink: 0; opacity: 0.7; }
+.admin__nav-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .admin__nav-item:hover { color: #111; background: rgba(0,0,0,0.04); }
 .admin__nav-item.is-active { color: #111; background: rgba(0,0,0,0.08); }
-.admin__nav-item--ghost { font-size: 12px; opacity: 0.6; }
-.admin__sidebar-foot { margin-top: auto; }
+.admin__nav-item.is-active .admin__nav-icon { opacity: 1; }
+.admin__nav-item--ghost { font-size: 12px; opacity: 0.7; }
+.admin__nav-item--button { background: transparent; }
+
+.admin__sidebar-foot {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.admin__user {
+  font-size: 11px;
+  opacity: 0.55;
+  padding: 4px 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Estado colapsado: esconde labels e textos */
+.admin--collapsed .admin__brand-text,
+.admin--collapsed .admin__nav-label,
+.admin--collapsed .admin__user { display: none; }
+.admin--collapsed .admin__nav-item { justify-content: center; padding: 10px; }
+.admin--collapsed .admin__brand-row { justify-content: center; }
+.admin--collapsed .admin__collapse { margin: 0 auto; }
+
+/* Scrim do drawer mobile — escondido por padrão no desktop */
+.admin__scrim {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  border: 0;
+  z-index: 40;
+  cursor: pointer;
+}
+.admin__mobile-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid #e5e5e2;
+  color: #111;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
 
 .admin__main {
   display: flex;
@@ -3827,37 +3943,63 @@ textarea.admin-field__input {
 .admin__topbar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 16px 28px;
   background: #fff;
   border-bottom: 1px solid #ececea;
   position: sticky;
   top: 0;
   z-index: 5;
+  gap: 16px;
 }
-.admin__topbar-title {
+.admin__topbar-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.admin__topbar-eyebrow {
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   opacity: 0.55;
 }
-.admin__topbar-right { display: flex; align-items: center; gap: 12px; }
-.admin__user { font-size: 12px; opacity: 0.6; }
+.admin__topbar-title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.admin__topbar-desc {
+  font-size: 13px;
+  opacity: 0.65;
+  margin: 4px 0 0;
+  max-width: 60ch;
+}
+.admin__topbar-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .admin__content { padding: 28px; max-width: 1200px; width: 100%; }
 
 @media (max-width: 800px) {
-  .admin { grid-template-columns: 1fr; }
+  .admin,
+  .admin--collapsed { grid-template-columns: 1fr; }
   .admin__sidebar {
-    position: static;
-    height: auto;
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
-    padding: 14px 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
   }
-  .admin__nav { flex-direction: row; flex-wrap: wrap; gap: 4px; }
-  .admin__sidebar-foot { margin-top: 0; }
+  .admin--mobile-open .admin__sidebar { transform: translateX(0); }
+  .admin--mobile-open .admin__scrim { display: block; }
+  .admin__mobile-toggle { display: inline-flex; }
   .admin__content { padding: 18px; }
+  .admin--collapsed .admin__brand-text,
+  .admin--collapsed .admin__nav-label,
+  .admin--collapsed .admin__user { display: initial; }
+  .admin--collapsed .admin__nav-item { justify-content: flex-start; padding: 8px 10px; }
 }
 
 /* ----- Cards / sections ----- */
