@@ -25,7 +25,7 @@ Deno.serve(async (req) => {
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const [{ data: settings }, { data: projects }, { data: projectImages }] = await Promise.all([
+  const [{ data: settings }, { data: projects }, { data: projectImages }, { data: blogPosts }] = await Promise.all([
     supabase
       .from("site_settings")
       .select("seo_canonical_base, site_title")
@@ -40,6 +40,11 @@ Deno.serve(async (req) => {
       .from("project_images")
       .select("project_id, url, alt, order_index")
       .order("order_index", { ascending: true }),
+    supabase
+      .from("blog_posts")
+      .select("slug, title, cover_url, cover_alt, updated_at, published_at")
+      .eq("visible", true)
+      .order("published_at", { ascending: false, nullsFirst: false }),
   ]);
 
   const base = (settings?.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
@@ -76,7 +81,28 @@ Deno.serve(async (req) => {
     { loc: `${base}/`, priority: "1.0", changefreq: "weekly", lastmod: today },
     { loc: `${base}/faq`, priority: "0.8", changefreq: "monthly", lastmod: today },
     { loc: `${base}/portfolio`, priority: "0.9", changefreq: "weekly", lastmod: today },
+    { loc: `${base}/blog`, priority: "0.8", changefreq: "weekly", lastmod: today },
   ];
+
+  const blogUrls: UrlEntry[] = ((blogPosts ?? []) as Array<{
+    slug: string;
+    title: string;
+    cover_url: string | null;
+    cover_alt: string | null;
+    updated_at: string | null;
+    published_at: string | null;
+  }>).map((b) => {
+    const images: Array<{ url: string; caption?: string }> = [];
+    const coverAbs = absUrl(b.cover_url);
+    if (coverAbs) images.push({ url: coverAbs, caption: b.cover_alt || b.title });
+    return {
+      loc: `${base}/blog/${b.slug}`,
+      priority: "0.7",
+      changefreq: "monthly",
+      lastmod: (b.updated_at ?? b.published_at ?? new Date().toISOString()).slice(0, 10),
+      images,
+    };
+  });
 
   const projectUrls: UrlEntry[] = ((projects ?? []) as Array<{
     id: string;
@@ -107,7 +133,7 @@ Deno.serve(async (req) => {
     };
   });
 
-  const all = [...staticUrls, ...projectUrls];
+  const all = [...staticUrls, ...projectUrls, ...blogUrls];
 
   const urlsXml = all
     .map((u) => {
