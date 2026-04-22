@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import InternalNav from "../components/InternalNav";
@@ -7,6 +7,7 @@ import { useSiteSettings } from "../lib/useSiteSettings";
 import { useSeo, breadcrumbJsonLd, organizationJsonLd } from "../lib/useSeo";
 import { routes, navigate } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
+import { derivePictureSources, setToSrcset } from "../lib/derivePicture";
 
 function formatDate(iso: string | null): string {
   if (!iso) return "";
@@ -84,6 +85,72 @@ export default function BlogPostPage({ slug }: Props) {
           ]
         : undefined,
   });
+
+  /**
+   * Pós-processa o `content_html` antes de injetar no DOM:
+   *  - Garante `loading="lazy"` + `decoding="async"` + `fetchpriority="low"` em
+   *    toda <img> que esteja fora de uma <picture>.
+   *  - Quando a URL da <img> segue a convenção `-{sm|md|lg}.{ext}` do pipeline,
+   *    envolve-a numa <picture> com sources AVIF + WebP + JPEG, fazendo upgrade
+   *    automático mesmo em posts antigos seedados sem `<picture>`.
+   *
+   * Roda uma única vez por mudança de post (useMemo) — sem custo na rolagem.
+   */
+  const enhancedHtml = useMemo(() => {
+    if (!post?.content_html) return "";
+    if (typeof window === "undefined") return post.content_html;
+    try {
+      const doc = new DOMParser().parseFromString(
+        `<div id="root">${post.content_html}</div>`,
+        "text/html"
+      );
+      const root = doc.getElementById("root");
+      if (!root) return post.content_html;
+
+      const imgs = Array.from(root.querySelectorAll("img"));
+      for (const img of imgs) {
+        // 1) Garantir lazy + async em qualquer <img> sem priority explícita
+        if (!img.hasAttribute("loading")) img.setAttribute("loading", "lazy");
+        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
+        if (!img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "low");
+
+        // 2) Se já está dentro de <picture>, deixa quieto (autor já configurou).
+        const inPicture = img.parentElement?.tagName.toLowerCase() === "picture";
+        if (inPicture) continue;
+
+        // 3) Tenta derivar AVIF/WebP/JPEG da URL — só upgrade se for URL do pipeline.
+        const src = img.getAttribute("src") || "";
+        const derived = derivePictureSources(src);
+        if (!derived) continue;
+
+        const sizes = img.getAttribute("sizes") || "(max-width: 900px) 100vw, 900px";
+
+        const picture = doc.createElement("picture");
+        const mkSource = (type: string, set: { sm: string; md: string; lg: string }) => {
+          const s = doc.createElement("source");
+          s.setAttribute("type", type);
+          s.setAttribute("srcset", setToSrcset(set));
+          s.setAttribute("sizes", sizes);
+          return s;
+        };
+        picture.appendChild(mkSource("image/avif", derived.avif));
+        picture.appendChild(mkSource("image/webp", derived.webp));
+        picture.appendChild(mkSource("image/jpeg", derived.jpeg));
+
+        // Atualiza a <img> para apontar ao JPEG fallback (universal).
+        img.setAttribute("src", derived.fallbackSrc);
+        img.setAttribute("srcset", setToSrcset(derived.jpeg));
+        img.setAttribute("sizes", sizes);
+
+        img.parentNode?.insertBefore(picture, img);
+        picture.appendChild(img);
+      }
+      return root.innerHTML;
+    } catch {
+      // Em qualquer falha, devolve o HTML original — nunca quebra o render do artigo.
+      return post.content_html;
+    }
+  }, [post?.content_html]);
 
   useEffect(() => {
     if (!post) return;
@@ -205,31 +272,58 @@ export default function BlogPostPage({ slug }: Props) {
           )}
         </header>
 
-        {post.cover_url && (
-          <figure className="blog-post__cover">
-            <img
-              src={post.cover_url_md || post.cover_url}
-              srcSet={
-                post.cover_url_sm && post.cover_url_md && post.cover_url
-                  ? `${post.cover_url_sm} 640w, ${post.cover_url_md} 1280w, ${post.cover_url} 1920w`
-                  : undefined
-              }
-              sizes="(max-width: 1100px) 100vw, 1100px"
-              alt={post.cover_alt || post.title}
-              width={1920}
-              height={1080}
-              loading="eager"
-              fetchPriority="high"
-              decoding="sync"
-            />
-          </figure>
-        )}
+        {post.cover_url && (() => {
+          const cover = derivePictureSources(post.cover_url);
+          const sizes = "(max-width: 1100px) 100vw, 1100px";
+          if (cover) {
+            return (
+              <figure className="blog-post__cover">
+                <picture>
+                  <source type="image/avif" srcSet={setToSrcset(cover.avif)} sizes={sizes} />
+                  <source type="image/webp" srcSet={setToSrcset(cover.webp)} sizes={sizes} />
+                  <source type="image/jpeg" srcSet={setToSrcset(cover.jpeg)} sizes={sizes} />
+                  <img
+                    src={cover.fallbackSrc}
+                    srcSet={setToSrcset(cover.jpeg)}
+                    sizes={sizes}
+                    alt={post.cover_alt || post.title}
+                    width={1920}
+                    height={1080}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="sync"
+                  />
+                </picture>
+              </figure>
+            );
+          }
+          // Fallback: imagens legadas que não seguem a convenção -sm/-md/-lg
+          return (
+            <figure className="blog-post__cover">
+              <img
+                src={post.cover_url_md || post.cover_url}
+                srcSet={
+                  post.cover_url_sm && post.cover_url_md && post.cover_url
+                    ? `${post.cover_url_sm} 640w, ${post.cover_url_md} 1280w, ${post.cover_url} 1920w`
+                    : undefined
+                }
+                sizes={sizes}
+                alt={post.cover_alt || post.title}
+                width={1920}
+                height={1080}
+                loading="eager"
+                fetchPriority="high"
+                decoding="sync"
+              />
+            </figure>
+          );
+        })()}
 
         <div
           className="blog-post__content"
           // O HTML é editado/curado pela admin do estúdio (autora confiável).
           // Sanitização é feita no formulário antes de salvar.
-          dangerouslySetInnerHTML={{ __html: post.content_html }}
+          dangerouslySetInnerHTML={{ __html: enhancedHtml }}
         />
 
         {post.tags && post.tags.length > 0 && (

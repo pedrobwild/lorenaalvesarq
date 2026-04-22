@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
-import { processImage } from "@/lib/imagePipeline";
+import { uploadImageGeneric, type UploadResult } from "@/lib/uploadImage";
 import { navigate, routes } from "@/lib/useHashRoute";
 import { slugify, readingTime, type BlogPost } from "@/lib/useBlog";
 
@@ -127,38 +127,9 @@ export default function BlogFormPage({ slug }: Props) {
     }));
   }
 
-  // ---------- Upload imagens ----------
-  async function uploadFile(file: File, folder: "covers" | "inline") {
-    const processed = await processImage(file);
-    const stamp = Date.now();
-    const baseName = slugify(file.name.replace(/\.[^.]+$/, "")) || "img";
-    const basePath = `${folder}/${stamp}-${baseName}`;
-    const variants = [
-      { suffix: "lg.webp", blob: processed.large },
-      { suffix: "md.webp", blob: processed.medium },
-      { suffix: "sm.webp", blob: processed.small },
-    ];
-    const urls = await Promise.all(
-      variants.map(async ({ suffix, blob }) => {
-        const path = `${basePath}-${suffix}`;
-        const { error } = await supabase.storage
-          .from("blog-images")
-          .upload(path, blob, {
-            cacheControl: "31536000",
-            upsert: false,
-            contentType: "image/webp",
-          });
-        if (error) throw error;
-        const { data } = supabase.storage.from("blog-images").getPublicUrl(path);
-        return data.publicUrl;
-      })
-    );
-    return {
-      url: urls[0],
-      urlMd: urls[1],
-      urlSm: urls[2],
-      blurDataUrl: processed.blurDataUrl,
-    };
+  // ---------- Upload imagens (AVIF + WebP + JPEG, lazy + decoding async) ----------
+  async function uploadFile(file: File, folder: "covers" | "inline"): Promise<UploadResult> {
+    return uploadImageGeneric(file, "blog-images", folder);
   }
 
   async function handleCoverUpload(file: File) {
@@ -179,13 +150,31 @@ export default function BlogFormPage({ slug }: Props) {
     }
   }
 
+  /**
+   * Insere uma <picture> com sources AVIF + WebP + JPEG no editor.
+   * Browsers escolhem o melhor formato suportado automaticamente; loading="lazy"
+   * + decoding="async" evitam bloquear o render do conteúdo acima.
+   */
   async function handleInlineImageUpload(file: File) {
     setUploadingInline(true);
     try {
       const r = await uploadFile(file, "inline");
-      const alt = prompt("Texto alternativo da imagem (importante para SEO):") || "";
-      const html = `<figure><img src="${r.urlMd}" srcset="${r.urlSm} 640w, ${r.urlMd} 1280w, ${r.url} 1920w" sizes="(max-width: 900px) 100vw, 900px" alt="${alt.replace(/"/g, "&quot;")}" loading="lazy" decoding="async" width="1280" height="720" /></figure>`;
-      // Insere no editor
+      const alt = (prompt("Texto alternativo da imagem (importante para SEO):") || "")
+        .replace(/"/g, "&quot;");
+      const sizes = "(max-width: 900px) 100vw, 900px";
+      const sources: string[] = [];
+      if (r.avif) {
+        sources.push(
+          `<source type="image/avif" srcset="${r.avif.sm} 640w, ${r.avif.md} 1280w, ${r.avif.lg} 1920w" sizes="${sizes}" />`
+        );
+      }
+      sources.push(
+        `<source type="image/webp" srcset="${r.webp.sm} 640w, ${r.webp.md} 1280w, ${r.webp.lg} 1920w" sizes="${sizes}" />`
+      );
+      const imgTag =
+        `<img src="${r.jpeg.md}" srcset="${r.jpeg.sm} 640w, ${r.jpeg.md} 1280w, ${r.jpeg.lg} 1920w" ` +
+        `sizes="${sizes}" alt="${alt}" loading="lazy" decoding="async" width="1280" height="720" />`;
+      const html = `<figure><picture>${sources.join("")}${imgTag}</picture></figure>`;
       if (editorRef.current) {
         editorRef.current.focus();
         document.execCommand("insertHTML", false, html);

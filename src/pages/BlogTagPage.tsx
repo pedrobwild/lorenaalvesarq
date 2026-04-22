@@ -7,6 +7,7 @@ import { useSiteSettings } from "../lib/useSiteSettings";
 import { useSeo, breadcrumbJsonLd, organizationJsonLd } from "../lib/useSeo";
 import { routes } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
+import BlogCardCover from "../components/BlogCardCover";
 
 function formatDate(iso: string | null): string {
   if (!iso) return "";
@@ -117,8 +118,10 @@ export default function BlogTagPage({ slug }: Props) {
         )}
 
         {posts.map((p, i) => {
-          const cover = p.cover_url_md || p.cover_url || "";
-          const coverFallback = p.cover_url || "";
+          const sizes =
+            i === 0
+              ? "(max-width: 900px) 100vw, 60vw"
+              : "(max-width: 900px) 100vw, 30vw";
           return (
             <article
               key={p.id}
@@ -130,33 +133,15 @@ export default function BlogTagPage({ slug }: Props) {
                 data-cursor="hover"
                 aria-label={`Ler artigo: ${p.title}`}
               >
-                {cover && (
-                  <div className="blog-card__media">
-                    <img
-                      src={cover}
-                      srcSet={
-                        p.cover_url_sm && p.cover_url_md && p.cover_url
-                          ? `${p.cover_url_sm} 640w, ${p.cover_url_md} 1280w, ${p.cover_url} 1920w`
-                          : undefined
-                      }
-                      sizes={
-                        i === 0
-                          ? "(max-width: 900px) 100vw, 60vw"
-                          : "(max-width: 900px) 100vw, 30vw"
-                      }
-                      alt={p.cover_alt || p.title}
-                      loading={i === 0 ? "eager" : "lazy"}
-                      decoding={i === 0 ? "sync" : "async"}
-                      width={1280}
-                      height={720}
-                      onError={(e) => {
-                        const el = e.currentTarget;
-                        if (coverFallback && el.src !== coverFallback)
-                          el.src = coverFallback;
-                      }}
-                    />
-                  </div>
-                )}
+                <BlogCardCover
+                  coverUrl={p.cover_url}
+                  coverUrlMd={p.cover_url_md}
+                  coverUrlSm={p.cover_url_sm}
+                  alt={p.cover_alt || p.title}
+                  sizes={sizes}
+                  priority={i === 0}
+                />
+
                 <div className="blog-card__body">
                   <div className="blog-card__meta mono">
                     {p.category && <span>{p.category}</span>}
