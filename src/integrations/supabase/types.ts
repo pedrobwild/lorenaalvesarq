@@ -122,6 +122,90 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_posts: {
+        Row: {
+          author_name: string | null
+          author_role: string | null
+          category: string | null
+          content_html: string
+          cover_alt: string | null
+          cover_blur_data_url: string | null
+          cover_url: string | null
+          cover_url_md: string | null
+          cover_url_sm: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          og_image_url: string | null
+          order_index: number | null
+          published_at: string | null
+          reading_minutes: number | null
+          seo_description: string | null
+          seo_keywords: string | null
+          seo_title: string | null
+          slug: string
+          subtitle: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          author_name?: string | null
+          author_role?: string | null
+          category?: string | null
+          content_html?: string
+          cover_alt?: string | null
+          cover_blur_data_url?: string | null
+          cover_url?: string | null
+          cover_url_md?: string | null
+          cover_url_sm?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          og_image_url?: string | null
+          order_index?: number | null
+          published_at?: string | null
+          reading_minutes?: number | null
+          seo_description?: string | null
+          seo_keywords?: string | null
+          seo_title?: string | null
+          slug: string
+          subtitle?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          author_name?: string | null
+          author_role?: string | null
+          category?: string | null
+          content_html?: string
+          cover_alt?: string | null
+          cover_blur_data_url?: string | null
+          cover_url?: string | null
+          cover_url_md?: string | null
+          cover_url_sm?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          og_image_url?: string | null
+          order_index?: number | null
+          published_at?: string | null
+          reading_minutes?: number | null
+          seo_description?: string | null
+          seo_keywords?: string | null
+          seo_title?: string | null
+          slug?: string
+          subtitle?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       faq_items: {
         Row: {
           answer: string
