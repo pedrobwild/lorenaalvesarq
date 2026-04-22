@@ -98,6 +98,17 @@ export default function BlogPage() {
         </p>
       </header>
 
+      <nav className="blog-tags-strip" aria-label="Atalho para tags">
+        <a
+          href={routes.blogTags}
+          className="blog-tags-strip__link mono"
+          data-cursor="hover"
+        >
+          <span>Navegar por tags</span>
+          <span aria-hidden>→</span>
+        </a>
+      </nav>
+
       <section className="blog-grid" aria-label="Artigos do blog">
         {loading && (
           <p className="mono" style={{ opacity: 0.5 }}>

@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
       .order("order_index", { ascending: true }),
     supabase
       .from("blog_posts")
-      .select("slug, title, cover_url, cover_alt, updated_at, published_at")
+      .select("slug, title, cover_url, cover_alt, tags, updated_at, published_at")
       .eq("visible", true)
       .order("published_at", { ascending: false, nullsFirst: false }),
   ]);
