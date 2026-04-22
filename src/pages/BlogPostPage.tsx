@@ -171,10 +171,22 @@ export default function BlogPostPage({ slug }: Props) {
             y: 0,
             duration: 0.7,
             ease: "power3.out",
-            scrollTrigger: { trigger: el, start: "top 92%", once: true },
+            scrollTrigger: {
+              trigger: el,
+              start: "top 95%",
+              once: true,
+              // Failsafe: se ao registrar o trigger ele já passou da posição,
+              // dispara imediatamente — evita conteúdo invisível por race condition
+              // entre dangerouslySetInnerHTML e ScrollTrigger.
+              onRefresh: (self) => {
+                if (self.progress > 0) gsap.set(el, { opacity: 1, y: 0 });
+              },
+            },
           }
         );
       });
+      // Recalcula triggers após o DOM injetado pelo dangerouslySetInnerHTML estar estável.
+      requestAnimationFrame(() => ScrollTrigger.refresh());
     });
     return () => ctx.revert();
   }, [post]);
