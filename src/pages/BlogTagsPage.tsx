@@ -69,9 +69,23 @@ export default function BlogTagsPage() {
           Encontre artigos por <em>assunto</em>.
         </h1>
         <p className="pf-head__lede">
-          Os textos do estúdio organizados por temas — desde os primeiros passos
-          de quem vai construir até decisões de projeto, materialidade e modos
-          de habitar.
+          Um índice vivo dos temas que atravessam o blog do estúdio — de quem
+          vai erguer a <strong>primeira casa</strong> a quem busca repertório
+          sobre <strong>arquitetura residencial</strong>, <strong>reforma</strong>,{" "}
+          <strong>projeto autoral</strong> e os bastidores do nosso trabalho em{" "}
+          <strong>Uberlândia, MG</strong>.
+        </p>
+        <p className="pf-head__lede" style={{ marginTop: "1rem" }}>
+          Cada tag agrupa textos escritos com cuidado para orientar decisões
+          reais: como escolher um terreno, quanto custa contratar um arquiteto,
+          quais materiais envelhecem bem no clima do cerrado, como funciona o
+          acompanhamento de obra e por que vale projetar antes de construir.
+          Use os atalhos abaixo para começar pelo assunto que mais te interessa
+          — ou volte para o{" "}
+          <a href={routes.blog} data-cursor="hover" className="link-underline">
+            índice cronológico do blog
+          </a>
+          .
         </p>
       </header>
 
