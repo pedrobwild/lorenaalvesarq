@@ -2237,7 +2237,8 @@ main:focus { outline: none; }
   max-width: 32ch;
 }
 
-.footer__col h4 {
+.footer__col h4,
+.footer__col .footer__col-title {
   font-family: var(--font-mono);
   font-size: var(--t-xs);
   letter-spacing: 0.24em;
@@ -2442,7 +2443,7 @@ main:focus { outline: none; }
   .footer__top { display: flex; flex-direction: column; gap: 2.5rem; }
   .footer__brand { font-size: 1.6rem; line-height: 1.05; }
   .footer__tag { font-size: 0.95rem; line-height: 1.55; max-width: 38ch; }
-  .footer__col h4 { font-size: 0.68rem; letter-spacing: 0.22em; }
+  .footer__col h4, .footer__col .footer__col-title { font-size: 0.68rem; letter-spacing: 0.22em; }
   .footer__col a, .footer__col p { font-size: 0.95rem; }
   .footer__mega { font-size: clamp(2.8rem, 14vw, 4.5rem); line-height: 0.95; margin-top: 2.5rem; letter-spacing: -0.04em; white-space: nowrap; overflow: hidden; text-overflow: clip; }
   .footer__bottom { flex-direction: column; align-items: flex-start; gap: 0.75rem; padding-top: 2rem; font-size: 0.72rem; }
