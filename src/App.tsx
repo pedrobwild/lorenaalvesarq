@@ -527,8 +527,8 @@ export default function App() {
 
   return (
     <>
-      {/* Skip link */}
-      <a href="#inicio" className="skip-link">
+      {/* Skip link — leva direto ao conteúdo principal (a11y + SEO landmark) */}
+      <a href="#main" className="skip-link">
         Pular para o conteúdo
       </a>
 
@@ -632,6 +632,9 @@ export default function App() {
           )}
         </div>
       </div>
+
+      {/* Conteúdo principal — landmark <main> exigido para a11y/SEO */}
+      <main id="main" tabIndex={-1}>
 
       {/* Hero */}
       <section className="hero" id="inicio">
@@ -1002,8 +1005,11 @@ export default function App() {
         </div>
       </section>
 
+      </main>
+      {/* /main */}
+
       {/* Footer */}
-      <footer className="footer">
+      <footer className="footer" role="contentinfo">
         <div className="footer__seal" aria-hidden="true">
           <BrandSeal variant="light" sizeRem={10} />
         </div>
