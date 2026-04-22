@@ -753,7 +753,7 @@ export default function App() {
         <div className="about__grid">
           <div className="about__portrait reveal">
             <Picture
-              src="/images/lorena-alves-arquiteta-uberlandia-retrato.png"
+              src="/images/lorena-alves-retrato-v2.jpg"
               alt="Retrato de Lorena Alves, arquiteta e urbanista formada pela UFU, fundadora do estúdio Lorena Alves Arquitetura em Uberlândia/MG"
               width={900}
               height={1200}
