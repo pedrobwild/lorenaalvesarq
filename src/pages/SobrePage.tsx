@@ -286,15 +286,15 @@ export default function SobrePage() {
         </div>
         <ul className="sobre-page__formacao">
           {FORMACOES.map((f, i) => (
-            <li className="sobre-page__formacao-item" key={f.curso}>
-              <div className="sobre-page__formacao-num mono">
+            <li className="sobre-page__formacao-item text-[#303030]/[0.46] bg-zinc-900" key={f.curso}>
+              <div className="sobre-page__formacao-num mono text-slate-50">
                 {String(i + 1).padStart(2, "0")}
               </div>
               <div className="sobre-page__formacao-body">
-                <h3 className="sobre-page__formacao-curso">{f.curso}</h3>
-                <p className="sobre-page__formacao-inst">
+                <h3 className="sobre-page__formacao-curso text-slate-50">{f.curso}</h3>
+                <p className="sobre-page__formacao-inst text-slate-50">
                   {f.instituicao}
-                  {f.sigla ? <span className="mono"> · {f.sigla}</span> : null}
+                  {f.sigla ? <span className="mono text-slate-50"> · {f.sigla}</span> : null}
                 </p>
               </div>
             </li>
