@@ -316,9 +316,9 @@ export default function SobrePage() {
         </div>
         <div className="sobre-page__especialidades">
           {ESPECIALIDADES.map((e) => (
-            <article className="sobre-page__esp-card" key={e.titulo}>
+            <article className="sobre-page__esp-card border-slate-50 bg-slate-950 text-slate-100" key={e.titulo}>
               <h3 className="sobre-page__esp-titulo">{e.titulo}</h3>
-              <p className="sobre-page__esp-desc">{e.desc}</p>
+              <p className="sobre-page__esp-desc font-medium text-slate-50">{e.desc}</p>
             </article>
           ))}
         </div>
