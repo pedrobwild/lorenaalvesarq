@@ -268,20 +268,20 @@ export default function BlogPostPage({ slug }: Props) {
 
   if (loading) {
     return (
-      <div className="pf-page blog-page">
+      <main id="main" tabIndex={-1} className="pf-page blog-page">
         <InternalNav active="blog" backHref={routes.blog} backLabel="voltar ao blog" />
         <div className="pf-head">
-          <p className="mono" style={{ opacity: 0.5 }}>
+          <p className="mono" style={{ opacity: 0.5 }} role="status" aria-live="polite">
             carregando…
           </p>
         </div>
-      </div>
+      </main>
     );
   }
 
   if (notFound || !post) {
     return (
-      <div className="pf-page blog-page">
+      <main id="main" tabIndex={-1} className="pf-page blog-page">
         <InternalNav active="blog" backHref={routes.blog} backLabel="voltar ao blog" />
         <header className="pf-head">
           <p className="pf-head__eyebrow mono">404 · Artigo não encontrado</p>
@@ -303,12 +303,12 @@ export default function BlogPostPage({ slug }: Props) {
             </span>
           </button>
         </header>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="pf-page blog-page">
+    <main id="main" tabIndex={-1} className="pf-page blog-page">
       <InternalNav active="blog" backHref={routes.blog} backLabel="voltar ao blog" />
 
       <article className="blog-post">
@@ -477,6 +477,6 @@ export default function BlogPostPage({ slug }: Props) {
           </div>
         </footer>
       </article>
-    </div>
+    </main>
   );
 }
