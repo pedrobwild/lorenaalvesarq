@@ -794,34 +794,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Conceito — valores do brandbook: Seriedade · Compromisso · Simplicidade · Sofisticação · Inovação · Modernidade */}
-      <section className="concept reveal" id="conceito" aria-label="Valores do estúdio">
-        <div className="concept__seal-wrap" aria-hidden="true">
-          <BrandSeal variant="light" sizeRem={16} />
-        </div>
-        <div className="concept__header">
-          <span className="concept__eyebrow">Conceito · 03</span>
-          <h2 className="concept__lead">
-            Simplicidade como a<br />forma mais pura de <em>sofisticação</em>.
-          </h2>
-        </div>
-        <div className="concept__grid" role="list">
-          {[
-            { n: "01", word: "Seriedade" },
-            { n: "02", word: "Compromisso" },
-            { n: "03", word: "Simplicidade" },
-            { n: "04", word: "Sofisticação" },
-            { n: "05", word: "Inovação" },
-            { n: "06", word: "Modernidade" },
-          ].map((c) => (
-            <div className="concept__cell" role="listitem" key={c.n}>
-              <span className="concept__num">{c.n}</span>
-              <span className="concept__word">{c.word}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Ensaios — slideshow editorial */}
       <section
         className="ensaios reveal"
