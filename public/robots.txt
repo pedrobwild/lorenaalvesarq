@@ -2,15 +2,19 @@
 # robots.txt — Lorena Alves Arquitetura
 # Escritório de arquitetura em Uberlândia, MG
 # Host canônico: https://lorenaalvesarq.com
-# Atualizado: 2026-04-21
+# Atualizado: 2026-04-22
 # =========================================================
 
 # --- Regra geral ---
 User-agent: *
 Allow: /
+Allow: /sobre
 Allow: /portfolio
 Allow: /projeto/
 Allow: /faq
+Allow: /privacidade
+Allow: /blog
+Allow: /blog/
 Disallow: /admin
 Disallow: /admin/
 Disallow: /*?*utm_           # evita indexar URLs com tracking duplicado
@@ -37,9 +41,12 @@ Allow: /*.woff2$
 # --- Crawlers principais (sem crawl-delay para não atrasar indexação) ---
 User-agent: Googlebot
 Allow: /
+Allow: /sobre
 Allow: /portfolio
 Allow: /projeto/
 Allow: /faq
+Allow: /blog
+Allow: /blog/
 Disallow: /admin/
 
 User-agent: Googlebot-Image
@@ -47,11 +54,19 @@ Allow: /images/
 Allow: /
 Disallow: /admin/
 
+User-agent: Googlebot-News
+Allow: /blog
+Allow: /blog/
+Disallow: /admin/
+
 User-agent: Bingbot
 Allow: /
+Allow: /sobre
 Allow: /portfolio
 Allow: /projeto/
 Allow: /faq
+Allow: /blog
+Allow: /blog/
 Disallow: /admin/
 
 User-agent: DuckDuckBot
