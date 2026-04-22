@@ -64,7 +64,7 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { id: "projetos", label: "Portfólio", href: routes.portfolio },
   { id: "estudio", label: "Sobre", href: routes.sobre },
-  { id: "metodo", label: "Método", href: "#metodo" },
+  { id: "metodo", label: "Método", href: `${routes.home}#metodo` },
   { id: "blog", label: "Blog", href: routes.blog },
   { id: "faq", label: "FAQ", href: routes.faq },
 ];
