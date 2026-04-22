@@ -6,6 +6,8 @@ import ProjectPage from "./pages/ProjectPage";
 import FaqPage from "./pages/FaqPage";
 import SobrePage from "./pages/SobrePage";
 import PrivacidadePage from "./pages/PrivacidadePage";
+import BlogPage from "./pages/BlogPage";
+import BlogPostPage from "./pages/BlogPostPage";
 import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import AnalyticsPage from "./pages/admin/AnalyticsPage";
@@ -14,6 +16,8 @@ import SettingsPage from "./pages/admin/SettingsPage";
 import ProjectsListPage from "./pages/admin/ProjectsListPage";
 import ProjectFormPage from "./pages/admin/ProjectFormPage";
 import FaqAdminPage from "./pages/admin/FaqAdminPage";
+import BlogListPage from "./pages/admin/BlogListPage";
+import BlogFormPage from "./pages/admin/BlogFormPage";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import CookieBanner from "./components/CookieBanner";
 import { useCustomCursor } from "./lib/useCustomCursor";
@@ -31,6 +35,8 @@ function renderRoute(route: Route) {
   if (route.name === "faq") return <FaqPage />;
   if (route.name === "sobre") return <SobrePage />;
   if (route.name === "privacidade") return <PrivacidadePage />;
+  if (route.name === "blog") return <BlogPage />;
+  if (route.name === "blog-post") return <BlogPostPage slug={route.slug} />;
   if (route.name === "admin-login") return <LoginPage />;
   if (route.name === "admin-dashboard")
     return (
