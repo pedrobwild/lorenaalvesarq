@@ -812,6 +812,7 @@ export default function App() {
         onMouseLeave={() => (ensaiosPaused.current = false)}
       >
         <div className="ensaios__frame">
+          <h2 className="sr-only">Ensaios editoriais</h2>
           <div className="ensaios__badge" aria-hidden="true">
             <span>L</span>
             <em>/</em>
