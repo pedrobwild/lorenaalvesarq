@@ -266,7 +266,7 @@ export default function BlogPostPage({ slug }: Props) {
             {post.subtitle && (
               <>
                 <br />
-                <em>{post.subtitle}</em>
+                <em className="text-3xl">{post.subtitle}</em>
               </>
             )}
           </h1>
