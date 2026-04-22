@@ -363,6 +363,8 @@ export default function BlogPostPage({ slug }: Props) {
           </nav>
         )}
 
+        <RelatedPosts currentPost={post} />
+
         <footer className="blog-post__footer">
           <div className="blog-post__cta-block">
             <p className="blog-post__cta-quote">
