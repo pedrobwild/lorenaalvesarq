@@ -171,3 +171,71 @@ export function useBlogPostsByTag(tagSlug: string | undefined) {
   }
   return { posts: filtered, label, loading };
 }
+
+export type RelatedBlogPost = BlogPost & {
+  /** Quantas tags o post relacionado compartilha com o atual */
+  sharedTagCount: number;
+  /** Tags compartilhadas (rótulos originais do post atual) */
+  sharedTags: string[];
+};
+
+/**
+ * Posts relacionados ao atual, ranqueados por:
+ *  1. Quantidade de tags compartilhadas (desc)
+ *  2. Mesma categoria (bônus de +0.5)
+ *  3. Mais recentes primeiro (desempate)
+ *
+ * Sempre devolve até `limit` posts (quando há outros disponíveis), preenchendo
+ * com os mais recentes mesmo sem tags em comum — assim o bloco de "leia também"
+ * nunca fica vazio, melhorando o internal linking para SEO e a permanência do leitor.
+ */
+export function useRelatedBlogPosts(
+  current: BlogPost | null | undefined,
+  limit = 3
+): { related: RelatedBlogPost[]; loading: boolean } {
+  const { posts, loading } = useBlogPosts();
+  if (!current) return { related: [], loading };
+
+  const currentTagSlugs = new Set(
+    (current.tags ?? []).map((t) => slugify(t)).filter(Boolean)
+  );
+  const currentLabelBySlug = new Map<string, string>();
+  for (const t of current.tags ?? []) {
+    const s = slugify(t);
+    if (s && !currentLabelBySlug.has(s)) currentLabelBySlug.set(s, t);
+  }
+
+  const scored: Array<{ p: BlogPost; score: number; shared: string[] }> = [];
+  for (const p of posts) {
+    if (p.id === current.id) continue;
+    const sharedSlugs = (p.tags ?? [])
+      .map((t) => slugify(t))
+      .filter((s) => s && currentTagSlugs.has(s));
+    const uniqueShared = Array.from(new Set(sharedSlugs));
+    let score = uniqueShared.length;
+    if (current.category && p.category && p.category === current.category) {
+      score += 0.5;
+    }
+    scored.push({
+      p,
+      score,
+      shared: uniqueShared.map((s) => currentLabelBySlug.get(s) || s),
+    });
+  }
+
+  scored.sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    // Desempate: mais recente primeiro
+    const aDate = a.p.published_at || a.p.created_at;
+    const bDate = b.p.published_at || b.p.created_at;
+    return bDate.localeCompare(aDate);
+  });
+
+  const related: RelatedBlogPost[] = scored.slice(0, limit).map(({ p, shared }) => ({
+    ...p,
+    sharedTagCount: shared.length,
+    sharedTags: shared,
+  }));
+
+  return { related, loading };
+}

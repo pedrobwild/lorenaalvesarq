@@ -8,6 +8,7 @@ import { useSeo, breadcrumbJsonLd, organizationJsonLd } from "../lib/useSeo";
 import { routes, navigate } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
 import { derivePictureSources, setToSrcset } from "../lib/derivePicture";
+import RelatedPosts from "../components/RelatedPosts";
 
 function formatDate(iso: string | null): string {
   if (!iso) return "";
@@ -361,6 +362,8 @@ export default function BlogPostPage({ slug }: Props) {
             </a>
           </nav>
         )}
+
+        <RelatedPosts currentPost={post} />
 
         <footer className="blog-post__footer">
           <div className="blog-post__cta-block">
