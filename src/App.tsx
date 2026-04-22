@@ -812,6 +812,7 @@ export default function App() {
         onMouseLeave={() => (ensaiosPaused.current = false)}
       >
         <div className="ensaios__frame">
+          <h2 className="sr-only">Ensaios editoriais</h2>
           <div className="ensaios__badge" aria-hidden="true">
             <span>L</span>
             <em>/</em>
@@ -1021,7 +1022,7 @@ export default function App() {
             </p>
           </div>
           <div className="footer__col">
-            <h4>menu</h4>
+            <h3 className="footer__col-title">menu</h3>
             <ul>
               <li>
                 <a href={routes.sobre}>Sobre</a>
@@ -1041,7 +1042,7 @@ export default function App() {
             </ul>
           </div>
           <div className="footer__col">
-            <h4>Projetos</h4>
+            <h3 className="footer__col-title">Projetos</h3>
             <ul>
               {PROJECTS.map((p) => (
                 <li key={p.slug}>
@@ -1058,7 +1059,7 @@ export default function App() {
             </ul>
           </div>
           <div className="footer__col">
-            <h4>Social</h4>
+            <h3 className="footer__col-title">Social</h3>
             <ul>
               {settings?.instagram_url && (
                 <li>
@@ -1103,7 +1104,7 @@ export default function App() {
             </ul>
           </div>
           <div className="footer__col">
-            <h4>Contato</h4>
+            <h3 className="footer__col-title">Contato</h3>
             <address className="footer__address" style={{ fontStyle: "normal" }}>
               <ul>
               {settings?.contact_email && (

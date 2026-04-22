@@ -149,6 +149,40 @@ export default function BlogPostPage({ slug }: Props) {
       const root = doc.getElementById("root");
       if (!root) return post.content_html;
 
+      // ============================================================
+      // Hierarquia de headings — garante H1 único na página
+      // ------------------------------------------------------------
+      // O <h1> da página é o título do post. Qualquer <h1> dentro
+      // do conteúdo é rebaixado para <h2>. Em seguida, normaliza
+      // pulos de nível (ex.: h2 → h4 vira h2 → h3) — mantendo a
+      // ordem semântica esperada por leitores de tela e crawlers.
+      // ============================================================
+      const renameHeading = (el: Element, newTag: string) => {
+        const next = doc.createElement(newTag);
+        for (const a of Array.from(el.attributes)) next.setAttribute(a.name, a.value);
+        next.innerHTML = el.innerHTML;
+        el.parentNode?.replaceChild(next, el);
+        return next;
+      };
+
+      // 1) Rebaixa qualquer h1 do conteúdo para h2
+      Array.from(root.querySelectorAll("h1")).forEach((h) => renameHeading(h, "h2"));
+
+      // 2) Normaliza pulos: nível atual nunca pode aumentar mais de 1
+      //    em relação ao último heading visto. Início mínimo = h2 (h1 é o título).
+      let prevLevel = 1; // h1 da página
+      const headings = Array.from(root.querySelectorAll("h2, h3, h4, h5, h6"));
+      for (const h of headings) {
+        const current = parseInt(h.tagName.charAt(1), 10);
+        const target = current > prevLevel + 1 ? prevLevel + 1 : current;
+        if (target !== current) {
+          const renamed = renameHeading(h, `h${target}`);
+          prevLevel = parseInt(renamed.tagName.charAt(1), 10);
+        } else {
+          prevLevel = current;
+        }
+      }
+
       const imgs = Array.from(root.querySelectorAll("img"));
       for (const img of imgs) {
         // 1) Garantir lazy + async em qualquer <img> sem priority explícita
