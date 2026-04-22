@@ -171,7 +171,14 @@ export default function App() {
     };
     const syncFromHash = () => {
       const h = window.location.hash.replace(/^#/, "");
-      if (h && HASH_TO_ID[h]) setActiveSection(HASH_TO_ID[h]);
+      if (h && HASH_TO_ID[h]) {
+        setActiveSection(HASH_TO_ID[h]);
+        // Rola até a seção alvo (útil quando se chega de outra rota com hash).
+        requestAnimationFrame(() => {
+          const el = document.getElementById(HASH_TO_ID[h]);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
     };
     syncFromHash();
     window.addEventListener("hashchange", syncFromHash);
