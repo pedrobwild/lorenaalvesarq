@@ -19,6 +19,8 @@ type EventType =
   | "pageview"
   | "project_view"
   | "portfolio_view"
+  | "blog_index_view"
+  | "blog_post_view"
   | "click_contact"
   | "click_whatsapp"
   | "click_instagram"

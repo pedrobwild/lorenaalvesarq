@@ -6,7 +6,7 @@ type Props = {
   /** rótulo do link "voltar" */
   backLabel?: string;
   /** rota atualmente ativa, para destacar o item do menu */
-  active?: "portfolio" | "faq" | "home" | "project" | "sobre" | "metodo";
+  active?: "portfolio" | "faq" | "home" | "project" | "sobre" | "metodo" | "blog";
   /** classe extra no <nav> (ex.: pp-nav para variante de fundo) */
   extraClassName?: string;
 };
@@ -75,6 +75,14 @@ export default function InternalNav({
           data-cursor="hover"
         >
           FAQ
+        </a>
+        <a
+          href={routes.blog}
+          className={active === "blog" ? "is-active" : ""}
+          aria-current={active === "blog" ? "page" : undefined}
+          data-cursor="hover"
+        >
+          Blog
         </a>
       </div>
 

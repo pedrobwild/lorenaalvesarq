@@ -54,7 +54,7 @@ const HERO_IMAGES: HeroSlide[] = [
  */
 type NavItem = {
   /** Id da seção na home — também a chave do scroll-spy */
-  id: "projetos" | "estudio" | "metodo" | "faq" | "contato";
+  id: "projetos" | "estudio" | "metodo" | "blog" | "faq" | "contato";
   /** Texto exibido no menu */
   label: string;
   /** Destino do link (rota dedicada ou âncora na home) */
@@ -65,6 +65,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "projetos", label: "Portfólio", href: routes.portfolio },
   { id: "estudio", label: "Sobre", href: routes.sobre },
   { id: "metodo", label: "Método", href: "#metodo" },
+  { id: "blog", label: "Blog", href: routes.blog },
   { id: "faq", label: "FAQ", href: routes.faq },
 ];
 
@@ -164,6 +165,7 @@ export default function App() {
       projetos: "projetos",
       estudio: "estudio",
       metodo: "metodo",
+      blog: "blog",
       faq: "faq",
       contato: "contato",
     };
