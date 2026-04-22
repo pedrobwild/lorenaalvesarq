@@ -323,7 +323,7 @@ export default function BlogPostPage({ slug }: Props) {
           className="blog-post__content"
           // O HTML é editado/curado pela admin do estúdio (autora confiável).
           // Sanitização é feita no formulário antes de salvar.
-          dangerouslySetInnerHTML={{ __html: post.content_html }}
+          dangerouslySetInnerHTML={{ __html: enhancedHtml }}
         />
 
         {post.tags && post.tags.length > 0 && (
