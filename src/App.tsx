@@ -1137,7 +1137,8 @@ export default function App() {
                   </li>
                 );
               })()}
-            </ul>
+              </ul>
+            </address>
           </div>
         </div>
         <div className="footer__bottom">
@@ -1148,9 +1149,11 @@ export default function App() {
             <a
               href="#/admin/login"
               className="footer__admin-link"
-              aria-label="Área administrativa"
+              aria-label="Área administrativa do site"
+              title="Área administrativa"
             >
-              Brasil
+              <span aria-hidden="true">Brasil</span>
+              <span className="sr-only">Acessar área administrativa</span>
             </a>
           </span>
         </div>
