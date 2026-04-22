@@ -932,15 +932,7 @@ export default function App() {
           sizes="100vw"
         />
         <div className="cta-hero__overlay" aria-hidden="true"></div>
-        <div className="cta-hero__content reveal">
-          <p className="cta-hero__eyebrow mono">Contato · 05</p>
-          <h2 className="cta-hero__title">
-            Onde seus projetos <em>ganham vida</em>.
-          </h2>
-          <p className="cta-hero__subtitle">
-            Vamos projetar o seu próximo <em>modo de viver</em>?
-          </p>
-        </div>
+        <div className="cta-hero__content reveal"></div>
       </section>
 
       {/* FAQ — perguntas frequentes (SEO local + processo) */}
