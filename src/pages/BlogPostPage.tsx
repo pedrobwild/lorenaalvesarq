@@ -86,6 +86,72 @@ export default function BlogPostPage({ slug }: Props) {
         : undefined,
   });
 
+  /**
+   * Pós-processa o `content_html` antes de injetar no DOM:
+   *  - Garante `loading="lazy"` + `decoding="async"` + `fetchpriority="low"` em
+   *    toda <img> que esteja fora de uma <picture>.
+   *  - Quando a URL da <img> segue a convenção `-{sm|md|lg}.{ext}` do pipeline,
+   *    envolve-a numa <picture> com sources AVIF + WebP + JPEG, fazendo upgrade
+   *    automático mesmo em posts antigos seedados sem `<picture>`.
+   *
+   * Roda uma única vez por mudança de post (useMemo) — sem custo na rolagem.
+   */
+  const enhancedHtml = useMemo(() => {
+    if (!post?.content_html) return "";
+    if (typeof window === "undefined") return post.content_html;
+    try {
+      const doc = new DOMParser().parseFromString(
+        `<div id="root">${post.content_html}</div>`,
+        "text/html"
+      );
+      const root = doc.getElementById("root");
+      if (!root) return post.content_html;
+
+      const imgs = Array.from(root.querySelectorAll("img"));
+      for (const img of imgs) {
+        // 1) Garantir lazy + async em qualquer <img> sem priority explícita
+        if (!img.hasAttribute("loading")) img.setAttribute("loading", "lazy");
+        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
+        if (!img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "low");
+
+        // 2) Se já está dentro de <picture>, deixa quieto (autor já configurou).
+        const inPicture = img.parentElement?.tagName.toLowerCase() === "picture";
+        if (inPicture) continue;
+
+        // 3) Tenta derivar AVIF/WebP/JPEG da URL — só upgrade se for URL do pipeline.
+        const src = img.getAttribute("src") || "";
+        const derived = derivePictureSources(src);
+        if (!derived) continue;
+
+        const sizes = img.getAttribute("sizes") || "(max-width: 900px) 100vw, 900px";
+
+        const picture = doc.createElement("picture");
+        const mkSource = (type: string, set: { sm: string; md: string; lg: string }) => {
+          const s = doc.createElement("source");
+          s.setAttribute("type", type);
+          s.setAttribute("srcset", setToSrcset(set));
+          s.setAttribute("sizes", sizes);
+          return s;
+        };
+        picture.appendChild(mkSource("image/avif", derived.avif));
+        picture.appendChild(mkSource("image/webp", derived.webp));
+        picture.appendChild(mkSource("image/jpeg", derived.jpeg));
+
+        // Atualiza a <img> para apontar ao JPEG fallback (universal).
+        img.setAttribute("src", derived.fallbackSrc);
+        img.setAttribute("srcset", setToSrcset(derived.jpeg));
+        img.setAttribute("sizes", sizes);
+
+        img.parentNode?.insertBefore(picture, img);
+        picture.appendChild(img);
+      }
+      return root.innerHTML;
+    } catch {
+      // Em qualquer falha, devolve o HTML original — nunca quebra o render do artigo.
+      return post.content_html;
+    }
+  }, [post?.content_html]);
+
   useEffect(() => {
     if (!post) return;
     track("blog_post_view", { value: { slug: post.slug } });
