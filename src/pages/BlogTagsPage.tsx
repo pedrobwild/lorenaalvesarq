@@ -17,9 +17,9 @@ export default function BlogTagsPage() {
 
   useSeo({
     title:
-      "Tags do Blog · Arquitetura, Interiores e Construção | Lorena Alves Arquitetura",
+      "Tags do Blog · Arquitetura, Construção e Interiores em Uberlândia | Lorena Alves Arquitetura",
     description:
-      "Navegue os artigos do blog Lorena Alves por assunto: construção, projeto autoral, reforma, arquitetura residencial, interiores e mais — organizados por tag.",
+      "Explore os artigos do blog Lorena Alves organizados por assunto: como construir sua casa, projeto autoral, reforma, arquitetura residencial, materiais e interiores. Conteúdo prático para quem vai projetar em Uberlândia, MG.",
     canonicalPath: "/blog/tags",
     ogType: "website",
     jsonLd: settings
