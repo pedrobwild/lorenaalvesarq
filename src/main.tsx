@@ -86,6 +86,24 @@ function renderRoute(route: Route) {
         <FaqAdminPage />
       </ProtectedRoute>
     );
+  if (route.name === "admin-blog")
+    return (
+      <ProtectedRoute>
+        <BlogListPage />
+      </ProtectedRoute>
+    );
+  if (route.name === "admin-blog-new")
+    return (
+      <ProtectedRoute>
+        <BlogFormPage />
+      </ProtectedRoute>
+    );
+  if (route.name === "admin-blog-edit")
+    return (
+      <ProtectedRoute>
+        <BlogFormPage slug={route.slug} />
+      </ProtectedRoute>
+    );
   // home (com ou sem âncora) e not-found caem na App (que trata âncoras legadas)
   return <App />;
 }
@@ -97,6 +115,8 @@ function isAdminRoute(route: Route) {
 function routeKeyOf(route: Route) {
   if (route.name === "project") return `project:${route.slug}`;
   if (route.name === "admin-project-edit") return `admin-edit:${route.slug}`;
+  if (route.name === "blog-post") return `blog:${route.slug}`;
+  if (route.name === "admin-blog-edit") return `admin-blog-edit:${route.slug}`;
   return route.name;
 }
 
