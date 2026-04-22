@@ -214,8 +214,23 @@ button {
 .nav .brand-logo { height: 1.35rem; }
 .loader .brand-logo { height: clamp(2.2rem, 5vw, 3.2rem); }
 .hero .brand-logo,
-.hero__title .brand-logo { height: clamp(3.8rem, 10vw, 9rem); }
+.hero__title .brand-logo {
+  height: clamp(3.8rem, 10vw, 9rem);
+  display: block;
+}
 .footer .brand-logo { height: 1.4rem; }
+
+/* Quando o BrandLogo (imagem) é o conteúdo do hero__title, não pode ser
+   clipado pelo overflow:hidden de .word nem deslocado pelo translateY do span.
+   Senão a baseline da imagem fica cortada. */
+.hero__title .word:has(.brand-logo) {
+  overflow: visible;
+  line-height: 0;
+}
+.hero__title .word > span:has(> .brand-logo) {
+  transform: none !important;
+  display: block;
+}
 
 /* ---------- Brand seal (selo circular) ---------- */
 .brand-seal {
