@@ -822,6 +822,8 @@ export default function App() {
           <div
             className="ensaios__track"
             style={{ transform: `translateX(-${ensaioIdx * 100}%)` }}
+            aria-live="polite"
+            aria-atomic="false"
           >
             {ENSAIOS.map((e, i) => (
               <article
