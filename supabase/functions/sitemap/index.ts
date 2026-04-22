@@ -159,7 +159,7 @@ Deno.serve(async (req) => {
     };
   });
 
-  const all = [...staticUrls, ...projectUrls, ...blogUrls];
+  const all = [...staticUrls, ...projectUrls, ...blogUrls, ...tagUrls];
 
   const urlsXml = all
     .map((u) => {
