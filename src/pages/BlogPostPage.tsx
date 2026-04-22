@@ -36,6 +36,21 @@ export default function BlogPostPage({ slug }: Props) {
   const ogImage =
     post?.og_image_url || post?.cover_url || `${base}/images/og-lorena-alves-arquitetura-uberlandia-mg.jpg`;
 
+  // Absolutiza URLs relativas — Rich Results Test exige URLs absolutas em ImageObject.
+  const absUrl = (u: string | null | undefined): string | undefined => {
+    if (!u) return undefined;
+    if (/^https?:\/\//i.test(u)) return u;
+    return `${base}${u.startsWith("/") ? "" : "/"}${u}`;
+  };
+
+  const headline = post?.title
+    ? post.title.length > 110
+      ? post.title.slice(0, 107) + "…"
+      : post.title
+    : "";
+  const articleUrl = post ? `${base}/blog/${post.slug}` : `${base}/blog`;
+  const publisherLogo = absUrl(settings?.seo_og_image || settings?.default_og_image);
+
   useSeo({
     title:
       post?.seo_title ||
@@ -44,7 +59,7 @@ export default function BlogPostPage({ slug }: Props) {
       post?.seo_description || post?.excerpt || "Artigo do blog Lorena Alves Arquitetura.",
     canonicalPath: post ? `/blog/${post.slug}` : "/blog",
     ogType: "article",
-    ogImage,
+    ogImage: absUrl(ogImage),
     jsonLd:
       settings && post
         ? [
@@ -57,31 +72,57 @@ export default function BlogPostPage({ slug }: Props) {
             {
               "@context": "https://schema.org",
               "@type": "BlogPosting",
-              headline: post.title,
-              description: post.excerpt || post.seo_description || undefined,
-              image: ogImage ? [ogImage] : undefined,
+              "@id": `${articleUrl}#article`,
+              headline,
+              name: post.title,
+              description:
+                post.excerpt || post.seo_description || `${post.title} — Blog Lorena Alves Arquitetura.`,
+              image: absUrl(ogImage)
+                ? [
+                    {
+                      "@type": "ImageObject",
+                      url: absUrl(ogImage)!,
+                      width: 1200,
+                      height: 630,
+                    },
+                  ]
+                : undefined,
+              url: articleUrl,
               datePublished: post.published_at ?? post.created_at,
-              dateModified: post.updated_at,
+              dateModified: post.updated_at || post.published_at || post.created_at,
               author: {
                 "@type": "Person",
                 name: post.author_name || "Lorena Alves",
                 url: base,
+                jobTitle: post.author_role || "Arquiteta e Urbanista",
               },
               publisher: {
                 "@type": "Organization",
+                "@id": `${base}/#organization`,
                 name: settings.site_title || "Lorena Alves Arquitetura",
-                logo: settings.seo_og_image
-                  ? { "@type": "ImageObject", url: settings.seo_og_image }
+                logo: publisherLogo
+                  ? {
+                      "@type": "ImageObject",
+                      url: publisherLogo,
+                      width: 1200,
+                      height: 630,
+                    }
                   : undefined,
               },
               mainEntityOfPage: {
                 "@type": "WebPage",
-                "@id": `${base}/blog/${post.slug}`,
+                "@id": articleUrl,
+              },
+              isPartOf: {
+                "@type": "Blog",
+                "@id": `${base}/blog#blog`,
+                name: "Blog · Lorena Alves Arquitetura",
+                url: `${base}/blog`,
               },
               articleSection: post.category || "Arquitetura",
               keywords: post.seo_keywords || (post.tags ?? []).join(", ") || undefined,
               inLanguage: "pt-BR",
-              wordCount: post.content_html.replace(/<[^>]+>/g, " ").split(/\s+/).length,
+              wordCount: post.content_html.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length,
             },
           ]
         : undefined,
