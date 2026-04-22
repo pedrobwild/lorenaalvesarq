@@ -5947,8 +5947,99 @@ textarea.admin-field__input {
 }
 
 /* ==========================================================
-   Blog Post (/blog/:slug) — leitura
+   Blog · Tags strip + tags index page
    ========================================================== */
+
+.blog-tags-strip {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--edge);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.blog-tags-strip__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--clay-deep);
+  text-decoration: none;
+  transition: gap 0.3s var(--ease), color 0.3s var(--ease);
+}
+.blog-tags-strip__link:hover { gap: 0.9rem; color: var(--ink); }
+
+.blog-tags {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2rem) var(--edge) clamp(4rem, 8vw, 6rem);
+}
+
+.blog-tags__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.blog-tags__chip {
+  --chip-bg: rgba(10, 10, 10, 0.04);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.7rem 1.05rem;
+  background: var(--chip-bg);
+  border: 1px solid rgba(10, 10, 10, 0.08);
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease),
+    transform 0.3s var(--ease), color 0.3s var(--ease);
+}
+.blog-tags__chip:hover {
+  background: var(--ink);
+  color: var(--bone);
+  border-color: var(--ink);
+  transform: translateY(-1px);
+}
+.blog-tags__chip:hover .blog-tags__chip-count { color: var(--bone-warm); }
+
+.blog-tags__chip-label {
+  font-size: 0.92rem;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+}
+.blog-tags__chip-count {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  color: var(--clay-deep);
+  transition: color 0.3s var(--ease);
+}
+
+/* Tag chips dentro do post viram links clicáveis */
+.blog-post__tags a.blog-post__tag {
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.25s var(--ease), color 0.25s var(--ease),
+    border-color 0.25s var(--ease);
+}
+.blog-post__tags a.blog-post__tag:hover {
+  background: var(--ink);
+  color: var(--bone);
+  border-color: var(--ink);
+}
+.blog-post__tag--all {
+  margin-left: auto;
+  opacity: 0.7;
+}
+.blog-post__tag--all:hover { opacity: 1; }
+
+
 
 .blog-post {
   max-width: 760px;

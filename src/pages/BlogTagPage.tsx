@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import InternalNav from "../components/InternalNav";
-import { useBlogPosts } from "../lib/useBlog";
+import { useBlogPostsByTag } from "../lib/useBlog";
 import { useSiteSettings } from "../lib/useSiteSettings";
 import { useSeo, breadcrumbJsonLd, organizationJsonLd } from "../lib/useSeo";
 import { routes } from "../lib/useHashRoute";
@@ -21,95 +21,89 @@ function formatDate(iso: string | null): string {
   }
 }
 
-export default function BlogPage() {
-  const { posts, loading } = useBlogPosts();
+type Props = { slug: string };
+
+export default function BlogTagPage({ slug }: Props) {
+  const { posts, label, loading } = useBlogPostsByTag(slug);
   const { settings } = useSiteSettings();
+  const base = (settings?.seo_canonical_base || "https://lorenaalvesarq.com").replace(
+    /\/$/,
+    ""
+  );
+  const displayLabel = label || slug.replace(/-/g, " ");
+  const titleCased = displayLabel.charAt(0).toUpperCase() + displayLabel.slice(1);
 
   useSeo({
-    title:
-      "Blog de Arquitetura e Interiores em Uberlândia | Lorena Alves Arquitetura",
-    description:
-      "Artigos do estúdio Lorena Alves sobre como construir, reformar e habitar — guias práticos de arquitetura residencial, design de interiores e planejamento de obra em Uberlândia/MG.",
-    canonicalPath: "/blog",
+    title: `${titleCased} · Artigos do Blog | Lorena Alves Arquitetura`,
+    description: `Artigos do blog Lorena Alves marcados com “${displayLabel}” — reflexões e guias práticos sobre arquitetura, interiores e construção em Uberlândia/MG.`,
+    canonicalPath: `/blog/tag/${slug}`,
     ogType: "website",
-    jsonLd: settings
-      ? [
-          organizationJsonLd(settings),
-          breadcrumbJsonLd(settings, [
-            { name: "Início", path: "/" },
-            { name: "Blog", path: "/blog" },
-          ]),
-          {
-            "@context": "https://schema.org",
-            "@type": "Blog",
-            name: "Blog · Lorena Alves Arquitetura",
-            url: `${(settings.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "")}/blog`,
-            description:
-              "Artigos do estúdio Lorena Alves sobre arquitetura residencial, interiores e planejamento de obra.",
-            publisher: {
-              "@type": "Organization",
-              name: settings.site_title || "Lorena Alves Arquitetura",
+    jsonLd:
+      settings && !loading
+        ? [
+            organizationJsonLd(settings),
+            breadcrumbJsonLd(settings, [
+              { name: "Início", path: "/" },
+              { name: "Blog", path: "/blog" },
+              { name: "Tags", path: "/blog/tags" },
+              { name: titleCased, path: `/blog/tag/${slug}` },
+            ]),
+            {
+              "@context": "https://schema.org",
+              "@type": "CollectionPage",
+              name: `${titleCased} · Blog · Lorena Alves Arquitetura`,
+              url: `${base}/blog/tag/${slug}`,
+              about: { "@type": "Thing", name: displayLabel },
+              hasPart: posts.map((p) => ({
+                "@type": "BlogPosting",
+                headline: p.title,
+                url: `${base}/blog/${p.slug}`,
+                datePublished: p.published_at ?? p.created_at,
+                image: p.cover_url ?? undefined,
+              })),
             },
-            blogPost: posts.map((p) => ({
-              "@type": "BlogPosting",
-              headline: p.title,
-              url: `${(settings.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "")}/blog/${p.slug}`,
-              datePublished: p.published_at ?? p.created_at,
-              image: p.cover_url ?? undefined,
-            })),
-          },
-        ]
-      : undefined,
+          ]
+        : undefined,
   });
 
   useEffect(() => {
-    track("blog_index_view");
+    if (!slug) return;
+    track("blog_tag_view", { value: { tag: slug } });
     const ctx = gsap.context(() => {
       gsap.utils.toArray<HTMLElement>(".blog-reveal").forEach((el) => {
         gsap.fromTo(
           el,
-          { opacity: 0, y: 32 },
+          { opacity: 0, y: 28 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.9,
+            duration: 0.8,
             ease: "power3.out",
-            scrollTrigger: { trigger: el, start: "top 88%", once: true },
+            scrollTrigger: { trigger: el, start: "top 90%", once: true },
           }
         );
       });
     });
     return () => ctx.revert();
-  }, [posts.length]);
+  }, [slug, posts.length]);
 
   return (
     <div className="pf-page blog-page">
-      <InternalNav active="blog" backLabel="voltar ao início" />
+      <InternalNav active="blog" backHref={routes.blogTags} backLabel="ver todas as tags" />
 
       <header className="pf-head">
-        <p className="pf-head__eyebrow mono">Blog · Lorena Alves Arquitetura</p>
+        <p className="pf-head__eyebrow mono">Blog · Tag</p>
         <h1 className="pf-head__title">
-          Escritos sobre <em>habitar, projetar e construir</em>.
+          #{displayLabel}
         </h1>
         <p className="pf-head__lede">
-          Reflexões e guias práticos do estúdio — sobre como tornar o desejo de
-          uma casa em projeto, e o projeto em obra. Um lugar para pensar a
-          arquitetura antes do primeiro traço.
+          {posts.length === 0 && !loading
+            ? "Nenhum artigo encontrado com esta tag — por enquanto."
+            : `${posts.length} ${posts.length === 1 ? "artigo" : "artigos"} marcados com “${displayLabel}”.`}
         </p>
       </header>
 
-      <nav className="blog-tags-strip" aria-label="Atalho para tags">
-        <a
-          href={routes.blogTags}
-          className="blog-tags-strip__link mono"
-          data-cursor="hover"
-        >
-          <span>Navegar por tags</span>
-          <span aria-hidden>→</span>
-        </a>
-      </nav>
-
-      <section className="blog-grid" aria-label="Artigos do blog">
+      <section className="blog-grid" aria-label={`Artigos com a tag ${displayLabel}`}>
         {loading && (
           <p className="mono" style={{ opacity: 0.5 }}>
             carregando…
@@ -118,7 +112,7 @@ export default function BlogPage() {
 
         {!loading && posts.length === 0 && (
           <p className="mono" style={{ opacity: 0.6 }}>
-            Em breve, os primeiros artigos.
+            <a href={routes.blogTags}>Voltar para todas as tags →</a>
           </p>
         )}
 
@@ -153,7 +147,6 @@ export default function BlogPage() {
                       alt={p.cover_alt || p.title}
                       loading={i === 0 ? "eager" : "lazy"}
                       decoding={i === 0 ? "sync" : "async"}
-                      fetchPriority={i === 0 ? "high" : "auto"}
                       width={1280}
                       height={720}
                       onError={(e) => {
@@ -200,18 +193,15 @@ export default function BlogPage() {
       <footer className="pf-foot blog-reveal">
         <div>
           <p className="pf-foot__quote">
-            Quer transformar um desejo em projeto? <em>Conversemos.</em>
+            Quer ver mais assuntos? <em>Explore todas as tags.</em>
           </p>
         </div>
         <a
           className="pf-foot__cta"
-          href={`${routes.home}#contato`}
+          href={routes.blogTags}
           data-cursor="hover"
-          onClick={() =>
-            track("click_cta", { value: { label: "contato", from: "blog-index" } })
-          }
         >
-          <span>FALAR COM O ESTÚDIO</span>
+          <span>VER TODAS AS TAGS</span>
           <span className="btn-big__arrow" />
         </a>
       </footer>

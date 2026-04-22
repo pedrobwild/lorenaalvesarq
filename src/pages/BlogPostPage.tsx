@@ -233,13 +233,39 @@ export default function BlogPostPage({ slug }: Props) {
         />
 
         {post.tags && post.tags.length > 0 && (
-          <div className="blog-post__tags">
-            {post.tags.map((t) => (
-              <span key={t} className="blog-post__tag mono">
-                #{t}
-              </span>
-            ))}
-          </div>
+          <nav className="blog-post__tags" aria-label="Tags do artigo">
+            {post.tags.map((t) => {
+              const tagSlug = t
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9\s-]/g, "")
+                .trim()
+                .replace(/\s+/g, "-");
+              return (
+                <a
+                  key={t}
+                  href={routes.blogTag(tagSlug)}
+                  className="blog-post__tag mono"
+                  data-cursor="hover"
+                  onClick={() =>
+                    track("blog_tag_click", {
+                      value: { from: "post", tag: tagSlug, slug: post.slug },
+                    })
+                  }
+                >
+                  #{t}
+                </a>
+              );
+            })}
+            <a
+              href={routes.blogTags}
+              className="blog-post__tag blog-post__tag--all mono"
+              data-cursor="hover"
+            >
+              ver todas as tags →
+            </a>
+          </nav>
         )}
 
         <footer className="blog-post__footer">

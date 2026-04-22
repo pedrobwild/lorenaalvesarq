@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
       .order("order_index", { ascending: true }),
     supabase
       .from("blog_posts")
-      .select("slug, title, cover_url, cover_alt, updated_at, published_at")
+      .select("slug, title, cover_url, cover_alt, tags, updated_at, published_at")
       .eq("visible", true)
       .order("published_at", { ascending: false, nullsFirst: false }),
   ]);
@@ -82,7 +82,33 @@ Deno.serve(async (req) => {
     { loc: `${base}/faq`, priority: "0.8", changefreq: "monthly", lastmod: today },
     { loc: `${base}/portfolio`, priority: "0.9", changefreq: "weekly", lastmod: today },
     { loc: `${base}/blog`, priority: "0.8", changefreq: "weekly", lastmod: today },
+    { loc: `${base}/blog/tags`, priority: "0.6", changefreq: "weekly", lastmod: today },
   ];
+
+  // Agrega tags únicas dos posts visíveis (slug derivado do label)
+  function slugifyTag(input: string): string {
+    return input
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+  }
+  const tagSet = new Set<string>();
+  for (const b of (blogPosts ?? []) as Array<{ tags?: string[] | null }>) {
+    for (const t of b.tags ?? []) {
+      const s = slugifyTag(t ?? "");
+      if (s) tagSet.add(s);
+    }
+  }
+  const tagUrls: UrlEntry[] = Array.from(tagSet).map((slug) => ({
+    loc: `${base}/blog/tag/${slug}`,
+    priority: "0.5",
+    changefreq: "weekly",
+    lastmod: today,
+  }));
 
   const blogUrls: UrlEntry[] = ((blogPosts ?? []) as Array<{
     slug: string;
@@ -133,7 +159,7 @@ Deno.serve(async (req) => {
     };
   });
 
-  const all = [...staticUrls, ...projectUrls, ...blogUrls];
+  const all = [...staticUrls, ...projectUrls, ...blogUrls, ...tagUrls];
 
   const urlsXml = all
     .map((u) => {
