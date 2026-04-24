@@ -441,3 +441,109 @@ Deno.test("rota canônica também devolve 200 direto (sem 3xx para normalizar)",
   assertEquals(body.status, "ok");
   assertEquals(body.path, "/portfolio");
 });
+
+// ---------------------------------------------------------------------------
+// Validação de input do parâmetro `path`.
+//
+// A função aceita normalização leve (ex.: faltando `/`, trailing slash,
+// querystring extra) — esses NÃO são erros do cliente. Mas inputs claramente
+// inválidos (param ausente, vazio, com control chars, ou absurdamente longo)
+// devem responder 400 (bad_request) em vez de 200 ("/" implícito) ou 404
+// (path normalizado vazio). Caso contrário um bug do cliente vira sinal SEO
+// errado: "/" indexado por engano ou um 404 fantasma no Search Console.
+// ---------------------------------------------------------------------------
+
+/** Versão bruta do call() que NÃO seta path automaticamente. */
+function callRaw(searchParams: Record<string, string>) {
+  const u = new URL(FN_URL);
+  for (const [k, v] of Object.entries(searchParams)) {
+    u.searchParams.set(k, v);
+  }
+  return fetch(u.toString(), {
+    method: "GET",
+    redirect: "manual",
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+    },
+  });
+}
+
+Deno.test("input inválido: parâmetro path ausente devolve 400", async () => {
+  // Nenhum search param `path` enviado.
+  const r = await callRaw({});
+  const body = await r.json();
+  assert(
+    r.status === 400 || r.status === 422,
+    `esperado 400/422 para path ausente, recebido ${r.status} (body=${JSON.stringify(body)})`,
+  );
+  assertEquals(body.status, "bad_request");
+  assertEquals(body.reason, "path_param_missing");
+});
+
+Deno.test("input inválido: path vazio devolve 400", async () => {
+  const r = await callRaw({ path: "" });
+  const body = await r.json();
+  assert(
+    r.status === 400 || r.status === 422,
+    `esperado 400/422 para path vazio, recebido ${r.status}`,
+  );
+  assertEquals(body.status, "bad_request");
+  assertEquals(body.reason, "path_param_empty");
+});
+
+Deno.test("input inválido: path só com whitespace devolve 400", async () => {
+  const r = await callRaw({ path: "   " });
+  const body = await r.json();
+  assert(
+    r.status === 400 || r.status === 422,
+    `esperado 400/422 para path só com whitespace, recebido ${r.status}`,
+  );
+  assertEquals(body.status, "bad_request");
+  assertEquals(body.reason, "path_param_empty");
+});
+
+Deno.test("input inválido: path com NULL byte devolve 400", async () => {
+  const r = await callRaw({ path: "/rota\u0000injetada" });
+  const body = await r.json();
+  assert(
+    r.status === 400 || r.status === 422,
+    `esperado 400/422 para path com NULL byte, recebido ${r.status}`,
+  );
+  assertEquals(body.status, "bad_request");
+  assertEquals(body.reason, "path_param_invalid_chars");
+});
+
+Deno.test("input inválido: path com caractere de controle devolve 400", async () => {
+  // \u0007 = BEL (bell), caractere de controle ASCII.
+  const r = await callRaw({ path: "/rota\u0007quebrada" });
+  const body = await r.json();
+  assert(
+    r.status === 400 || r.status === 422,
+    `esperado 400/422 para path com control char, recebido ${r.status}`,
+  );
+  assertEquals(body.status, "bad_request");
+  assertEquals(body.reason, "path_param_invalid_chars");
+});
+
+Deno.test("input inválido: path absurdamente longo (>2000 chars) devolve 400", async () => {
+  const longPath = "/" + "a".repeat(2500);
+  const r = await callRaw({ path: longPath });
+  const body = await r.json();
+  assert(
+    r.status === 400 || r.status === 422,
+    `esperado 400/422 para path muito longo, recebido ${r.status}`,
+  );
+  assertEquals(body.status, "bad_request");
+  assertEquals(body.reason, "path_param_too_long");
+});
+
+Deno.test("input válido limítrofe: path sem `/` inicial é aceito (autoconserto, não 400)", async () => {
+  // Confirma que NÃO somos rígidos demais: faltar `/` inicial é normalização,
+  // não erro do cliente. Devolve 404 normal porque "rota-sem-barra" não existe.
+  const r = await callRaw({ path: "rota-sem-barra-inicial" });
+  const body = await r.json();
+  assertEquals(r.status, 404, `path sem / não deve ser 400; recebido ${r.status}`);
+  assertEquals(body.status, "not_found");
+  assertEquals(body.path, "/rota-sem-barra-inicial");
+});
