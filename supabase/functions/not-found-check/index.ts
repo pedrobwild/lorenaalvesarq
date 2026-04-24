@@ -31,7 +31,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
  * relevante de comportamento. Exposta no endpoint de health para facilitar
  * monitoramento externo (uptime checks, smoke tests pós-deploy, etc.).
  */
-const FN_VERSION = "1.1.0";
+const FN_VERSION = "1.2.0";
 /** Momento em que o worker atual subiu (cold start). */
 const FN_BOOTED_AT = new Date().toISOString();
 
