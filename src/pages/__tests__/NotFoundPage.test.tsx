@@ -12,6 +12,7 @@ import {
   getTwitterCard,
   getTwitterTitle,
   getTwitterDescription,
+  expectMetaContainsNoIndex,
   resetHead,
 } from "@/test/seoHelpers";
 
