@@ -268,3 +268,32 @@ Deno.test("health check via /health devolve 200", async () => {
   assertEquals(body.status, "ok");
   assertEquals(body.service, "not-found-check");
 });
+
+// ---------------------------------------------------------------------------
+// Idempotência: chamadas repetidas ao mesmo path inexistente devem
+// devolver exatamente o mesmo status/reason. Isso é o contrato que crawlers
+// (Googlebot, Bingbot) esperam: se uma URL retornou 404 ontem, ela ainda
+// retorna 404 hoje, com a mesma justificativa.
+//
+// NOTA: a edge function NÃO chama `public.log_404` — ela é só leitura.
+// Quem persiste em `seo_404_log` é o cliente (src/lib/notFoundLog.ts) ao
+// montar a NotFoundPage. Portanto este teste valida apenas a estabilidade
+// da resposta da função, não efeitos colaterais no banco.
+// ---------------------------------------------------------------------------
+Deno.test("chamadas repetidas ao mesmo path 404 são idempotentes", async () => {
+  const uniquePath = `/rota-idempotencia-${Date.now()}`;
+
+  const r1 = await call(uniquePath);
+  const body1 = await r1.json();
+  assertEquals(r1.status, 404);
+  assertEquals(body1.status, "not_found");
+  assertEquals(body1.reason, "unknown_route");
+  assertEquals(body1.path, uniquePath);
+
+  const r2 = await call(uniquePath);
+  const body2 = await r2.json();
+  assertEquals(r2.status, 404, "segunda chamada também deve retornar 404");
+  assertEquals(body2.status, body1.status);
+  assertEquals(body2.reason, body1.reason);
+  assertEquals(body2.path, body1.path);
+});
