@@ -104,6 +104,7 @@ Deno.serve(async (req: Request) => {
   const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY");
   if (!supabaseUrl || !supabaseAnonKey) {
     // Sem credenciais não conseguimos validar dinâmicas — falha fechada (404).
+    // Como não temos client, não conseguimos persistir o log aqui.
     return jsonResponse(404, {
       path,
       status: "not_found",
@@ -112,6 +113,24 @@ Deno.serve(async (req: Request) => {
   }
 
   const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  const referrer = req.headers.get("referer") || req.headers.get("origin") || null;
+
+  /**
+   * Persiste o 404 na tabela seo_404_log via RPC log_404 (SECURITY DEFINER),
+   * incluindo o `reason` para auditoria. Não bloqueia a resposta — falhas
+   * de logging nunca devem mascarar o status HTTP correto.
+   */
+  const logHit = async (reason: string) => {
+    try {
+      await supabase.rpc("log_404", {
+        p_path: path,
+        p_referrer: referrer,
+        p_reason: reason,
+      });
+    } catch {
+      /* swallow — logging é best-effort */
+    }
+  };
 
   // 3) Redirect ativo em seo_404_log? -> 301 com Location.
   try {
@@ -124,6 +143,7 @@ Deno.serve(async (req: Request) => {
 
     if (redirectRow?.redirect_to) {
       const target = redirectRow.redirect_to;
+      // Não logamos como 404 — é um redirect resolvido.
       return new Response(
         JSON.stringify({ path, status: "redirect", target }),
         {
@@ -147,6 +167,7 @@ Deno.serve(async (req: Request) => {
     const slug = path.slice(cfg.prefix.length);
     if (!slug || slug.includes("/")) {
       // segmento vazio ou path mais profundo => não existe
+      await logHit("invalid_dynamic_segment");
       return jsonResponse(404, {
         path,
         status: "not_found",
@@ -188,6 +209,7 @@ Deno.serve(async (req: Request) => {
       /* falha fechada -> 404 */
     }
 
+    await logHit("dynamic_slug_not_found");
     return jsonResponse(404, {
       path,
       status: "not_found",
@@ -196,8 +218,14 @@ Deno.serve(async (req: Request) => {
   }
 
   // 5) Nada bateu -> 404.
+  await logHit("unknown_route");
   return jsonResponse(404, {
     path,
+    status: "not_found",
+    reason: "unknown_route",
+  });
+});
+
     status: "not_found",
     reason: "unknown_route",
   });
