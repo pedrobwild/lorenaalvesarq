@@ -1,0 +1,49 @@
+name: Setup guard
+
+# Re-roda o teste de guarda (setupNoTsExpectError) sempre que
+# `src/test/setup.ts` for modificado em push ou pull request.
+#
+# Objetivo: bloquear a reintrodução de `@ts-expect-error` /
+# `@ts-ignore` no setup de testes — diretivas que, ao ficarem
+# "sem efeito", quebram o build de produção com TS2578.
+#
+# O job falha (exit != 0) se o teste detectar uma diretiva proibida
+# ou se o próprio Vitest falhar por qualquer outro motivo.
+
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - "src/test/setup.ts"
+      - "src/test/__tests__/setupNoTsExpectError.test.ts"
+      - ".github/workflows/ci-setup-guard.yml"
+  pull_request:
+    branches: ["**"]
+    paths:
+      - "src/test/setup.ts"
+      - "src/test/__tests__/setupNoTsExpectError.test.ts"
+      - ".github/workflows/ci-setup-guard.yml"
+
+jobs:
+  setup-guard:
+    name: setup.ts guard test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run setup.ts guard test
+        # Roda APENAS o teste de guarda. Se a regex detectar
+        # @ts-expect-error / @ts-ignore em src/test/setup.ts, o
+        # Vitest sai com status != 0 e o workflow falha.
+        run: npx vitest run src/test/__tests__/setupNoTsExpectError.test.ts
