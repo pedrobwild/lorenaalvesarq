@@ -35,7 +35,7 @@ export async function logNotFound(path: string, referrer?: string | null): Promi
   try {
     await supabase.rpc("log_404", {
       p_path: path,
-      p_referrer: referrer || null,
+      p_referrer: referrer || undefined,
     });
   } catch {
     /* nunca falha a renderização por causa do logging */
