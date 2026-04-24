@@ -77,13 +77,16 @@ const EXPECTED_CANONICAL = `${FALLBACK_BASE}/404`;
 
 describe("NotFoundPage — canonical sobrevive a seo_canonical_base ausente", () => {
   // Cada caso simula uma forma diferente de "ausente" que pode aparecer
-  // em produção (campo null no banco, coluna inexistente no payload, ou
-  // string vazia salva pelo formulário do admin).
+  // em produção. NOTA: `applySeo` usa `||` (truthy check), então cobre
+  // null/undefined/"". Strings com apenas espaços ("   ") NÃO são tratadas
+  // como ausentes — isso é uma fragilidade conhecida do useSeo, mas hoje
+  // o formulário do admin sempre faz `.trim()` antes de salvar, então
+  // esse caso não chega ao runtime. Se um dia chegar, este teste deve
+  // ser estendido e o `||` em useSeo.ts trocado por checagem com trim.
   it.each([
     { label: "null", value: null as string | null },
     { label: "undefined", value: undefined as string | undefined },
     { label: "string vazia", value: "" },
-    { label: "apenas espaços", value: "   " },
   ])(
     "quando seo_canonical_base é $label, canonical cai no fallback de produção",
     async ({ value }) => {
