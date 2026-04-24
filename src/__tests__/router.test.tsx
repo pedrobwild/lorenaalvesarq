@@ -66,7 +66,7 @@ vi.mock("@/App", () => ({
 
 import type { Route } from "@/lib/useHashRoute";
 import { renderRoute } from "@/router";
-import { getRobotsContent, resetHead } from "@/test/seoHelpers";
+import { expectMetaContainsNoIndex, resetHead } from "@/test/seoHelpers";
 
 beforeEach(() => {
   resetHead();
