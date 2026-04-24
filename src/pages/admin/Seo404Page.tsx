@@ -30,7 +30,23 @@ type Row = {
   status: string;
   redirect_to: string | null;
   notes: string | null;
+  reason: string | null;
 };
+
+// Causa do 404 (preenchida pela edge function `not-found-check` e pela
+// NotFoundPage via RPC `log_404`). Usado para auditoria.
+const REASON_LABEL: Record<string, string> = {
+  unknown_route: "Rota desconhecida",
+  invalid_dynamic_segment: "Segmento dinâmico inválido",
+  dynamic_slug_not_found: "Slug não encontrado",
+  supabase_unavailable: "Backend indisponível",
+  spa_fallback: "SPA fallback (front)",
+  manual: "Inserção manual",
+};
+function reasonLabel(v?: string | null) {
+  if (!v) return "—";
+  return REASON_LABEL[v] ?? v;
+}
 
 const STATUS_OPTIONS: Array<{ value: string; label: string; tone: string }> = [
   { value: "pending", label: "Pendente", tone: "#a3a3a3" },
@@ -374,6 +390,9 @@ export default function Seo404Page() {
                       <strong>{r.hits}</strong> {r.hits === 1 ? "acesso" : "acessos"}
                     </span>
                     <span>Origem: {SOURCE_LABEL[r.source] ?? r.source}</span>
+                    <span title={r.reason ?? ""}>
+                      Causa: <strong>{reasonLabel(r.reason)}</strong>
+                    </span>
                     <span>Última visita: {formatDate(r.last_seen_at)}</span>
                     {r.referrer && (
                       <span title={r.referrer}>
