@@ -54,7 +54,7 @@ export default function BrandLogo({
       height={88}
       loading="eager"
       decoding="async"
-      fetchPriority="high"
+      {...({ fetchpriority: "high" } as { fetchpriority: string })}
       className={`brand-logo brand-logo--${variant} ${className}`.trim()}
       onError={() => setFailed(true)}
       style={{
