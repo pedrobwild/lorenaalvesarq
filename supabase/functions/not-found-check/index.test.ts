@@ -109,31 +109,96 @@ for (const route of CANONICAL_PUBLIC_ROUTES) {
   });
 }
 
-// Variantes de path que devem ser normalizadas e tratadas como a mesma rota.
-// Garante que /portfolio/ , /portfolio?utm=foo e /portfolio#x não vazem 404.
-const ROUTE_VARIANTS: Array<{ raw: string; expectedPath: string }> = [
-  { raw: "/portfolio/", expectedPath: "/portfolio" },
-  { raw: "/portfolio?utm_source=instagram", expectedPath: "/portfolio" },
-  { raw: "/sobre/", expectedPath: "/sobre" },
-  { raw: "/blog/?page=2", expectedPath: "/blog" },
-  { raw: "/blog/tags/", expectedPath: "/blog/tags" },
+// ---------------------------------------------------------------------------
+// Variantes de URL geradas automaticamente.
+//
+// Para CADA rota canônica (pública + admin) verificamos 3 variantes:
+//   1. trailing slash         → /portfolio/
+//   2. querystring simples    → /portfolio?utm_source=instagram
+//   3. querystring composta   → /portfolio/?utm_source=ig&utm_medium=story
+//
+// Crawlers, redes sociais e gestores de tráfego (Meta Ads, Google Ads,
+// Mailchimp) frequentemente acrescentam UTM, fbclid e gclid. Se qualquer
+// dessas variantes vazasse 404, perderíamos sinal de SEO e atribuição.
+// O teste falha individualmente por variante, deixando claro qual
+// combinação quebrou.
+// ---------------------------------------------------------------------------
+
+const CANONICAL_ADMIN_ROUTES = [
+  "/admin",
+  "/admin/login",
 ];
 
-for (const { raw, expectedPath } of ROUTE_VARIANTS) {
-  Deno.test(`variante ${raw} é normalizada para ${expectedPath} (HTTP 200)`, async () => {
-    const r = await call(raw);
-    const body = await r.json();
-    assertEquals(
-      r.status,
-      200,
-      `variante ${raw} esperava 200, recebeu ${r.status} (body=${JSON.stringify(body)})`,
-    );
-    assertEquals(body.path, expectedPath);
-    assertEquals(body.status, "ok");
+/** Gera as variantes para um path base (sem trailing slash, sem query). */
+function variantsFor(base: string): Array<{ raw: string; expectedPath: string }> {
+  const out: Array<{ raw: string; expectedPath: string }> = [];
+  // Querystring simples — sempre aplicável, inclusive na raiz "/".
+  out.push({
+    raw: `${base}?utm_source=instagram`,
+    expectedPath: base,
   });
+  // Trailing slash + querystring composta — só faz sentido se base !== "/".
+  if (base !== "/") {
+    out.push({ raw: `${base}/`, expectedPath: base });
+    out.push({
+      raw: `${base}/?utm_source=ig&utm_medium=story&fbclid=xyz123`,
+      expectedPath: base,
+    });
+  } else {
+    // Para a raiz, ainda vale testar querystring composta sem trailing slash.
+    out.push({
+      raw: `/?utm_source=ig&utm_medium=story&fbclid=xyz123`,
+      expectedPath: "/",
+    });
+  }
+  return out;
 }
 
-// O bloco /admin é tratado como rota válida (existe na SPA), mas não-indexável.
+// ---- Públicas: devem responder 200 com reason="static_route".
+for (const base of CANONICAL_PUBLIC_ROUTES) {
+  for (const { raw, expectedPath } of variantsFor(base)) {
+    Deno.test(
+      `variante pública "${raw}" → 200 normalizada para ${expectedPath}`,
+      async () => {
+        const r = await call(raw);
+        const body = await r.json();
+        assertEquals(
+          r.status,
+          200,
+          `variante ${raw} esperava 200, recebeu ${r.status} ` +
+            `(body=${JSON.stringify(body)})`,
+        );
+        assertEquals(body.path, expectedPath);
+        assertEquals(body.status, "ok");
+        assertEquals(body.reason, "static_route");
+      },
+    );
+  }
+}
+
+// ---- Admin: devem responder 200 com reason="admin_route".
+for (const base of CANONICAL_ADMIN_ROUTES) {
+  for (const { raw, expectedPath } of variantsFor(base)) {
+    Deno.test(
+      `variante admin "${raw}" → 200 normalizada para ${expectedPath}`,
+      async () => {
+        const r = await call(raw);
+        const body = await r.json();
+        assertEquals(
+          r.status,
+          200,
+          `variante ${raw} esperava 200, recebeu ${r.status} ` +
+            `(body=${JSON.stringify(body)})`,
+        );
+        assertEquals(body.path, expectedPath);
+        assertEquals(body.status, "ok");
+        assertEquals(body.reason, "admin_route");
+      },
+    );
+  }
+}
+
+// Testes pontuais antigos (mantidos como sanity check explícito por nome).
 Deno.test("rota /admin devolve HTTP 200 com reason admin_route", async () => {
   const r = await call("/admin");
   const body = await r.json();
