@@ -22,6 +22,7 @@ type ActiveKey =
   | "blog"
   | "analytics"
   | "seo"
+  | "seo-404"
   | "settings"
   | "faq";
 
@@ -43,6 +44,7 @@ const NAV: { key: ActiveKey; label: string; href: string; icon: typeof LayoutDas
   { key: "blog", label: "Blog", href: routes.adminBlog, icon: Newspaper },
   { key: "faq", label: "FAQ", href: routes.adminFaq, icon: HelpCircle },
   { key: "seo", label: "SEO", href: routes.adminSeo, icon: Search },
+  { key: "seo-404", label: "URLs 404", href: routes.adminSeo404, icon: Search },
   { key: "settings", label: "Configurações", href: routes.adminSettings, icon: Settings },
 ];
 

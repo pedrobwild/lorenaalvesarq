@@ -62,6 +62,12 @@ function renderRoute(route: Route) {
         <SeoPage />
       </ProtectedRoute>
     );
+  if (route.name === "admin-seo-404")
+    return (
+      <ProtectedRoute>
+        <Seo404Page />
+      </ProtectedRoute>
+    );
   if (route.name === "admin-settings")
     return (
       <ProtectedRoute>
