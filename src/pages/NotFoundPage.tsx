@@ -1,8 +1,6 @@
-import { useEffect } from "react";
 import { useSeo } from "../lib/useSeo";
 import InternalNav from "../components/InternalNav";
 import { routes } from "../lib/useHashRoute";
-import { track } from "../lib/analytics";
 
 /**
  * Página 404 dedicada — sinaliza claramente ao Google que a URL é inválida.
