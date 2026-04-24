@@ -143,4 +143,107 @@ describe("NotFoundPage — proteção contra soft-404", () => {
       expect(href.endsWith("/404")).toBe(true);
     });
   });
+
+  // -------------------------------------------------------------------------
+  // Open Graph + Twitter Cards
+  //
+  // Quando alguém compartilha uma URL inválida no WhatsApp / X / LinkedIn /
+  // Facebook, o crawler dessas redes lê as meta tags `og:*` e `twitter:*` e
+  // monta um preview. Se a 404 reaproveitar o OG genérico do site, o preview
+  // mostra "Lorena Alves Arquitetura — Estúdio de arquitetura..." como se
+  // fosse uma página real — confundindo o usuário.
+  //
+  // Estes testes garantem que:
+  //  - og:title e twitter:title mencionam "404" (preview honesto)
+  //  - og:description e twitter:description também sinalizam o erro
+  //  - og:url aponta para o canonical /404 (consolida sinais)
+  //  - og:type é "website" (não "article" — não há autor/data)
+  //  - og:locale = pt_BR (público brasileiro)
+  //  - meta robots permanece noindex (defesa em profundidade contra
+  //    indexação acidental do preview da 404)
+  // -------------------------------------------------------------------------
+  describe("Open Graph + Twitter Cards refletem 404", () => {
+    const getMetaContent = (selector: string): string =>
+      document.head
+        .querySelector<HTMLMetaElement>(selector)
+        ?.getAttribute("content") || "";
+
+    it("og:title menciona '404'", async () => {
+      render(<NotFoundPage />);
+      await waitFor(() => {
+        const v = getMetaContent('meta[property="og:title"]');
+        expect(v).toMatch(/404/);
+      });
+    });
+
+    it("twitter:title menciona '404'", async () => {
+      render(<NotFoundPage />);
+      await waitFor(() => {
+        const v = getMetaContent('meta[name="twitter:title"]');
+        expect(v).toMatch(/404/);
+      });
+    });
+
+    it("og:description sinaliza página inexistente (não usa o pitch genérico)", async () => {
+      render(<NotFoundPage />);
+      await waitFor(() => {
+        const v = getMetaContent('meta[property="og:description"]').toLowerCase();
+        // Aceita qualquer texto que indique erro — robusto a reescritas de copy.
+        expect(v).toMatch(/n[ãa]o existe|n[ãa]o encontrad|movida|inv[áa]lid/);
+      });
+    });
+
+    it("twitter:description sinaliza página inexistente", async () => {
+      render(<NotFoundPage />);
+      await waitFor(() => {
+        const v = getMetaContent('meta[name="twitter:description"]').toLowerCase();
+        expect(v).toMatch(/n[ãa]o existe|n[ãa]o encontrad|movida|inv[áa]lid/);
+      });
+    });
+
+    it("og:url aponta para o canonical da 404 (consolida sinais sociais)", async () => {
+      render(<NotFoundPage />);
+      await waitFor(() => {
+        const v = getMetaContent('meta[property="og:url"]');
+        expect(v).toBe("https://lorenaalvesarq.com/404");
+      });
+    });
+
+    it("og:type é 'website' (não 'article' — 404 não tem autor/data)", async () => {
+      render(<NotFoundPage />);
+      await waitFor(() => {
+        const v = getMetaContent('meta[property="og:type"]');
+        expect(v).toBe("website");
+      });
+    });
+
+    it("og:locale é pt_BR", async () => {
+      render(<NotFoundPage />);
+      await waitFor(() => {
+        const v = getMetaContent('meta[property="og:locale"]');
+        expect(v).toBe("pt_BR");
+      });
+    });
+
+    it("twitter:card é 'summary' ou 'summary_large_image' (válido)", async () => {
+      render(<NotFoundPage />);
+      await waitFor(() => {
+        const v = getMetaContent('meta[name="twitter:card"]');
+        expect(["summary", "summary_large_image"]).toContain(v);
+      });
+    });
+
+    it("meta robots continua noindex mesmo com OG/Twitter presentes (defesa em profundidade)", async () => {
+      // Garante que injetar OG/Twitter (que poderiam parecer "promover" a página)
+      // não conflita com o sinal de noindex enviado a Google/Bing.
+      render(<NotFoundPage />);
+      await waitFor(() => {
+        const robots = getMetaContent('meta[name="robots"]').toLowerCase();
+        const ogTitle = getMetaContent('meta[property="og:title"]');
+        // Ambos presentes, mas robots = noindex.
+        expect(ogTitle).not.toBe("");
+        expect(robots).toContain("noindex");
+      });
+    });
+  });
 });
