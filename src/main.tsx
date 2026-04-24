@@ -15,6 +15,7 @@ import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import AnalyticsPage from "./pages/admin/AnalyticsPage";
 import SeoPage from "./pages/admin/SeoPage";
+import Seo404Page from "./pages/admin/Seo404Page";
 import SettingsPage from "./pages/admin/SettingsPage";
 import ProjectsListPage from "./pages/admin/ProjectsListPage";
 import ProjectFormPage from "./pages/admin/ProjectFormPage";
