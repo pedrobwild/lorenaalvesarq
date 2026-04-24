@@ -52,6 +52,42 @@ export function getRobotsContent(): string {
   return getMetaByName("robots");
 }
 
+/**
+ * Asserção padronizada: a página atual está marcada como NÃO-indexável.
+ *
+ * Aceita qualquer variante reconhecida pelo Google/Bing:
+ *   - "noindex"
+ *   - "no index"        (com espaço — alguns CMSs geram assim)
+ *   - "noindex, follow" / "noindex,nofollow" / "none"
+ *   - case-insensitive ("NOINDEX", "NoIndex", ...)
+ *
+ * Falha com mensagem clara mostrando o conteúdo recebido — facilita debug
+ * quando alguém troca acidentalmente o robots de uma 404 para "index, follow".
+ *
+ * Uso:
+ *   await waitFor(() => expectMetaContainsNoIndex());
+ *
+ * Também aceita um conteúdo arbitrário (útil para validar headers HTTP
+ * como `X-Robots-Tag` retornados por edge functions):
+ *   expectMetaContainsNoIndex(response.headers.get("x-robots-tag"));
+ */
+export function expectMetaContainsNoIndex(content?: string | null): void {
+  const raw = content ?? getRobotsContent();
+  const normalized = (raw || "").toLowerCase().replace(/\s+/g, "");
+  // "noindex" cobre "noindex", "no index" (após remover espaços) e
+  // "noindex,follow"/"noindex,nofollow". "none" é o atalho oficial do
+  // Google equivalente a "noindex, nofollow".
+  const ok = normalized.includes("noindex") || normalized.includes("none");
+  if (!ok) {
+    throw new Error(
+      `Esperado meta robots / X-Robots-Tag contendo "noindex" (ou "none"), ` +
+        `mas recebeu: ${JSON.stringify(raw)}. ` +
+        `Páginas 404 NUNCA devem ser indexáveis — verifique useSeo({ noindex: true }) ` +
+        `ou o header X-Robots-Tag da edge function.`
+    );
+  }
+}
+
 /** Open Graph title. */
 export const getOgTitle = () => getMetaByProperty("og:title");
 /** Open Graph description. */
