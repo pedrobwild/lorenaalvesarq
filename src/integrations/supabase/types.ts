@@ -388,6 +388,7 @@ export type Database = {
           last_seen_at: string
           notes: string | null
           path: string
+          reason: string | null
           redirect_to: string | null
           referrer: string | null
           resolved_at: string | null
@@ -403,6 +404,7 @@ export type Database = {
           last_seen_at?: string
           notes?: string | null
           path: string
+          reason?: string | null
           redirect_to?: string | null
           referrer?: string | null
           resolved_at?: string | null
@@ -418,6 +420,7 @@ export type Database = {
           last_seen_at?: string
           notes?: string | null
           path?: string
+          reason?: string | null
           redirect_to?: string | null
           referrer?: string | null
           resolved_at?: string | null
@@ -785,10 +788,12 @@ export type Database = {
         }[]
       }
       is_admin: { Args: never; Returns: boolean }
-      log_404: {
-        Args: { p_path: string; p_referrer?: string }
-        Returns: undefined
-      }
+      log_404:
+        | { Args: { p_path: string; p_referrer?: string }; Returns: undefined }
+        | {
+            Args: { p_path: string; p_reason?: string; p_referrer?: string }
+            Returns: undefined
+          }
     }
     Enums: {
       [_ in never]: never

@@ -26,6 +26,15 @@
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 
+/**
+ * Versão lógica desta edge function. Incrementar manualmente a cada mudança
+ * relevante de comportamento. Exposta no endpoint de health para facilitar
+ * monitoramento externo (uptime checks, smoke tests pós-deploy, etc.).
+ */
+const FN_VERSION = "1.1.0";
+/** Momento em que o worker atual subiu (cold start). */
+const FN_BOOTED_AT = new Date().toISOString();
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
@@ -88,6 +97,23 @@ Deno.serve(async (req: Request) => {
   }
 
   const url = new URL(req.url);
+
+  // Health check: ?health=1 ou path terminando em /health.
+  // Sempre 200, sem tocar no banco — usado por monitoramento e por testes
+  // de disponibilidade para confirmar que o worker está vivo.
+  const isHealth =
+    url.searchParams.get("health") === "1" ||
+    url.pathname.endsWith("/health");
+  if (isHealth) {
+    return jsonResponse(200, {
+      status: "ok",
+      service: "not-found-check",
+      version: FN_VERSION,
+      booted_at: FN_BOOTED_AT,
+      now: new Date().toISOString(),
+    });
+  }
+
   const path = normalizePath(url.searchParams.get("path"));
 
   // 1) Bloco admin: tratamos como 200 (existe), mas não indexável.
