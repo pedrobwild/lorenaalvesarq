@@ -138,7 +138,16 @@ function injectTrackers(settings: SiteSettings) {
 }
 
 function applySeo(settings: SiteSettings, seo: SeoInput) {
-  const base = (settings.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  // Normaliza a base canônica:
+  //  - trim (cobre "   ")
+  //  - fallback para o domínio de produção quando ausente
+  //  - remove barra final ("https://x.com/" → "https://x.com")
+  //  - força https:// (Search Console penaliza canonical http quando o
+  //    domínio serve https — qualquer http salvo no admin por engano
+  //    é promovido aqui no runtime)
+  const rawBase = settings.seo_canonical_base?.trim() || "https://lorenaalvesarq.com";
+  const httpsBase = rawBase.replace(/^http:\/\//i, "https://");
+  const base = httpsBase.replace(/\/$/, "");
   const title = seo.title || settings.seo_default_title || settings.site_title || "lorenaalves arq";
   const description =
     seo.description || settings.seo_default_description || settings.site_description || "";
