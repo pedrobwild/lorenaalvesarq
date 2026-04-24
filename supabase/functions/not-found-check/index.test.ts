@@ -375,6 +375,56 @@ Deno.test("blog com slug inválido também não passa por 3xx", async () => {
   await r.text();
 });
 
+// ---------------------------------------------------------------------------
+// Querystring (UTM/fbclid/gclid) em rota inexistente.
+//
+// Crawlers e campanhas de tráfego (Meta Ads, Google Ads, newsletters)
+// podem anexar UTM a QUALQUER URL — inclusive a links quebrados publicados
+// por terceiros. O contrato é: a querystring não pode mascarar o 404 nem
+// alterar o `reason`. A função deve descartar a query, identificar a rota
+// base como desconhecida e devolver exatamente o mesmo payload que devolveria
+// sem a query.
+// ---------------------------------------------------------------------------
+Deno.test("rota inexistente com querystring UTM mantém 404 e mesmo reason", async () => {
+  const basePath = "/rota-inexistente-com-utm-xyz";
+
+  // Baseline: sem querystring.
+  const rPlain = await call(basePath);
+  const bodyPlain = await rPlain.json();
+  assertEquals(rPlain.status, 404);
+  assertEquals(bodyPlain.status, "not_found");
+  assertEquals(bodyPlain.reason, "unknown_route");
+
+  // Mesma rota com UTM completa + fbclid + gclid.
+  const withQuery =
+    `${basePath}?utm_source=instagram&utm_medium=story&utm_campaign=launch` +
+    `&fbclid=IwAR123abc&gclid=Cj0KCQjw`;
+  const rQuery = await call(withQuery);
+
+  // Status e header continuam terminais (sem 3xx, sem Location).
+  assert(
+    rQuery.status < 300 || rQuery.status >= 400,
+    `status ${rQuery.status} indica redirect — querystring não deve gerar 3xx`,
+  );
+  assertEquals(
+    rQuery.status,
+    404,
+    `esperado 404 mesmo com UTM, recebido ${rQuery.status}`,
+  );
+  assertEquals(rQuery.headers.get("location"), null);
+
+  // Reason e status do body idênticos ao baseline.
+  const bodyQuery = await rQuery.json();
+  assertEquals(bodyQuery.status, bodyPlain.status);
+  assertEquals(
+    bodyQuery.reason,
+    bodyPlain.reason,
+    `reason mudou com querystring: "${bodyPlain.reason}" → "${bodyQuery.reason}"`,
+  );
+  // Path normalizado deve descartar a query.
+  assertEquals(bodyQuery.path, basePath);
+});
+
 Deno.test("rota canônica também devolve 200 direto (sem 3xx para normalizar)", async () => {
   // Confirma que mesmo URLs com trailing slash + querystring (que são
   // NORMALIZADAS pela função) devolvem 200 direto, em vez de 301 para a
