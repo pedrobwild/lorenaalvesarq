@@ -547,3 +547,108 @@ Deno.test("input válido limítrofe: path sem `/` inicial é aceito (autoconsert
   assertEquals(body.status, "not_found");
   assertEquals(body.path, "/rota-sem-barra-inicial");
 });
+
+// ---------------------------------------------------------------------------
+// Contrato exato do header X-Robots-Tag em respostas 404.
+//
+// Por que validar com rigor
+// -------------------------
+// O header X-Robots-Tag é o único sinal HTTP que diz ao Googlebot/Bingbot
+// "não indexe esta URL". Em uma página 404 ele é redundante (404 já remove
+// do índice), mas serve como cinta-suspensório caso algum proxy/CDN
+// intermediário transforme o status em 200 (cenário comum quando há
+// reescrita de erro). O contrato implementado em `jsonResponse()` é:
+//
+//     X-Robots-Tag: noindex, nofollow
+//
+// Este teste valida:
+//   1. header presente (não `null`)
+//   2. contém o token `noindex` exato (case-insensitive, separado por
+//      vírgula ou espaço — não casa com "noindex-foo" por acidente)
+//   3. contém o token `nofollow` exato (mesmo critério)
+//   4. NÃO contém diretivas conflitantes (`index`, `follow`, `all`)
+//   5. mesmo contrato em respostas 400 (input inválido) e nas 404 de
+//      slug dinâmico — nunca queremos uma resposta de erro indexável.
+// ---------------------------------------------------------------------------
+
+/**
+ * Verifica se um header X-Robots-Tag contém um token específico
+ * (`noindex`, `nofollow`, etc.) como diretiva isolada — não como substring.
+ *
+ * Exemplos:
+ *   hasRobotsToken("noindex, nofollow", "noindex") === true
+ *   hasRobotsToken("NOINDEX,NOFOLLOW", "nofollow") === true
+ *   hasRobotsToken("noindex-foo", "noindex") === false  // não é token isolado
+ *   hasRobotsToken("all", "noindex") === false
+ */
+function hasRobotsToken(header: string, token: string): boolean {
+  return header
+    .toLowerCase()
+    .split(",")
+    .map((t) => t.trim())
+    .some((t) => t === token.toLowerCase());
+}
+
+Deno.test("X-Robots-Tag em 404: contém noindex E nofollow como tokens exatos", async () => {
+  const r = await call("/rota-inexistente-robots-contract");
+  await r.text(); // consume body
+
+  assertEquals(r.status, 404);
+  const robots = r.headers.get("x-robots-tag");
+  assert(robots !== null, "header X-Robots-Tag ausente em resposta 404");
+
+  // Tokens obrigatórios.
+  assert(
+    hasRobotsToken(robots!, "noindex"),
+    `X-Robots-Tag deve conter token "noindex"; recebido "${robots}"`,
+  );
+  assert(
+    hasRobotsToken(robots!, "nofollow"),
+    `X-Robots-Tag deve conter token "nofollow"; recebido "${robots}"`,
+  );
+
+  // Diretivas conflitantes não podem estar presentes.
+  for (const forbidden of ["index", "follow", "all"]) {
+    assert(
+      !hasRobotsToken(robots!, forbidden),
+      `X-Robots-Tag não deve conter "${forbidden}" em resposta 404; recebido "${robots}"`,
+    );
+  }
+});
+
+Deno.test("X-Robots-Tag em 404: valor exato bate com o contrato `noindex, nofollow`", async () => {
+  // Validação estrita do valor — qualquer mudança de ordem/whitespace passa
+  // a exigir atualização explícita deste teste, evitando drift silencioso.
+  const r = await call("/rota-inexistente-robots-strict");
+  await r.text();
+
+  assertEquals(r.status, 404);
+  const robots = r.headers.get("x-robots-tag");
+  assertEquals(
+    robots,
+    "noindex, nofollow",
+    `valor exato do X-Robots-Tag mudou; revise o contrato da edge function`,
+  );
+});
+
+Deno.test("X-Robots-Tag em 404 de slug dinâmico inválido também é noindex+nofollow", async () => {
+  const r = await call("/projeto/slug-robots-test");
+  await r.text();
+
+  assertEquals(r.status, 404);
+  const robots = r.headers.get("x-robots-tag") || "";
+  assert(hasRobotsToken(robots, "noindex"), `slug dinâmico 404 sem noindex: "${robots}"`);
+  assert(hasRobotsToken(robots, "nofollow"), `slug dinâmico 404 sem nofollow: "${robots}"`);
+});
+
+Deno.test("X-Robots-Tag em 400 (input inválido) também é noindex+nofollow", async () => {
+  // Erros de input nunca devem ser indexáveis — caso contrário um cliente
+  // bugado pode gerar URLs como `?path=` que ficam no índice como "Bad Request".
+  const r = await callRaw({ path: "" });
+  await r.text();
+
+  assertEquals(r.status, 400);
+  const robots = r.headers.get("x-robots-tag") || "";
+  assert(hasRobotsToken(robots, "noindex"), `400 sem noindex: "${robots}"`);
+  assert(hasRobotsToken(robots, "nofollow"), `400 sem nofollow: "${robots}"`);
+});
