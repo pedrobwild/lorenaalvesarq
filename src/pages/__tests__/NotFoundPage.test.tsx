@@ -110,7 +110,7 @@ describe("NotFoundPage — proteção contra soft-404", () => {
   it("injeta <meta name=\"robots\" content=\"noindex, ...\"> no head", async () => {
     render(<NotFoundPage />);
     await waitFor(() => {
-      expect(getRobotsContent()).toMatch(/noindex/i);
+      expectMetaContainsNoIndex();
     });
   });
 
