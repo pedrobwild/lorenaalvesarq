@@ -250,3 +250,4 @@ describe("NotFoundPage — canonical sobrevive a seo_canonical_base ausente", ()
   });
 });
 
+});
