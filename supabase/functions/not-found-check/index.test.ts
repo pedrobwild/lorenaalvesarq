@@ -74,6 +74,80 @@ Deno.test("home devolve HTTP 200", async () => {
   assertEquals(body.status, "ok");
 });
 
+// ---------------------------------------------------------------------------
+// Cobertura de TODAS as rotas canônicas públicas.
+//
+// Espelha a constante STATIC_ROUTES em index.ts e a lista de rotas públicas
+// em src/lib/useHashRoute.ts. Se você adicionar uma nova página pública à
+// SPA (ex.: /servicos, /contato), adicione o path AQUI e em STATIC_ROUTES
+// na edge function. Caso contrário este teste falhará — o que é o
+// comportamento desejado: quebra cedo, durante o build/CI, em vez de
+// silenciosamente devolver 404 para crawlers em produção.
+// ---------------------------------------------------------------------------
+const CANONICAL_PUBLIC_ROUTES = [
+  "/",
+  "/sobre",
+  "/portfolio",
+  "/faq",
+  "/privacidade",
+  "/blog",
+  "/blog/tags",
+  "/404",
+];
+
+for (const route of CANONICAL_PUBLIC_ROUTES) {
+  Deno.test(`rota canônica ${route} devolve HTTP 200`, async () => {
+    const r = await call(route);
+    const body = await r.json();
+    assertEquals(
+      r.status,
+      200,
+      `rota ${route} esperava 200, recebeu ${r.status} (body=${JSON.stringify(body)})`,
+    );
+    assertEquals(body.status, "ok");
+    assertEquals(body.reason, "static_route");
+  });
+}
+
+// Variantes de path que devem ser normalizadas e tratadas como a mesma rota.
+// Garante que /portfolio/ , /portfolio?utm=foo e /portfolio#x não vazem 404.
+const ROUTE_VARIANTS: Array<{ raw: string; expectedPath: string }> = [
+  { raw: "/portfolio/", expectedPath: "/portfolio" },
+  { raw: "/portfolio?utm_source=instagram", expectedPath: "/portfolio" },
+  { raw: "/sobre/", expectedPath: "/sobre" },
+  { raw: "/blog/?page=2", expectedPath: "/blog" },
+  { raw: "/blog/tags/", expectedPath: "/blog/tags" },
+];
+
+for (const { raw, expectedPath } of ROUTE_VARIANTS) {
+  Deno.test(`variante ${raw} é normalizada para ${expectedPath} (HTTP 200)`, async () => {
+    const r = await call(raw);
+    const body = await r.json();
+    assertEquals(
+      r.status,
+      200,
+      `variante ${raw} esperava 200, recebeu ${r.status} (body=${JSON.stringify(body)})`,
+    );
+    assertEquals(body.path, expectedPath);
+    assertEquals(body.status, "ok");
+  });
+}
+
+// O bloco /admin é tratado como rota válida (existe na SPA), mas não-indexável.
+Deno.test("rota /admin devolve HTTP 200 com reason admin_route", async () => {
+  const r = await call("/admin");
+  const body = await r.json();
+  assertEquals(r.status, 200);
+  assertEquals(body.reason, "admin_route");
+});
+
+Deno.test("subrota /admin/login devolve HTTP 200 com reason admin_route", async () => {
+  const r = await call("/admin/login");
+  const body = await r.json();
+  assertEquals(r.status, 200);
+  assertEquals(body.reason, "admin_route");
+});
+
 Deno.test("método POST devolve 405", async () => {
   const r = await fetch(`${FN_URL}?path=/qualquer`, {
     method: "POST",
