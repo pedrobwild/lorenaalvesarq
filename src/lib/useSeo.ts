@@ -141,13 +141,26 @@ function applySeo(settings: SiteSettings, seo: SeoInput) {
   // Normaliza a base canônica:
   //  - trim (cobre "   ")
   //  - fallback para o domínio de produção quando ausente
-  //  - remove barra final ("https://x.com/" → "https://x.com")
   //  - força https:// (Search Console penaliza canonical http quando o
   //    domínio serve https — qualquer http salvo no admin por engano
   //    é promovido aqui no runtime)
+  //  - extrai apenas o ORIGIN (protocolo + host + porta), descartando
+  //    qualquer path/query/hash. Isso protege contra cenários como:
+  //      "https://lorenaalvesarq.com/404"  → vira "https://lorenaalvesarq.com"
+  //      "https://lorenaalvesarq.com/blog/" → vira "https://lorenaalvesarq.com"
+  //    Caso contrário o canonical da 404 sairia duplicado tipo
+  //    "https://lorenaalvesarq.com/404/404" — Googlebot trata como URL
+  //    inexistente e gera mais ruído de soft-404.
   const rawBase = settings.seo_canonical_base?.trim() || "https://lorenaalvesarq.com";
   const httpsBase = rawBase.replace(/^http:\/\//i, "https://");
-  const base = httpsBase.replace(/\/$/, "");
+  let base: string;
+  try {
+    base = new URL(httpsBase).origin;
+  } catch {
+    // URL inválida (ex.: "lorenaalvesarq.com" sem protocolo) — usa o fallback
+    // de produção em vez de tentar concatenar string crua.
+    base = "https://lorenaalvesarq.com";
+  }
   const title = seo.title || settings.seo_default_title || settings.site_title || "lorenaalves arq";
   const description =
     seo.description || settings.seo_default_description || settings.site_description || "";
