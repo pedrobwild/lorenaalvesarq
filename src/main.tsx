@@ -10,6 +10,7 @@ import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import BlogTagsPage from "./pages/BlogTagsPage";
 import BlogTagPage from "./pages/BlogTagPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/admin/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import AnalyticsPage from "./pages/admin/AnalyticsPage";
@@ -108,7 +109,9 @@ function renderRoute(route: Route) {
         <BlogFormPage slug={route.slug} />
       </ProtectedRoute>
     );
-  // home (com ou sem âncora) e not-found caem na App (que trata âncoras legadas)
+  // 404 dedicada — evita soft-404 do Google ao renderizar a home em URLs inválidas
+  if (route.name === "not-found") return <NotFoundPage />;
+  // home (com ou sem âncora) cai na App (que também trata âncoras legadas)
   return <App />;
 }
 
