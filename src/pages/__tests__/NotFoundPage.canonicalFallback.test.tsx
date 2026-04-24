@@ -77,23 +77,25 @@ const EXPECTED_CANONICAL = `${FALLBACK_BASE}/404`;
 
 describe("NotFoundPage — canonical sobrevive a seo_canonical_base ausente", () => {
   // Cada caso simula uma forma diferente de "ausente" que pode aparecer
-  // em produção. NOTA: `applySeo` usa `||` (truthy check), então cobre
-  // null/undefined/"". Strings com apenas espaços ("   ") NÃO são tratadas
-  // como ausentes — isso é uma fragilidade conhecida do useSeo, mas hoje
-  // o formulário do admin sempre faz `.trim()` antes de salvar, então
-  // esse caso não chega ao runtime. Se um dia chegar, este teste deve
-  // ser estendido e o `||` em useSeo.ts trocado por checagem com trim.
+  // em produção. `applySeo` aplica `?.trim() || fallback`, então cobre:
+  //   - null / undefined (coluna nullable)
+  //   - "" (string vazia)
+  //   - "   " / "\t\n " (whitespace puro — usuário apertou espaço sem querer
+  //     ou um import CSV preservou padding)
+  // Em todos os casos o canonical da 404 DEVE ser a URL absoluta de produção.
   it.each([
     { label: "null", value: null as string | null },
     { label: "undefined", value: undefined as string | undefined },
     { label: "string vazia", value: "" },
+    { label: "apenas espaços", value: "   " },
+    { label: "tabs e quebra de linha", value: "\t\n  " },
   ])(
     "quando seo_canonical_base é $label, canonical cai no fallback de produção",
     async ({ value }) => {
       fetchSiteSettingsMock.mockResolvedValue({
         site_title: "Lorena Alves Arquitetura",
         site_description: "Estúdio de arquitetura em Uberlândia/MG",
-        // Valor sob teste — pode ser null, undefined ou vazio.
+        // Valor sob teste — pode ser null, undefined, vazio ou whitespace.
         seo_canonical_base: value as string | null | undefined,
         seo_robots: "index, follow",
       });
@@ -110,6 +112,10 @@ describe("NotFoundPage — canonical sobrevive a seo_canonical_base ausente", ()
         expect(href).not.toMatch(/^null/i);
         expect(href).not.toMatch(/^undefined/i);
         expect(href.endsWith("/404")).toBe(true);
+        // Também garante que o canonical bate exatamente com o fallback
+        // — protege contra bases tipo "   /" ou "\nhttps://..." que poderiam
+        // sobreviver ao trim por descuido.
+        expect(href).toBe(EXPECTED_CANONICAL);
       });
     }
   );
