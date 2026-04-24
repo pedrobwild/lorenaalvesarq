@@ -1,7 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, cleanup, waitFor } from "@testing-library/react";
 import NotFoundPage from "../NotFoundPage";
-import { getCanonicalHref, resetHead } from "@/test/seoHelpers";
+import {
+  getCanonicalHref,
+  expectMetaContainsNoIndex,
+  resetHead,
+} from "@/test/seoHelpers";
 
 /**
  * Regressão: o canonical da 404 sobrevive a `seo_canonical_base` ausente.
@@ -247,6 +251,77 @@ describe("NotFoundPage — canonical sobrevive a seo_canonical_base ausente", ()
 
       await waitFor(() => {
         expect(getCanonicalHref()).toBe(EXPECTED_CANONICAL);
+      });
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Robots noindex sobrevive a site_settings vazio / canonical_base ausente
+  //
+  // Por que isso importa
+  // --------------------
+  // O contrato de "página 404 = noindex" é INDEPENDENTE de qualquer config
+  // remota. `useSeo` recebe `noindex: true` da NotFoundPage e gera
+  // `meta robots="noindex, nofollow"` localmente — não consulta site_settings
+  // para isso. Mas como `applySeo` lê várias chaves do settings (canonical,
+  // OG image, GA id, etc.), uma exceção em qualquer dessas leituras
+  // poderia abortar a função antes de chegar na linha do `setMeta(robots)`.
+  //
+  // Estes testes envenenam o mock de `fetchSiteSettings` com cenários
+  // degenerados (objeto vazio, canonical_base null/undefined/whitespace,
+  // até erro de rede) e exigem que o `noindex` continue sendo emitido.
+  //
+  // Se um destes quebrar, é sinal de que `applySeo` ficou frágil a
+  // settings ausentes — o pior cenário SEO seria a 404 voltar a ser
+  // indexável durante uma janela de migração / restore do banco.
+  // ---------------------------------------------------------------------------
+  describe("robots noindex é resiliente a site_settings degenerado", () => {
+    it.each([
+      { label: "site_settings completamente vazio ({})", value: {} },
+      { label: "seo_canonical_base = null", value: { seo_canonical_base: null } },
+      {
+        label: "seo_canonical_base = undefined",
+        value: { seo_canonical_base: undefined },
+      },
+      { label: "seo_canonical_base = ''", value: { seo_canonical_base: "" } },
+      {
+        label: "seo_canonical_base = '   ' (whitespace)",
+        value: { seo_canonical_base: "   " },
+      },
+      {
+        label: "site_settings sem nenhum campo SEO mas com seo_robots = 'index, follow'",
+        // Caso traiçoeiro: o admin marcou o site como indexável globalmente.
+        // A 404 deve IGNORAR esse default e forçar noindex (`useSeo` recebe
+        // `noindex: true` no input e tem prioridade sobre `settings.seo_robots`).
+        value: { seo_robots: "index, follow" },
+      },
+    ])(
+      "quando $label, meta robots ainda é noindex",
+      async ({ value }) => {
+        fetchSiteSettingsMock.mockResolvedValue(value);
+
+        render(<NotFoundPage />);
+
+        await waitFor(() => {
+          expectMetaContainsNoIndex();
+        });
+      }
+    );
+
+    it("noindex é injetado mesmo quando settings só tem campos não-SEO (ex.: chaves de tracking)", async () => {
+      // Defesa contra refactor: se alguém condicionar `setMeta(robots)` à
+      // existência de outros campos (ex.: "só injeta robots se tiver canonical"),
+      // a 404 fica sem proteção. Aqui o settings tem só GA — nada de SEO —
+      // mas robots ainda deve sair noindex porque vem do `seo.noindex` da
+      // NotFoundPage, não do settings.
+      fetchSiteSettingsMock.mockResolvedValue({
+        google_analytics_id: "G-XXXXXXXX",
+      });
+
+      render(<NotFoundPage />);
+
+      await waitFor(() => {
+        expectMetaContainsNoIndex();
       });
     });
   });
