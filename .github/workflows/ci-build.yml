@@ -1,0 +1,45 @@
+name: Production build
+
+# Roda o pipeline completo de build em qualquer push ou PR.
+# Falha o job (exit != 0) se qualquer etapa falhar:
+#   1. routes:check  → paridade de rotas SPA ↔ edge function
+#   2. prebuild      → mesmo script via npm prebuild hook
+#   3. tsc -b        → checagem de tipos
+#   4. vite build    → bundle de produção
+#
+# O `npm run build` já encadeia prebuild + tsc + vite build, então
+# basta executá-lo: qualquer falha aborta com status non-zero e o
+# GitHub Actions marca o workflow como failed automaticamente.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  build:
+    name: build (parity + tsc + vite)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Routes parity check
+        run: npm run routes:check
+
+      - name: Production build (tsc + vite)
+        # `npm run build` aciona o prebuild (parity check) novamente,
+        # roda `tsc -b` e em seguida `vite build`. Falha em qualquer
+        # uma das etapas faz o step retornar exit != 0.
+        run: npm run build
