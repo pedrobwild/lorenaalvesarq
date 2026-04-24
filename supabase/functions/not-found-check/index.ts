@@ -31,7 +31,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
  * relevante de comportamento. Exposta no endpoint de health para facilitar
  * monitoramento externo (uptime checks, smoke tests pós-deploy, etc.).
  */
-const FN_VERSION = "1.1.0";
+const FN_VERSION = "1.2.0";
 /** Momento em que o worker atual subiu (cold start). */
 const FN_BOOTED_AT = new Date().toISOString();
 
@@ -84,6 +84,34 @@ function normalizePath(raw: string | null): string {
   return p;
 }
 
+/**
+ * Validação de entrada do parâmetro `path`.
+ *
+ * Retorna `null` se o input é aceitável (mesmo que precise de normalização,
+ * ex.: faltando `/` inicial). Retorna um objeto `{ reason }` quando o input
+ * é claramente um erro do cliente — nesses casos respondemos 400, em vez de
+ * 200 ("/" implícito) ou 404 (path normalizado vazio), para que crawlers e
+ * integrações detectem o bug em vez de receberem um sinal SEO errado.
+ *
+ * Casos rejeitados:
+ *   - parâmetro `path` ausente da query (`searchParams.get` => null)
+ *   - string vazia ou só whitespace (cliente esqueceu de preencher)
+ *   - contém NULL byte ou caracteres de controle (provável injeção/lixo)
+ *   - excede 2000 chars (limite generoso; > que isso é abuso)
+ */
+function validatePathParam(raw: string | null): { reason: string } | null {
+  if (raw === null) return { reason: "path_param_missing" };
+  if (raw.trim() === "") return { reason: "path_param_empty" };
+  if (raw.length > 2000) return { reason: "path_param_too_long" };
+  // \u0000-\u001F e \u007F são caracteres de controle ASCII; nunca aparecem
+  // em URLs legítimas e travam parsers downstream.
+  // eslint-disable-next-line no-control-regex
+  if (/[\u0000-\u001F\u007F]/.test(raw)) {
+    return { reason: "path_param_invalid_chars" };
+  }
+  return null;
+}
+
 function jsonResponse(status: number, body: Record<string, unknown>, extraHeaders: Record<string, string> = {}) {
   return new Response(JSON.stringify(body), {
     status,
@@ -124,7 +152,15 @@ Deno.serve(async (req: Request) => {
     });
   }
 
-  const path = normalizePath(url.searchParams.get("path"));
+  const rawPathParam = url.searchParams.get("path");
+  const validationError = validatePathParam(rawPathParam);
+  if (validationError) {
+    return jsonResponse(400, {
+      status: "bad_request",
+      reason: validationError.reason,
+    });
+  }
+  const path = normalizePath(rawPathParam);
 
   // 1) Bloco admin: tratamos como 200 (existe), mas não indexável.
   if (path === "/admin" || path.startsWith("/admin/")) {
