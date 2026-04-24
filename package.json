@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/check-routes-parity.mjs",
     "build": "tsc -b && vite build",
     "build:dev": "vite build --mode development",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "routes:check": "node scripts/check-routes-parity.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
