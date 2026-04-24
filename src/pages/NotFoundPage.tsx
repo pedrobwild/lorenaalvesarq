@@ -23,14 +23,6 @@ export default function NotFoundPage() {
     noindex: true,
   });
 
-  useEffect(() => {
-    // Registra o 404 no analytics para identificar URLs quebradas mais frequentes.
-    track("page_not_found", {
-      path: typeof window !== "undefined" ? window.location.pathname : null,
-      referrer: typeof document !== "undefined" ? document.referrer : null,
-    });
-  }, []);
-
   return (
     <main id="main" tabIndex={-1} className="pf-page">
       <InternalNav backLabel="voltar ao início" />
@@ -51,10 +43,26 @@ export default function NotFoundPage() {
         className="privacidade-page__list"
         aria-label="Atalhos para páginas principais"
       >
-        <h2 className="mono" style={{ fontSize: "0.85rem", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "1rem" }}>
+        <h2
+          className="mono"
+          style={{
+            fontSize: "0.85rem",
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            marginBottom: "1rem",
+          }}
+        >
           Para onde ir agora
         </h2>
-        <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: "0.75rem", fontSize: "1rem" }}>
+        <ul
+          style={{
+            listStyle: "none",
+            padding: 0,
+            display: "grid",
+            gap: "0.75rem",
+            fontSize: "1rem",
+          }}
+        >
           <li>
             <a href={routes.home} style={{ textDecoration: "underline" }}>
               → Voltar à página inicial
