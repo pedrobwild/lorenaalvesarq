@@ -495,7 +495,7 @@ export function itemListJsonLd(
   s: SiteSettings,
   items: Array<{ name: string; path: string; image?: string }>
 ) {
-  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (s.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -527,7 +527,7 @@ export function faqJsonLd(items: Array<{ q: string; a: string }>) {
 
 /** WebSite JSON-LD com SearchAction (ajuda a aparecer caixa de busca no Google). */
 export function websiteJsonLd(s: SiteSettings) {
-  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (s.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -541,7 +541,7 @@ export function websiteJsonLd(s: SiteSettings) {
 
 /** Organization JSON-LD — reforça entidade para o Knowledge Graph. */
 export function organizationJsonLd(s: SiteSettings) {
-  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (s.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
 
   const absUrl = (u: string | null | undefined) => {
     if (!u) return undefined;
