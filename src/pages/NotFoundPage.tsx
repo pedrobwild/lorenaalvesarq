@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { useSeo } from "../lib/useSeo";
 import InternalNav from "../components/InternalNav";
-import { routes } from "../lib/useHashRoute";
+import { routes, navigate } from "../lib/useHashRoute";
+import { logNotFound, lookupActiveRedirect } from "../lib/notFoundLog";
 
 /**
  * Página 404 dedicada — sinaliza claramente ao Google que a URL é inválida.
@@ -12,8 +14,12 @@ import { routes } from "../lib/useHashRoute";
  *  - <title> e H1 começam explicitamente com "404"
  *  - Conteúdo curto e sinalético — Googlebot detecta soft-404 pelo conteúdo
  *  - Links úteis (home, portfólio, blog) ajudam usuário e crawler a se reorientar
+ *  - Registra a URL na tabela seo_404_log para curadoria no admin
+ *  - Se o admin já configurou um redirect para este path, redireciona automaticamente
  */
 export default function NotFoundPage() {
+  const [redirecting, setRedirecting] = useState(false);
+
   useSeo({
     title: "404 · Página não encontrada — Lorena Alves Arquitetura",
     description:
@@ -22,6 +28,45 @@ export default function NotFoundPage() {
     ogType: "website",
     noindex: true,
   });
+
+  useEffect(() => {
+    const path = window.location.pathname || "/";
+    const referrer = document.referrer || null;
+
+    // 1) Registra (best effort) o 404 para curadoria no admin
+    void logNotFound(path, referrer);
+
+    // 2) Verifica se há um redirect ativo configurado para esse path
+    let cancelled = false;
+    void (async () => {
+      const target = await lookupActiveRedirect(path);
+      if (cancelled || !target) return;
+      setRedirecting(true);
+      // pequeno delay garante que o registro foi enviado antes do unmount
+      window.setTimeout(() => {
+        if (target.startsWith("http")) {
+          window.location.replace(target);
+        } else {
+          navigate(target.startsWith("/") ? target : `/${target}`);
+        }
+      }, 60);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (redirecting) {
+    return (
+      <main id="main" tabIndex={-1} className="pf-page" aria-live="polite">
+        <header className="pf-head">
+          <p className="pf-head__eyebrow mono">Redirecionando…</p>
+          <h1 className="pf-head__title">Levando você ao lugar certo.</h1>
+        </header>
+      </main>
+    );
+  }
 
   return (
     <main id="main" tabIndex={-1} className="pf-page">

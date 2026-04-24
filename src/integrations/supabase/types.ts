@@ -379,6 +379,54 @@ export type Database = {
         }
         Relationships: []
       }
+      seo_404_log: {
+        Row: {
+          created_at: string
+          first_seen_at: string
+          hits: number
+          id: number
+          last_seen_at: string
+          notes: string | null
+          path: string
+          redirect_to: string | null
+          referrer: string | null
+          resolved_at: string | null
+          source: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          first_seen_at?: string
+          hits?: number
+          id?: number
+          last_seen_at?: string
+          notes?: string | null
+          path: string
+          redirect_to?: string | null
+          referrer?: string | null
+          resolved_at?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          first_seen_at?: string
+          hits?: number
+          id?: number
+          last_seen_at?: string
+          notes?: string | null
+          path?: string
+          redirect_to?: string | null
+          referrer?: string | null
+          resolved_at?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       seo_audit_log: {
         Row: {
           created_at: string | null
@@ -737,6 +785,10 @@ export type Database = {
         }[]
       }
       is_admin: { Args: never; Returns: boolean }
+      log_404: {
+        Args: { p_path: string; p_referrer?: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
