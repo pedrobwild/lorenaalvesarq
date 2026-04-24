@@ -6,17 +6,18 @@ import NotFoundPage from "../NotFoundPage";
  * Testes de regressão para a página 404.
  *
  * Esses testes existem para impedir que o site volte a gerar "soft-404" no
- * Google Search Console em mudanças futuras. Validam três contratos críticos:
+ * Google Search Console em mudanças futuras. Validam quatro contratos:
  *
- *  1. A página renderiza um <h1> que começa com "404".
- *  2. O <title> do documento começa com "404".
- *  3. A meta robots fica em "noindex" (gerada por useSeo via prop noindex).
+ *  1. O <h1 data-testid="not-found-h1"> existe e contém "404"
+ *     (seletor estável, sobrevive a mudanças de copy/layout).
+ *  2. O cabeçalho como um todo menciona "404" (defesa em profundidade).
+ *  3. O <title> do documento começa com "404".
+ *  4. A meta robots fica em "noindex".
  *
- * Se qualquer um desses contratos quebrar, o `npm test` falha — e como o
- * script `build` roda os testes antes do `vite build`, o deploy também falha.
+ * Se qualquer contrato quebrar, `npm test` falha — e como `build` roda os
+ * testes antes do `vite build`, o deploy também falha.
  */
 
-// Mock do supabase client para não tentar abrir conexão real durante os testes.
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
     rpc: vi.fn().mockResolvedValue({ data: null, error: null }),
@@ -32,7 +33,6 @@ vi.mock("@/integrations/supabase/client", () => ({
   },
 }));
 
-// Mock do fetchSiteSettings para não buscar settings reais (useSeo).
 vi.mock("@/lib/useSiteSettings", async () => {
   const actual = await vi.importActual<typeof import("@/lib/useSiteSettings")>(
     "@/lib/useSiteSettings"
@@ -50,16 +50,13 @@ vi.mock("@/lib/useSiteSettings", async () => {
 });
 
 beforeEach(() => {
-  // sessionStorage limpo para que logNotFound não seja "engolido" entre testes.
   try {
     sessionStorage.clear();
   } catch {
     /* noop */
   }
-  // Limpa head para um estado conhecido.
   document.head.innerHTML = "";
   document.title = "";
-  // Garante que o pathname não seja "/" (NotFoundPage pula o log nesse caso).
   window.history.replaceState({}, "", "/rota-inexistente-test");
 });
 
@@ -68,21 +65,25 @@ afterEach(() => {
 });
 
 describe("NotFoundPage — proteção contra soft-404", () => {
-  it("renderiza um <h1> que sinaliza explicitamente o erro 404", async () => {
+  it("renderiza um <h1> com data-testid='not-found-h1' contendo '404'", () => {
+    const { getByTestId } = render(<NotFoundPage />);
+
+    // Usa data-testid em vez de seletor estrutural ou texto exato:
+    // o teste sobrevive a mudanças de copy, classes CSS e layout,
+    // desde que o H1 da 404 continue marcado e contenha "404".
+    const h1 = getByTestId("not-found-h1");
+    expect(h1.tagName).toBe("H1");
+    expect(h1.textContent || "").toMatch(/404/);
+  });
+
+  it("o cabeçalho da página também menciona '404' (defesa em profundidade)", () => {
     const { container } = render(<NotFoundPage />);
-
-    const h1 = container.querySelector("h1");
-    expect(h1).not.toBeNull();
-
-    // Junta H1 + eyebrow para considerar tanto "Erro 404" no eyebrow
-    // quanto "404" no título principal — ambos sinalizam a Googlebot.
     const headerText = container.querySelector("header")?.textContent || "";
     expect(headerText).toMatch(/404/);
   });
 
   it("define document.title começando com '404'", async () => {
     render(<NotFoundPage />);
-
     await waitFor(() => {
       expect(document.title).toMatch(/^404/);
     });
@@ -90,7 +91,6 @@ describe("NotFoundPage — proteção contra soft-404", () => {
 
   it("injeta <meta name=\"robots\" content=\"noindex, ...\"> no head", async () => {
     render(<NotFoundPage />);
-
     await waitFor(() => {
       const robots = document.head.querySelector<HTMLMetaElement>(
         'meta[name="robots"]'
@@ -102,7 +102,6 @@ describe("NotFoundPage — proteção contra soft-404", () => {
 
   it("não marca a página como indexável (não emite 'index, follow')", async () => {
     render(<NotFoundPage />);
-
     await waitFor(() => {
       const robots = document.head.querySelector<HTMLMetaElement>(
         'meta[name="robots"]'

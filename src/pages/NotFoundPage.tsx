@@ -74,8 +74,8 @@ export default function NotFoundPage() {
 
       <header className="pf-head">
         <p className="pf-head__eyebrow mono">Erro 404 · Página não encontrada</p>
-        <h1 className="pf-head__title">
-          Essa página <em>não existe</em>.
+        <h1 className="pf-head__title" data-testid="not-found-h1">
+          Essa página <em>não existe</em>. (404)
         </h1>
         <p className="pf-head__lede">
           O endereço acessado não corresponde a nenhuma página do estúdio. Talvez
