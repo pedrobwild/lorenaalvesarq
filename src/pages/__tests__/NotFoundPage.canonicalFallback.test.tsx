@@ -325,4 +325,114 @@ describe("NotFoundPage — canonical sobrevive a seo_canonical_base ausente", ()
       });
     });
   });
+
+  // ---------------------------------------------------------------------------
+  // Normalização: descartar path/query/hash da seo_canonical_base
+  //
+  // Por que isso importa
+  // --------------------
+  // `seo_canonical_base` deve conter SOMENTE o origin (protocolo + host),
+  // mas o admin é livre — alguém pode colar uma URL completa copiada do
+  // navegador (ex.: "https://lorenaalvesarq.com/portfolio?utm=x") e a base
+  // sairia poluída. O resultado seriam canônicos catastróficos:
+  //
+  //   base = "https://lorenaalvesarq.com/404"
+  //   path = "/404"
+  //   canonical = "https://lorenaalvesarq.com/404/404"  ← URL inexistente
+  //
+  // O Googlebot trataria isso como nova soft-404 e o ciclo se realimentaria.
+  //
+  // useSeo agora aplica `new URL(base).origin`, descartando qualquer path,
+  // query ou hash. Estes testes blindam essa normalização.
+  // ---------------------------------------------------------------------------
+  describe("seo_canonical_base com path/query/hash extras é normalizado", () => {
+    it.each([
+      {
+        label: "base já termina em /404 (auto-referência acidental)",
+        value: "https://lorenaalvesarq.com/404",
+      },
+      {
+        label: "base termina em /portfolio (usuário colou URL de página interna)",
+        value: "https://lorenaalvesarq.com/portfolio",
+      },
+      {
+        label: "base com path multinível",
+        value: "https://lorenaalvesarq.com/blog/posts/algum-slug",
+      },
+      {
+        label: "base com path e barra final",
+        value: "https://lorenaalvesarq.com/sobre/",
+      },
+      {
+        label: "base com querystring (UTMs colados sem querer)",
+        value: "https://lorenaalvesarq.com/?utm_source=admin&utm_medium=copy",
+      },
+      {
+        label: "base com hash de âncora",
+        value: "https://lorenaalvesarq.com/#contato",
+      },
+      {
+        label: "base com path + query + hash combinados",
+        value: "https://lorenaalvesarq.com/blog?ref=x#topo",
+      },
+      {
+        label: "base com path E protocolo http (combina upgrade + strip de path)",
+        value: "http://lorenaalvesarq.com/404",
+      },
+    ])(
+      "quando seo_canonical_base = $label, canonical é exatamente origin + /404",
+      async ({ value }) => {
+        fetchSiteSettingsMock.mockResolvedValue({
+          site_title: "Lorena Alves Arquitetura",
+          seo_canonical_base: value,
+          seo_robots: "index, follow",
+        });
+
+        render(<NotFoundPage />);
+
+        await waitFor(() => {
+          const href = getCanonicalHref();
+          // Contrato principal: canonical é exatamente origin + /404,
+          // sem duplicar caminho.
+          expect(href).toBe(EXPECTED_CANONICAL);
+          // Defesas explícitas contra os modos de falha mais prováveis:
+          expect(href).not.toMatch(/\/404\/404/); // sem auto-duplicação
+          expect(href).not.toMatch(/\?/);          // sem query no canonical
+          expect(href).not.toMatch(/#/);           // sem fragment no canonical
+          // Nenhuma barra dupla exceto a do protocolo.
+          const withoutProtocol = href.replace(/^https?:\/\//, "");
+          expect(withoutProtocol).not.toMatch(/\/\//);
+        });
+      }
+    );
+
+    it("base com origin alternativo (subdomínio) preserva o subdomínio mas descarta path", async () => {
+      // Caso de migração: admin testando em subdomain. Devemos respeitar o
+      // host configurado, mas descartar o path indevido.
+      fetchSiteSettingsMock.mockResolvedValue({
+        seo_canonical_base: "https://staging.lorenaalvesarq.com/qualquer-coisa",
+      });
+
+      render(<NotFoundPage />);
+
+      await waitFor(() => {
+        expect(getCanonicalHref()).toBe("https://staging.lorenaalvesarq.com/404");
+      });
+    });
+
+    it("base completamente inválida (sem protocolo) cai no fallback de produção", async () => {
+      // `new URL("lorenaalvesarq.com")` lança — useSeo deve cair no catch
+      // e usar o fallback. Sem isso, o canonical sairia como
+      // "lorenaalvesarq.com/404" (URL relativa, inválida para canonical).
+      fetchSiteSettingsMock.mockResolvedValue({
+        seo_canonical_base: "lorenaalvesarq.com",
+      });
+
+      render(<NotFoundPage />);
+
+      await waitFor(() => {
+        expect(getCanonicalHref()).toBe(EXPECTED_CANONICAL);
+      });
+    });
+  });
 });
