@@ -28,7 +28,21 @@ function markLoggedThisSession(path: string) {
   }
 }
 
-export async function logNotFound(path: string, referrer?: string | null): Promise<void> {
+/**
+ * Registra (best-effort) o path 404 atual no banco.
+ *
+ * @param path  caminho não encontrado (ex.: "/projeto/foo")
+ * @param referrer  document.referrer, se houver
+ * @param reason  motivo opcional (ex.: "spa_fallback", "manual"); a edge
+ *                function `not-found-check` envia reasons mais específicos
+ *                como "unknown_route", "invalid_dynamic_segment",
+ *                "dynamic_slug_not_found".
+ */
+export async function logNotFound(
+  path: string,
+  referrer?: string | null,
+  reason: string = "spa_fallback"
+): Promise<void> {
   if (!path || path === "/") return;
   if (hasLoggedThisSession(path)) return;
   markLoggedThisSession(path);
@@ -36,6 +50,7 @@ export async function logNotFound(path: string, referrer?: string | null): Promi
     await supabase.rpc("log_404", {
       p_path: path,
       p_referrer: referrer || undefined,
+      p_reason: reason,
     });
   } catch {
     /* nunca falha a renderização por causa do logging */

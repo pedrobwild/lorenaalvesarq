@@ -110,4 +110,29 @@ describe("NotFoundPage — proteção contra soft-404", () => {
       expect(content.toLowerCase()).not.toContain("index, follow");
     });
   });
+
+  it("injeta <link rel=\"canonical\"> apontando para base + /404", async () => {
+    render(<NotFoundPage />);
+    await waitFor(() => {
+      const canonical = document.head.querySelector<HTMLLinkElement>(
+        'link[rel="canonical"]'
+      );
+      expect(canonical).not.toBeNull();
+      expect(canonical!.getAttribute("href")).toBe(
+        "https://lorenaalvesarq.com/404"
+      );
+    });
+  });
+
+  it("o canonical da 404 é absoluto e termina em /404", async () => {
+    render(<NotFoundPage />);
+    await waitFor(() => {
+      const href =
+        document.head
+          .querySelector<HTMLLinkElement>('link[rel="canonical"]')
+          ?.getAttribute("href") || "";
+      expect(href).toMatch(/^https?:\/\//);
+      expect(href.endsWith("/404")).toBe(true);
+    });
+  });
 });
