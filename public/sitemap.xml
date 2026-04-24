@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Sitemap estático — Lorena Alves Arquitetura
-  Atualizado em 2026-04-22.
-  Lista TODAS as rotas indexáveis: home, sobre, portfólio, FAQ, privacidade,
-  blog (índice + tags + posts) e cada projeto individual visível.
+  Atualizado em 2026-04-24.
+
+  Lista APENAS as rotas canônicas indexáveis do site, na ordem do roteador
+  (src/lib/useHashRoute.ts):
+    /                          (home)
+    /sobre                     (estúdio)
+    /portfolio                 (lista de projetos)
+    /faq
+    /privacidade
+    /blog                      (índice)
+    /blog/tags                 (índice de tags)
+    /blog/tag/<slug>           (uma por tag real de post visível)
+    /blog/<slug>               (uma por post visível)
+    /projeto/<slug>            (uma por projeto visível)
+
+  Páginas excluídas propositalmente:
+    - /admin/*                 (área administrativa, bloqueada no robots)
+    - /404                     (noindex, follow)
+    - quaisquer aliases legados (estes têm redirect 301 via seo_404_log,
+      não devem entrar no sitemap para não ensinar URLs antigas ao Google)
+
   A versão dinâmica (com galeria completa em tempo real) é servida pela
   edge function /functions/v1/sitemap, declarada também no robots.txt.
 -->
@@ -12,10 +30,14 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml"
   xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
+  <!-- ============================================================
+       PÁGINAS PRINCIPAIS
+       ============================================================ -->
+
   <!-- Home -->
   <url>
     <loc>https://lorenaalvesarq.com/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.00</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/" />
@@ -35,7 +57,7 @@
   <!-- Sobre -->
   <url>
     <loc>https://lorenaalvesarq.com/sobre</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/sobre" />
@@ -50,7 +72,7 @@
   <!-- Portfolio -->
   <url>
     <loc>https://lorenaalvesarq.com/portfolio</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/portfolio" />
@@ -90,7 +112,7 @@
   <!-- FAQ -->
   <url>
     <loc>https://lorenaalvesarq.com/faq</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/faq" />
@@ -100,7 +122,7 @@
   <!-- Privacidade -->
   <url>
     <loc>https://lorenaalvesarq.com/privacidade</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.30</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/privacidade" />
@@ -108,11 +130,12 @@
   </url>
 
   <!-- ============================================================
-       BLOG — índice, tags e posts
+       BLOG — índice + tags
        ============================================================ -->
+
   <url>
     <loc>https://lorenaalvesarq.com/blog</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog" />
@@ -121,17 +144,20 @@
 
   <url>
     <loc>https://lorenaalvesarq.com/blog/tags</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tags" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://lorenaalvesarq.com/blog/tags" />
   </url>
 
-  <!-- Blog post: Como funciona um projeto arquitetônico -->
+  <!-- ============================================================
+       BLOG — posts visíveis (fonte: tabela blog_posts)
+       ============================================================ -->
+
   <url>
     <loc>https://lorenaalvesarq.com/blog/como-funciona-projeto-arquitetonico</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/como-funciona-projeto-arquitetonico" />
@@ -143,10 +169,9 @@
     </image:image>
   </url>
 
-  <!-- Blog post: Como construir minha casa -->
   <url>
     <loc>https://lorenaalvesarq.com/blog/como-construir-minha-casa</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/como-construir-minha-casa" />
@@ -158,84 +183,88 @@
     </image:image>
   </url>
 
-  <!-- Blog tags -->
+  <!-- ============================================================
+       BLOG — tags reais (derivadas dos posts visíveis)
+       ============================================================ -->
+
   <url>
     <loc>https://lorenaalvesarq.com/blog/tag/arquitetura-residencial</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.50</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/arquitetura-residencial" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/blog/tag/briefing</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.50</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/briefing" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/blog/tag/construcao</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.50</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/construcao" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/blog/tag/etapas</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.50</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/etapas" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/blog/tag/prazo</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.50</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/prazo" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/blog/tag/primeira-casa</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.50</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/primeira-casa" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/blog/tag/projeto-arquitetonico</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.50</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/projeto-arquitetonico" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/blog/tag/projeto-autoral</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.50</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/projeto-autoral" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/blog/tag/reforma</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.50</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/reforma" />
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/blog/tag/uberlandia</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.50</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/blog/tag/uberlandia" />
   </url>
 
   <!-- ============================================================
-       PROJETOS — fichas individuais
+       PROJETOS — fichas individuais (fonte: tabela projects)
        ============================================================ -->
+
   <url>
     <loc>https://lorenaalvesarq.com/projeto/casa-paineira</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-paineira" />
@@ -246,7 +275,7 @@
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/casa-jequitiba</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-jequitiba" />
@@ -257,7 +286,7 @@
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/apto-higienopolis</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/apto-higienopolis" />
@@ -268,7 +297,7 @@
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/casa-pau-brasil</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/casa-pau-brasil" />
@@ -279,7 +308,7 @@
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/restaurante-takka</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/restaurante-takka" />
@@ -290,7 +319,7 @@
   </url>
   <url>
     <loc>https://lorenaalvesarq.com/projeto/fazenda-porto</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://lorenaalvesarq.com/projeto/fazenda-porto" />
