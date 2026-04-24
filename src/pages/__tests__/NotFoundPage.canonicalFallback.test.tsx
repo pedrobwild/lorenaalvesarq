@@ -1,7 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, cleanup, waitFor } from "@testing-library/react";
 import NotFoundPage from "../NotFoundPage";
-import { getCanonicalHref, resetHead } from "@/test/seoHelpers";
+import {
+  getCanonicalHref,
+  expectMetaContainsNoIndex,
+  resetHead,
+} from "@/test/seoHelpers";
 
 /**
  * Regressão: o canonical da 404 sobrevive a `seo_canonical_base` ausente.
