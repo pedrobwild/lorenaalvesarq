@@ -477,7 +477,7 @@ export function breadcrumbJsonLd(
   s: SiteSettings,
   trail: Array<{ name: string; path: string }>
 ) {
-  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (s.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
