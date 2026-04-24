@@ -109,10 +109,11 @@ function renderRoute(route: Route) {
         <BlogFormPage slug={route.slug} />
       </ProtectedRoute>
     );
-  // 404 dedicada — evita soft-404 do Google ao renderizar a home em URLs inválidas
-  if (route.name === "not-found") return <NotFoundPage />;
-  // home (com ou sem âncora) cai na App (que também trata âncoras legadas)
-  return <App />;
+  // Home (com ou sem âncora) — única rota que renderiza o App principal
+  if (route.name === "home") return <App />;
+  // Qualquer outra rota (incluindo "not-found" e nomes futuros não mapeados acima)
+  // cai aqui — renderiza 404 dedicada com noindex, evitando soft-404 do Google.
+  return <NotFoundPage />;
 }
 
 function isAdminRoute(route: Route) {
