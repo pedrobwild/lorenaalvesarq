@@ -102,11 +102,7 @@ describe("roteador — smoke test do fallback 404", () => {
   it("a NotFoundPage montada pelo roteador injeta meta robots noindex", async () => {
     render(<>{renderRoute({ name: "not-found" })}</>);
     await waitFor(() => {
-      const robots = document.head.querySelector<HTMLMetaElement>(
-        'meta[name="robots"]'
-      );
-      expect(robots).not.toBeNull();
-      expect(robots!.getAttribute("content")).toMatch(/noindex/i);
+      expect(getRobotsContent()).toMatch(/noindex/i);
     });
   });
 });
