@@ -132,7 +132,7 @@ Deno.serve(async (req: Request) => {
   }
 
   // 2) Rota estática conhecida.
-  if (STATIC_ROUTES.has(path)) {
+  if (STATIC_ROUTES_SET.has(path)) {
     return jsonResponse(200, { path, status: "ok", reason: "static_route" });
   }
 
