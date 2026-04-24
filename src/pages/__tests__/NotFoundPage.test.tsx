@@ -110,4 +110,37 @@ describe("NotFoundPage — proteção contra soft-404", () => {
       expect(content.toLowerCase()).not.toContain("index, follow");
     });
   });
+
+  it("injeta <link rel=\"canonical\"> apontando para base + /404", async () => {
+    // useSeo é chamado com canonicalPath: "/404" e o mock de site_settings
+    // devolve seo_canonical_base = "https://lorenaalvesarq.com".
+    // O canonical resultante DEVE ser exatamente "https://lorenaalvesarq.com/404"
+    // — isso impede que o Google trate múltiplas URLs inexistentes como
+    // duplicatas distintas (todas apontam para o mesmo canonical de 404).
+    render(<NotFoundPage />);
+
+    await waitFor(() => {
+      const canonical = document.head.querySelector<HTMLLinkElement>(
+        'link[rel="canonical"]'
+      );
+      expect(canonical).not.toBeNull();
+      expect(canonical!.getAttribute("href")).toBe(
+        "https://lorenaalvesarq.com/404"
+      );
+    });
+  });
+
+  it("o canonical da 404 é absoluto (começa com a base https://) e termina em /404", async () => {
+    // Teste mais frouxo, sobrevive a mudanças futuras do canonical_base.
+    render(<NotFoundPage />);
+
+    await waitFor(() => {
+      const href =
+        document.head
+          .querySelector<HTMLLinkElement>('link[rel="canonical"]')
+          ?.getAttribute("href") || "";
+      expect(href).toMatch(/^https?:\/\//);
+      expect(href.endsWith("/404")).toBe(true);
+    });
+  });
 });
