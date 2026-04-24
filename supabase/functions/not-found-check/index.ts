@@ -97,6 +97,23 @@ Deno.serve(async (req: Request) => {
   }
 
   const url = new URL(req.url);
+
+  // Health check: ?health=1 ou path terminando em /health.
+  // Sempre 200, sem tocar no banco — usado por monitoramento e por testes
+  // de disponibilidade para confirmar que o worker está vivo.
+  const isHealth =
+    url.searchParams.get("health") === "1" ||
+    url.pathname.endsWith("/health");
+  if (isHealth) {
+    return jsonResponse(200, {
+      status: "ok",
+      service: "not-found-check",
+      version: FN_VERSION,
+      booted_at: FN_BOOTED_AT,
+      now: new Date().toISOString(),
+    });
+  }
+
   const path = normalizePath(url.searchParams.get("path"));
 
   // 1) Bloco admin: tratamos como 200 (existe), mas não indexável.
