@@ -33,7 +33,10 @@ installLinkInterceptor();
 
 const TRANSITION_MS = 380;
 
-function renderRoute(route: Route) {
+// Exportada para permitir testes de smoke do roteador (src/__tests__/router.test.tsx).
+// Garante que o NotFoundPage é REALMENTE montado pelo roteador para rotas
+// inexistentes — não apenas importado.
+export function renderRoute(route: Route) {
   if (route.name === "portfolio") return <PortfolioPage />;
   if (route.name === "project") return <ProjectPage slug={route.slug} />;
   if (route.name === "faq") return <FaqPage />;
