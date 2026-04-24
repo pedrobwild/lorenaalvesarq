@@ -332,7 +332,7 @@ export async function refreshSeoEverywhere(opts?: { pingSearchEngines?: boolean 
 
 /** LocalBusiness / ProfessionalService — enriquecido com horário, faixa de preço e mapa. */
 export function professionalServiceJsonLd(s: SiteSettings) {
-  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (s.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
   const type = s.business_type || "ProfessionalService";
 
   const geo = (() => {
