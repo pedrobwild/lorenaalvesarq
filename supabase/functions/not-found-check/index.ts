@@ -26,6 +26,15 @@
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 
+/**
+ * Versão lógica desta edge function. Incrementar manualmente a cada mudança
+ * relevante de comportamento. Exposta no endpoint de health para facilitar
+ * monitoramento externo (uptime checks, smoke tests pós-deploy, etc.).
+ */
+const FN_VERSION = "1.1.0";
+/** Momento em que o worker atual subiu (cold start). */
+const FN_BOOTED_AT = new Date().toISOString();
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
