@@ -226,7 +226,3 @@ Deno.serve(async (req: Request) => {
   });
 });
 
-    status: "not_found",
-    reason: "unknown_route",
-  });
-});
