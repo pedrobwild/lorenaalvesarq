@@ -138,7 +138,7 @@ function injectTrackers(settings: SiteSettings) {
 }
 
 function applySeo(settings: SiteSettings, seo: SeoInput) {
-  const base = (settings.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (settings.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
   const title = seo.title || settings.seo_default_title || settings.site_title || "lorenaalves arq";
   const description =
     seo.description || settings.seo_default_description || settings.site_description || "";
@@ -332,7 +332,7 @@ export async function refreshSeoEverywhere(opts?: { pingSearchEngines?: boolean 
 
 /** LocalBusiness / ProfessionalService — enriquecido com horário, faixa de preço e mapa. */
 export function professionalServiceJsonLd(s: SiteSettings) {
-  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (s.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
   const type = s.business_type || "ProfessionalService";
 
   const geo = (() => {
@@ -453,7 +453,7 @@ export function projectJsonLd(
     tag?: string;
   }
 ) {
-  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (s.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
   return {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
@@ -477,7 +477,7 @@ export function breadcrumbJsonLd(
   s: SiteSettings,
   trail: Array<{ name: string; path: string }>
 ) {
-  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (s.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -495,7 +495,7 @@ export function itemListJsonLd(
   s: SiteSettings,
   items: Array<{ name: string; path: string; image?: string }>
 ) {
-  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (s.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -527,7 +527,7 @@ export function faqJsonLd(items: Array<{ q: string; a: string }>) {
 
 /** WebSite JSON-LD com SearchAction (ajuda a aparecer caixa de busca no Google). */
 export function websiteJsonLd(s: SiteSettings) {
-  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (s.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -541,7 +541,7 @@ export function websiteJsonLd(s: SiteSettings) {
 
 /** Organization JSON-LD — reforça entidade para o Knowledge Graph. */
 export function organizationJsonLd(s: SiteSettings) {
-  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (s.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
 
   const absUrl = (u: string | null | undefined) => {
     if (!u) return undefined;
