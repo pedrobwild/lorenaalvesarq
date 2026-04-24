@@ -27,7 +27,8 @@ class MockIntersectionObserver {
   rootMargin = "";
   thresholds = [];
 }
-// @ts-expect-error — atribui mock ao global
-window.IntersectionObserver = MockIntersectionObserver;
-// @ts-expect-error — atribui mock ao global
-globalThis.IntersectionObserver = MockIntersectionObserver;
+// Atribui o mock ao global (cast para evitar mismatch de tipos)
+(window as unknown as { IntersectionObserver: unknown }).IntersectionObserver =
+  MockIntersectionObserver;
+(globalThis as unknown as { IntersectionObserver: unknown }).IntersectionObserver =
+  MockIntersectionObserver;
