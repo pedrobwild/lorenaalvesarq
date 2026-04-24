@@ -453,7 +453,7 @@ export function projectJsonLd(
     tag?: string;
   }
 ) {
-  const base = (s.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (s.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
   return {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
