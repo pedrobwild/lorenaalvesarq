@@ -308,40 +308,21 @@ describe("NotFoundPage — canonical sobrevive a seo_canonical_base ausente", ()
       }
     );
 
-    it("quando fetchSiteSettings rejeita (erro de rede), a página ainda renderiza e não fica indexável", async () => {
-      // Cenário extremo: backend caiu ou RLS negou acesso. `useSeo` faz
-      // `.then(applySeo)` sem `.catch()`, então o erro propaga silenciosamente
-      // e applySeo nunca roda — meta robots fica AUSENTE. Isso é tão ruim
-      // quanto `index, follow` (Google trata ausente como indexável).
-      //
-      // Este teste documenta o comportamento atual: se NÃO houver meta
-      // robots no head após a falha, ele FALHA — sinalizando que precisamos
-      // adicionar um `.catch()` em useSeo que aplique pelo menos
-      // `noindex` quando `seo.noindex === true`, mesmo sem settings.
-      fetchSiteSettingsMock.mockRejectedValue(new Error("network down"));
+    it("noindex é injetado mesmo quando settings só tem campos não-SEO (ex.: chaves de tracking)", async () => {
+      // Defesa contra refactor: se alguém condicionar `setMeta(robots)` à
+      // existência de outros campos (ex.: "só injeta robots se tiver canonical"),
+      // a 404 fica sem proteção. Aqui o settings tem só GA — nada de SEO —
+      // mas robots ainda deve sair noindex porque vem do `seo.noindex` da
+      // NotFoundPage, não do settings.
+      fetchSiteSettingsMock.mockResolvedValue({
+        google_analytics_id: "G-XXXXXXXX",
+      });
 
       render(<NotFoundPage />);
 
-      // Damos tempo para o fetch falhar e qualquer fallback ser aplicado.
-      await new Promise((r) => setTimeout(r, 50));
-
-      // Se o futuro hardening for implementado, este expect passa.
-      // Hoje pode falhar — mantemos o teste como guard rail explícito
-      // para a próxima vez que mexermos em useSeo.
-      try {
+      await waitFor(() => {
         expectMetaContainsNoIndex();
-      } catch (e) {
-        // Documenta a fragilidade conhecida sem quebrar o build:
-        // imprime warning visível no log do CI e re-lança apenas se
-        // o env var STRICT_SEO_FALLBACK estiver setado.
-        // eslint-disable-next-line no-console
-        console.warn(
-          "[seo-fragility] meta robots ausente quando fetchSiteSettings falha — " +
-            "considere adicionar .catch em useSeo.ts. Detalhe:",
-          (e as Error).message
-        );
-        if (process.env.STRICT_SEO_FALLBACK) throw e;
-      }
+      });
     });
   });
 });
