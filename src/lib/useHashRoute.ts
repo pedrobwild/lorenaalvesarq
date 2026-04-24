@@ -15,6 +15,7 @@ export type Route =
   | { name: "admin-dashboard" }
   | { name: "admin-analytics" }
   | { name: "admin-seo" }
+  | { name: "admin-seo-404" }
   | { name: "admin-settings" }
   | { name: "admin-projects" }
   | { name: "admin-project-new" }
@@ -50,6 +51,7 @@ function parsePath(rawPath: string): Route {
   if (path === "/admin") return { name: "admin-dashboard" };
   if (path === "/admin/analytics") return { name: "admin-analytics" };
   if (path === "/admin/seo") return { name: "admin-seo" };
+  if (path === "/admin/seo/404") return { name: "admin-seo-404" };
   if (path === "/admin/settings") return { name: "admin-settings" };
   if (path === "/admin/faq") return { name: "admin-faq" };
   if (path === "/admin/projects") return { name: "admin-projects" };
@@ -114,6 +116,7 @@ export const routes = {
   adminDashboard: "/admin",
   adminAnalytics: "/admin/analytics",
   adminSeo: "/admin/seo",
+  adminSeo404: "/admin/seo/404",
   adminSettings: "/admin/settings",
   adminProjects: "/admin/projects",
   adminProjectNew: "/admin/projects/new",
