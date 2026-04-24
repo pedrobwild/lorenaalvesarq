@@ -231,7 +231,7 @@ describe("NotFoundPage — proteção contra soft-404", () => {
       await waitFor(() => {
         // Ambos presentes, mas robots = noindex.
         expect(getOgTitle()).not.toBe("");
-        expect(getRobotsContent().toLowerCase()).toContain("noindex");
+        expectMetaContainsNoIndex();
       });
     });
   });
