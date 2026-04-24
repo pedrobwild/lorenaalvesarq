@@ -167,6 +167,8 @@ describe("NotFoundPage — canonical sobrevive a seo_canonical_base ausente", ()
       const withoutProtocol = getCanonicalHref().replace(/^https?:\/\//, "");
       expect(withoutProtocol).not.toMatch(/\/\//);
     });
+  });
+
   // ---------------------------------------------------------------------------
   // Upgrade obrigatório de http:// → https://
   //
