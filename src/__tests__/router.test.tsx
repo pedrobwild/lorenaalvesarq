@@ -66,10 +66,10 @@ vi.mock("@/App", () => ({
 
 import type { Route } from "@/lib/useHashRoute";
 import { renderRoute } from "@/router";
+import { getRobotsContent, resetHead } from "@/test/seoHelpers";
 
 beforeEach(() => {
-  document.head.innerHTML = "";
-  document.title = "";
+  resetHead();
   window.history.replaceState({}, "", "/rota-que-nao-existe-smoke");
 });
 
