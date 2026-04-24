@@ -95,3 +95,37 @@ Deno.test("response inclui X-Robots-Tag noindex", async () => {
     `esperado X-Robots-Tag noindex, recebido "${robots}"`
   );
 });
+
+Deno.test("health check via ?health=1 devolve 200 com versão", async () => {
+  const u = new URL(FN_URL);
+  u.searchParams.set("health", "1");
+  const r = await fetch(u.toString(), {
+    method: "GET",
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+    },
+  });
+  const body = await r.json();
+  assertEquals(r.status, 200);
+  assertEquals(body.status, "ok");
+  assertEquals(body.service, "not-found-check");
+  assert(typeof body.version === "string" && body.version.length > 0,
+    `esperado body.version string não vazia, recebido ${JSON.stringify(body.version)}`);
+  assert(typeof body.booted_at === "string");
+  assert(typeof body.now === "string");
+});
+
+Deno.test("health check via /health devolve 200", async () => {
+  const r = await fetch(`${FN_URL}/health`, {
+    method: "GET",
+    headers: {
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+    },
+  });
+  const body = await r.json();
+  assertEquals(r.status, 200);
+  assertEquals(body.status, "ok");
+  assertEquals(body.service, "not-found-check");
+});
