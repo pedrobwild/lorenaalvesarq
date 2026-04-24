@@ -138,7 +138,7 @@ function injectTrackers(settings: SiteSettings) {
 }
 
 function applySeo(settings: SiteSettings, seo: SeoInput) {
-  const base = (settings.seo_canonical_base || "https://lorenaalvesarq.com").replace(/\/$/, "");
+  const base = (settings.seo_canonical_base?.trim() || "https://lorenaalvesarq.com").replace(/\/$/, "");
   const title = seo.title || settings.seo_default_title || settings.site_title || "lorenaalves arq";
   const description =
     seo.description || settings.seo_default_description || settings.site_description || "";
