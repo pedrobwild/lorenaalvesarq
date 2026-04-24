@@ -152,7 +152,15 @@ Deno.serve(async (req: Request) => {
     });
   }
 
-  const path = normalizePath(url.searchParams.get("path"));
+  const rawPathParam = url.searchParams.get("path");
+  const validationError = validatePathParam(rawPathParam);
+  if (validationError) {
+    return jsonResponse(400, {
+      status: "bad_request",
+      reason: validationError.reason,
+    });
+  }
+  const path = normalizePath(rawPathParam);
 
   // 1) Bloco admin: tratamos como 200 (existe), mas não indexável.
   if (path === "/admin" || path.startsWith("/admin/")) {
