@@ -167,5 +167,85 @@ describe("NotFoundPage — canonical sobrevive a seo_canonical_base ausente", ()
       const withoutProtocol = getCanonicalHref().replace(/^https?:\/\//, "");
       expect(withoutProtocol).not.toMatch(/\/\//);
     });
+  // ---------------------------------------------------------------------------
+  // Upgrade obrigatório de http:// → https://
+  //
+  // Por que isso importa
+  // --------------------
+  // O domínio lorenaalvesarq.com serve HTTPS com HSTS. Se o canonical sair
+  // como `http://...`, o Googlebot vai:
+  //   1. Seguir o canonical e bater em http://
+  //   2. Receber 301 do servidor para https://
+  //   3. Marcar a URL como "Indexada, embora bloqueada por canônico
+  //      alternativo" — efetivamente desperdiça crawl budget e atrasa
+  //      reindexação.
+  //
+  // Pior: em alguns casos o GSC reporta "URL inválida — Indisponível
+  // por causa de outro problema 4xx". Para a 404, isso amplifica o
+  // problema de soft-404.
+  //
+  // useSeo aplica `.replace(/^http:\/\//i, "https://")` no `applySeo`,
+  // promovendo qualquer http salvo no admin (intencional ou erro de
+  // digitação). Estes testes blindam esse contrato.
+  // ---------------------------------------------------------------------------
+  describe("canonical sempre usa https:// (nunca http://)", () => {
+    it.each([
+      { label: "http minúsculo", value: "http://lorenaalvesarq.com" },
+      { label: "HTTP maiúsculo", value: "HTTP://lorenaalvesarq.com" },
+      { label: "http com barra final", value: "http://lorenaalvesarq.com/" },
+      { label: "http em domínio alternativo", value: "http://www.lorenaalvesarq.com" },
+    ])(
+      "quando seo_canonical_base começa com $label, canonical é promovido para https://",
+      async ({ value }) => {
+        fetchSiteSettingsMock.mockResolvedValue({
+          site_title: "Lorena Alves Arquitetura",
+          seo_canonical_base: value,
+          seo_robots: "index, follow",
+        });
+
+        render(<NotFoundPage />);
+
+        await waitFor(() => {
+          const href = getCanonicalHref();
+          // Contrato principal: nunca http://.
+          expect(href).toMatch(/^https:\/\//);
+          expect(href).not.toMatch(/^http:\/\//i);
+          // Continua sendo a 404 do domínio que o admin configurou
+          // (apenas o protocolo foi promovido).
+          expect(href.endsWith("/404")).toBe(true);
+        });
+      }
+    );
+
+    it("preserva https:// quando já está correto (não vira httpss:// ou similar)", async () => {
+      // Defesa contra regressão: se alguém substituir o regex por algo
+      // mais agressivo (ex.: replace("http", "https")), https vira httpss.
+      fetchSiteSettingsMock.mockResolvedValue({
+        seo_canonical_base: "https://lorenaalvesarq.com",
+      });
+
+      render(<NotFoundPage />);
+
+      await waitFor(() => {
+        const href = getCanonicalHref();
+        expect(href).toBe(EXPECTED_CANONICAL);
+        expect(href).not.toMatch(/httpss/i);
+        expect(href).not.toMatch(/https:\/\/https/i);
+      });
+    });
+
+    it("promove http→https mesmo combinando com barra final (normalização completa)", async () => {
+      // Caso composto: protocolo errado E barra final. Os dois passos
+      // de normalização devem operar em conjunto e produzir a URL canônica.
+      fetchSiteSettingsMock.mockResolvedValue({
+        seo_canonical_base: "http://lorenaalvesarq.com/",
+      });
+
+      render(<NotFoundPage />);
+
+      await waitFor(() => {
+        expect(getCanonicalHref()).toBe(EXPECTED_CANONICAL);
+      });
+    });
   });
 });
