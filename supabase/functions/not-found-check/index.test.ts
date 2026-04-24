@@ -371,6 +371,8 @@ Deno.test("blog com slug inválido também não passa por 3xx", async () => {
   );
   assertEquals(r.status, 404);
   assertEquals(r.headers.get("location"), null);
+  // Consome body para evitar leak detectado pelo Deno test runner.
+  await r.text();
 });
 
 Deno.test("rota canônica também devolve 200 direto (sem 3xx para normalizar)", async () => {
