@@ -66,10 +66,10 @@ vi.mock("@/App", () => ({
 
 import type { Route } from "@/lib/useHashRoute";
 import { renderRoute } from "@/router";
+import { getRobotsContent, resetHead } from "@/test/seoHelpers";
 
 beforeEach(() => {
-  document.head.innerHTML = "";
-  document.title = "";
+  resetHead();
   window.history.replaceState({}, "", "/rota-que-nao-existe-smoke");
 });
 
@@ -102,11 +102,7 @@ describe("roteador — smoke test do fallback 404", () => {
   it("a NotFoundPage montada pelo roteador injeta meta robots noindex", async () => {
     render(<>{renderRoute({ name: "not-found" })}</>);
     await waitFor(() => {
-      const robots = document.head.querySelector<HTMLMetaElement>(
-        'meta[name="robots"]'
-      );
-      expect(robots).not.toBeNull();
-      expect(robots!.getAttribute("content")).toMatch(/noindex/i);
+      expect(getRobotsContent()).toMatch(/noindex/i);
     });
   });
 });
