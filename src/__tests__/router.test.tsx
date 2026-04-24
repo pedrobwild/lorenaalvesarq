@@ -66,7 +66,7 @@ vi.mock("@/App", () => ({
 
 import type { Route } from "@/lib/useHashRoute";
 import { renderRoute } from "@/router";
-import { getRobotsContent, resetHead } from "@/test/seoHelpers";
+import { expectMetaContainsNoIndex, resetHead } from "@/test/seoHelpers";
 
 beforeEach(() => {
   resetHead();
@@ -102,7 +102,7 @@ describe("roteador — smoke test do fallback 404", () => {
   it("a NotFoundPage montada pelo roteador injeta meta robots noindex", async () => {
     render(<>{renderRoute({ name: "not-found" })}</>);
     await waitFor(() => {
-      expect(getRobotsContent()).toMatch(/noindex/i);
+      expectMetaContainsNoIndex();
     });
   });
 });

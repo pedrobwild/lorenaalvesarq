@@ -12,6 +12,7 @@ import {
   getTwitterCard,
   getTwitterTitle,
   getTwitterDescription,
+  expectMetaContainsNoIndex,
   resetHead,
 } from "@/test/seoHelpers";
 
@@ -109,7 +110,7 @@ describe("NotFoundPage — proteção contra soft-404", () => {
   it("injeta <meta name=\"robots\" content=\"noindex, ...\"> no head", async () => {
     render(<NotFoundPage />);
     await waitFor(() => {
-      expect(getRobotsContent()).toMatch(/noindex/i);
+      expectMetaContainsNoIndex();
     });
   });
 
@@ -230,7 +231,7 @@ describe("NotFoundPage — proteção contra soft-404", () => {
       await waitFor(() => {
         // Ambos presentes, mas robots = noindex.
         expect(getOgTitle()).not.toBe("");
-        expect(getRobotsContent().toLowerCase()).toContain("noindex");
+        expectMetaContainsNoIndex();
       });
     });
   });
