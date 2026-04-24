@@ -42,8 +42,16 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "GET, OPTIONS",
 };
 
-/** Rotas estáticas conhecidas (espelha src/lib/useHashRoute.ts). */
-const STATIC_ROUTES = new Set<string>([
+/**
+ * Rotas estáticas conhecidas (espelha src/lib/useHashRoute.ts).
+ *
+ * IMPORTANTE: ao criar uma nova página pública (ex.: /servicos, /contato),
+ * adicione o path AQUI também — caso contrário a edge function devolverá
+ * 404 e o Search Console pode marcar a URL como "não encontrada" mesmo
+ * que ela exista na SPA. O teste `index.test.ts` valida cada rota desta
+ * lista individualmente para evitar regressões silenciosas.
+ */
+export const STATIC_ROUTES: ReadonlyArray<string> = [
   "/",
   "/sobre",
   "/portfolio",
@@ -52,7 +60,9 @@ const STATIC_ROUTES = new Set<string>([
   "/blog",
   "/blog/tags",
   "/404",
-]);
+];
+
+const STATIC_ROUTES_SET = new Set<string>(STATIC_ROUTES);
 
 /** Prefixos dinâmicos cuja existência precisa ser checada no banco. */
 const DYNAMIC_PREFIXES: Array<{ prefix: string; table: string; column: string }> = [
