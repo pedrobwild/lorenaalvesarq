@@ -6705,3 +6705,66 @@ textarea.admin-field__input {
   .blog-post__title { font-size: clamp(1.9rem, 9vw, 2.6rem); }
   .blog-post__content { font-size: 1.02rem; line-height: 1.7; }
 }
+
+/* ============================================================
+   ADMIN — Tipografia unificada
+   Objetivo: usar uma única família sans-serif sóbria em todo o
+   ambiente do painel (sidebar, topbar, conteúdo, formulários,
+   tabelas e tela de login). Neutraliza os usos de Manrope e
+   JetBrains Mono dentro do escopo .admin / .admin-* para
+   eliminar a sensação de "fontes diferentes" entre páginas.
+   ============================================================ */
+:root {
+  --font-admin: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.admin,
+.admin *,
+[class^="admin-"],
+[class*=" admin-"],
+[class^="admin-"] *,
+[class*=" admin-"] * {
+  font-family: var(--font-admin) !important;
+  font-feature-settings: "ss01", "cv11", "tnum";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0;
+}
+
+/* Neutraliza a classe utilitária .mono dentro do admin para que
+   eyebrows, labels, helper texts e mensagens de login deixem de
+   usar JetBrains Mono e fiquem coerentes com o restante. */
+.admin .mono,
+.admin-login .mono,
+[class^="admin-"] .mono,
+[class*=" admin-"] .mono {
+  font-family: var(--font-admin) !important;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+/* Pequenos ajustes de hierarquia para reforçar a leitura sóbria
+   sem mexer em layout, cores ou densidade. */
+.admin__topbar-eyebrow {
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.admin__topbar-title {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.admin__topbar-desc,
+.admin__nav-label,
+.admin-field__label {
+  font-weight: 500;
+}
+.admin-table { font-variant-numeric: tabular-nums; }
+
+/* Marca do painel: mantém o lockup minúsculo, mas em Inter */
+.admin__brand-name,
+.admin-login__brand .brand-lockup {
+  font-family: var(--font-admin) !important;
+  letter-spacing: -0.01em;
+}
