@@ -6715,25 +6715,26 @@ textarea.admin-field__input {
    eliminar a sensação de "fontes diferentes" entre páginas.
    ============================================================ */
 :root {
-  /* ------------------------------------------------------------
-     ADMIN — Tokens de tipografia
-     Centraliza família, escala, pesos, line-heights e tracking
-     usados em todo o painel. Para ajustar a tipografia do admin,
-     altere apenas estes tokens — todas as telas seguem.
-     ------------------------------------------------------------ */
+  /* ============================================================
+     ADMIN — Tokens de tipografia (escala canônica)
+     ------------------------------------------------------------
+     Princípio: sóbrio e funcional. Uma família, escala reduzida
+     e previsível, pesos contidos (regular → semibold).
+     Para reescalar todo o admin, ajuste apenas estes tokens.
+     ============================================================ */
 
   /* Família */
   --font-admin: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
-  /* Escala de tamanho (px) */
-  --admin-fs-2xs: 10px;   /* badges, micro-labels */
-  --admin-fs-xs:  11px;   /* eyebrow, helper, captions */
-  --admin-fs-sm:  12px;   /* meta, navegação compacta */
-  --admin-fs-base:13px;   /* corpo padrão de UI densa */
-  --admin-fs-md:  14px;   /* corpo de formulários, tabelas */
-  --admin-fs-lg:  16px;   /* subtítulos, valores em destaque */
-  --admin-fs-xl:  20px;   /* títulos de página */
-  --admin-fs-2xl: 24px;   /* títulos hero (login, dashboards) */
+  /* Escala bruta (px) */
+  --admin-fs-2xs: 10px;
+  --admin-fs-xs:  11px;
+  --admin-fs-sm:  12px;
+  --admin-fs-base:13px;
+  --admin-fs-md:  14px;
+  --admin-fs-lg:  16px;
+  --admin-fs-xl:  20px;
+  --admin-fs-2xl: 24px;
 
   /* Pesos */
   --admin-fw-regular:  400;
@@ -6752,11 +6753,68 @@ textarea.admin-field__input {
   --admin-tracking-wide:   0.04em;
   --admin-tracking-caps:   0.06em;
 
-  /* Estilo padrão para eyebrow/labels uppercase */
   --admin-eyebrow-transform: uppercase;
+
+  /* ------------------------------------------------------------
+     Papéis tipográficos — fonte de verdade para hierarquia.
+     ------------------------------------------------------------ */
+
+  /* H1 — título de página */
+  --admin-h1-size:    var(--admin-fs-xl);     /* 20px */
+  --admin-h1-weight:  var(--admin-fw-semibold);
+  --admin-h1-lh:      var(--admin-lh-tight);
+  --admin-h1-tracking:var(--admin-tracking-tight);
+
+  /* H2 — seções, cards de destaque */
+  --admin-h2-size:    var(--admin-fs-lg);     /* 16px */
+  --admin-h2-weight:  var(--admin-fw-semibold);
+  --admin-h2-lh:      var(--admin-lh-tight);
+  --admin-h2-tracking:var(--admin-tracking-tight);
+
+  /* H3 — subtítulos internos */
+  --admin-h3-size:    var(--admin-fs-md);     /* 14px */
+  --admin-h3-weight:  var(--admin-fw-semibold);
+  --admin-h3-lh:      var(--admin-lh-snug);
+  --admin-h3-tracking:var(--admin-tracking-normal);
+
+  /* Body */
+  --admin-body-size:    var(--admin-fs-md);   /* 14px */
+  --admin-body-weight:  var(--admin-fw-regular);
+  --admin-body-lh:      var(--admin-lh-snug);
+
+  /* Body small */
+  --admin-body-sm-size:   var(--admin-fs-base); /* 13px */
+  --admin-body-sm-weight: var(--admin-fw-regular);
+  --admin-body-sm-lh:     var(--admin-lh-snug);
+
+  /* Label / eyebrow */
+  --admin-label-size:     var(--admin-fs-xs);   /* 11px */
+  --admin-label-weight:   var(--admin-fw-medium);
+  --admin-label-lh:       var(--admin-lh-tight);
+  --admin-label-tracking: var(--admin-tracking-caps);
+
+  /* Botão */
+  --admin-btn-size:       var(--admin-fs-base); /* 13px */
+  --admin-btn-weight:     var(--admin-fw-medium);
+  --admin-btn-lh:         var(--admin-lh-tight);
+  --admin-btn-sm-size:    var(--admin-fs-sm);   /* 12px */
+
+  /* Tabela */
+  --admin-table-size:     var(--admin-fs-base); /* 13px */
+  --admin-table-weight:   var(--admin-fw-regular);
+  --admin-table-lh:       var(--admin-lh-snug);
+  --admin-th-size:        var(--admin-fs-2xs);  /* 10px */
+  --admin-th-weight:      var(--admin-fw-medium);
+  --admin-th-tracking:    var(--admin-tracking-caps);
+
+  /* Inputs */
+  --admin-input-size:     var(--admin-fs-md);   /* 14px */
+  --admin-input-weight:   var(--admin-fw-regular);
+  --admin-input-lh:       var(--admin-lh-snug);
 }
 
-/* Aplica família + features uniformes em todo o escopo do admin */
+/* Família + features uniformes em todo o escopo do admin.
+   Não força weight/size aqui — papéis abaixo cuidam disso. */
 .admin,
 .admin *,
 [class^="admin-"],
@@ -6767,11 +6825,18 @@ textarea.admin-field__input {
   font-feature-settings: "ss01", "cv11", "tnum";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Texto base do admin (corpo) */
+.admin,
+.admin-login {
+  font-size: var(--admin-body-size);
+  font-weight: var(--admin-body-weight);
+  line-height: var(--admin-body-lh);
   letter-spacing: var(--admin-tracking-normal);
 }
 
-/* Neutraliza .mono dentro do admin para evitar JetBrains Mono em
-   eyebrows, helper texts e mensagens, mantendo coerência. */
+/* Neutraliza .mono dentro do admin */
 .admin .mono,
 .admin-login .mono,
 [class^="admin-"] .mono,
@@ -6782,88 +6847,78 @@ textarea.admin-field__input {
 }
 
 /* ------------------------------------------------------------
-   Hierarquia — agora baseada nos tokens.
-   Ajuste qualquer token acima e estas regras seguem.
+   Utilitários reutilizáveis (use em novas telas).
    ------------------------------------------------------------ */
-.admin__topbar-eyebrow {
-  font-size: var(--admin-fs-xs);
-  font-weight: var(--admin-fw-medium);
-  letter-spacing: var(--admin-tracking-wide);
+.admin-h1, .admin h1 {
+  font-size: var(--admin-h1-size);
+  font-weight: var(--admin-h1-weight);
+  line-height: var(--admin-h1-lh);
+  letter-spacing: var(--admin-h1-tracking);
+  margin: 0;
+}
+.admin-h2, .admin h2 {
+  font-size: var(--admin-h2-size);
+  font-weight: var(--admin-h2-weight);
+  line-height: var(--admin-h2-lh);
+  letter-spacing: var(--admin-h2-tracking);
+  margin: 0;
+}
+.admin-h3, .admin h3 {
+  font-size: var(--admin-h3-size);
+  font-weight: var(--admin-h3-weight);
+  line-height: var(--admin-h3-lh);
+  letter-spacing: var(--admin-h3-tracking);
+  margin: 0;
+}
+.admin-text {
+  font-size: var(--admin-body-size);
+  font-weight: var(--admin-body-weight);
+  line-height: var(--admin-body-lh);
+}
+.admin-text--sm {
+  font-size: var(--admin-body-sm-size);
+  font-weight: var(--admin-body-sm-weight);
+  line-height: var(--admin-body-sm-lh);
+}
+.admin-label {
+  font-size: var(--admin-label-size);
+  font-weight: var(--admin-label-weight);
+  line-height: var(--admin-label-lh);
+  letter-spacing: var(--admin-label-tracking);
   text-transform: var(--admin-eyebrow-transform);
-  line-height: var(--admin-lh-tight);
-}
-.admin__topbar-title {
-  font-size: var(--admin-fs-xl);
-  font-weight: var(--admin-fw-semibold);
-  letter-spacing: var(--admin-tracking-tight);
-  line-height: var(--admin-lh-tight);
-}
-.admin__topbar-desc {
-  font-size: var(--admin-fs-md);
-  font-weight: var(--admin-fw-regular);
-  line-height: var(--admin-lh-snug);
-}
-.admin__nav-label {
-  font-size: var(--admin-fs-md);
-  font-weight: var(--admin-fw-medium);
-  line-height: var(--admin-lh-tight);
-}
-.admin-field__label {
-  font-size: var(--admin-fs-sm);
-  font-weight: var(--admin-fw-medium);
-  letter-spacing: var(--admin-tracking-normal);
-}
-.admin-table {
-  font-size: var(--admin-fs-md);
-  font-variant-numeric: tabular-nums;
-}
-.admin-table th {
-  font-size: var(--admin-fs-xs);
-  font-weight: var(--admin-fw-medium);
-  letter-spacing: var(--admin-tracking-caps);
-  text-transform: var(--admin-eyebrow-transform);
-}
-.admin-card__label {
-  font-size: var(--admin-fs-xs);
-  font-weight: var(--admin-fw-medium);
-  letter-spacing: var(--admin-tracking-caps);
-  text-transform: var(--admin-eyebrow-transform);
-}
-.admin-card__value {
-  font-size: var(--admin-fs-xl);
-  font-weight: var(--admin-fw-semibold);
-  letter-spacing: var(--admin-tracking-tight);
-  line-height: var(--admin-lh-tight);
-}
-.admin-section__title {
-  font-size: var(--admin-fs-lg);
-  font-weight: var(--admin-fw-semibold);
-  letter-spacing: var(--admin-tracking-tight);
-}
-.admin-login__title {
-  font-size: var(--admin-fs-2xl);
-  font-weight: var(--admin-fw-semibold);
-  letter-spacing: var(--admin-tracking-tight);
-  line-height: var(--admin-lh-tight);
-}
-.admin-login__lede {
-  font-size: var(--admin-fs-md);
-  line-height: var(--admin-lh-snug);
-}
-.admin-btn {
-  font-size: var(--admin-fs-md);
-  font-weight: var(--admin-fw-medium);
-}
-.admin-btn--sm {
-  font-size: var(--admin-fs-sm);
-}
-.admin-field__input {
-  font-size: var(--admin-fs-md);
-  font-weight: var(--admin-fw-regular);
-  line-height: var(--admin-lh-snug);
 }
 
-/* Marca do painel: mantém o lockup minúsculo, mas em Inter */
+/* ------------------------------------------------------------
+   Aplicação aos componentes existentes.
+   ------------------------------------------------------------ */
+
+/* Topbar */
+.admin__topbar-eyebrow {
+  font-size: var(--admin-label-size);
+  font-weight: var(--admin-label-weight);
+  letter-spacing: var(--admin-label-tracking);
+  text-transform: var(--admin-eyebrow-transform);
+  line-height: var(--admin-label-lh);
+}
+.admin__topbar-title {
+  font-size: var(--admin-h1-size);
+  font-weight: var(--admin-h1-weight);
+  letter-spacing: var(--admin-h1-tracking);
+  line-height: var(--admin-h1-lh);
+  margin: 0;
+}
+.admin__topbar-desc {
+  font-size: var(--admin-body-sm-size);
+  font-weight: var(--admin-body-sm-weight);
+  line-height: var(--admin-body-sm-lh);
+}
+
+/* Sidebar */
+.admin__nav-label {
+  font-size: var(--admin-fs-base);
+  font-weight: var(--admin-fw-medium);
+  line-height: var(--admin-lh-tight);
+}
 .admin__brand-name,
 .admin-login__brand .brand-lockup {
   font-family: var(--font-admin) !important;
@@ -6874,4 +6929,93 @@ textarea.admin-field__input {
   font-weight: var(--admin-fw-medium);
   letter-spacing: var(--admin-tracking-caps);
   text-transform: var(--admin-eyebrow-transform);
+}
+.admin__user {
+  font-size: var(--admin-fs-xs);
+  font-weight: var(--admin-fw-regular);
+}
+
+/* Cards / sections */
+.admin-card__label {
+  font-size: var(--admin-label-size);
+  font-weight: var(--admin-label-weight);
+  letter-spacing: var(--admin-label-tracking);
+  text-transform: var(--admin-eyebrow-transform);
+}
+.admin-card__value {
+  font-size: var(--admin-fs-2xl);
+  font-weight: var(--admin-fw-semibold);
+  letter-spacing: var(--admin-tracking-tight);
+  line-height: var(--admin-lh-tight);
+}
+.admin-section__title {
+  font-size: var(--admin-h2-size);
+  font-weight: var(--admin-h2-weight);
+  letter-spacing: var(--admin-h2-tracking);
+  line-height: var(--admin-h2-lh);
+  margin: 0;
+}
+
+/* Formulários */
+.admin-field__label {
+  font-size: var(--admin-label-size);
+  font-weight: var(--admin-label-weight);
+  letter-spacing: var(--admin-label-tracking);
+  text-transform: var(--admin-eyebrow-transform);
+  line-height: var(--admin-label-lh);
+}
+.admin-field__input,
+textarea.admin-field__input {
+  font-size: var(--admin-input-size);
+  font-weight: var(--admin-input-weight);
+  line-height: var(--admin-input-lh);
+}
+
+/* Botões */
+.admin-btn {
+  font-size: var(--admin-btn-size);
+  font-weight: var(--admin-btn-weight);
+  line-height: var(--admin-btn-lh);
+  letter-spacing: var(--admin-tracking-normal);
+}
+.admin-btn--sm {
+  font-size: var(--admin-btn-sm-size);
+}
+
+/* Tabelas */
+.admin-table {
+  font-size: var(--admin-table-size);
+  font-weight: var(--admin-table-weight);
+  line-height: var(--admin-table-lh);
+  font-variant-numeric: tabular-nums;
+}
+.admin-table th {
+  font-size: var(--admin-th-size);
+  font-weight: var(--admin-th-weight);
+  letter-spacing: var(--admin-th-tracking);
+  text-transform: var(--admin-eyebrow-transform);
+}
+.admin-table__sub {
+  font-size: var(--admin-fs-xs);
+  font-weight: var(--admin-fw-regular);
+}
+
+/* Login */
+.admin-login__title {
+  font-size: var(--admin-fs-2xl);
+  font-weight: var(--admin-fw-semibold);
+  letter-spacing: var(--admin-tracking-tight);
+  line-height: var(--admin-lh-tight);
+  margin: 0;
+}
+.admin-login__lede {
+  font-size: var(--admin-body-size);
+  font-weight: var(--admin-body-weight);
+  line-height: var(--admin-body-lh);
+}
+.admin-login__error,
+.admin-login__info,
+.admin-login__switch {
+  font-size: var(--admin-body-sm-size);
+  line-height: var(--admin-body-sm-lh);
 }
