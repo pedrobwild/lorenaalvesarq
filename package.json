@@ -9,7 +9,8 @@
     "build": "tsc -b && vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
-    "routes:check": "node scripts/check-routes-parity.mjs"
+    "routes:check": "node scripts/check-routes-parity.mjs",
+    "test:setup-guard": "vitest run src/test/__tests__/setupNoTsExpectError.test.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
