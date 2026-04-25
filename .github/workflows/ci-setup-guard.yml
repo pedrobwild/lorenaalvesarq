@@ -42,8 +42,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify Vitest is available
+        # Garante que o binário do Vitest existe antes de rodar o
+        # teste de guarda. Se `npm ci` não instalou (ex.: vitest
+        # ausente do package.json ou falha silenciosa), tenta uma
+        # instalação direcionada como dev dependency. Se ainda
+        # assim não estiver disponível, falha o job com mensagem
+        # clara em vez de deixar o `npx` baixar uma versão
+        # arbitrária da rede em tempo de execução.
+        run: |
+          if npx --no-install vitest --version >/dev/null 2>&1; then
+            echo "vitest disponível: $(npx --no-install vitest --version)"
+          else
+            echo "vitest não encontrado após npm ci — instalando como devDependency"
+            npm install --no-save --save-dev vitest
+          fi
+          npx --no-install vitest --version
+
       - name: Run setup.ts guard test
         # Roda APENAS o teste de guarda. Se a regex detectar
         # @ts-expect-error / @ts-ignore em src/test/setup.ts, o
         # Vitest sai com status != 0 e o workflow falha.
-        run: npx vitest run src/test/__tests__/setupNoTsExpectError.test.ts
+        # `--no-install` impede que o npx baixe vitest da rede:
+        # se chegou aqui, a etapa anterior garantiu o binário.
+        run: npx --no-install vitest run src/test/__tests__/setupNoTsExpectError.test.ts
