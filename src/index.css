@@ -6715,9 +6715,48 @@ textarea.admin-field__input {
    eliminar a sensação de "fontes diferentes" entre páginas.
    ============================================================ */
 :root {
+  /* ------------------------------------------------------------
+     ADMIN — Tokens de tipografia
+     Centraliza família, escala, pesos, line-heights e tracking
+     usados em todo o painel. Para ajustar a tipografia do admin,
+     altere apenas estes tokens — todas as telas seguem.
+     ------------------------------------------------------------ */
+
+  /* Família */
   --font-admin: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Escala de tamanho (px) */
+  --admin-fs-2xs: 10px;   /* badges, micro-labels */
+  --admin-fs-xs:  11px;   /* eyebrow, helper, captions */
+  --admin-fs-sm:  12px;   /* meta, navegação compacta */
+  --admin-fs-base:13px;   /* corpo padrão de UI densa */
+  --admin-fs-md:  14px;   /* corpo de formulários, tabelas */
+  --admin-fs-lg:  16px;   /* subtítulos, valores em destaque */
+  --admin-fs-xl:  20px;   /* títulos de página */
+  --admin-fs-2xl: 24px;   /* títulos hero (login, dashboards) */
+
+  /* Pesos */
+  --admin-fw-regular:  400;
+  --admin-fw-medium:   500;
+  --admin-fw-semibold: 600;
+  --admin-fw-bold:     700;
+
+  /* Line-heights */
+  --admin-lh-tight:  1.2;
+  --admin-lh-snug:   1.35;
+  --admin-lh-normal: 1.5;
+
+  /* Tracking */
+  --admin-tracking-tight:  -0.01em;
+  --admin-tracking-normal: 0;
+  --admin-tracking-wide:   0.04em;
+  --admin-tracking-caps:   0.06em;
+
+  /* Estilo padrão para eyebrow/labels uppercase */
+  --admin-eyebrow-transform: uppercase;
 }
 
+/* Aplica família + features uniformes em todo o escopo do admin */
 .admin,
 .admin *,
 [class^="admin-"],
@@ -6728,12 +6767,11 @@ textarea.admin-field__input {
   font-feature-settings: "ss01", "cv11", "tnum";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: 0;
+  letter-spacing: var(--admin-tracking-normal);
 }
 
-/* Neutraliza a classe utilitária .mono dentro do admin para que
-   eyebrows, labels, helper texts e mensagens de login deixem de
-   usar JetBrains Mono e fiquem coerentes com o restante. */
+/* Neutraliza .mono dentro do admin para evitar JetBrains Mono em
+   eyebrows, helper texts e mensagens, mantendo coerência. */
 .admin .mono,
 .admin-login .mono,
 [class^="admin-"] .mono,
@@ -6743,28 +6781,97 @@ textarea.admin-field__input {
   text-transform: none;
 }
 
-/* Pequenos ajustes de hierarquia para reforçar a leitura sóbria
-   sem mexer em layout, cores ou densidade. */
+/* ------------------------------------------------------------
+   Hierarquia — agora baseada nos tokens.
+   Ajuste qualquer token acima e estas regras seguem.
+   ------------------------------------------------------------ */
 .admin__topbar-eyebrow {
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  font-size: 11px;
+  font-size: var(--admin-fs-xs);
+  font-weight: var(--admin-fw-medium);
+  letter-spacing: var(--admin-tracking-wide);
+  text-transform: var(--admin-eyebrow-transform);
+  line-height: var(--admin-lh-tight);
 }
 .admin__topbar-title {
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: var(--admin-fs-xl);
+  font-weight: var(--admin-fw-semibold);
+  letter-spacing: var(--admin-tracking-tight);
+  line-height: var(--admin-lh-tight);
 }
-.admin__topbar-desc,
-.admin__nav-label,
+.admin__topbar-desc {
+  font-size: var(--admin-fs-md);
+  font-weight: var(--admin-fw-regular);
+  line-height: var(--admin-lh-snug);
+}
+.admin__nav-label {
+  font-size: var(--admin-fs-md);
+  font-weight: var(--admin-fw-medium);
+  line-height: var(--admin-lh-tight);
+}
 .admin-field__label {
-  font-weight: 500;
+  font-size: var(--admin-fs-sm);
+  font-weight: var(--admin-fw-medium);
+  letter-spacing: var(--admin-tracking-normal);
 }
-.admin-table { font-variant-numeric: tabular-nums; }
+.admin-table {
+  font-size: var(--admin-fs-md);
+  font-variant-numeric: tabular-nums;
+}
+.admin-table th {
+  font-size: var(--admin-fs-xs);
+  font-weight: var(--admin-fw-medium);
+  letter-spacing: var(--admin-tracking-caps);
+  text-transform: var(--admin-eyebrow-transform);
+}
+.admin-card__label {
+  font-size: var(--admin-fs-xs);
+  font-weight: var(--admin-fw-medium);
+  letter-spacing: var(--admin-tracking-caps);
+  text-transform: var(--admin-eyebrow-transform);
+}
+.admin-card__value {
+  font-size: var(--admin-fs-xl);
+  font-weight: var(--admin-fw-semibold);
+  letter-spacing: var(--admin-tracking-tight);
+  line-height: var(--admin-lh-tight);
+}
+.admin-section__title {
+  font-size: var(--admin-fs-lg);
+  font-weight: var(--admin-fw-semibold);
+  letter-spacing: var(--admin-tracking-tight);
+}
+.admin-login__title {
+  font-size: var(--admin-fs-2xl);
+  font-weight: var(--admin-fw-semibold);
+  letter-spacing: var(--admin-tracking-tight);
+  line-height: var(--admin-lh-tight);
+}
+.admin-login__lede {
+  font-size: var(--admin-fs-md);
+  line-height: var(--admin-lh-snug);
+}
+.admin-btn {
+  font-size: var(--admin-fs-md);
+  font-weight: var(--admin-fw-medium);
+}
+.admin-btn--sm {
+  font-size: var(--admin-fs-sm);
+}
+.admin-field__input {
+  font-size: var(--admin-fs-md);
+  font-weight: var(--admin-fw-regular);
+  line-height: var(--admin-lh-snug);
+}
 
 /* Marca do painel: mantém o lockup minúsculo, mas em Inter */
 .admin__brand-name,
 .admin-login__brand .brand-lockup {
   font-family: var(--font-admin) !important;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--admin-tracking-tight);
+}
+.admin__brand-tag {
+  font-size: var(--admin-fs-2xs);
+  font-weight: var(--admin-fw-medium);
+  letter-spacing: var(--admin-tracking-caps);
+  text-transform: var(--admin-eyebrow-transform);
 }
