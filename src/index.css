@@ -4966,6 +4966,22 @@ textarea.admin-field__input {
   filter: saturate(1) contrast(1.04);
 }
 
+/* Card de projeto na home (carrossel) — wrapper precisa preencher o
+   contêiner com aspect-ratio 4/5 para que o object-fit:cover funcione. */
+.project-card__media [data-smart-img-wrap] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.project-card__media [data-smart-img-wrap] img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* Em touch devices, congelar transforms */
 @media (hover: none) {
   .pf-card__media [data-smart-img-wrap] img,
