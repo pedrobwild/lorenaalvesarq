@@ -25,7 +25,8 @@ type ActiveKey =
   | "seo"
   | "seo-404"
   | "settings"
-  | "faq";
+  | "faq"
+  | "typography";
 
 type Props = {
   children: ReactNode;
