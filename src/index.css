@@ -6811,6 +6811,29 @@ textarea.admin-field__input {
   --admin-input-size:     var(--admin-fs-md);   /* 14px */
   --admin-input-weight:   var(--admin-fw-regular);
   --admin-input-lh:       var(--admin-lh-snug);
+
+  /* Placeholder (inputs/selects/textarea) */
+  --admin-placeholder-size:    var(--admin-input-size);
+  --admin-placeholder-weight:  var(--admin-fw-regular);
+  --admin-placeholder-opacity: 0.5;
+
+  /* Helper / hint text abaixo de campos */
+  --admin-help-size:    var(--admin-fs-xs);   /* 11px */
+  --admin-help-weight:  var(--admin-fw-regular);
+  --admin-help-lh:      var(--admin-lh-snug);
+
+  /* Select (nativo ou custom) — espelha input por padrão */
+  --admin-select-size:    var(--admin-input-size);
+  --admin-select-weight:  var(--admin-input-weight);
+  --admin-select-lh:      var(--admin-input-lh);
+
+  /* Empty state */
+  --admin-empty-title-size:    var(--admin-fs-md);   /* 14px */
+  --admin-empty-title-weight:  var(--admin-fw-semibold);
+  --admin-empty-title-lh:      var(--admin-lh-tight);
+  --admin-empty-desc-size:     var(--admin-body-sm-size); /* 13px */
+  --admin-empty-desc-weight:   var(--admin-fw-regular);
+  --admin-empty-desc-lh:       var(--admin-lh-snug);
 }
 
 /* Família + features uniformes em todo o escopo do admin.
