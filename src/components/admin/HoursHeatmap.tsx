@@ -38,7 +38,7 @@ export default function HoursHeatmap({ events }: { events: HeatmapEvent[] }) {
 
   if (max === 0) {
     return (
-      <p style={{ fontFamily: "JetBrains Mono, monospace", fontSize: 11, color: "#9a9a93" }}>
+      <p style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "var(--admin-fs-xs)", color: "#9a9a93" }}>
         sem dados de visitas no período
       </p>
     );

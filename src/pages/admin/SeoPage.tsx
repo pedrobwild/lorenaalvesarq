@@ -387,7 +387,7 @@ function VerifyTab({
             onChange={(e) => patch("google_site_verification", e.target.value)}
             placeholder="abc123XYZ…"
           />
-          <p className="mono" style={{ fontSize: 11, opacity: 0.6, marginTop: 4 }}>
+          <p className="mono" style={{ fontSize: "var(--admin-fs-xs)", opacity: 0.6, marginTop: 4 }}>
             Em search.google.com/search-console, escolha "HTML tag" e cole apenas o content.
           </p>
         </Field>
@@ -569,7 +569,7 @@ function LocalTab({
             onChange={(e) => patch("business_opening_hours", e.target.value)}
             placeholder="Mo-Fr 09:00-18:00"
           />
-          <p className="mono" style={{ fontSize: 11, opacity: 0.6, marginTop: 4 }}>
+          <p className="mono" style={{ fontSize: "var(--admin-fs-xs)", opacity: 0.6, marginTop: 4 }}>
             Formato schema.org: Mo, Tu, We, Th, Fr, Sa, Su — intervalos 24h.
           </p>
         </Field>
@@ -788,7 +788,7 @@ function AuditTab({
             <h2 className="admin-section__title">Problemas e sugestões</h2>
             {Object.entries(grouped).map(([area, items]) => (
               <div key={area} style={{ marginBottom: 16 }}>
-                <h3 className="mono" style={{ fontSize: 12, opacity: 0.7, marginBottom: 6 }}>
+                <h3 className="mono" style={{ fontSize: "var(--admin-fs-sm)", opacity: 0.7, marginBottom: 6 }}>
                   {area}
                 </h3>
                 <ul className="seo-issues">
@@ -934,7 +934,7 @@ function Hint({ count, max }: { count: number; max: number }) {
     <span
       className="mono"
       style={{
-        fontSize: 11,
+        fontSize: "var(--admin-fs-xs)",
         opacity: 0.6,
         marginTop: 4,
         color: over ? "tomato" : undefined,

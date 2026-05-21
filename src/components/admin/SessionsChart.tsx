@@ -59,7 +59,7 @@ export default function SessionsChart({
             <XAxis
               dataKey="label"
               stroke="#0006"
-              tick={{ fontSize: 11, fontFamily: "var(--font-mono)" }}
+              tick={{ fontSize: "var(--admin-fs-xs)", fontFamily: "var(--font-mono)" }}
               tickLine={false}
               axisLine={false}
             />
@@ -67,7 +67,7 @@ export default function SessionsChart({
           {showAxes && (
             <YAxis
               stroke="#0006"
-              tick={{ fontSize: 11, fontFamily: "var(--font-mono)" }}
+              tick={{ fontSize: "var(--admin-fs-xs)", fontFamily: "var(--font-mono)" }}
               tickLine={false}
               axisLine={false}
               width={28}
@@ -80,7 +80,7 @@ export default function SessionsChart({
                 background: "hsl(var(--background, 0 0% 100%))",
                 border: "1px solid #0001",
                 fontFamily: "var(--font-mono)",
-                fontSize: 12,
+                fontSize: "var(--admin-fs-sm)",
               }}
             />
           )}
@@ -114,7 +114,7 @@ export default function SessionsChart({
           <XAxis
             dataKey="label"
             stroke="#0006"
-            tick={{ fontSize: 11, fontFamily: "var(--font-mono)" }}
+            tick={{ fontSize: "var(--admin-fs-xs)", fontFamily: "var(--font-mono)" }}
             tickLine={false}
             axisLine={false}
           />
@@ -122,7 +122,7 @@ export default function SessionsChart({
         {showAxes && (
           <YAxis
             stroke="#0006"
-            tick={{ fontSize: 11, fontFamily: "var(--font-mono)" }}
+            tick={{ fontSize: "var(--admin-fs-xs)", fontFamily: "var(--font-mono)" }}
             tickLine={false}
             axisLine={false}
             width={28}
@@ -135,7 +135,7 @@ export default function SessionsChart({
               background: "white",
               border: "1px solid #0001",
               fontFamily: "var(--font-mono)",
-              fontSize: 12,
+              fontSize: "var(--admin-fs-sm)",
             }}
             labelStyle={{ color: "#0009" }}
           />
