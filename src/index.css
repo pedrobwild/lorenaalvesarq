@@ -7050,7 +7050,7 @@ textarea.admin-field__input {
   text-transform: var(--admin-eyebrow-transform);
 }
 .admin-card__value {
-  font-size: var(--admin-fs-2xl);
+  font-size: var(--admin-fs-3xl);
   font-weight: var(--admin-fw-semibold);
   letter-spacing: var(--admin-tracking-tight);
   line-height: var(--admin-lh-tight);
