@@ -3769,9 +3769,7 @@ textarea.admin-field__input {
   background: #fff;
   color: #111;
   border-radius: 8px;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 500;
+  /* Tipografia definida pelo role-rule (--admin-btn-*). */
   cursor: pointer;
   text-decoration: none;
   transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
