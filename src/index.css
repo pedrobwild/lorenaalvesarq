@@ -3943,7 +3943,7 @@ textarea.admin-field__input {
   gap: 2px;
 }
 .admin__user {
-  font-size: 11px;
+  /* font-size definido pelo role-rule (--admin-fs-xs). */
   opacity: 0.55;
   padding: 4px 10px;
   white-space: nowrap;
