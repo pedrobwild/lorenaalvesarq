@@ -4005,20 +4005,19 @@ textarea.admin-field__input {
   min-width: 0;
 }
 .admin__topbar-eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  /* Tipografia definida pelo role-rule (--admin-label-*). */
+  letter-spacing: var(--admin-tracking-caps);
   text-transform: uppercase;
-  opacity: 0.55;
+  opacity: 0.72;
 }
 .admin__topbar-title {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  /* Tipografia definida pelo role-rule (--admin-h1-*). */
+  letter-spacing: var(--admin-tracking-tight);
   margin: 0;
 }
 .admin__topbar-desc {
-  font-size: 13px;
-  opacity: 0.65;
+  /* Tipografia definida pelo role-rule (--admin-body-sm-*). */
+  opacity: 0.72;
   margin: 4px 0 0;
   max-width: 60ch;
 }
