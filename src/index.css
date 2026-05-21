@@ -3848,7 +3848,7 @@ textarea.admin-field__input {
   gap: 10px;
   text-decoration: none;
   color: inherit;
-  font-size: 16px;
+  font-size: var(--admin-fs-lg);
   min-width: 0;
 }
 .admin__brand-mark {
