@@ -12,6 +12,7 @@ import {
   Menu,
   HelpCircle,
   Newspaper,
+  Type,
 } from "lucide-react";
 import { useAuth } from "@/lib/useAuth";
 import { navigate, routes } from "@/lib/useHashRoute";
