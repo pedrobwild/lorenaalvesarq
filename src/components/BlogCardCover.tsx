@@ -47,7 +47,7 @@ export default function BlogCardCover({
             height={720}
             loading={priority ? "eager" : "lazy"}
             decoding={priority ? "sync" : "async"}
-            fetchPriority={priority ? "high" : "low"}
+            {...({ fetchpriority: priority ? "high" : "low" } as { fetchpriority: string })}
           />
         </picture>
       </div>
@@ -71,7 +71,7 @@ export default function BlogCardCover({
         height={720}
         loading={priority ? "eager" : "lazy"}
         decoding={priority ? "sync" : "async"}
-        fetchPriority={priority ? "high" : "low"}
+          {...({ fetchpriority: priority ? "high" : "low" } as { fetchpriority: string })}
         onError={(e) => {
           const el = e.currentTarget;
           if (coverUrl && el.src !== coverUrl) el.src = coverUrl;

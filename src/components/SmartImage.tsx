@@ -137,7 +137,7 @@ export default function SmartImage({
           aria-hidden={decorative || undefined}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
-          fetchPriority={priority ? "high" : "auto"}
+          {...({ fetchpriority: priority ? "high" : "auto" } as { fetchpriority: string })}
           width={rest.width ?? 1920}
           height={rest.height ?? 1280}
           onLoad={() => setLoaded(true)}
