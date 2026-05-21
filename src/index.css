@@ -3730,7 +3730,8 @@ html { scroll-behavior: smooth; }
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.6;
+  /* opacity 0.72 sobre #fafaf9 ≈ #525252 → contraste ~7.4:1 (WCAG AA/AAA). */
+  opacity: 0.72;
 }
 .admin-field__input {
   width: 100%;
@@ -3789,7 +3790,8 @@ textarea.admin-field__input {
   background: #000;
 }
 .admin-btn--ghost {
-  border-color: #d4d4d4;
+  /* Borda mais perceptível (≥3:1 vs branco) sem perder leveza. */
+  border-color: #b4b4b4;
   color: #555;
 }
 .admin-btn:disabled {
@@ -4114,15 +4116,17 @@ textarea.admin-field__input {
   vertical-align: middle;
 }
 .admin-table th {
-  font-size: 10px;
+  /* 11px (era 10px) para legibilidade mínima em caps tracking. */
+  font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  opacity: 0.55;
+  /* 0.72 sobre #fafaf9 → ~#525252 (~7.4:1) — passa AA para small text. */
+  opacity: 0.72;
   font-weight: 500;
   background: #fafaf9;
 }
 .admin-table tbody tr:last-child td { border-bottom: none; }
-.admin-table__sub { font-size: 11px; opacity: 0.55; margin-top: 2px; }
+.admin-table__sub { font-size: 11px; opacity: 0.7; margin-top: 2px; }
 .admin-thumb {
   width: 56px;
   height: 40px;
@@ -6803,7 +6807,7 @@ textarea.admin-field__input {
   --admin-table-size:     var(--admin-fs-base); /* 13px */
   --admin-table-weight:   var(--admin-fw-regular);
   --admin-table-lh:       var(--admin-lh-snug);
-  --admin-th-size:        var(--admin-fs-2xs);  /* 10px */
+  --admin-th-size:        var(--admin-fs-xs);   /* 11px (≥ mínimo legível) */
   --admin-th-weight:      var(--admin-fw-medium);
   --admin-th-tracking:    var(--admin-tracking-caps);
 
@@ -6815,7 +6819,7 @@ textarea.admin-field__input {
   /* Placeholder (inputs/selects/textarea) */
   --admin-placeholder-size:    var(--admin-input-size);
   --admin-placeholder-weight:  var(--admin-fw-regular);
-  --admin-placeholder-opacity: 0.5;
+  --admin-placeholder-opacity: 0.62; /* ~5:1 sobre #fff — passa AA */
 
   /* Helper / hint text abaixo de campos */
   --admin-help-size:    var(--admin-fs-xs);   /* 11px */
