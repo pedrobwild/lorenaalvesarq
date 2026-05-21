@@ -6994,6 +6994,56 @@ textarea.admin-field__input {
   line-height: var(--admin-input-lh);
 }
 
+/* Placeholders consistentes em inputs/textarea/select do admin */
+.admin-field__input::placeholder,
+.admin-select::placeholder,
+.admin .admin-field__input::placeholder,
+.admin input::placeholder,
+.admin textarea::placeholder {
+  font-size: var(--admin-placeholder-size);
+  font-weight: var(--admin-placeholder-weight);
+  opacity: var(--admin-placeholder-opacity);
+}
+
+/* Select — utilitário e aplicação ao <select> dentro do admin */
+.admin-select,
+.admin select {
+  font-family: var(--font-admin) !important;
+  font-size: var(--admin-select-size);
+  font-weight: var(--admin-select-weight);
+  line-height: var(--admin-select-lh);
+  letter-spacing: var(--admin-tracking-normal);
+}
+
+/* Texto auxiliar / hint abaixo do campo */
+.admin-field__help,
+.admin-help {
+  font-size: var(--admin-help-size);
+  font-weight: var(--admin-help-weight);
+  line-height: var(--admin-help-lh);
+  opacity: 0.7;
+}
+
+/* Empty state */
+.admin-empty {
+  text-align: center;
+  padding: 32px 16px;
+}
+.admin-empty__title {
+  font-size: var(--admin-empty-title-size);
+  font-weight: var(--admin-empty-title-weight);
+  line-height: var(--admin-empty-title-lh);
+  letter-spacing: var(--admin-tracking-tight);
+  margin: 0 0 4px;
+}
+.admin-empty__desc {
+  font-size: var(--admin-empty-desc-size);
+  font-weight: var(--admin-empty-desc-weight);
+  line-height: var(--admin-empty-desc-lh);
+  opacity: 0.7;
+  margin: 0;
+}
+
 /* Botões */
 .admin-btn {
   font-size: var(--admin-btn-size);
