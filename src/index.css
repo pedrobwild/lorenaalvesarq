@@ -4101,7 +4101,7 @@ textarea.admin-field__input {
   border-radius: 12px;
   overflow: hidden;
 }
-.admin-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.admin-table { width: 100%; border-collapse: collapse; /* font-size definido pelo role-rule (--admin-table-size). */ }
 .admin-table th, .admin-table td {
   text-align: left;
   padding: 12px 14px;
