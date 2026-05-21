@@ -6819,7 +6819,7 @@ textarea.admin-field__input {
   /* Placeholder (inputs/selects/textarea) */
   --admin-placeholder-size:    var(--admin-input-size);
   --admin-placeholder-weight:  var(--admin-fw-regular);
-  --admin-placeholder-opacity: 0.5;
+  --admin-placeholder-opacity: 0.62; /* ~5:1 sobre #fff — passa AA */
 
   /* Helper / hint text abaixo de campos */
   --admin-help-size:    var(--admin-fs-xs);   /* 11px */
