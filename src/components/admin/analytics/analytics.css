@@ -20,6 +20,7 @@
   --aa-gap: 12px;
 
   /* density */
+  --aa-text-2xs: 10px;
   --aa-text-xs: 11px;
   --aa-text-sm: 12px;
   --aa-text: 13px;
@@ -27,6 +28,12 @@
   --aa-text-lg: 16px;
   --aa-text-xl: 22px;
   --aa-text-2xl: 32px;
+
+  /* weight scale */
+  --aa-fw-regular: 400;
+  --aa-fw-medium: 500;
+  --aa-fw-semibold: 600;
+  --aa-fw-bold: 700;
 
   font-family: var(--aa-font-ui);
   font-size: var(--aa-text);
