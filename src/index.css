@@ -4064,14 +4064,13 @@ textarea.admin-field__input {
   gap: 6px;
 }
 .admin-card__label {
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  /* Tipografia definida pelo role-rule (--admin-label-*). */
+  letter-spacing: var(--admin-tracking-caps);
   text-transform: uppercase;
-  opacity: 0.55;
+  opacity: 0.72;
 }
 .admin-card__value {
-  font-size: 28px;
-  font-weight: 600;
+  /* Tipografia definida pelo role-rule (--admin-fs-3xl + semibold). */
   letter-spacing: -0.02em;
 }
 
@@ -4090,10 +4089,9 @@ textarea.admin-field__input {
   gap: 12px;
 }
 .admin-section__title {
-  font-size: 15px;
-  font-weight: 600;
+  /* Tipografia definida pelo role-rule (--admin-h2-*). */
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--admin-tracking-tight);
 }
 
 /* ----- Tables ----- */
