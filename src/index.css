@@ -3730,7 +3730,8 @@ html { scroll-behavior: smooth; }
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.6;
+  /* opacity 0.72 sobre #fafaf9 ≈ #525252 → contraste ~7.4:1 (WCAG AA/AAA). */
+  opacity: 0.72;
 }
 .admin-field__input {
   width: 100%;
