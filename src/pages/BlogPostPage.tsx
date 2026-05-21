@@ -378,8 +378,8 @@ export default function BlogPostPage({ slug }: Props) {
                     width={1920}
                     height={1080}
                     loading="eager"
-                    fetchPriority="high"
                     decoding="sync"
+                    {...({ fetchpriority: "high" } as { fetchpriority: string })}
                   />
                 </picture>
               </figure>
@@ -400,8 +400,8 @@ export default function BlogPostPage({ slug }: Props) {
                 width={1920}
                 height={1080}
                 loading="eager"
-                fetchPriority="high"
                 decoding="sync"
+                {...({ fetchpriority: "high" } as { fetchpriority: string })}
               />
             </figure>
           );
