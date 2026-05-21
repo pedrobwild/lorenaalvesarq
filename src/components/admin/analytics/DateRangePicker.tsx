@@ -145,11 +145,11 @@ export default function DateRangePicker({ value, onChange }: Props) {
     >
       <Popover.Trigger asChild>
         <button type="button" className="admin-analytics__btn" aria-label="Selecionar período">
-          <span className="aa-mono" style={{ fontSize: "11px", color: "var(--aa-fg-faint)" }}>
+          <span className="aa-mono" style={{ fontSize: "var(--aa-text-xs)", color: "var(--aa-fg-faint)" }}>
             período
           </span>
           <span>{formatRange(value)}</span>
-          <span className="aa-mono aa-faint" style={{ fontSize: "11px" }}>
+          <span className="aa-mono aa-faint" style={{ fontSize: "var(--aa-text-xs)" }}>
             · {days}d
           </span>
         </button>

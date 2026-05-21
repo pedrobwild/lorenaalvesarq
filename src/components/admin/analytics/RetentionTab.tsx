@@ -167,7 +167,7 @@ export default function RetentionTab({ range, segments }: Props) {
           <div
             className="aa-faint aa-mono"
             style={{
-              fontSize: 11,
+              fontSize: "var(--aa-text-xs)",
               padding: "8px 12px",
               border: "1px dashed var(--aa-border)",
               borderRadius: 6,
@@ -183,28 +183,28 @@ export default function RetentionTab({ range, segments }: Props) {
       <div className="aa-col-3 aa-card">
         <div className="aa-kpi__label">coortes</div>
         <div className="aa-kpi__value">{kpis.cohortCount}</div>
-        <div className="aa-kpi__delta aa-faint" style={{ fontSize: 11 }}>
+        <div className="aa-kpi__delta aa-faint" style={{ fontSize: "var(--aa-text-xs)" }}>
           janela: {weeks} semanas
         </div>
       </div>
       <div className="aa-col-3 aa-card">
         <div className="aa-kpi__label">novos visitantes</div>
         <div className="aa-kpi__value">{fmtNum(kpis.totalNew)}</div>
-        <div className="aa-kpi__delta aa-faint" style={{ fontSize: 11 }}>
+        <div className="aa-kpi__delta aa-faint" style={{ fontSize: "var(--aa-text-xs)" }}>
           soma de W0 · todas as coortes
         </div>
       </div>
       <div className="aa-col-3 aa-card">
         <div className="aa-kpi__label">retorno W1</div>
         <div className="aa-kpi__value">{fmtPct(kpis.avgW1)}</div>
-        <div className="aa-kpi__delta aa-faint" style={{ fontSize: 11 }}>
+        <div className="aa-kpi__delta aa-faint" style={{ fontSize: "var(--aa-text-xs)" }}>
           média entre coortes
         </div>
       </div>
       <div className="aa-col-3 aa-card">
         <div className="aa-kpi__label">retorno W4</div>
         <div className="aa-kpi__value">{fmtPct(kpis.avgW4)}</div>
-        <div className="aa-kpi__delta aa-faint" style={{ fontSize: 11 }}>
+        <div className="aa-kpi__delta aa-faint" style={{ fontSize: "var(--aa-text-xs)" }}>
           média entre coortes
         </div>
       </div>
@@ -255,7 +255,7 @@ function CohortMatrix({
               <th
                 key={o}
                 className="num aa-mono"
-                style={{ fontSize: 10, color: "var(--aa-fg-faint)", padding: "4px 6px" }}
+                style={{ fontSize: "var(--aa-text-2xs)", color: "var(--aa-fg-faint)", padding: "4px 6px" }}
               >
                 W{o}
               </th>
@@ -268,7 +268,7 @@ function CohortMatrix({
             const w0 = row.get(0) ?? 0;
             return (
               <tr key={c}>
-                <td className="aa-mono" style={{ fontSize: 11, paddingRight: 12 }}>
+                <td className="aa-mono" style={{ fontSize: "var(--aa-text-xs)", paddingRight: 12 }}>
                   {fmtCohortLabel(c)}
                 </td>
                 <td className="num aa-mono" style={{ paddingRight: 12 }}>
@@ -304,7 +304,7 @@ function CohortMatrix({
                         height: 32,
                         textAlign: "center",
                         verticalAlign: "middle",
-                        fontSize: 11,
+                        fontSize: "var(--aa-text-xs)",
                         color: intensity > 0.55 ? "var(--aa-bg)" : "var(--aa-fg)",
                         background: `color-mix(in srgb, var(--aa-accent) ${10 + intensity * 75}%, transparent)`,
                         borderRadius: 3,

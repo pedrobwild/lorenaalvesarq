@@ -131,7 +131,7 @@ export default function AnalyticsShell({ state, children }: Props) {
                         {v.name}
                         <span
                           className="aa-mono aa-faint"
-                          style={{ fontSize: 10, marginLeft: 6 }}
+                          style={{ fontSize: "var(--aa-text-2xs)", marginLeft: 6 }}
                         >
                           {v.tab}
                         </span>
@@ -150,7 +150,7 @@ export default function AnalyticsShell({ state, children }: Props) {
                   {state.savedViews.length === 0 && (
                     <div
                       className="aa-faint aa-mono"
-                      style={{ padding: "6px 10px", fontSize: 11 }}
+                      style={{ padding: "6px 10px", fontSize: "var(--aa-text-xs)" }}
                     >
                       nenhuma view salva
                     </div>
@@ -184,7 +184,7 @@ export default function AnalyticsShell({ state, children }: Props) {
               onClick={() => state.setComparePrev(!state.comparePrev)}
               title="Comparar com período anterior"
             >
-              <span className="aa-mono" style={{ fontSize: 11, color: "var(--aa-fg-faint)" }}>
+              <span className="aa-mono" style={{ fontSize: "var(--aa-text-xs)", color: "var(--aa-fg-faint)" }}>
                 comparar
               </span>
               <span>{state.comparePrev ? "ativo" : "off"}</span>

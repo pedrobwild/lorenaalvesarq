@@ -49,7 +49,7 @@ export default function SegmentFilter({ segments, onAdd, onRemove, onClear }: Pr
       <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger asChild>
           <button type="button" className="admin-analytics__btn">
-            <span className="aa-mono" style={{ fontSize: "11px", color: "var(--aa-fg-faint)" }}>
+            <span className="aa-mono" style={{ fontSize: "var(--aa-text-xs)", color: "var(--aa-fg-faint)" }}>
               segmento
             </span>
             <span>+ adicionar</span>
@@ -94,7 +94,7 @@ export default function SegmentFilter({ segments, onAdd, onRemove, onClear }: Pr
                       className="admin-analytics__btn"
                       data-variant="ghost"
                       onClick={() => quickPick(v)}
-                      style={{ padding: "3px 8px", fontSize: 11 }}
+                      style={{ padding: "3px 8px", fontSize: "var(--aa-text-xs)" }}
                     >
                       {v}
                     </button>
@@ -144,7 +144,7 @@ export default function SegmentFilter({ segments, onAdd, onRemove, onClear }: Pr
           className="admin-analytics__btn"
           data-variant="ghost"
           onClick={onClear}
-          style={{ fontSize: 11 }}
+          style={{ fontSize: "var(--aa-text-xs)" }}
         >
           limpar
         </button>
