@@ -3871,7 +3871,7 @@ textarea.admin-field__input {
   min-width: 0;
 }
 .admin__brand-name {
-  font-size: 14px;
+  font-size: var(--admin-fs-md);
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
