@@ -24,6 +24,7 @@ export type Route =
   | { name: "admin-blog" }
   | { name: "admin-blog-new" }
   | { name: "admin-blog-edit"; slug: string }
+  | { name: "admin-typography" }
   | { name: "not-found" };
 
 function parsePath(rawPath: string): Route {
