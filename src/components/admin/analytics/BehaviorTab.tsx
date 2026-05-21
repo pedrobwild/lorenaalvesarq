@@ -319,7 +319,7 @@ function ServerHeatmap({ cells }: { cells: HourCell[] }) {
           gridTemplateColumns: "32px repeat(24, 1fr)",
           gap: 2,
           fontFamily: "var(--aa-font-mono)",
-          fontSize: 10,
+          fontSize: "var(--aa-text-2xs)",
           color: "var(--aa-fg-faint)",
         }}
       >
@@ -361,7 +361,7 @@ function ServerHeatmap({ cells }: { cells: HourCell[] }) {
         style={{
           display: "flex",
           gap: 16,
-          fontSize: 11,
+          fontSize: "var(--aa-text-xs)",
           color: "var(--aa-fg-faint)",
           flexWrap: "wrap",
         }}

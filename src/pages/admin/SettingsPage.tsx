@@ -266,11 +266,11 @@ function Field({
       <span className="admin-field__label mono">{label}</span>
       {children}
       {error ? (
-        <span className="mono" style={{ fontSize: 11, color: "tomato", marginTop: 4 }}>
+        <span className="mono" style={{ fontSize: "var(--admin-fs-xs)", color: "tomato", marginTop: 4 }}>
           {error}
         </span>
       ) : hint ? (
-        <span className="mono" style={{ fontSize: 11, opacity: 0.5, marginTop: 4 }}>
+        <span className="mono" style={{ fontSize: "var(--admin-fs-xs)", opacity: 0.5, marginTop: 4 }}>
           {hint}
         </span>
       ) : null}

@@ -137,7 +137,7 @@ export default function ConversionTab({ range, segments }: Props) {
           <div
             className="aa-faint aa-mono"
             style={{
-              fontSize: 11,
+              fontSize: "var(--aa-text-xs)",
               padding: "8px 12px",
               border: "1px dashed var(--aa-border)",
               borderRadius: 6,
@@ -161,7 +161,7 @@ export default function ConversionTab({ range, segments }: Props) {
               {s.label}
             </div>
             <div className="aa-kpi__value">{fmtNum(s.sessions)}</div>
-            <div className="aa-kpi__delta aa-faint" style={{ fontSize: 11 }}>
+            <div className="aa-kpi__delta aa-faint" style={{ fontSize: "var(--aa-text-xs)" }}>
               {fmtPct(pctTop)} do topo · {s.description}
             </div>
           </div>
@@ -222,7 +222,7 @@ function FunnelChart({ steps }: { steps: StepView[] }) {
                 justifyContent: "space-between",
                 alignItems: "baseline",
                 gap: 12,
-                fontSize: 12,
+                fontSize: "var(--aa-text-sm)",
               }}
             >
               <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -230,13 +230,13 @@ function FunnelChart({ steps }: { steps: StepView[] }) {
                   className="aa-mono"
                   style={{
                     color: "var(--aa-fg-faint)",
-                    fontSize: 10,
+                    fontSize: "var(--aa-text-2xs)",
                   }}
                 >
                   {String(s.index).padStart(2, "0")}
                 </span>
                 <strong style={{ color: "var(--aa-fg)" }}>{s.label}</strong>
-                <span className="aa-faint" style={{ fontSize: 11 }}>
+                <span className="aa-faint" style={{ fontSize: "var(--aa-text-xs)" }}>
                   {s.description}
                 </span>
               </span>
@@ -272,7 +272,7 @@ function FunnelChart({ steps }: { steps: StepView[] }) {
                   alignItems: "center",
                   justifyContent: "space-between",
                   padding: "0 10px",
-                  fontSize: 11,
+                  fontSize: "var(--aa-text-xs)",
                   color: "var(--aa-fg)",
                   mixBlendMode: "difference",
                   filter: "invert(1)",
@@ -290,7 +290,7 @@ function FunnelChart({ steps }: { steps: StepView[] }) {
                 style={{
                   display: "flex",
                   gap: 14,
-                  fontSize: 11,
+                  fontSize: "var(--aa-text-xs)",
                   color: "var(--aa-fg-faint)",
                   paddingLeft: 4,
                 }}
@@ -323,7 +323,7 @@ function FunnelChart({ steps }: { steps: StepView[] }) {
           display: "flex",
           gap: 20,
           flexWrap: "wrap",
-          fontSize: 11,
+          fontSize: "var(--aa-text-xs)",
         }}
         className="aa-mono aa-faint"
       >

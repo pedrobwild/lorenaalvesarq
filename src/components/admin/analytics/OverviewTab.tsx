@@ -332,7 +332,7 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
               data-variant="ghost"
               aria-pressed={metric === "sessions"}
               onClick={() => setMetric("sessions")}
-              style={{ fontSize: 11, padding: "3px 8px" }}
+              style={{ fontSize: "var(--aa-text-xs)", padding: "3px 8px" }}
             >
               sessões
             </button>
@@ -342,7 +342,7 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
               data-variant="ghost"
               aria-pressed={metric === "pageviews"}
               onClick={() => setMetric("pageviews")}
-              style={{ fontSize: 11, padding: "3px 8px" }}
+              style={{ fontSize: "var(--aa-text-xs)", padding: "3px 8px" }}
             >
               pageviews
             </button>
@@ -365,12 +365,12 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
                   if (Number.isNaN(dt.getTime())) return d;
                   return dt.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
                 }}
-                tick={{ fontSize: 10, fontFamily: "var(--aa-font-mono)", fill: "var(--aa-fg-faint)" }}
+                tick={{ fontSize: "var(--aa-text-2xs)", fontFamily: "var(--aa-font-mono)", fill: "var(--aa-fg-faint)" }}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
-                tick={{ fontSize: 10, fontFamily: "var(--aa-font-mono)", fill: "var(--aa-fg-faint)" }}
+                tick={{ fontSize: "var(--aa-text-2xs)", fontFamily: "var(--aa-font-mono)", fill: "var(--aa-fg-faint)" }}
                 tickLine={false}
                 axisLine={false}
                 width={36}
@@ -382,7 +382,7 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
                   border: "1px solid var(--aa-border)",
                   borderRadius: 6,
                   fontFamily: "var(--aa-font-mono)",
-                  fontSize: 11,
+                  fontSize: "var(--aa-text-xs)",
                   color: "var(--aa-fg)",
                 }}
                 labelFormatter={(d) => {

@@ -195,7 +195,7 @@ export default function Seo404Page() {
             borderRadius: 6,
             background: msg.kind === "ok" ? "#10b98120" : "#ef444420",
             color: msg.kind === "ok" ? "#065f46" : "#991b1b",
-            fontSize: "0.875rem",
+            fontSize: "var(--admin-fs-base)",
           }}
         >
           {msg.text}
@@ -215,7 +215,7 @@ export default function Seo404Page() {
               border: "1px solid #e5e5e5",
               background: filter === opt.value ? "#111" : "#fff",
               color: filter === opt.value ? "#fff" : "#111",
-              fontSize: "0.8rem",
+              fontSize: "var(--admin-fs-sm)",
               cursor: "pointer",
             }}
           >
@@ -235,10 +235,10 @@ export default function Seo404Page() {
             background: "#fafafa",
           }}
         >
-          <h2 style={{ fontSize: "0.95rem", marginBottom: "0.5rem" }}>
+          <h2 style={{ fontSize: "var(--admin-fs-md)", marginBottom: "0.5rem" }}>
             Colar URLs do Search Console
           </h2>
-          <p style={{ fontSize: "0.8rem", color: "#666", marginBottom: "0.75rem" }}>
+          <p style={{ fontSize: "var(--admin-fs-sm)", color: "#666", marginBottom: "0.75rem" }}>
             No Search Console, abra o relatório <strong>Páginas → Não encontrado (404)</strong>,
             exporte ou copie a coluna de URLs e cole abaixo (uma por linha).
             URLs absolutas (https://…) são convertidas em caminho relativo automaticamente.
@@ -251,7 +251,7 @@ export default function Seo404Page() {
             style={{
               width: "100%",
               fontFamily: "monospace",
-              fontSize: "0.85rem",
+              fontSize: "var(--admin-fs-base)",
               padding: "0.5rem",
               border: "1px solid #d4d4d4",
               borderRadius: 4,
@@ -296,7 +296,7 @@ export default function Seo404Page() {
             border: "1px solid #d4d4d4",
             borderRadius: 4,
             fontFamily: "monospace",
-            fontSize: "0.85rem",
+            fontSize: "var(--admin-fs-base)",
           }}
         />
         <button type="button" className="btn-ghost" onClick={() => void addManualPath()}>
@@ -344,8 +344,8 @@ export default function Seo404Page() {
                   >
                     <code
                       style={{
-                        fontSize: "0.95rem",
-                        fontWeight: 600,
+                        fontSize: "var(--admin-fs-md)",
+                        fontWeight: "var(--admin-fw-semibold)",
                         wordBreak: "break-all",
                       }}
                     >
@@ -363,7 +363,7 @@ export default function Seo404Page() {
                   </div>
                   <div
                     style={{
-                      fontSize: "0.75rem",
+                      fontSize: "var(--admin-fs-sm)",
                       color: "#737373",
                       display: "flex",
                       gap: "1rem",
@@ -388,8 +388,8 @@ export default function Seo404Page() {
                     borderRadius: 999,
                     background: `${statusTone(r.status)}20`,
                     color: statusTone(r.status),
-                    fontSize: "0.7rem",
-                    fontWeight: 600,
+                    fontSize: "var(--admin-fs-xs)",
+                    fontWeight: "var(--admin-fw-semibold)",
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -412,7 +412,7 @@ export default function Seo404Page() {
                     padding: "0.4rem",
                     border: "1px solid #d4d4d4",
                     borderRadius: 4,
-                    fontSize: "0.85rem",
+                    fontSize: "var(--admin-fs-base)",
                   }}
                 >
                   {STATUS_OPTIONS.map((o) => (
@@ -445,7 +445,7 @@ export default function Seo404Page() {
                     border: "1px solid #d4d4d4",
                     borderRadius: 4,
                     fontFamily: "monospace",
-                    fontSize: "0.85rem",
+                    fontSize: "var(--admin-fs-base)",
                   }}
                 />
 
@@ -483,7 +483,7 @@ export default function Seo404Page() {
                   padding: "0.4rem 0.6rem",
                   border: "1px solid #e5e5e5",
                   borderRadius: 4,
-                  fontSize: "0.8rem",
+                  fontSize: "var(--admin-fs-sm)",
                   fontFamily: "inherit",
                   resize: "vertical",
                 }}
