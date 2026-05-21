@@ -3737,7 +3737,7 @@ html { scroll-behavior: smooth; }
   border: 1px solid #e5e5e4;
   border-radius: 8px;
   font: inherit;
-  font-size: 14px;
+  /* font-size definido pelo role-rule (--admin-input-size). */
   background: #fff;
   color: #111;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
