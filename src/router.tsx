@@ -33,6 +33,7 @@ import ProjectFormPage from "./pages/admin/ProjectFormPage";
 import FaqAdminPage from "./pages/admin/FaqAdminPage";
 import BlogListPage from "./pages/admin/BlogListPage";
 import BlogFormPage from "./pages/admin/BlogFormPage";
+import TypographyPage from "./pages/admin/TypographyPage";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import type { Route } from "./lib/useHashRoute";
 
@@ -117,6 +118,12 @@ export function renderRoute(route: Route) {
     return (
       <ProtectedRoute>
         <BlogFormPage slug={route.slug} />
+      </ProtectedRoute>
+    );
+  if (route.name === "admin-typography")
+    return (
+      <ProtectedRoute>
+        <TypographyPage />
       </ProtectedRoute>
     );
   // Home (com ou sem âncora) — única rota que renderiza o App principal

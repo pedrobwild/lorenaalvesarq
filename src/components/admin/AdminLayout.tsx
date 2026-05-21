@@ -12,6 +12,7 @@ import {
   Menu,
   HelpCircle,
   Newspaper,
+  Type,
 } from "lucide-react";
 import { useAuth } from "@/lib/useAuth";
 import { navigate, routes } from "@/lib/useHashRoute";
@@ -24,7 +25,8 @@ type ActiveKey =
   | "seo"
   | "seo-404"
   | "settings"
-  | "faq";
+  | "faq"
+  | "typography";
 
 type Props = {
   children: ReactNode;
@@ -46,6 +48,7 @@ const NAV: { key: ActiveKey; label: string; href: string; icon: typeof LayoutDas
   { key: "seo", label: "SEO", href: routes.adminSeo, icon: Search },
   { key: "seo-404", label: "URLs 404", href: routes.adminSeo404, icon: Search },
   { key: "settings", label: "Configurações", href: routes.adminSettings, icon: Settings },
+  { key: "typography", label: "Tipografia", href: routes.adminTypography, icon: Type },
 ];
 
 const STORAGE_KEY = "admin-sidebar-collapsed";
