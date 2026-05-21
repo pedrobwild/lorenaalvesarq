@@ -120,6 +120,12 @@ export function renderRoute(route: Route) {
         <BlogFormPage slug={route.slug} />
       </ProtectedRoute>
     );
+  if (route.name === "admin-typography")
+    return (
+      <ProtectedRoute>
+        <TypographyPage />
+      </ProtectedRoute>
+    );
   // Home (com ou sem âncora) — única rota que renderiza o App principal
   if (route.name === "home") return <App />;
   // Qualquer outra rota (incluindo "not-found" e nomes futuros não mapeados acima)
