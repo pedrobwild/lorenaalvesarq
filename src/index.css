@@ -3662,20 +3662,18 @@ html { scroll-behavior: smooth; }
   display: inline-block;
   text-decoration: none;
   color: inherit;
-  font-size: 18px;
+  font-size: var(--admin-fs-lg);
   margin-bottom: 28px;
 }
 .admin-login__title {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  /* Tipografia definida pelo role-rule (tokens). */
+  letter-spacing: var(--admin-tracking-tight);
   margin: 0 0 4px;
 }
 .admin-login__lede {
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--admin-tracking-wide);
   text-transform: uppercase;
-  opacity: 0.55;
+  opacity: 0.72;
   margin: 0 0 24px;
 }
 .admin-login__form {
@@ -3691,22 +3689,22 @@ html { scroll-behavior: smooth; }
   background: #fef2f2;
   border-radius: 6px;
   padding: 8px 10px;
-  font-size: 12px;
+  font-size: var(--admin-fs-sm);
 }
 .admin-login__info {
   color: #065f46;
   background: #ecfdf5;
   border-radius: 6px;
   padding: 8px 10px;
-  font-size: 12px;
+  font-size: var(--admin-fs-sm);
 }
 .admin-login__switch {
   text-align: center;
   margin-top: 20px;
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: var(--admin-fs-xs);
+  letter-spacing: var(--admin-tracking-wide);
   text-transform: uppercase;
-  opacity: 0.6;
+  opacity: 0.72;
 }
 .admin-login__switch button {
   background: none;
@@ -3727,8 +3725,8 @@ html { scroll-behavior: smooth; }
   grid-column: 1 / -1;
 }
 .admin-field__label {
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  /* Tipografia definida pelo role-rule (--admin-label-*). */
+  letter-spacing: var(--admin-tracking-caps);
   text-transform: uppercase;
   /* opacity 0.72 sobre #fafaf9 ≈ #525252 → contraste ~7.4:1 (WCAG AA/AAA). */
   opacity: 0.72;
@@ -3739,7 +3737,7 @@ html { scroll-behavior: smooth; }
   border: 1px solid #e5e5e4;
   border-radius: 8px;
   font: inherit;
-  font-size: 14px;
+  /* font-size definido pelo role-rule (--admin-input-size). */
   background: #fff;
   color: #111;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -3771,9 +3769,7 @@ textarea.admin-field__input {
   background: #fff;
   color: #111;
   border-radius: 8px;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 500;
+  /* Tipografia definida pelo role-rule (--admin-btn-*). */
   cursor: pointer;
   text-decoration: none;
   transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
@@ -3800,7 +3796,7 @@ textarea.admin-field__input {
 }
 .admin-btn--sm {
   padding: 6px 10px;
-  font-size: 12px;
+  /* font-size definido pelo role-rule (--admin-btn-sm-size). */
   white-space: nowrap;
 }
 .admin-alt-row {
@@ -3852,7 +3848,7 @@ textarea.admin-field__input {
   gap: 10px;
   text-decoration: none;
   color: inherit;
-  font-size: 16px;
+  font-size: var(--admin-fs-lg);
   min-width: 0;
 }
 .admin__brand-mark {
@@ -3864,8 +3860,8 @@ textarea.admin-field__input {
   border-radius: 6px;
   background: #111;
   color: #fff;
-  font-weight: 700;
-  font-size: 13px;
+  font-weight: var(--admin-fw-bold);
+  font-size: var(--admin-fs-base);
   flex-shrink: 0;
 }
 .admin__brand-text {
@@ -3875,18 +3871,18 @@ textarea.admin-field__input {
   min-width: 0;
 }
 .admin__brand-name {
-  font-size: 14px;
+  font-size: var(--admin-fs-md);
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
-.admin__brand-name b { font-weight: 700; }
+.admin__brand-name b { font-weight: var(--admin-fw-bold); }
 .admin__brand-name sup {
   font-size: 0.55em;
   margin-left: 2px;
   opacity: 0.7;
 }
 .admin__brand-tag {
-  font-size: 10px;
+  font-size: var(--admin-fs-2xs);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   opacity: 0.55;
@@ -3916,7 +3912,7 @@ textarea.admin-field__input {
   text-decoration: none;
   padding: 8px 10px;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: var(--admin-fs-base);
   transition: background 0.15s ease, color 0.15s ease;
   display: flex;
   align-items: center;
@@ -3937,7 +3933,7 @@ textarea.admin-field__input {
 .admin__nav-item:hover { color: #111; background: rgba(0,0,0,0.04); }
 .admin__nav-item.is-active { color: #111; background: rgba(0,0,0,0.08); }
 .admin__nav-item.is-active .admin__nav-icon { opacity: 1; }
-.admin__nav-item--ghost { font-size: 12px; opacity: 0.7; }
+.admin__nav-item--ghost { font-size: var(--admin-fs-sm); opacity: 0.7; }
 .admin__nav-item--button { background: transparent; }
 
 .admin__sidebar-foot {
@@ -3947,7 +3943,7 @@ textarea.admin-field__input {
   gap: 2px;
 }
 .admin__user {
-  font-size: 11px;
+  /* font-size definido pelo role-rule (--admin-fs-xs). */
   opacity: 0.55;
   padding: 4px 10px;
   white-space: nowrap;
@@ -4009,20 +4005,19 @@ textarea.admin-field__input {
   min-width: 0;
 }
 .admin__topbar-eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  /* Tipografia definida pelo role-rule (--admin-label-*). */
+  letter-spacing: var(--admin-tracking-caps);
   text-transform: uppercase;
-  opacity: 0.55;
+  opacity: 0.72;
 }
 .admin__topbar-title {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  /* Tipografia definida pelo role-rule (--admin-h1-*). */
+  letter-spacing: var(--admin-tracking-tight);
   margin: 0;
 }
 .admin__topbar-desc {
-  font-size: 13px;
-  opacity: 0.65;
+  /* Tipografia definida pelo role-rule (--admin-body-sm-*). */
+  opacity: 0.72;
   margin: 4px 0 0;
   max-width: 60ch;
 }
@@ -4069,14 +4064,13 @@ textarea.admin-field__input {
   gap: 6px;
 }
 .admin-card__label {
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  /* Tipografia definida pelo role-rule (--admin-label-*). */
+  letter-spacing: var(--admin-tracking-caps);
   text-transform: uppercase;
-  opacity: 0.55;
+  opacity: 0.72;
 }
 .admin-card__value {
-  font-size: 28px;
-  font-weight: 600;
+  /* Tipografia definida pelo role-rule (--admin-fs-3xl + semibold). */
   letter-spacing: -0.02em;
 }
 
@@ -4095,10 +4089,9 @@ textarea.admin-field__input {
   gap: 12px;
 }
 .admin-section__title {
-  font-size: 15px;
-  font-weight: 600;
+  /* Tipografia definida pelo role-rule (--admin-h2-*). */
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--admin-tracking-tight);
 }
 
 /* ----- Tables ----- */
@@ -4108,7 +4101,7 @@ textarea.admin-field__input {
   border-radius: 12px;
   overflow: hidden;
 }
-.admin-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.admin-table { width: 100%; border-collapse: collapse; /* font-size definido pelo role-rule (--admin-table-size). */ }
 .admin-table th, .admin-table td {
   text-align: left;
   padding: 12px 14px;
@@ -4116,17 +4109,15 @@ textarea.admin-field__input {
   vertical-align: middle;
 }
 .admin-table th {
-  /* 11px (era 10px) para legibilidade mínima em caps tracking. */
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  /* Tipografia definida pelo role-rule (--admin-th-* — 11px caps). */
+  letter-spacing: var(--admin-th-tracking);
   text-transform: uppercase;
   /* 0.72 sobre #fafaf9 → ~#525252 (~7.4:1) — passa AA para small text. */
   opacity: 0.72;
-  font-weight: 500;
   background: #fafaf9;
 }
 .admin-table tbody tr:last-child td { border-bottom: none; }
-.admin-table__sub { font-size: 11px; opacity: 0.7; margin-top: 2px; }
+.admin-table__sub { font-size: var(--admin-fs-xs); opacity: 0.7; margin-top: 2px; }
 .admin-thumb {
   width: 56px;
   height: 40px;
@@ -4165,10 +4156,9 @@ textarea.admin-field__input {
   background: #fff;
   border-radius: 999px;
   padding: 6px 12px;
-  font-size: 12px;
+  font-size: var(--admin-fs-sm);
   cursor: pointer;
-  font: inherit;
-  font-size: 12px;
+  font-family: inherit;
 }
 .admin-chip.is-active { background: #111; color: #fff; border-color: #111; }
 
@@ -4203,15 +4193,16 @@ textarea.admin-field__input {
   flex-wrap: wrap;
 }
 .admin-form-head__title {
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: var(--admin-h1-size);
+  font-weight: var(--admin-h1-weight);
+  letter-spacing: var(--admin-h1-tracking);
+  line-height: var(--admin-h1-lh);
   margin: 0;
   flex: 1;
 }
 .admin-form-head__actions { display: flex; gap: 10px; align-items: center; }
 .admin-flash {
-  font-size: 11px;
+  font-size: var(--admin-fs-xs);
   padding: 6px 10px;
   border-radius: 6px;
 }
@@ -6739,6 +6730,7 @@ textarea.admin-field__input {
   --admin-fs-lg:  16px;
   --admin-fs-xl:  20px;
   --admin-fs-2xl: 24px;
+  --admin-fs-3xl: 28px;
 
   /* Pesos */
   --admin-fw-regular:  400;
@@ -7049,7 +7041,7 @@ textarea.admin-field__input {
   text-transform: var(--admin-eyebrow-transform);
 }
 .admin-card__value {
-  font-size: var(--admin-fs-2xl);
+  font-size: var(--admin-fs-3xl);
   font-weight: var(--admin-fw-semibold);
   letter-spacing: var(--admin-tracking-tight);
   line-height: var(--admin-lh-tight);
