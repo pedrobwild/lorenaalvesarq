@@ -3860,8 +3860,8 @@ textarea.admin-field__input {
   border-radius: 6px;
   background: #111;
   color: #fff;
-  font-weight: 700;
-  font-size: 13px;
+  font-weight: var(--admin-fw-bold);
+  font-size: var(--admin-fs-base);
   flex-shrink: 0;
 }
 .admin__brand-text {
