@@ -6811,6 +6811,29 @@ textarea.admin-field__input {
   --admin-input-size:     var(--admin-fs-md);   /* 14px */
   --admin-input-weight:   var(--admin-fw-regular);
   --admin-input-lh:       var(--admin-lh-snug);
+
+  /* Placeholder (inputs/selects/textarea) */
+  --admin-placeholder-size:    var(--admin-input-size);
+  --admin-placeholder-weight:  var(--admin-fw-regular);
+  --admin-placeholder-opacity: 0.5;
+
+  /* Helper / hint text abaixo de campos */
+  --admin-help-size:    var(--admin-fs-xs);   /* 11px */
+  --admin-help-weight:  var(--admin-fw-regular);
+  --admin-help-lh:      var(--admin-lh-snug);
+
+  /* Select (nativo ou custom) — espelha input por padrão */
+  --admin-select-size:    var(--admin-input-size);
+  --admin-select-weight:  var(--admin-input-weight);
+  --admin-select-lh:      var(--admin-input-lh);
+
+  /* Empty state */
+  --admin-empty-title-size:    var(--admin-fs-md);   /* 14px */
+  --admin-empty-title-weight:  var(--admin-fw-semibold);
+  --admin-empty-title-lh:      var(--admin-lh-tight);
+  --admin-empty-desc-size:     var(--admin-body-sm-size); /* 13px */
+  --admin-empty-desc-weight:   var(--admin-fw-regular);
+  --admin-empty-desc-lh:       var(--admin-lh-snug);
 }
 
 /* Família + features uniformes em todo o escopo do admin.
@@ -6969,6 +6992,56 @@ textarea.admin-field__input {
   font-size: var(--admin-input-size);
   font-weight: var(--admin-input-weight);
   line-height: var(--admin-input-lh);
+}
+
+/* Placeholders consistentes em inputs/textarea/select do admin */
+.admin-field__input::placeholder,
+.admin-select::placeholder,
+.admin .admin-field__input::placeholder,
+.admin input::placeholder,
+.admin textarea::placeholder {
+  font-size: var(--admin-placeholder-size);
+  font-weight: var(--admin-placeholder-weight);
+  opacity: var(--admin-placeholder-opacity);
+}
+
+/* Select — utilitário e aplicação ao <select> dentro do admin */
+.admin-select,
+.admin select {
+  font-family: var(--font-admin) !important;
+  font-size: var(--admin-select-size);
+  font-weight: var(--admin-select-weight);
+  line-height: var(--admin-select-lh);
+  letter-spacing: var(--admin-tracking-normal);
+}
+
+/* Texto auxiliar / hint abaixo do campo */
+.admin-field__help,
+.admin-help {
+  font-size: var(--admin-help-size);
+  font-weight: var(--admin-help-weight);
+  line-height: var(--admin-help-lh);
+  opacity: 0.7;
+}
+
+/* Empty state */
+.admin-empty {
+  text-align: center;
+  padding: 32px 16px;
+}
+.admin-empty__title {
+  font-size: var(--admin-empty-title-size);
+  font-weight: var(--admin-empty-title-weight);
+  line-height: var(--admin-empty-title-lh);
+  letter-spacing: var(--admin-tracking-tight);
+  margin: 0 0 4px;
+}
+.admin-empty__desc {
+  font-size: var(--admin-empty-desc-size);
+  font-weight: var(--admin-empty-desc-weight);
+  line-height: var(--admin-empty-desc-lh);
+  opacity: 0.7;
+  margin: 0;
 }
 
 /* Botões */
