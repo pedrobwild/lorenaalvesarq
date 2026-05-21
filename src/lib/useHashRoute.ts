@@ -127,6 +127,7 @@ export const routes = {
   adminBlog: "/admin/blog",
   adminBlogNew: "/admin/blog/new",
   adminBlogEdit: (slug: string) => `/admin/blog/${slug}`,
+  adminTypography: "/admin/typography",
 };
 
 // Navega programaticamente sem recarregar a página.
