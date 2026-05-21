@@ -33,6 +33,7 @@ import ProjectFormPage from "./pages/admin/ProjectFormPage";
 import FaqAdminPage from "./pages/admin/FaqAdminPage";
 import BlogListPage from "./pages/admin/BlogListPage";
 import BlogFormPage from "./pages/admin/BlogFormPage";
+import TypographyPage from "./pages/admin/TypographyPage";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import type { Route } from "./lib/useHashRoute";
 
