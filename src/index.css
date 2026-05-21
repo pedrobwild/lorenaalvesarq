@@ -4156,10 +4156,9 @@ textarea.admin-field__input {
   background: #fff;
   border-radius: 999px;
   padding: 6px 12px;
-  font-size: 12px;
+  font-size: var(--admin-fs-sm);
   cursor: pointer;
-  font: inherit;
-  font-size: 12px;
+  font-family: inherit;
 }
 .admin-chip.is-active { background: #111; color: #fff; border-color: #111; }
 
