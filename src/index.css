@@ -6836,6 +6836,85 @@ textarea.admin-field__input {
   --admin-empty-desc-lh:       var(--admin-lh-snug);
 }
 
+/* ------------------------------------------------------------
+   Escala responsiva — sobrescreve apenas tokens de papéis.
+   Mantém a hierarquia (H1 > H2 > H3 > body > label) e melhora
+   legibilidade + alvo de toque em telas menores. Preserva
+   tracking/peso definidos acima.
+   ------------------------------------------------------------ */
+
+/* Tablet — ≤900px */
+@media (max-width: 900px) {
+  :root {
+    /* Headings ganham um leve respiro vertical */
+    --admin-h1-lh: 1.25;
+    --admin-h2-lh: 1.3;
+    --admin-h3-lh: 1.4;
+
+    /* Body um pouco mais arejado */
+    --admin-body-lh:    1.5;
+    --admin-body-sm-lh: 1.5;
+
+    /* Tabela e inputs com mais altura de linha */
+    --admin-table-lh: 1.45;
+    --admin-input-lh: 1.45;
+
+    /* Empty state — descrição mais legível */
+    --admin-empty-desc-lh: 1.5;
+  }
+}
+
+/* Mobile — ≤600px
+   - H1 sobe para 22px (ainda contido); H2 para 17px.
+   - Body sobe para 15px; body-sm sobe para 13.5px → 14px equivalente.
+   - Inputs/selects/textarea sobem para 16px para evitar zoom
+     automático do iOS Safari no foco e ampliar alvo de toque.
+   - Botões sobem para 14px; label mantém 11px (caps) para hierarquia.
+   - Tabela mantém legibilidade básica em 13px com line-height maior;
+     th sobe 1px (11px) preservando tracking caps. */
+@media (max-width: 600px) {
+  :root {
+    /* Hierarquia */
+    --admin-h1-size: 22px;
+    --admin-h1-lh:   1.25;
+    --admin-h2-size: 17px;
+    --admin-h2-lh:   1.3;
+    --admin-h3-size: 15px;
+    --admin-h3-lh:   1.4;
+
+    /* Corpo */
+    --admin-body-size: 15px;
+    --admin-body-lh:   1.55;
+    --admin-body-sm-size: 14px;
+    --admin-body-sm-lh:   1.5;
+
+    /* Formulários — 16px evita zoom automático no iOS */
+    --admin-input-size:       16px;
+    --admin-input-lh:         1.45;
+    --admin-select-size:      16px;
+    --admin-select-lh:        1.45;
+    --admin-placeholder-size: 16px;
+
+    /* Help / hint mantém densidade, com line-height generoso */
+    --admin-help-size: 12px;
+    --admin-help-lh:   1.5;
+
+    /* Botões — alvo de toque confortável */
+    --admin-btn-size:    14px;
+    --admin-btn-sm-size: 13px;
+    --admin-btn-lh:      1.3;
+
+    /* Tabela — line-height maior, header 1px acima */
+    --admin-table-lh: 1.5;
+    --admin-th-size:  11px;
+
+    /* Empty state */
+    --admin-empty-title-size: 15px;
+    --admin-empty-desc-size:  14px;
+    --admin-empty-desc-lh:    1.55;
+  }
+}
+
 /* Família + features uniformes em todo o escopo do admin.
    Não força weight/size aqui — papéis abaixo cuidam disso. */
 .admin,
