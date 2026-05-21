@@ -4116,15 +4116,17 @@ textarea.admin-field__input {
   vertical-align: middle;
 }
 .admin-table th {
-  font-size: 10px;
+  /* 11px (era 10px) para legibilidade mínima em caps tracking. */
+  font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  opacity: 0.55;
+  /* 0.72 sobre #fafaf9 → ~#525252 (~7.4:1) — passa AA para small text. */
+  opacity: 0.72;
   font-weight: 500;
   background: #fafaf9;
 }
 .admin-table tbody tr:last-child td { border-bottom: none; }
-.admin-table__sub { font-size: 11px; opacity: 0.55; margin-top: 2px; }
+.admin-table__sub { font-size: 11px; opacity: 0.7; margin-top: 2px; }
 .admin-thumb {
   width: 56px;
   height: 40px;
