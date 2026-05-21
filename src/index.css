@@ -6807,7 +6807,7 @@ textarea.admin-field__input {
   --admin-table-size:     var(--admin-fs-base); /* 13px */
   --admin-table-weight:   var(--admin-fw-regular);
   --admin-table-lh:       var(--admin-lh-snug);
-  --admin-th-size:        var(--admin-fs-2xs);  /* 10px */
+  --admin-th-size:        var(--admin-fs-xs);   /* 11px (≥ mínimo legível) */
   --admin-th-weight:      var(--admin-fw-medium);
   --admin-th-tracking:    var(--admin-tracking-caps);
 
