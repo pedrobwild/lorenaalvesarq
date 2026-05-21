@@ -6739,6 +6739,7 @@ textarea.admin-field__input {
   --admin-fs-lg:  16px;
   --admin-fs-xl:  20px;
   --admin-fs-2xl: 24px;
+  --admin-fs-3xl: 28px;
 
   /* Pesos */
   --admin-fw-regular:  400;
