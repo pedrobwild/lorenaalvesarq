@@ -17,6 +17,7 @@ import {
 import { useSiteSettings } from "./lib/useSiteSettings";
 import BrandLogo, { BrandSeal } from "./components/BrandLogo";
 import Picture from "./components/Picture";
+import SmartImage from "./components/SmartImage";
 import FaqSection from "./components/FaqSection";
 import { useFaq } from "./lib/useFaq";
 import heroImg1 from "./assets/hero/hero-1.webp";
@@ -658,8 +659,8 @@ export default function App() {
                   src={slide.webp}
                   alt={heroAlts[i] || heroAlts[0]}
                   loading={i === 0 ? "eager" : "lazy"}
-                  fetchPriority={i === 0 ? "high" : "auto"}
                   decoding={i === 0 ? "sync" : "async"}
+                  {...({ fetchpriority: i === 0 ? "high" : "auto" } as { fetchpriority: string })}
                   width={1920}
                   height={1080}
                   className={`hero__media-img${i === heroIdx ? " is-active" : ""}`}
@@ -725,9 +726,13 @@ export default function App() {
             >
               <div className="project-card__media">
                 <span className="project-card__number mono">{p.number} / 06</span>
-                <Picture
+                <SmartImage
                   src={p.cover}
+                  srcMd={p.coverMd}
+                  srcSm={p.coverSm}
+                  blurDataUrl={p.coverBlurDataUrl}
                   alt={p.alt}
+                  altFallback={`${p.title} ${p.em}`}
                   width={1280}
                   height={1600}
                   sizes="(max-width: 700px) 88vw, (max-width: 1200px) 44vw, 30vw"
