@@ -3796,7 +3796,7 @@ textarea.admin-field__input {
 }
 .admin-btn--sm {
   padding: 6px 10px;
-  font-size: 12px;
+  /* font-size definido pelo role-rule (--admin-btn-sm-size). */
   white-space: nowrap;
 }
 .admin-alt-row {
