@@ -3725,8 +3725,8 @@ html { scroll-behavior: smooth; }
   grid-column: 1 / -1;
 }
 .admin-field__label {
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  /* Tipografia definida pelo role-rule (--admin-label-*). */
+  letter-spacing: var(--admin-tracking-caps);
   text-transform: uppercase;
   /* opacity 0.72 sobre #fafaf9 ≈ #525252 → contraste ~7.4:1 (WCAG AA/AAA). */
   opacity: 0.72;
