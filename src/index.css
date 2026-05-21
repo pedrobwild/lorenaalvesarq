@@ -3662,20 +3662,18 @@ html { scroll-behavior: smooth; }
   display: inline-block;
   text-decoration: none;
   color: inherit;
-  font-size: 18px;
+  font-size: var(--admin-fs-lg);
   margin-bottom: 28px;
 }
 .admin-login__title {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  /* Tipografia definida pelo role-rule (tokens). */
+  letter-spacing: var(--admin-tracking-tight);
   margin: 0 0 4px;
 }
 .admin-login__lede {
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--admin-tracking-wide);
   text-transform: uppercase;
-  opacity: 0.55;
+  opacity: 0.72;
   margin: 0 0 24px;
 }
 .admin-login__form {
@@ -3691,22 +3689,22 @@ html { scroll-behavior: smooth; }
   background: #fef2f2;
   border-radius: 6px;
   padding: 8px 10px;
-  font-size: 12px;
+  font-size: var(--admin-fs-sm);
 }
 .admin-login__info {
   color: #065f46;
   background: #ecfdf5;
   border-radius: 6px;
   padding: 8px 10px;
-  font-size: 12px;
+  font-size: var(--admin-fs-sm);
 }
 .admin-login__switch {
   text-align: center;
   margin-top: 20px;
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: var(--admin-fs-xs);
+  letter-spacing: var(--admin-tracking-wide);
   text-transform: uppercase;
-  opacity: 0.6;
+  opacity: 0.72;
 }
 .admin-login__switch button {
   background: none;
