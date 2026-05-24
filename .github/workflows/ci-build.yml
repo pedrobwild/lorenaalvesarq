@@ -39,6 +39,11 @@ jobs:
       - name: Routes parity check
         run: npm run routes:check
 
+      - name: Lint (eslint)
+        # Falha o job se houver erros de ESLint. Warnings são aceitos por
+        # enquanto (cleanups incrementais ficam para PRs do plano do audit).
+        run: npm run lint
+
       - name: Tests (vitest run)
         # Roda a suíte completa antes do build. Regressões de SEO/roteador
         # devem bloquear o merge antes do bundle de produção ser gerado.

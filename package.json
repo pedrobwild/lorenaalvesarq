@@ -10,6 +10,9 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "routes:check": "node scripts/check-routes-parity.mjs",
+    "lint": "eslint .",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:setup-guard": "vitest run src/test/__tests__/setupNoTsExpectError.test.ts"
@@ -37,6 +40,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/dompurify": "^3.0.5",
@@ -45,10 +49,16 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.19",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.26",
+    "globals": "^15.15.0",
     "jsdom": "^29.1.1",
     "postcss": "^8.4.39",
+    "prettier": "^3.8.3",
     "tailwindcss": "^3.4.6",
     "typescript": "^5.5.3",
+    "typescript-eslint": "^8.59.4",
     "vite": "^5.3.3",
     "vitest": "^2.1.9"
   }
