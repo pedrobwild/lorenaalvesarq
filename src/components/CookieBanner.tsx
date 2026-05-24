@@ -1,34 +1,16 @@
 import { useEffect, useState } from "react";
 import { routes } from "../lib/useHashRoute";
+import { readConsent, setConsent, type Consent } from "../lib/cookieConsent";
 
 /**
  * Banner de consentimento de cookies (LGPD).
  * - Aparece apenas se o usuário ainda não registrou uma escolha.
- * - Persiste a decisão em localStorage sob a chave `lal_cookie_consent`:
- *   "accepted" | "declined".
+ * - Persiste e propaga a decisão via `src/lib/cookieConsent.ts` (chave
+ *   `lal_cookie_consent` no localStorage + evento `cookie:consent-change`).
+ * - Analytics, GA4, GTM, Meta Pixel, Clarity e Hotjar só rodam quando o
+ *   valor é `"accepted"` — sem aceite, nenhum tracker é injetado.
  * - Link para /privacidade para detalhes.
  */
-
-const STORAGE_KEY = "lal_cookie_consent";
-type Consent = "accepted" | "declined";
-
-function readConsent(): Consent | null {
-  try {
-    const v = window.localStorage.getItem(STORAGE_KEY);
-    if (v === "accepted" || v === "declined") return v;
-    return null;
-  } catch {
-    return null;
-  }
-}
-
-function writeConsent(value: Consent) {
-  try {
-    window.localStorage.setItem(STORAGE_KEY, value);
-  } catch {
-    // silenciosamente ignora (modo privado, storage cheio, etc.)
-  }
-}
 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
@@ -45,7 +27,7 @@ export default function CookieBanner() {
   }, []);
 
   function handle(choice: Consent) {
-    writeConsent(choice);
+    setConsent(choice);
     setVisible(false);
   }
 

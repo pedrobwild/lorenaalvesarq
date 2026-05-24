@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { fetchSiteSettings, invalidateSiteSettings, type SiteSettings } from "./useSiteSettings";
+import { isConsentAccepted, onConsentChange } from "./cookieConsent";
 
 export const SEO_REFRESH_EVENT = "seo:refresh";
 
@@ -130,11 +131,34 @@ function injectHotjar(id: string) {
 }
 
 function injectTrackers(settings: SiteSettings) {
+  // LGPD: nenhum tracker de terceiros entra no DOM sem aceite explícito.
+  // `applySeo` chama isto a cada mudança de rota; quem aceita depois
+  // dispara `cookie:consent-change`, e o listener em `setupTrackersConsentGate`
+  // refaz a injeção com as settings em cache.
+  if (!isConsentAccepted()) return;
   if (settings.google_tag_manager_id) injectGTM(settings.google_tag_manager_id);
   if (settings.google_analytics_id) injectGA4(settings.google_analytics_id);
   if (settings.meta_pixel_id) injectMetaPixel(settings.meta_pixel_id);
   if (settings.clarity_id) injectClarity(settings.clarity_id);
   if (settings.hotjar_id) injectHotjar(settings.hotjar_id);
+}
+
+/**
+ * Quando o usuário aceita o banner DEPOIS que a página já está montada, os
+ * `useSeo` montados não vão re-rodar `applySeo` espontaneamente. Esta função,
+ * idempotente, registra um listener global que dispara o evento de refresh
+ * de SEO assim que o consentimento vira "accepted" — fazendo os trackers
+ * entrarem no DOM sem exigir reload.
+ */
+let trackersConsentGateAttached = false;
+function setupTrackersConsentGate() {
+  if (trackersConsentGateAttached) return;
+  if (typeof window === "undefined") return;
+  trackersConsentGateAttached = true;
+  onConsentChange((v) => {
+    if (v !== "accepted") return;
+    window.dispatchEvent(new CustomEvent(SEO_REFRESH_EVENT));
+  });
 }
 
 function applySeo(settings: SiteSettings, seo: SeoInput) {
@@ -303,6 +327,7 @@ function applySeo(settings: SiteSettings, seo: SeoInput) {
 export function useSeo(seo: SeoInput) {
   const dep = JSON.stringify(seo);
   useEffect(() => {
+    setupTrackersConsentGate();
     let cancelled = false;
     const apply = (force = false) =>
       fetchSiteSettings(force).then((settings) => {
