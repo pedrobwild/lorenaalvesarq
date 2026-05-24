@@ -10,6 +10,8 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "routes:check": "node scripts/check-routes-parity.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:setup-guard": "vitest run src/test/__tests__/setupNoTsExpectError.test.ts"
   },
   "dependencies": {
@@ -34,14 +36,18 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^25.6.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.19",
+    "jsdom": "^29.1.1",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.6",
     "typescript": "^5.5.3",
-    "vite": "^5.3.3"
+    "vite": "^5.3.3",
+    "vitest": "^2.1.9"
   }
 }
