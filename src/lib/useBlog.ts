@@ -225,9 +225,12 @@ export function useRelatedBlogPosts(
 
   scored.sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
-    // Desempate: mais recente primeiro
-    const aDate = a.p.published_at || a.p.created_at;
-    const bDate = b.p.published_at || b.p.created_at;
+    // Desempate: mais recente primeiro. Fallback para "" cobre o caso
+    // (raro mas possível) em que ambos os campos de data são nulos —
+    // sem isso, `localeCompare(null)` lança TypeError em runtime e
+    // quebra todo o bloco de "leia também".
+    const aDate = a.p.published_at || a.p.created_at || "";
+    const bDate = b.p.published_at || b.p.created_at || "";
     return bDate.localeCompare(aDate);
   });
 
