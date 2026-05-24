@@ -43,7 +43,15 @@ function Root() {
 
   useEffect(() => {
     const nextKey = routeKeyOf(route);
-    if (nextKey === lastRouteKey.current) return;
+    if (nextKey === lastRouteKey.current) {
+      // A rota voltou para o que já está sendo exibido em meio a uma
+      // transição (ex.: A → B → A em rajada): o timer da fase anterior
+      // foi cancelado pelo cleanup, mas `phase` ficou em "out" e nunca
+      // mais é reposto, deixando a tela permanentemente invisível.
+      // Reposicionar para "in" aqui garante que o conteúdo volte a aparecer.
+      setPhase("in");
+      return;
+    }
 
     // Fase 1: fade-out da rota atual
     setPhase("out");

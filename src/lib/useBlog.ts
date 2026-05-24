@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 export type BlogPost = {
@@ -124,26 +124,30 @@ export type BlogTag = {
  */
 export function useBlogTags() {
   const { posts, loading } = useBlogPosts();
-  const tagMap = new Map<string, BlogTag>();
 
-  for (const p of posts) {
-    for (const raw of p.tags ?? []) {
-      const label = (raw ?? "").trim();
-      if (!label) continue;
-      const slug = slugify(label);
-      if (!slug) continue;
-      const existing = tagMap.get(slug);
-      if (existing) {
-        existing.count += 1;
-      } else {
-        tagMap.set(slug, { label, slug, count: 1 });
+  // Recalcula apenas quando a lista de posts muda. Sem o useMemo, cada
+  // re-render do consumidor faz `slugify` rodar n*tags vezes e a saída
+  // ganha referência nova, invalidando memos em cascata nos filhos.
+  const tags = useMemo<BlogTag[]>(() => {
+    const tagMap = new Map<string, BlogTag>();
+    for (const p of posts) {
+      for (const raw of p.tags ?? []) {
+        const label = (raw ?? "").trim();
+        if (!label) continue;
+        const slug = slugify(label);
+        if (!slug) continue;
+        const existing = tagMap.get(slug);
+        if (existing) {
+          existing.count += 1;
+        } else {
+          tagMap.set(slug, { label, slug, count: 1 });
+        }
       }
     }
-  }
-
-  const tags = Array.from(tagMap.values()).sort(
-    (a, b) => b.count - a.count || a.label.localeCompare(b.label, "pt-BR")
-  );
+    return Array.from(tagMap.values()).sort(
+      (a, b) => b.count - a.count || a.label.localeCompare(b.label, "pt-BR")
+    );
+  }, [posts]);
 
   return { tags, loading };
 }
@@ -155,20 +159,27 @@ export function useBlogTags() {
  */
 export function useBlogPostsByTag(tagSlug: string | undefined) {
   const { posts, loading } = useBlogPosts();
-  if (!tagSlug) return { posts: [], label: "", loading };
 
-  const filtered = posts.filter((p) =>
-    (p.tags ?? []).some((t) => slugify(t) === tagSlug)
-  );
-  // Recupera o rótulo original a partir do primeiro match (preserva acentos/caixa)
-  let label = tagSlug.replace(/-/g, " ");
-  for (const p of filtered) {
-    const original = (p.tags ?? []).find((t) => slugify(t) === tagSlug);
-    if (original) {
-      label = original;
-      break;
+  // Memoizado por `[posts, tagSlug]`. Sem isso, a filtragem rodava de novo
+  // a cada render do consumidor e o `slugify` por post fazia O(posts*tags)
+  // de trabalho desnecessário durante scroll/hover.
+  const { filtered, label } = useMemo(() => {
+    if (!tagSlug) return { filtered: [] as BlogPost[], label: "" };
+    const matched = posts.filter((p) =>
+      (p.tags ?? []).some((t) => slugify(t) === tagSlug)
+    );
+    // Recupera o rótulo original a partir do primeiro match (preserva acentos/caixa)
+    let resolvedLabel = tagSlug.replace(/-/g, " ");
+    for (const p of matched) {
+      const original = (p.tags ?? []).find((t) => slugify(t) === tagSlug);
+      if (original) {
+        resolvedLabel = original;
+        break;
+      }
     }
-  }
+    return { filtered: matched, label: resolvedLabel };
+  }, [posts, tagSlug]);
+
   return { posts: filtered, label, loading };
 }
 
@@ -194,48 +205,58 @@ export function useRelatedBlogPosts(
   limit = 3
 ): { related: RelatedBlogPost[]; loading: boolean } {
   const { posts, loading } = useBlogPosts();
-  if (!current) return { related: [], loading };
 
-  const currentTagSlugs = new Set(
-    (current.tags ?? []).map((t) => slugify(t)).filter(Boolean)
-  );
-  const currentLabelBySlug = new Map<string, string>();
-  for (const t of current.tags ?? []) {
-    const s = slugify(t);
-    if (s && !currentLabelBySlug.has(s)) currentLabelBySlug.set(s, t);
-  }
+  // Memoizado por `[posts, current?.id, current?.tags, current?.category, limit]`.
+  // Sem isso, todo render do BlogPostPage refazia o scoring O(posts*tags).
+  // Usamos `current?.tags` (referência) na dep — `useBlogPosts` mantém a mesma
+  // referência por carregamento, então não força recálculo espúrio.
+  const related = useMemo<RelatedBlogPost[]>(() => {
+    if (!current) return [];
 
-  const scored: Array<{ p: BlogPost; score: number; shared: string[] }> = [];
-  for (const p of posts) {
-    if (p.id === current.id) continue;
-    const sharedSlugs = (p.tags ?? [])
-      .map((t) => slugify(t))
-      .filter((s) => s && currentTagSlugs.has(s));
-    const uniqueShared = Array.from(new Set(sharedSlugs));
-    let score = uniqueShared.length;
-    if (current.category && p.category && p.category === current.category) {
-      score += 0.5;
+    const currentTagSlugs = new Set(
+      (current.tags ?? []).map((t) => slugify(t)).filter(Boolean)
+    );
+    const currentLabelBySlug = new Map<string, string>();
+    for (const t of current.tags ?? []) {
+      const s = slugify(t);
+      if (s && !currentLabelBySlug.has(s)) currentLabelBySlug.set(s, t);
     }
-    scored.push({
-      p,
-      score,
-      shared: uniqueShared.map((s) => currentLabelBySlug.get(s) || s),
+
+    const scored: Array<{ p: BlogPost; score: number; shared: string[] }> = [];
+    for (const p of posts) {
+      if (p.id === current.id) continue;
+      const sharedSlugs = (p.tags ?? [])
+        .map((t) => slugify(t))
+        .filter((s) => s && currentTagSlugs.has(s));
+      const uniqueShared = Array.from(new Set(sharedSlugs));
+      let score = uniqueShared.length;
+      if (current.category && p.category && p.category === current.category) {
+        score += 0.5;
+      }
+      scored.push({
+        p,
+        score,
+        shared: uniqueShared.map((s) => currentLabelBySlug.get(s) || s),
+      });
+    }
+
+    scored.sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      // Desempate: mais recente primeiro. Fallback para "" cobre o caso
+      // (raro mas possível) em que ambos os campos de data são nulos —
+      // sem isso, `localeCompare(null)` lança TypeError em runtime e
+      // quebra todo o bloco de "leia também".
+      const aDate = a.p.published_at || a.p.created_at || "";
+      const bDate = b.p.published_at || b.p.created_at || "";
+      return bDate.localeCompare(aDate);
     });
-  }
 
-  scored.sort((a, b) => {
-    if (b.score !== a.score) return b.score - a.score;
-    // Desempate: mais recente primeiro
-    const aDate = a.p.published_at || a.p.created_at;
-    const bDate = b.p.published_at || b.p.created_at;
-    return bDate.localeCompare(aDate);
-  });
-
-  const related: RelatedBlogPost[] = scored.slice(0, limit).map(({ p, shared }) => ({
-    ...p,
-    sharedTagCount: shared.length,
-    sharedTags: shared,
-  }));
+    return scored.slice(0, limit).map(({ p, shared }) => ({
+      ...p,
+      sharedTagCount: shared.length,
+      sharedTags: shared,
+    }));
+  }, [posts, current, limit]);
 
   return { related, loading };
 }

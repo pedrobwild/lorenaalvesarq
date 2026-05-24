@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { fetchSiteSettings, invalidateSiteSettings, type SiteSettings } from "./useSiteSettings";
 import { isConsentAccepted, onConsentChange } from "./cookieConsent";
 
@@ -325,14 +325,21 @@ function applySeo(settings: SiteSettings, seo: SeoInput) {
  * Usa o DOM diretamente (sem react-helmet-async para evitar nova dependência).
  */
 export function useSeo(seo: SeoInput) {
-  const dep = JSON.stringify(seo);
+  // Deps granulares: cada campo primitivo é uma dep, e o jsonLd é
+  // serializado uma vez por render (apenas se presente) em vez de
+  // `JSON.stringify(seo)` no corpo do hook. Mais honesto sobre o que
+  // dispara o re-apply, e barra a regressão silenciosa do "ESLint não
+  // sabia que dependíamos de X porque tudo passava por uma string única".
+  const { title, description, canonicalPath, ogImage, ogType, noindex, jsonLd } = seo;
+  const jsonLdKey = useMemo(() => (jsonLd ? JSON.stringify(jsonLd) : ""), [jsonLd]);
+
   useEffect(() => {
     setupTrackersConsentGate();
     let cancelled = false;
     const apply = (force = false) =>
       fetchSiteSettings(force).then((settings) => {
         if (cancelled) return;
-        applySeo(settings, seo);
+        applySeo(settings, { title, description, canonicalPath, ogImage, ogType, noindex, jsonLd });
       });
     apply();
     const onRefresh = () => apply(true);
@@ -341,8 +348,10 @@ export function useSeo(seo: SeoInput) {
       cancelled = true;
       window.removeEventListener(SEO_REFRESH_EVENT, onRefresh);
     };
+    // jsonLd entra na dep via `jsonLdKey` (hash estável da serialização);
+    // a função `applySeo` é importada estaticamente, sem captura instável.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dep]);
+  }, [title, description, canonicalPath, ogImage, ogType, noindex, jsonLdKey]);
 }
 
 /**

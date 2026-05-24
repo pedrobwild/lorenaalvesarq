@@ -20,13 +20,17 @@ export function useAuth() {
   useEffect(() => {
     let mounted = true;
 
-    // Set up listener BEFORE checking session (recommended order)
+    // Set up listener BEFORE checking session (recommended order).
+    // O `setTimeout(0)` que existia aqui era resíduo do supabase-js v1,
+    // onde chamadas à API dentro do callback de auth podiam deadlockar.
+    // Em supabase-js v2 (em uso) o callback é "async-safe", então
+    // chamamos `checkAdmin` direto — sem trabalho enfileirado em macro
+    // task que atrasa o `loading=false` por um tick visível.
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return;
       setState((s) => ({ ...s, session, user: session?.user ?? null }));
-      // Defer admin check to avoid deadlock inside the auth callback
       if (session?.user) {
-        setTimeout(() => checkAdmin(session.user.id), 0);
+        checkAdmin(session.user.id);
       } else {
         setState((s) => ({ ...s, isAdmin: false, loading: false }));
       }
