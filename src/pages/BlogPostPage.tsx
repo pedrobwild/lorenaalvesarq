@@ -8,6 +8,7 @@ import { useSeo, breadcrumbJsonLd, organizationJsonLd } from "../lib/useSeo";
 import { routes, navigate } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
 import { derivePictureSources, setToSrcset } from "../lib/derivePicture";
+import { sanitizeBlogHtml } from "../lib/sanitizeHtml";
 import RelatedPosts from "../components/RelatedPosts";
 
 function formatDate(iso: string | null): string {
@@ -141,13 +142,18 @@ export default function BlogPostPage({ slug }: Props) {
   const enhancedHtml = useMemo(() => {
     if (!post?.content_html) return "";
     if (typeof window === "undefined") return post.content_html;
+    // Sanitiza ANTES de qualquer transformação: protege contra `<script>`,
+    // handlers on*= e javascript: URLs que possam ter sido salvos por um
+    // admin comprometido ou por conteúdo legado anterior à sanitização no
+    // formulário. É a última linha de defesa antes do dangerouslySetInnerHTML.
+    const safeHtml = sanitizeBlogHtml(post.content_html);
     try {
       const doc = new DOMParser().parseFromString(
-        `<div id="root">${post.content_html}</div>`,
+        `<div id="root">${safeHtml}</div>`,
         "text/html"
       );
       const root = doc.getElementById("root");
-      if (!root) return post.content_html;
+      if (!root) return safeHtml;
 
       // ============================================================
       // Hierarquia de headings — garante H1 único na página
@@ -223,8 +229,9 @@ export default function BlogPostPage({ slug }: Props) {
       }
       return root.innerHTML;
     } catch {
-      // Em qualquer falha, devolve o HTML original — nunca quebra o render do artigo.
-      return post.content_html;
+      // Em qualquer falha, devolve o HTML sanitizado (sem as melhorias de
+      // imagem) — nunca quebra o render e nunca regride para conteúdo cru.
+      return safeHtml;
     }
   }, [post?.content_html]);
 
@@ -409,8 +416,10 @@ export default function BlogPostPage({ slug }: Props) {
 
         <div
           className="blog-post__content"
-          // O HTML é editado/curado pela admin do estúdio (autora confiável).
-          // Sanitização é feita no formulário antes de salvar.
+          // `enhancedHtml` é sempre passado por sanitizeBlogHtml (DOMPurify)
+          // antes de qualquer transformação — `<script>`, handlers on*= e
+          // URLs `javascript:` são removidos. Defesa em profundidade junto
+          // com a sanitização no save em BlogFormPage.
           dangerouslySetInnerHTML={{ __html: enhancedHtml }}
         />
 

@@ -262,7 +262,7 @@ export default function App() {
     const useLenis = shouldUseSmoothScroll();
     const canParallax = shouldRunParallax();
     let lenis: Lenis | null = null;
-    let rafId: number | null = null;
+    const rafId: number | null = null;
 
     if (useLenis) {
       lenis = new Lenis({

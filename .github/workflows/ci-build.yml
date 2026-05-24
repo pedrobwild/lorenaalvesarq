@@ -3,9 +3,10 @@ name: Production build
 # Roda o pipeline completo de build em qualquer push ou PR.
 # Falha o job (exit != 0) se qualquer etapa falhar:
 #   1. routes:check  → paridade de rotas SPA ↔ edge function
-#   2. prebuild      → mesmo script via npm prebuild hook
-#   3. tsc -b        → checagem de tipos
-#   4. vite build    → bundle de produção
+#   2. test          → suíte Vitest (jsdom)
+#   3. prebuild      → mesmo script via npm prebuild hook
+#   4. tsc -b        → checagem de tipos
+#   5. vite build    → bundle de produção
 #
 # O `npm run build` já encadeia prebuild + tsc + vite build, então
 # basta executá-lo: qualquer falha aborta com status non-zero e o
@@ -19,7 +20,7 @@ on:
 
 jobs:
   build:
-    name: build (parity + tsc + vite)
+    name: build (parity + tests + tsc + vite)
     runs-on: ubuntu-latest
 
     steps:
@@ -37,6 +38,16 @@ jobs:
 
       - name: Routes parity check
         run: npm run routes:check
+
+      - name: Lint (eslint)
+        # Falha o job se houver erros de ESLint. Warnings são aceitos por
+        # enquanto (cleanups incrementais ficam para PRs do plano do audit).
+        run: npm run lint
+
+      - name: Tests (vitest run)
+        # Roda a suíte completa antes do build. Regressões de SEO/roteador
+        # devem bloquear o merge antes do bundle de produção ser gerado.
+        run: npm test
 
       - name: Production build (tsc + vite)
         # `npm run build` aciona o prebuild (parity check) novamente,

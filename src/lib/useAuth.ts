@@ -63,17 +63,9 @@ export function useAuth() {
     return await supabase.auth.signInWithPassword({ email, password });
   }
 
-  async function signUp(email: string, password: string) {
-    return await supabase.auth.signUp({
-      email,
-      password,
-      options: { emailRedirectTo: `${window.location.origin}/` },
-    });
-  }
-
   async function signOut() {
     await supabase.auth.signOut();
   }
 
-  return { ...state, signIn, signUp, signOut };
+  return { ...state, signIn, signOut };
 }

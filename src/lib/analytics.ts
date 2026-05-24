@@ -14,6 +14,7 @@
  * - Resiliência: nunca lança exceção
  */
 import { supabase } from "@/integrations/supabase/client";
+import { isConsentAccepted, onConsentChange } from "@/lib/cookieConsent";
 
 type EventType =
   | "pageview"
@@ -409,6 +410,9 @@ export function track(eventType: EventType, payload?: TrackPayload): void {
   try {
     if (isDntEnabled()) return;
     if (isAdminContext()) return;
+    // LGPD: sem aceite explícito do banner, nenhum evento sai. Cobre tanto
+    // o caso "usuário ainda não decidiu" quanto "recusou".
+    if (!isConsentAccepted()) return;
     sendEvent(buildRow(eventType, payload), false);
   } catch {
     /* never throw */
@@ -532,13 +536,11 @@ function onPageHide() {
 }
 
 let initialized = false;
+let pendingConsentUnsub: (() => void) | null = null;
 
-export function initAnalytics(): () => void {
-  if (typeof window === "undefined") return () => undefined;
-  if (initialized) return () => undefined;
-  initialized = true;
-
-  // pageview inicial
+function attachListeners(): () => void {
+  // pageview inicial — track() já gateia por consentimento, então emitir aqui
+  // antes do aceite vira no-op em vez de vazar dados.
   emitPageview();
 
   const onRouteChange = () => emitPageview();
@@ -559,6 +561,34 @@ export function initAnalytics(): () => void {
     document.removeEventListener("visibilitychange", onVisibilityChange);
     window.removeEventListener("pagehide", onPageHide);
     if (pageviewDebounceTimer) window.clearTimeout(pageviewDebounceTimer);
+  };
+}
+
+export function initAnalytics(): () => void {
+  if (typeof window === "undefined") return () => undefined;
+  if (initialized) return () => undefined;
+  initialized = true;
+
+  // Gate LGPD: se o usuário já aceitou, anexa listeners agora; senão,
+  // anexa só quando o consentimento mudar para "accepted". Recusa ou
+  // ausência de decisão mantém o app totalmente silencioso.
+  let detachListeners: (() => void) | null = null;
+
+  if (isConsentAccepted()) {
+    detachListeners = attachListeners();
+  } else {
+    pendingConsentUnsub = onConsentChange((v) => {
+      if (v === "accepted" && !detachListeners) {
+        detachListeners = attachListeners();
+      }
+    });
+  }
+
+  return () => {
+    detachListeners?.();
+    detachListeners = null;
+    pendingConsentUnsub?.();
+    pendingConsentUnsub = null;
     initialized = false;
   };
 }

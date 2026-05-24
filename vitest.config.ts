@@ -8,9 +8,10 @@ import path from "path";
  * Os testes rodam no ambiente jsdom para que possamos inspecionar `document.head`
  * (title, <meta name="robots">, JSON-LD) e o DOM renderizado pelo React.
  *
- * O script `npm run build` encadeia `vitest run` antes do `vite build` para que
- * regressões em SEO (ex.: alguém remover `noindex` da NotFoundPage) quebrem o
- * build de produção e não cheguem a virar soft-404 no Google.
+ * A suíte é executada via `npm test` (script `vitest run`). O workflow de CI
+ * `ci-build.yml` roda `npm test` antes de `npm run build`, garantindo que
+ * regressões em SEO (ex.: alguém remover `noindex` da NotFoundPage) bloqueiem
+ * o merge antes de virar soft-404 no Google.
  */
 export default defineConfig({
   plugins: [react()],

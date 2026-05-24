@@ -3,6 +3,7 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { uploadImageGeneric, type UploadResult } from "@/lib/uploadImage";
 import { navigate, routes } from "@/lib/useHashRoute";
+import { sanitizeBlogHtml } from "@/lib/sanitizeHtml";
 import { slugify, readingTime, type BlogPost } from "@/lib/useBlog";
 
 type Props = { slug?: string };
@@ -232,12 +233,17 @@ export default function BlogFormPage({ slug }: Props) {
       .split(",")
       .map((t) => t.trim())
       .filter(Boolean);
+    // Sanitiza antes de persistir: tira `<script>`, handlers on*= e
+    // URLs `javascript:`. O render também sanitiza por defesa em
+    // profundidade, mas limpamos aqui para não deixar payload sujo
+    // viajando até o banco.
+    const sanitizedContent = sanitizeBlogHtml(draft.content_html);
     const payload = {
       slug: draft.slug.trim(),
       title: draft.title.trim(),
       subtitle: draft.subtitle.trim() || null,
       excerpt: draft.excerpt.trim() || null,
-      content_html: draft.content_html,
+      content_html: sanitizedContent,
       cover_url: draft.cover_url || null,
       cover_url_md: draft.cover_url_md || null,
       cover_url_sm: draft.cover_url_sm || null,
@@ -245,7 +251,7 @@ export default function BlogFormPage({ slug }: Props) {
       cover_blur_data_url: draft.cover_blur_data_url || null,
       category: draft.category.trim() || null,
       tags,
-      reading_minutes: draft.reading_minutes || readingTime(draft.content_html),
+      reading_minutes: draft.reading_minutes || readingTime(sanitizedContent),
       author_name: draft.author_name.trim() || null,
       author_role: draft.author_role.trim() || null,
       published_at: draft.published_at
