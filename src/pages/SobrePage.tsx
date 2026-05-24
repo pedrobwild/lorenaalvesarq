@@ -20,12 +20,12 @@ const FORMACOES = [
   },
   {
     curso: "Design de Interiores",
-    instituicao: "Instituto de Pós-Graduação de Goiânia",
+    instituicao: "Instituto de Pós-Graduação",
     sigla: "IPOG",
   },
   {
     curso: "Lighting Design",
-    instituicao: "Instituto de Pós-Graduação de Goiânia",
+    instituicao: "Instituto de Pós-Graduação",
     sigla: "IPOG",
   },
   {
