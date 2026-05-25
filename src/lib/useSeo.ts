@@ -470,25 +470,31 @@ export function professionalServiceJsonLd(s: SiteSettings) {
           availableLanguage: ["Portuguese", "pt-BR"],
         }
       : undefined,
-    taxID: "05.119.224/0001-30",
-    vatID: "05.119.224/0001-30",
-    iso6523Code: "0007:05119224000130",
+    taxID: s.cnpj || undefined,
+    vatID: s.cnpj || undefined,
+    iso6523Code: s.cnpj ? `0007:${s.cnpj.replace(/\D/g, "")}` : undefined,
     identifier: [
-      { "@type": "PropertyValue", propertyID: "CNPJ", value: "05.119.224/0001-30" },
-      { "@type": "PropertyValue", propertyID: "CAU", value: "A66583-5" },
-    ],
-    hasCredential: {
-      "@type": "EducationalOccupationalCredential",
-      name: "Registro Profissional CAU",
-      credentialCategory: "Professional Registration",
-      identifier: "A66583-5",
-      recognizedBy: {
-        "@type": "Organization",
-        name: "Conselho de Arquitetura e Urbanismo do Brasil",
-        alternateName: "CAU/BR",
-        url: "https://www.caubr.gov.br",
-      },
-    },
+      s.cnpj
+        ? { "@type": "PropertyValue", propertyID: "CNPJ", value: s.cnpj }
+        : null,
+      s.cau
+        ? { "@type": "PropertyValue", propertyID: "CAU", value: s.cau }
+        : null,
+    ].filter(Boolean),
+    hasCredential: s.cau
+      ? {
+          "@type": "EducationalOccupationalCredential",
+          name: "Registro Profissional CAU",
+          credentialCategory: "Professional Registration",
+          identifier: s.cau,
+          recognizedBy: {
+            "@type": "Organization",
+            name: "Conselho de Arquitetura e Urbanismo do Brasil",
+            alternateName: "CAU/BR",
+            url: "https://www.caubr.gov.br",
+          },
+        }
+      : undefined,
     priceRange: s.business_price_range || undefined,
     foundingDate: s.business_founding_year || undefined,
     openingHours: s.business_opening_hours || undefined,
@@ -658,26 +664,32 @@ export function organizationJsonLd(s: SiteSettings) {
       "@type": "Person",
       name: "Lorena Alves",
       jobTitle: "Arquiteta e Urbanista",
-      hasCredential: {
-        "@type": "EducationalOccupationalCredential",
-        name: "Registro Profissional CAU",
-        credentialCategory: "Professional Registration",
-        identifier: "A66583-5",
-        recognizedBy: {
-          "@type": "Organization",
-          name: "Conselho de Arquitetura e Urbanismo do Brasil",
-          alternateName: "CAU/BR",
-          url: "https://www.caubr.gov.br",
-        },
-      },
+      hasCredential: s.cau
+        ? {
+            "@type": "EducationalOccupationalCredential",
+            name: "Registro Profissional CAU",
+            credentialCategory: "Professional Registration",
+            identifier: s.cau,
+            recognizedBy: {
+              "@type": "Organization",
+              name: "Conselho de Arquitetura e Urbanismo do Brasil",
+              alternateName: "CAU/BR",
+              url: "https://www.caubr.gov.br",
+            },
+          }
+        : undefined,
     },
-    taxID: "05.119.224/0001-30",
-    vatID: "05.119.224/0001-30",
-    iso6523Code: "0007:05119224000130",
+    taxID: s.cnpj || undefined,
+    vatID: s.cnpj || undefined,
+    iso6523Code: s.cnpj ? `0007:${s.cnpj.replace(/\D/g, "")}` : undefined,
     identifier: [
-      { "@type": "PropertyValue", propertyID: "CNPJ", value: "05.119.224/0001-30" },
-      { "@type": "PropertyValue", propertyID: "CAU", value: "A66583-5" },
-    ],
+      s.cnpj
+        ? { "@type": "PropertyValue", propertyID: "CNPJ", value: s.cnpj }
+        : null,
+      s.cau
+        ? { "@type": "PropertyValue", propertyID: "CAU", value: s.cau }
+        : null,
+    ].filter(Boolean),
     address,
     contactPoint: s.contact_phone
       ? {

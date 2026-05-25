@@ -9,23 +9,17 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const { supabaseInsertMock, supabaseFromMock } = vi.hoisted(() => {
-  const insertMock = vi.fn().mockResolvedValue({ error: null });
-  const fromMock = vi.fn(() => ({ insert: insertMock }));
-  return { supabaseInsertMock: insertMock, supabaseFromMock: fromMock };
-});
-
-vi.mock("@/integrations/supabase/client", () => ({
-  supabase: { from: supabaseFromMock },
-}));
+// Após A9 o tracker bate na edge function /functions/v1/track via fetch.
+// Mockamos o global fetch e contamos quantos POSTs saem.
+const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
+vi.stubGlobal("fetch", fetchMock);
 
 import { track } from "@/lib/analytics";
 import { setConsent, isConsentAccepted } from "@/lib/cookieConsent";
 
 beforeEach(() => {
   window.localStorage.clear();
-  supabaseInsertMock.mockClear();
-  supabaseFromMock.mockClear();
+  fetchMock.mockClear();
 });
 
 afterEach(() => {
@@ -36,29 +30,32 @@ describe("track() — gate de consentimento LGPD", () => {
   it("não envia evento quando não há decisão de consentimento", () => {
     expect(isConsentAccepted()).toBe(false);
     track("pageview", { path: "/" });
-    expect(supabaseInsertMock).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("não envia evento quando o usuário recusou", () => {
     setConsent("declined");
     track("pageview", { path: "/" });
-    expect(supabaseInsertMock).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("envia evento depois que o usuário aceita", () => {
     setConsent("accepted");
     track("pageview", { path: "/" });
-    expect(supabaseInsertMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const [url, init] = fetchMock.mock.calls[0]!;
+    expect(String(url)).toMatch(/\/functions\/v1\/track$/);
+    expect((init as RequestInit)?.method).toBe("POST");
   });
 
   it("volta a silenciar se o consentimento for revogado para 'declined'", () => {
     setConsent("accepted");
     track("pageview", { path: "/a" });
-    expect(supabaseInsertMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
 
     setConsent("declined");
     track("pageview", { path: "/b" });
-    expect(supabaseInsertMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });
 

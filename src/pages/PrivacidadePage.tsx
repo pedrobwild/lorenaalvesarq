@@ -66,10 +66,11 @@ export default function PrivacidadePage() {
           <div className="privacidade-page__a">
             <p>
               <strong>Lorena Alves Arquitetura</strong>, estabelecida em
-              Uberlândia/MG, inscrita no CNPJ 05.119.224/0001-30 e registrada no
-              CAU sob o número A66583-5, é a controladora dos dados pessoais
-              tratados por meio deste site, sendo responsável pelas decisões
-              sobre o tratamento desses dados.
+              Uberlândia/MG
+              {settings?.cnpj && <>, inscrita no CNPJ {settings.cnpj}</>}
+              {settings?.cau && <> e registrada no CAU sob o número {settings.cau}</>},
+              é a controladora dos dados pessoais tratados por meio deste site,
+              sendo responsável pelas decisões sobre o tratamento desses dados.
             </p>
           </div>
         </article>

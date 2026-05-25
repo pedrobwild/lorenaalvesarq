@@ -44,6 +44,27 @@ const settingsSchema = z.object({
   instagram_url: optionalUrl,
   linkedin_url: optionalUrl,
   pinterest_url: optionalUrl,
+  cnpj: z
+    .string()
+    .trim()
+    .max(20, "CNPJ muito longo")
+    .regex(/^[\d./-]*$/, "Use apenas dígitos, ponto, barra e hífen")
+    .optional()
+    .nullable(),
+  cau: z
+    .string()
+    .trim()
+    .max(20, "CAU muito longo")
+    .regex(/^[A-Za-z0-9-]*$/, "Use apenas letras, dígitos e hífen")
+    .optional()
+    .nullable(),
+  whatsapp_number: z
+    .string()
+    .trim()
+    .max(20, "Número muito longo")
+    .regex(/^\d*$/, "Use apenas dígitos no formato E.164 sem + (ex: 5534999998888)")
+    .optional()
+    .nullable(),
 });
 
 type FieldErrors = Partial<Record<keyof z.infer<typeof settingsSchema>, string>>;
@@ -77,6 +98,9 @@ export default function SettingsPage() {
       instagram_url: s.instagram_url ?? "",
       linkedin_url: s.linkedin_url ?? "",
       pinterest_url: s.pinterest_url ?? "",
+      cnpj: s.cnpj ?? "",
+      cau: s.cau ?? "",
+      whatsapp_number: s.whatsapp_number ?? "",
     };
     const parsed = settingsSchema.safeParse(candidate);
     if (!parsed.success) {
@@ -210,6 +234,49 @@ export default function SettingsPage() {
               onChange={(e) => patch("address_region", e.target.value)}
               maxLength={40}
               placeholder="MG"
+            />
+          </Field>
+        </div>
+      </section>
+
+      <section className="admin-section">
+        <h2 className="admin-section__title">Identidade profissional</h2>
+        <p className="mono" style={{ opacity: 0.6, marginBottom: 16, fontSize: "var(--admin-fs-xs)" }}>
+          Aparecem no footer do site, no rodapé da política de privacidade e nos schemas JSON-LD
+          consumidos por Google e demais motores.
+        </p>
+        <div className="admin-grid-2">
+          <Field label="CNPJ" error={errors.cnpj} hint="formato livre, ex: 05.119.224/0001-30">
+            <input
+              className="admin-field__input"
+              value={s.cnpj ?? ""}
+              onChange={(e) => patch("cnpj", e.target.value)}
+              maxLength={20}
+              placeholder="05.119.224/0001-30"
+            />
+          </Field>
+          <Field label="Registro CAU" error={errors.cau} hint="ex: A66583-5">
+            <input
+              className="admin-field__input"
+              value={s.cau ?? ""}
+              onChange={(e) => patch("cau", e.target.value)}
+              maxLength={20}
+              placeholder="A66583-5"
+            />
+          </Field>
+          <Field
+            label="WhatsApp (E.164 sem +)"
+            error={errors.whatsapp_number}
+            hint="só dígitos, ex: 5534996668215 — usado para gerar a URL wa.me do CTA"
+            full
+          >
+            <input
+              className="admin-field__input"
+              value={s.whatsapp_number ?? ""}
+              onChange={(e) => patch("whatsapp_number", e.target.value.replace(/\D/g, ""))}
+              maxLength={20}
+              placeholder="5534996668215"
+              inputMode="numeric"
             />
           </Field>
         </div>
