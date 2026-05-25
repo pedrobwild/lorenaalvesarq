@@ -42,7 +42,12 @@ const EDGE_FN_FILE = resolve(
  *
  * Tudo que NÃO estiver nesta lista de exceções precisa estar em ambos os
  * arquivos, ou o script falha.
+ *
+ * IMPORTANTE: ao adicionar uma rota nova em /admin/*, lembre-se de incluí-la
+ * AQUI ao mesmo tempo em que cria a entrada em src/lib/useHashRoute.ts —
+ * caso contrário o CI quebra. Veja docs/ROUTING.md para o contrato completo.
  */
+
 const SPA_ONLY_ALLOWED = new Set([
   // Bloco admin: tratado como reason="admin_route" via prefixo /admin/*.
   "/admin",
