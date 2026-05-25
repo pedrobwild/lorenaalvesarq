@@ -38,7 +38,10 @@ export function useCustomCursor(enabled: boolean = true) {
       tx = e.clientX;
       ty = e.clientY;
     };
-    window.addEventListener("mousemove", onMove);
+    // `passive: true` em mousemove garante que o browser não precise
+    // esperar a função decidir se vai chamar preventDefault — ganho
+    // mensurável durante scroll com mouse simultâneo. (M2)
+    window.addEventListener("mousemove", onMove, { passive: true });
 
     const render = () => {
       x += (tx - x) * 0.22;
@@ -74,8 +77,8 @@ export function useCustomCursor(enabled: boolean = true) {
         c?.classList.remove("cursor--hover");
       }
     };
-    document.addEventListener("mouseover", enter);
-    document.addEventListener("mouseout", leave);
+    document.addEventListener("mouseover", enter, { passive: true });
+    document.addEventListener("mouseout", leave, { passive: true });
 
 
     return () => {

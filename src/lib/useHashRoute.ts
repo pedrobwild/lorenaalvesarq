@@ -68,14 +68,18 @@ function parsePath(rawPath: string): Route {
   return { name: "not-found" };
 }
 
+/**
+ * Função pura: lê `window.location` e devolve a `Route`, sem efeitos.
+ * Separada de `migrateLegacyHashIfNeeded` para que o `useState` inicial
+ * possa derivar a rota sem disparar `history.replaceState` durante o
+ * render (M12) — side effects no init do `useState` rodam em modo
+ * estrito duas vezes e são uma fonte clássica de loops sutis.
+ */
 function parseLocation(): Route {
-  // Compatibilidade com links antigos #/portfolio, #/projeto/slug, #/admin/...
   const hash = window.location.hash.replace(/^#/, "");
   if (hash.startsWith("/")) {
-    // Migra silenciosamente para URL limpa, preservando o histórico.
-    const cleanPath = hash;
-    window.history.replaceState({}, "", cleanPath || "/");
-    return parsePath(cleanPath);
+    // Resolve a rota a partir do hash legado SEM mutar a URL aqui.
+    return parsePath(hash);
   }
   // Âncoras puras (#estudio, #contato, #projetos) ficam na home
   if (hash && !hash.startsWith("/")) {
@@ -84,10 +88,27 @@ function parseLocation(): Route {
   return parsePath(window.location.pathname || "/");
 }
 
+/**
+ * Efeito colateral isolado: se a URL ainda usa o formato legado `#/algo`,
+ * promove para `/algo` via `replaceState` (preservando histórico). Roda só
+ * uma vez por mount no `useEffect`, fora do caminho de render.
+ */
+function migrateLegacyHashIfNeeded(): void {
+  const hash = window.location.hash.replace(/^#/, "");
+  if (!hash.startsWith("/")) return;
+  window.history.replaceState({}, "", hash || "/");
+}
+
 export function useHashRoute(): Route {
   const [route, setRoute] = useState<Route>(() => parseLocation());
 
   useEffect(() => {
+    // Migra a URL legada uma única vez no mount. Se houve migração,
+    // re-deriva a rota para refletir o pathname novo (no caso geral
+    // é equivalente, mas o re-parse mantém o estado autoconsistente).
+    migrateLegacyHashIfNeeded();
+    setRoute(parseLocation());
+
     const onChange = () => setRoute(parseLocation());
     window.addEventListener("popstate", onChange);
     window.addEventListener("hashchange", onChange);
