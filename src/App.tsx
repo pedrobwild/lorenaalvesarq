@@ -645,6 +645,14 @@ export default function App() {
               "Sala integrada com cozinha em projeto de design de interiores residencial assinado por Lorena Alves Arquitetura no Triângulo Mineiro",
               "Casa contemporânea em Uberlândia/MG ao entardecer com iluminação cênica e materiais autorais — arquitetura por Lorena Alves Arquitetura",
             ];
+            // Render apenas o slide ativo + o próximo (pré-busca do carrossel).
+            // Evita baixar ~2.7 MB de hero (5 webp) no load inicial — o `loading="lazy"`
+            // não ajuda aqui porque todos estão acima da dobra, mesmo com opacidade 0.
+            const nextIdx = (heroIdx + 1) % HERO_IMAGES.length;
+            const shouldRender = i === heroIdx || i === nextIdx || i === 0;
+            if (!shouldRender) {
+              return <picture key={slide.webp} aria-hidden="true" />;
+            }
             return (
               <picture key={slide.webp}>
                 <source

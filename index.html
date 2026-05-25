@@ -79,6 +79,24 @@
   rel="stylesheet"
 />
 
+<!--
+  Preload da imagem LCP (primeiro slide do hero).
+  Sem isso, a hero só começa a baixar depois do bundle JS (~2s),
+  porque é renderizada via React. Com o preload o browser inicia
+  o download em paralelo ao parse do JS/CSS — corta ~1.5–2s do LCP.
+  Usamos imagesrcset para o browser escolher AVIF md (mobile) ou lg (desktop).
+  O Vite reescreve o caminho /src/assets/... durante o build, mantendo o hash.
+-->
+<link
+  rel="preload"
+  as="image"
+  type="image/avif"
+  href="/src/assets/hero/hero-1-lg.avif"
+  imagesrcset="/src/assets/hero/hero-1-md.avif 1280w, /src/assets/hero/hero-1-lg.avif 1920w"
+  imagesizes="100vw"
+  fetchpriority="high"
+/>
+
 <!-- =========================================================
      JSON-LD — LocalBusiness + ProfessionalService + WebSite
      Inline para garantir indexação mesmo sem execução de JS.
