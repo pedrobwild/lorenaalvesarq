@@ -13,7 +13,6 @@
  * - Privacidade: respeita DNT, ignora rotas /admin
  * - Resiliência: nunca lança exceção
  */
-import { supabase } from "@/integrations/supabase/client";
 import { isConsentAccepted, onConsentChange } from "@/lib/cookieConsent";
 
 type EventType =
@@ -354,33 +353,27 @@ function buildRow(eventType: EventType, payload?: TrackPayload) {
 }
 
 function sendEvent(row: Record<string, unknown>, preferBeacon: boolean) {
-  // Beacon path (somente para unload / página fechando)
+  const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track`;
+  const json = JSON.stringify(row);
+
+  // Beacon path (somente para unload / página fechando). Usa text/plain pra
+  // evitar preflight CORS — a edge function parseia o body como JSON
+  // independente do Content-Type declarado.
   if (preferBeacon && typeof navigator !== "undefined" && "sendBeacon" in navigator) {
     try {
-      const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics_events`;
-      const apikey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-      const blob = new Blob([JSON.stringify(row)], {
-        type: "application/json",
-      });
-      // sendBeacon não permite headers custom; o PostgREST aceita a chave anon via querystring
-      // mas o melhor é tentar fetch keepalive como fallback se beacon falhar
-      const ok = navigator.sendBeacon(`${url}?apikey=${apikey}`, blob);
+      const blob = new Blob([json], { type: "text/plain;charset=UTF-8" });
+      const ok = navigator.sendBeacon(url, blob);
       if (ok) return;
     } catch {
       /* fallback abaixo */
     }
     // fallback fetch keepalive
     try {
-      void fetch(`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/analytics_events`, {
+      void fetch(url, {
         method: "POST",
         keepalive: true,
-        headers: {
-          "Content-Type": "application/json",
-          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string,
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string}`,
-          Prefer: "return=minimal",
-        },
-        body: JSON.stringify(row),
+        headers: { "Content-Type": "text/plain;charset=UTF-8" },
+        body: json,
       }).catch(() => undefined);
     } catch {
       /* noop */
@@ -388,21 +381,24 @@ function sendEvent(row: Record<string, unknown>, preferBeacon: boolean) {
     return;
   }
 
-  // Caminho normal: SDK (com retry único)
-  void supabase
-    .from("analytics_events")
-    .insert(row as never)
+  // Caminho normal: fetch JSON com retry único em falha de rede / 5xx.
+  // Não bloqueia (fire-and-forget). Erros 4xx são engolidos de propósito —
+  // significam payload inválido ou bot detectado, não vale retry.
+  void fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: json,
+  })
     .then((res) => {
-      if (res.error) {
-        // retry único
-        void supabase
-          .from("analytics_events")
-          .insert(row as never)
-          .then(() => undefined)
-          .then(undefined, () => undefined);
+      if (!res.ok && res.status >= 500) {
+        void fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: json,
+        }).catch(() => undefined);
       }
     })
-    .then(undefined, () => undefined);
+    .catch(() => undefined);
 }
 
 // ---------- public API ----------

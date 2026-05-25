@@ -991,21 +991,26 @@ export default function App() {
                 </p>
               </div>
             )}
-            <a
-              href="https://wa.me/5534996668215"
-              target="_blank"
-              rel="noopener noreferrer external"
-              className="btn-big"
-              data-cursor="hover"
-              onClick={(e) => {
-                track("click_contact", { value: { kind: "whatsapp", from: "cta-button" } });
-                e.preventDefault();
-                window.open("https://wa.me/5534996668215", "_blank", "noopener,noreferrer");
-              }}
-            >
-              <span>ENTRE EM CONTATO</span>
-              <span className="btn-big__arrow"></span>
-            </a>
+            {settings?.whatsapp_number && (() => {
+              const waUrl = `https://wa.me/${settings.whatsapp_number.replace(/\D/g, "")}`;
+              return (
+                <a
+                  href={waUrl}
+                  target="_blank"
+                  rel="noopener noreferrer external"
+                  className="btn-big"
+                  data-cursor="hover"
+                  onClick={(e) => {
+                    track("click_contact", { value: { kind: "whatsapp", from: "cta-button" } });
+                    e.preventDefault();
+                    window.open(waUrl, "_blank", "noopener,noreferrer");
+                  }}
+                >
+                  <span>ENTRE EM CONTATO</span>
+                  <span className="btn-big__arrow"></span>
+                </a>
+              );
+            })()}
           </div>
         </div>
       </section>
@@ -1148,8 +1153,8 @@ export default function App() {
         </div>
         <div className="footer__bottom">
           <span>© 2026 Lorena Alves Arquitetura. Todos os direitos reservados.</span>
-          <span>CNPJ 05.119.224/0001-30</span>
-          <span>CAU A66583-5</span>
+          {settings?.cnpj && <span>CNPJ {settings.cnpj}</span>}
+          {settings?.cau && <span>CAU {settings.cau}</span>}
           <span>
             <a
               href="#/admin/login"

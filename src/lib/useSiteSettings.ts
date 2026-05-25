@@ -15,6 +15,11 @@ export type SiteSettings = {
   pinterest_url: string | null;
   default_og_image: string | null;
 
+  // Identidade profissional
+  cnpj: string | null;
+  cau: string | null;
+  whatsapp_number: string | null;
+
   // SEO base
   seo_default_title: string | null;
   seo_default_description: string | null;
@@ -73,6 +78,10 @@ const DEFAULTS: SiteSettings = {
   linkedin_url: null,
   pinterest_url: null,
   default_og_image: null,
+
+  cnpj: "05.119.224/0001-30",
+  cau: "A66583-5",
+  whatsapp_number: "5534996668215",
 
   seo_default_title: "lorenaalves arq — Arquitetura e design de interiores",
   seo_default_description:
