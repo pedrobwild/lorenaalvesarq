@@ -190,20 +190,32 @@ export default function BlogPostPage({ slug }: Props) {
       }
 
       const imgs = Array.from(root.querySelectorAll("img"));
-      for (const img of imgs) {
-        // 1) Garantir lazy + async em qualquer <img> sem priority explícita
-        if (!img.hasAttribute("loading")) img.setAttribute("loading", "lazy");
-        if (!img.hasAttribute("decoding")) img.setAttribute("decoding", "async");
-        if (!img.hasAttribute("fetchpriority")) img.setAttribute("fetchpriority", "low");
+      imgs.forEach((img, idx) => {
+        // A primeira <img> do conteúdo é (estatisticamente) above-the-fold
+        // em posts longos. Aplicar `loading="lazy"` + `fetchpriority="low"`
+        // aqui derruba o LCP — o browser adia a request da imagem que o
+        // usuário vê primeiro. Trate a primeira como hero do artigo:
+        // eager + high-priority + decoding sync. Demais imagens seguem
+        // o lazy default abaixo. (M5)
+        const isAboveFold = idx === 0;
+        if (!img.hasAttribute("loading")) {
+          img.setAttribute("loading", isAboveFold ? "eager" : "lazy");
+        }
+        if (!img.hasAttribute("decoding")) {
+          img.setAttribute("decoding", isAboveFold ? "sync" : "async");
+        }
+        if (!img.hasAttribute("fetchpriority")) {
+          img.setAttribute("fetchpriority", isAboveFold ? "high" : "low");
+        }
 
         // 2) Se já está dentro de <picture>, deixa quieto (autor já configurou).
         const inPicture = img.parentElement?.tagName.toLowerCase() === "picture";
-        if (inPicture) continue;
+        if (inPicture) return;
 
         // 3) Tenta derivar AVIF/WebP/JPEG da URL — só upgrade se for URL do pipeline.
         const src = img.getAttribute("src") || "";
         const derived = derivePictureSources(src);
-        if (!derived) continue;
+        if (!derived) return;
 
         const sizes = img.getAttribute("sizes") || "(max-width: 900px) 100vw, 900px";
 
@@ -226,7 +238,7 @@ export default function BlogPostPage({ slug }: Props) {
 
         img.parentNode?.insertBefore(picture, img);
         picture.appendChild(img);
-      }
+      });
       return root.innerHTML;
     } catch {
       // Em qualquer falha, devolve o HTML sanitizado (sem as melhorias de

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom/client";
 import CookieBanner from "./components/CookieBanner";
+import RootErrorBoundary from "./components/RootErrorBoundary";
 import { useCustomCursor } from "./lib/useCustomCursor";
 import { useHashRoute, installLinkInterceptor, type Route } from "./lib/useHashRoute";
 import { initAnalytics } from "./lib/analytics";
@@ -69,9 +70,12 @@ function Root() {
 
   const adminMode = isAdminRoute(displayed);
 
+  // O elemento `.cursor` é criado/removido pelo próprio `useCustomCursor`
+  // — manter um <div className="cursor"> renderizado aqui em paralelo
+  // duplicava a responsabilidade e abria janela para dois nodes coexistirem
+  // se o hook fosse desabilitado/habilitado durante a vida do app. (M7)
   return (
     <>
-      {!adminMode && <div className="cursor" aria-hidden="true"></div>}
       <div
         className={`route-transition route-transition--${phase}`}
         style={{ ["--route-transition-ms" as string]: `${TRANSITION_MS}ms` }}
@@ -85,6 +89,8 @@ function Root() {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Root />
+    <RootErrorBoundary>
+      <Root />
+    </RootErrorBoundary>
   </React.StrictMode>
 );

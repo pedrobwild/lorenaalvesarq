@@ -22,9 +22,13 @@ function setMeta(selector: string, attrs: Record<string, string>) {
   if (!el) {
     const tag = selector.startsWith("link") ? "link" : "meta";
     el = document.createElement(tag) as HTMLMetaElement | HTMLLinkElement;
-    el.setAttribute(MANAGED_ATTR, "true");
     document.head.appendChild(el);
   }
+  // Marca toda tag tocada (criada OU pré-existente do index.html) como
+  // managed. Sem isso, os metas estáticos do index.html ficavam órfãos
+  // do ciclo de aplicação — `clearJsonLd` e checagens equivalentes não
+  // os enxergavam e o "estado" do <head> divergia entre route swaps. (M4)
+  el.setAttribute(MANAGED_ATTR, "true");
   for (const [k, v] of Object.entries(attrs)) {
     el.setAttribute(k, v);
   }

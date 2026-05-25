@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { routes } from "../lib/useHashRoute";
 import { readConsent, setConsent, type Consent } from "../lib/cookieConsent";
 
@@ -14,6 +14,8 @@ import { readConsent, setConsent, type Consent } from "../lib/cookieConsent";
 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
+  const acceptBtnRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     // Checa consentimento após montagem — evita SSR/hidratação inconsistente.
@@ -26,6 +28,29 @@ export default function CookieBanner() {
     return undefined;
   }, []);
 
+  // M8: a11y — quando o banner aparece, lembra o elemento focado para
+  // restaurar depois, e move o foco para "Aceitar" (default não
+  // destrutivo). ESC equivale a "Recusar" — opção mais segura para
+  // privacidade do que dispensar sem decisão.
+  useEffect(() => {
+    if (!visible) return;
+    previousFocusRef.current =
+      (document.activeElement as HTMLElement | null) ?? null;
+    acceptBtnRef.current?.focus({ preventScroll: true });
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        handle("declined");
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      previousFocusRef.current?.focus?.({ preventScroll: true });
+    };
+  }, [visible]);
+
   function handle(choice: Consent) {
     setConsent(choice);
     setVisible(false);
@@ -34,15 +59,22 @@ export default function CookieBanner() {
   if (!visible) return null;
 
   return (
+    // Usa `role="region"` (não "dialog") porque o banner não bloqueia
+    // interação com o resto da página — declarar dialog sem aria-modal
+    // nem focus-trap é o pior dos mundos. Region + aria-labelledby
+    // mantém o banner navegável por leitores de tela como landmark,
+    // e o ESC handler global cobre o fluxo de teclado. (M8)
     <div
       className="cookie-banner"
-      role="dialog"
+      role="region"
       aria-live="polite"
-      aria-label="Aviso de cookies e privacidade"
+      aria-labelledby="cookie-banner-title"
     >
       <div className="cookie-banner__inner">
         <div className="cookie-banner__text">
-          <p className="cookie-banner__title mono">Cookies e privacidade</p>
+          <p id="cookie-banner-title" className="cookie-banner__title mono">
+            Cookies e privacidade
+          </p>
           <p className="cookie-banner__desc">
             Este site utiliza cookies para melhorar sua experiência e entender
             como nossos conteúdos são acessados. Você pode aceitar ou recusar
@@ -67,6 +99,7 @@ export default function CookieBanner() {
             Recusar
           </button>
           <button
+            ref={acceptBtnRef}
             type="button"
             className="cookie-banner__btn cookie-banner__btn--solid"
             onClick={() => handle("accepted")}

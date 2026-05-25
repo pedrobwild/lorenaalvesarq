@@ -104,6 +104,15 @@ export function useProjects() {
       .order("order_index", { ascending: true })
       .then(({ data, error }) => {
         if (!mounted) return;
+        if (error && import.meta.env.DEV) {
+          // M6: a falha do fetch era silenciada por completo, escondendo
+          // problemas reais (RLS, schema drift, projeto offline). O fallback
+          // para STATIC_PROJECTS permanece — só passamos a logar em DEV para
+          // que o autor veja na console em vez de "funcionou mas com dados
+          // antigos misteriosamente". Sink externo (Sentry/Logflare) entra
+          // num PR futuro junto com error monitoring.
+          console.warn("[useProjects] fetch falhou, usando fallback estático:", error);
+        }
         if (data && data.length > 0 && !error) {
           setProjects((data as DbProject[]).map(mapDbToProject));
         }
