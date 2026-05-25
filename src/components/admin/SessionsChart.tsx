@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import {
   Area,
-  AreaChart,
   CartesianGrid,
   Line,
   LineChart,

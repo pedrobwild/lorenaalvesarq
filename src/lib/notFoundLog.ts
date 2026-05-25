@@ -9,6 +9,7 @@
 //   URL correta sem precisar publicar configuração extra de hosting.
 
 import { supabase } from "@/integrations/supabase/client";
+import { devWarn } from "@/lib/devLog";
 
 const SESSION_FLAG_PREFIX = "404-logged:";
 
@@ -37,8 +38,10 @@ export async function logNotFound(path: string, referrer?: string | null): Promi
       p_path: path,
       p_referrer: referrer || undefined,
     });
-  } catch {
-    /* nunca falha a renderização por causa do logging */
+  } catch (err) {
+    // Nunca derruba o render por logging — mas em DEV avisa o autor,
+    // antes o catch silenciava completamente (L9 do audit).
+    devWarn("[notFoundLog] log_404 falhou:", err);
   }
 }
 
@@ -53,7 +56,8 @@ export async function lookupActiveRedirect(path: string): Promise<string | null>
       .maybeSingle();
     if (error || !data?.redirect_to) return null;
     return data.redirect_to;
-  } catch {
+  } catch (err) {
+    devWarn("[notFoundLog] lookupActiveRedirect falhou:", err);
     return null;
   }
 }

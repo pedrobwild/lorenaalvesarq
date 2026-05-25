@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "../lib/gsap";
 import Lenis from "lenis";
 import { type ProjectImage } from "../data/projects";
 import { useProjects } from "../lib/useProjects";

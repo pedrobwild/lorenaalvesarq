@@ -10,6 +10,7 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { devError } from "@/lib/devLog";
 import type { DateRange, Segment, SegmentDim } from "./types";
 
 type Row = {
@@ -162,7 +163,7 @@ export default function AcquisitionTab({
       })
       .catch((err: unknown) => {
         const msg = err instanceof Error ? err.message : String(err);
-        console.error("[acquisition] rpc error", err);
+        devError("[acquisition] rpc error", err);
         if (!cancelled) setState({ loading: false, error: msg, data: EMPTY_DATA });
       });
 

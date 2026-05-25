@@ -12,6 +12,7 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { devError } from "@/lib/devLog";
 import type { DateRange, Segment } from "./types";
 
 type FunnelRow = { step: number; event_type: string; sessions: number };
@@ -73,7 +74,7 @@ export default function ConversionTab({ range, segments }: Props) {
       })
       .catch((err: unknown) => {
         const msg = err instanceof Error ? err.message : String(err);
-        console.error("[conversion] rpc error", err);
+        devError("[conversion] rpc error", err);
         if (!cancelled) setError(msg);
       })
       .finally(() => {

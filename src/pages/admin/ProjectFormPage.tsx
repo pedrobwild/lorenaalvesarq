@@ -3,6 +3,7 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { navigate, routes } from "@/lib/useHashRoute";
 import { uploadImage } from "@/lib/uploadImage";
+import { devError } from "@/lib/devLog";
 import {
   DndContext,
   PointerSensor,
@@ -130,7 +131,7 @@ export default function ProjectFormPage({ slug }: Props) {
       const alt = await generateAltText(imageUrl);
       setForm((f) => ({ ...f, cover_alt: alt }));
     } catch (err) {
-      console.error("auto cover alt failed:", err);
+      devError("auto cover alt failed:", err);
     } finally {
       setCoverAltLoading(false);
     }
@@ -142,7 +143,7 @@ export default function ProjectFormPage({ slug }: Props) {
       const alt = await generateAltText(imageUrl);
       setGallery((g) => g.map((it) => (it.uid === uid ? { ...it, alt } : it)));
     } catch (err) {
-      console.error("auto gallery alt failed:", err);
+      devError("auto gallery alt failed:", err);
     } finally {
       setGalleryAltLoading((s) => {
         const next = { ...s };

@@ -1,0 +1,8 @@
+# Pre-commit: roda ESLint. Mantém o gate rápido (~1s) — não trava o
+# commit por mais tempo do que o autor estaria disposto a esperar.
+# A suíte completa do Vitest e o `npm run build` continuam rodando
+# no CI (`.github/workflows/ci-build.yml`), então este hook é só uma
+# camada de feedback imediato local; o CI é a fonte de verdade.
+#
+# Para pular eventualmente: `git commit --no-verify`.
+npm run lint

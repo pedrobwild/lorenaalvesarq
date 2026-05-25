@@ -12,6 +12,7 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { devError } from "@/lib/devLog";
 import type { DateRange, Segment } from "./types";
 
 type Row = { cohort_week: string; week_offset: number; visitors: number };
@@ -74,7 +75,7 @@ export default function RetentionTab({ range, segments }: Props) {
       })
       .catch((err: unknown) => {
         const msg = err instanceof Error ? err.message : String(err);
-        console.error("[retention] rpc error", err);
+        devError("[retention] rpc error", err);
         if (!cancelled) setError(msg);
       })
       .finally(() => {

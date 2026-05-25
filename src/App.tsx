@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap, ScrollTrigger } from "./lib/gsap";
 import Lenis from "lenis";
 import { useProjects } from "./lib/useProjects";
 import { routes } from "./lib/useHashRoute";
@@ -35,8 +34,6 @@ import heroAvif4Lg from "./assets/hero/hero-4-lg.avif";
 import heroAvif4Md from "./assets/hero/hero-4-md.avif";
 import heroAvif5Lg from "./assets/hero/hero-5-lg.avif";
 import heroAvif5Md from "./assets/hero/hero-5-md.avif";
-
-gsap.registerPlugin(ScrollTrigger);
 
 type HeroSlide = { webp: string; avifLg: string; avifMd: string };
 const HERO_IMAGES: HeroSlide[] = [

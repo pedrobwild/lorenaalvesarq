@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { devWarn } from "@/lib/devLog";
 import { PROJECTS as STATIC_PROJECTS, type Project, type ProjectImage } from "@/data/projects";
 
 type DbProject = {
@@ -104,14 +105,12 @@ export function useProjects() {
       .order("order_index", { ascending: true })
       .then(({ data, error }) => {
         if (!mounted) return;
-        if (error && import.meta.env.DEV) {
-          // M6: a falha do fetch era silenciada por completo, escondendo
-          // problemas reais (RLS, schema drift, projeto offline). O fallback
-          // para STATIC_PROJECTS permanece — só passamos a logar em DEV para
-          // que o autor veja na console em vez de "funcionou mas com dados
-          // antigos misteriosamente". Sink externo (Sentry/Logflare) entra
-          // num PR futuro junto com error monitoring.
-          console.warn("[useProjects] fetch falhou, usando fallback estático:", error);
+        if (error) {
+          // M6 + L1: a falha do fetch era silenciada por completo. O
+          // fallback para STATIC_PROJECTS permanece — `devWarn` apenas
+          // imprime em DEV (no-op em produção). Sink externo (Sentry)
+          // entra num PR futuro junto com error monitoring.
+          devWarn("[useProjects] fetch falhou, usando fallback estático:", error);
         }
         if (data && data.length > 0 && !error) {
           setProjects((data as DbProject[]).map(mapDbToProject));
