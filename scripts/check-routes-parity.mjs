@@ -114,24 +114,76 @@ const edgeSrc = readFileSync(EDGE_FN_FILE, "utf8");
 const spaRoutes = extractSpaStaticRoutes(hashSrc);
 const edgeRoutes = extractEdgeStaticRoutes(edgeSrc);
 
-// Rotas da SPA que deveriam estar na edge (excluindo exceções permitidas).
-const missingInEdge = diff(spaRoutes, edgeRoutes).filter(
-  (r) => !SPA_ONLY_ALLOWED.has(r),
-);
-// Rotas da edge que não existem na SPA (excluindo exceções permitidas).
-const missingInSpa = diff(edgeRoutes, spaRoutes).filter(
-  (r) => !EDGE_ONLY_ALLOWED.has(r),
-);
+// Diferenças brutas: depois separamos o que é erro fatal do que foi
+// intencionalmente ignorado por allowlist.
+const rawSpaMinusEdge = diff(spaRoutes, edgeRoutes);
+const missingInEdge = rawSpaMinusEdge.filter((r) => !SPA_ONLY_ALLOWED.has(r));
+const spaAllowedHits = rawSpaMinusEdge.filter((r) => SPA_ONLY_ALLOWED.has(r));
+
+const rawEdgeMinusSpa = diff(edgeRoutes, spaRoutes);
+const missingInSpa = rawEdgeMinusSpa.filter((r) => !EDGE_ONLY_ALLOWED.has(r));
+const edgeAllowedHits = rawEdgeMinusSpa.filter((r) => EDGE_ONLY_ALLOWED.has(r));
+
+// Allowlists referenciando rotas que sumiram dos arquivos — drift silencioso.
+// Não quebra o build, mas vira aviso para limpeza.
+const staleSpaAllow = [...SPA_ONLY_ALLOWED]
+  .filter((r) => !spaRoutes.has(r))
+  .sort();
+const staleEdgeAllow = [...EDGE_ONLY_ALLOWED]
+  .filter((r) => !edgeRoutes.has(r))
+  .sort();
 
 const okPrefix = "\x1b[32m✓\x1b[0m";
 const errPrefix = "\x1b[31m✗\x1b[0m";
+const warnPrefix = "\x1b[33m!\x1b[0m";
+const dimStart = "\x1b[2m";
+const dimEnd = "\x1b[0m";
 
 console.log("");
 console.log("Verificação de paridade de rotas (SPA ↔ edge function)");
 console.log("─".repeat(60));
 console.log(`SPA  (useHashRoute.ts)           : ${spaRoutes.size} rotas estáticas`);
 console.log(`Edge (not-found-check STATIC_*)  : ${edgeRoutes.size} rotas`);
+console.log(
+  `Allowlists                       : ` +
+    `SPA_ONLY_ALLOWED=${SPA_ONLY_ALLOWED.size}, ` +
+    `EDGE_ONLY_ALLOWED=${EDGE_ONLY_ALLOWED.size}`,
+);
 console.log("");
+
+// Informativo: o que foi intencionalmente ignorado, com o nome da
+// allowlist responsável — ajuda a auditar rapidamente cada decisão.
+if (spaAllowedHits.length > 0 || edgeAllowedHits.length > 0) {
+  console.log(`${dimStart}Rotas ignoradas por allowlist (esperado):${dimEnd}`);
+  for (const r of spaAllowedHits) {
+    console.log(`${dimStart}    - ${r}  [SPA_ONLY_ALLOWED]${dimEnd}`);
+  }
+  for (const r of edgeAllowedHits) {
+    console.log(`${dimStart}    - ${r}  [EDGE_ONLY_ALLOWED]${dimEnd}`);
+  }
+  console.log("");
+}
+
+if (staleSpaAllow.length > 0) {
+  console.log(
+    `${warnPrefix} SPA_ONLY_ALLOWED contém rotas que não existem mais na SPA:`,
+  );
+  for (const r of staleSpaAllow) console.log(`    - ${r}`);
+  console.log(
+    "  → Remova de SPA_ONLY_ALLOWED em scripts/check-routes-parity.mjs.",
+  );
+  console.log("");
+}
+if (staleEdgeAllow.length > 0) {
+  console.log(
+    `${warnPrefix} EDGE_ONLY_ALLOWED contém rotas ausentes de STATIC_ROUTES:`,
+  );
+  for (const r of staleEdgeAllow) console.log(`    - ${r}`);
+  console.log(
+    "  → Remova de EDGE_ONLY_ALLOWED em scripts/check-routes-parity.mjs.",
+  );
+  console.log("");
+}
 
 if (missingInEdge.length === 0 && missingInSpa.length === 0) {
   console.log(`${okPrefix} Tudo em paridade. Nenhuma divergência detectada.`);
@@ -141,13 +193,17 @@ if (missingInEdge.length === 0 && missingInSpa.length === 0) {
 if (missingInEdge.length > 0) {
   console.log(
     `${errPrefix} Rotas presentes na SPA mas AUSENTES em STATIC_ROUTES ` +
-      `da edge function:`,
+      `da edge function (${missingInEdge.length}):`,
   );
-  for (const r of missingInEdge) console.log(`    - ${r}`);
+  for (const r of missingInEdge) {
+    console.log(`    - ${r}  [não está em nenhuma allowlist]`);
+  }
   console.log("");
   console.log(
-    "  → Adicione estes paths em " +
-      "supabase/functions/not-found-check/index.ts (constante STATIC_ROUTES).",
+    "  → Adicione em supabase/functions/not-found-check/index.ts " +
+      "(STATIC_ROUTES),\n" +
+      "    OU em SPA_ONLY_ALLOWED neste script se a rota for tratada\n" +
+      "    por outra regra (ex.: prefixo /admin/* na edge).",
   );
   console.log("");
 }
@@ -155,13 +211,17 @@ if (missingInEdge.length > 0) {
 if (missingInSpa.length > 0) {
   console.log(
     `${errPrefix} Rotas em STATIC_ROUTES da edge function que NÃO existem ` +
-      `na SPA:`,
+      `na SPA (${missingInSpa.length}):`,
   );
-  for (const r of missingInSpa) console.log(`    - ${r}`);
+  for (const r of missingInSpa) {
+    console.log(`    - ${r}  [não está em nenhuma allowlist]`);
+  }
   console.log("");
   console.log(
-    "  → Remova de supabase/functions/not-found-check/index.ts ou " +
-      "adicione a página na SPA (src/lib/useHashRoute.ts).",
+    "  → Remova de supabase/functions/not-found-check/index.ts,\n" +
+      "    adicione a página em src/lib/useHashRoute.ts,\n" +
+      "    OU adicione em EDGE_ONLY_ALLOWED neste script se for\n" +
+      "    intencional (ex.: /404).",
   );
   console.log("");
 }
