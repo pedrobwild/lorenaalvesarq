@@ -22,6 +22,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
+import { devError } from "@/lib/devLog";
 import type { DateRange, Segment, SegmentDim } from "./types";
 
 // ---------------------------------------------------------------------------
@@ -230,7 +231,7 @@ export default function OverviewTab({ range, segments, comparePrev }: Props) {
       })
       .catch((err: unknown) => {
         const msg = err instanceof Error ? err.message : String(err);
-        console.error("[analytics overview] rpc error", err);
+        devError("[analytics overview] rpc error", err);
         if (!cancelled) setError(msg);
       })
       .finally(() => {

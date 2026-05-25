@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
+import { devError } from "@/lib/devLog";
 
 type Props = { children: ReactNode };
 type State = { error: Error | null };
@@ -24,9 +25,7 @@ export default class RootErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    if (import.meta.env.DEV) {
-      console.error("[RootErrorBoundary]", error, info.componentStack);
-    }
+    devError("[RootErrorBoundary]", error, info.componentStack);
   }
 
   private reset = () => {

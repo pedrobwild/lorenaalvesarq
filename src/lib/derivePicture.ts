@@ -54,7 +54,6 @@ export function derivePictureSources(url: string | null | undefined): DerivedPic
   // Só derivamos se a URL tem o sufixo -sm/-md/-lg (forte indicação de pipeline).
   if (!SIZE_RE.test(url)) return null;
   const { stem, query } = stripExt(url);
-  const sizes: Array<"sm" | "md" | "lg"> = ["sm", "md", "lg"];
   const build = (ext: string): DerivedSet => ({
     sm: withSizeAndExt(stem, query, "sm", ext),
     md: withSizeAndExt(stem, query, "md", ext),

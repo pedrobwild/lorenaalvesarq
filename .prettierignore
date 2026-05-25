@@ -2,5 +2,4 @@ dist
 dist-ssr
 node_modules
 package-lock.json
-bun.lock
 supabase/functions/**/deno.lock

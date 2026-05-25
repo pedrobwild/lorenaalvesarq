@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { gsap } from "../lib/gsap";
 import InternalNav from "../components/InternalNav";
 import { useBlogPostsByTag } from "../lib/useBlog";
 import { useSiteSettings } from "../lib/useSiteSettings";

@@ -11,6 +11,7 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { devError } from "@/lib/devLog";
 import type { DateRange, Segment, SegmentDim } from "./types";
 
 type PathRow = { path: string; pageviews: number; sessions: number };
@@ -99,7 +100,7 @@ export default function BehaviorTab({ range, segments, onAddSegment, onRemoveSeg
       })
       .catch((err: unknown) => {
         const msg = err instanceof Error ? err.message : String(err);
-        console.error("[behavior] rpc error", err);
+        devError("[behavior] rpc error", err);
         if (!cancelled) setError(msg);
       })
       .finally(() => {
