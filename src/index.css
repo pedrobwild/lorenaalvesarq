@@ -3125,18 +3125,24 @@ body.has-custom-cursor *:focus-visible {
   min-height: clamp(260px, 38vh, 480px);
 }
 
-.pp-next::before {
-  content: "";
+.pp-next__bg {
   position: absolute;
   inset: 0;
-  background: inherit;
-  background-size: cover;
+  z-index: -1;
+  display: block;
+  overflow: hidden;
   transform: scale(1.05);
   transition: transform 1.6s var(--ease);
-  z-index: -1;
 }
 
-.pp-next:hover::before { transform: scale(1.1); }
+.pp-next__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.pp-next:hover .pp-next__bg { transform: scale(1.1); }
 
 .pp-next__veil {
   position: absolute;
@@ -3548,7 +3554,7 @@ html { scroll-behavior: smooth; }
     padding: clamp(3.5rem, 16vw, 6rem) var(--edge);
   }
 
-  .pp-next::before { transform: none !important; }
+  .pp-next__bg { transform: none !important; }
 
   .pp-next__title { font-size: clamp(2.4rem, 11vw, 3.6rem); }
 
