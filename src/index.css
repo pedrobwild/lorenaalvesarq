@@ -3554,7 +3554,7 @@ html { scroll-behavior: smooth; }
     padding: clamp(3.5rem, 16vw, 6rem) var(--edge);
   }
 
-  .pp-next::before { transform: none !important; }
+  .pp-next__bg { transform: none !important; }
 
   .pp-next__title { font-size: clamp(2.4rem, 11vw, 3.6rem); }
 
