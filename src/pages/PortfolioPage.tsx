@@ -146,7 +146,18 @@ export default function PortfolioPage() {
       <section className="pf-grid" ref={gridRef}>
         {filtered.map((p, i) => {
           // padrão editorial: alterna tamanhos para criar ritmo
-          const span = i % 5 === 0 ? "pf-card--lg" : i % 3 === 0 ? "pf-card--md" : "pf-card--sm";
+          const variant: "lg" | "md" | "sm" =
+            i % 5 === 0 ? "lg" : i % 3 === 0 ? "md" : "sm";
+          const span = `pf-card--${variant}`;
+          // sizes alinhado à largura real renderizada (grid 12col, max 1400px,
+          // colapsa para 100vw abaixo de 900px). Evita baixar o -lg quando o
+          // card cabe em ~660–770px no desktop.
+          const sizes =
+            variant === "lg"
+              ? "(max-width: 900px) 100vw, (max-width: 1400px) 92vw, 1340px"
+              : variant === "md"
+              ? "(max-width: 900px) 100vw, (max-width: 1400px) 58vw, 770px"
+              : "(max-width: 900px) 100vw, (max-width: 1400px) 50vw, 660px";
           return (
             <a
               key={p.slug}
@@ -165,10 +176,11 @@ export default function PortfolioPage() {
                   blurDataUrl={p.coverBlurDataUrl}
                   alt={p.alt}
                   altFallback={`${p.title} ${p.em} — ${p.tag} em ${p.location}`}
-                  sizes="(max-width: 700px) 100vw, (max-width: 1200px) 50vw, 600px"
+                  sizes={sizes}
                   wrapperClassName="pf-card__img-wrap"
                   priority={i === 0}
                 />
+
                 <div className="pf-card__veil" />
                 <span className="pf-card__index mono">
                   {p.number} / {String(projects.length).padStart(2, "0")}
