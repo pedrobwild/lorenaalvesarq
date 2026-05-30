@@ -19,13 +19,16 @@ import Picture from "./components/Picture";
 import SmartImage from "./components/SmartImage";
 import FaqSection from "./components/FaqSection";
 import { useFaq } from "./lib/useFaq";
-import heroImg1 from "./assets/hero/hero-1.webp";
+// Hero-1 (LCP) servido a partir de /public/hero/ para URL estável,
+// permitindo preload via <link rel="preload"> no index.html.
+// Demais hero slides continuam vindo de /src/assets/ (lazy, sem urgência).
+const heroImg1 = "/hero/hero-1.webp";
+const heroAvif1Lg = "/hero/hero-1-lg.avif";
+const heroAvif1Md = "/hero/hero-1-md.avif";
 import heroImg2 from "./assets/hero/hero-2.webp";
 import heroImg3 from "./assets/hero/hero-3.webp";
 import heroImg4 from "./assets/hero/hero-4.webp";
 import heroImg5 from "./assets/hero/hero-5.webp";
-import heroAvif1Lg from "./assets/hero/hero-1-lg.avif";
-import heroAvif1Md from "./assets/hero/hero-1-md.avif";
 import heroAvif2Lg from "./assets/hero/hero-2-lg.avif";
 import heroAvif2Md from "./assets/hero/hero-2-md.avif";
 import heroAvif3Lg from "./assets/hero/hero-3-lg.avif";
