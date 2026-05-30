@@ -184,7 +184,7 @@ export default function ProjectPage({ slug }: Props) {
             blurDataUrl={project.coverBlurDataUrl}
             alt={project.alt}
             altFallback={`${project.title} ${project.em} — ${project.tag} em ${project.location}`}
-            sizes="(max-width: 900px) 100vw, 60vw"
+            sizes="(max-width: 900px) 100vw, (max-width: 1400px) 52vw, 730px"
             priority
             wrapperClassName="pp-hero__img-wrap"
           />

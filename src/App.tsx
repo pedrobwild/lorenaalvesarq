@@ -743,7 +743,7 @@ export default function App() {
                   altFallback={`${p.title} ${p.em}`}
                   width={1280}
                   height={1600}
-                  sizes="(max-width: 700px) 88vw, (max-width: 1200px) 44vw, 30vw"
+                  sizes="(max-width: 700px) 82vw, (max-width: 1200px) 36vw, 520px"
                 />
                 <span className="project-card__go mono">ver projeto →</span>
               </div>
