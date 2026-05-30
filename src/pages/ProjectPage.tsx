@@ -230,9 +230,17 @@ export default function ProjectPage({ slug }: Props) {
       <a
         href={routes.project(next.slug)}
         className="pp-next"
-        style={{ backgroundImage: `url(${next.cover})` }}
         aria-label={`Próximo projeto: ${next.title} ${next.em}`}
       >
+        <SmartImage
+          src={next.cover}
+          srcMd={next.coverMd}
+          srcSm={next.coverSm}
+          blurDataUrl={next.coverBlurDataUrl}
+          decorative
+          sizes="100vw"
+          wrapperClassName="pp-next__bg"
+        />
         <div className="pp-next__inner">
           <span className="mono pp-next__eyebrow">próximo projeto</span>
           <h2 className="pp-next__title">
