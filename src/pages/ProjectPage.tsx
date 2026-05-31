@@ -17,14 +17,13 @@ export default function ProjectPage({ slug }: Props) {
   const { projects, loading } = useProjects();
   const { settings } = useSiteSettings();
   const found = projects.find((p) => p.slug === slug);
-  // Mantém o último projeto válido renderizado para evitar flash de "carregando"
-  // ou de conteúdo vazio ao navegar rapidamente entre projetos. Trocamos só
-  // quando o novo slug realmente bate com um projeto disponível.
+  // Mantém o último projeto válido renderizado para evitar flash ao navegar
+  // rapidamente entre projetos: enquanto o novo slug ainda carrega, seguimos
+  // exibindo o anterior. Trocamos a referência só quando o novo slug bate.
   const lastProjectRef = useRef<Project | null>(found ?? null);
-  if (found && lastProjectRef.current?.slug !== slug) {
-    lastProjectRef.current = found;
-  }
-  const project = found ?? (lastProjectRef.current?.slug === slug ? lastProjectRef.current : null);
+  if (found) lastProjectRef.current = found;
+  const isTransitioning = !found && !!lastProjectRef.current && loading;
+  const project = found ?? lastProjectRef.current;
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
 
