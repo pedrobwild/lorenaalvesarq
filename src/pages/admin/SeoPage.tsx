@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, SUPABASE_URL } from "@/integrations/supabase/client";
 import {
   fetchSiteSettings,
   invalidateSiteSettings,
@@ -9,8 +9,8 @@ import {
 import { runSeoAudit, type SeoAuditResult } from "@/lib/seoAudit";
 import { refreshSeoEverywhere } from "@/lib/useSeo";
 
-const SITEMAP_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sitemap`;
-const ROBOTS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/robots`;
+const SITEMAP_URL = `${SUPABASE_URL}/functions/v1/sitemap`;
+const ROBOTS_URL = `${SUPABASE_URL}/functions/v1/robots`;
 
 type TabKey = "global" | "verify" | "analytics" | "local" | "sitemap" | "audit" | "guide";
 

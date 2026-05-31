@@ -2,15 +2,35 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+// Credenciais do projeto Supabase conectado (kcyvttwanumuriijuctn).
+// A URL e a publishable/anon key são PÚBLICAS por design — o acesso é
+// protegido por Row Level Security em todas as tabelas. Mantê-las embutidas
+// aqui (padrão gerado pelo Lovable) garante que o app SEMPRE inicialize,
+// mesmo que as variáveis de ambiente do build/deploy não sejam injetadas.
+//
+// IMPORTANTE: este módulo é avaliado no topo do grafo de imports (App, main,
+// hooks). Um `throw` aqui derrubava o bundle inteiro ANTES do React montar,
+// resultando em tela preta permanente que nenhum error boundary conseguia
+// capturar. Por isso nunca lançamos erro neste arquivo — caímos no fallback.
+const FALLBACK_SUPABASE_URL = "https://kcyvttwanumuriijuctn.supabase.co";
+const FALLBACK_SUPABASE_PUBLISHABLE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjeXZ0dHdhbnVtdXJpaWp1Y3RuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3ODIwMTcsImV4cCI6MjA5MjM1ODAxN30.ms7gqbhCJydepYbaGgMIOWgvU4p_ESb8NFYudTg6Lcw";
 
-if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-  throw new Error(
-    "Faltam VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY no ambiente. " +
-      "Verifique as variaveis de ambiente do build/deploy.",
-  );
-}
+// Variáveis de ambiente têm prioridade (permitem apontar para outro projeto
+// em dev/preview), mas quando ausentes/vazias usamos o fallback embutido.
+const envUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
+const envKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim();
+
+// O override por env é tudo-ou-nada: só vale quando AMBOS os valores estão
+// presentes. Caso contrário caímos no par embutido completo — usar uma URL
+// de um projeto com a key de outro produziria falhas de autorização em vez
+// de cair no projeto embutido que funciona.
+const useEnvOverride = Boolean(envUrl && envKey);
+
+export const SUPABASE_URL = useEnvOverride ? envUrl! : FALLBACK_SUPABASE_URL;
+export const SUPABASE_PUBLISHABLE_KEY = useEnvOverride
+  ? envKey!
+  : FALLBACK_SUPABASE_PUBLISHABLE_KEY;
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";

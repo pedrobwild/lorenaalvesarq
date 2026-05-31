@@ -26,6 +26,8 @@ import { render, cleanup, waitFor } from "@testing-library/react";
 
 // ---- Mocks de infra: evita chamadas reais ao Supabase / settings remotos.
 vi.mock("@/integrations/supabase/client", () => ({
+  SUPABASE_URL: "https://test.supabase.co",
+  SUPABASE_PUBLISHABLE_KEY: "test-anon-key",
   supabase: {
     rpc: vi.fn().mockResolvedValue({ data: null, error: null }),
     from: () => ({
