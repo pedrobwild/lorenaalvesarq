@@ -1,0 +1,213 @@
+/**
+ * Recuperação automática contra "tela em branco" e erros fatais.
+ *
+ * Estratégia em três camadas:
+ *
+ *  1. **Captura**: erros do React (via RootErrorBoundary), erros globais
+ *     (`window.onerror`), promises rejeitadas sem catch
+ *     (`unhandledrejection`) e um watchdog que detecta `#root` vazio
+ *     poucos segundos após o boot.
+ *
+ *  2. **Registro**: cada crash vai para `localStorage` (ring buffer de
+ *     20 entradas — chave `lvbl:crash-log`) com timestamp, mensagem,
+ *     stack, rota, user-agent e tipo. Esse log sobrevive a reloads e
+ *     pode ser inspecionado depois em `window.__crashLog()`.
+ *
+ *  3. **Auto-reload com guarda anti-loop**: usamos um contador em
+ *     `sessionStorage` (`lvbl:reload-attempts`) que dispara no máximo
+ *     2 reloads dentro de uma janela de 60s. Se o terceiro crash
+ *     acontecer dentro dessa janela, paramos de recarregar e
+ *     mostramos fallback — recarregar em loop com a mesma falha
+ *     deixa o usuário pior do que uma tela de erro estática.
+ *     O contador é limpo após 5s de render saudável (`markHealthy`).
+ */
+import { devError } from "./devLog";
+
+const LOG_KEY = "lvbl:crash-log";
+const ATTEMPTS_KEY = "lvbl:reload-attempts";
+const ATTEMPTS_WINDOW_MS = 60_000;
+const MAX_ATTEMPTS = 2;
+const LOG_LIMIT = 20;
+const BLANK_SCREEN_TIMEOUT_MS = 6_000;
+const HEALTHY_AFTER_MS = 5_000;
+
+export type CrashKind =
+  | "react-error-boundary"
+  | "window-error"
+  | "unhandled-rejection"
+  | "blank-screen";
+
+export interface CrashEntry {
+  at: string;
+  kind: CrashKind;
+  message: string;
+  stack?: string;
+  route: string;
+  userAgent: string;
+  recovered: boolean;
+}
+
+function safeParse<T>(raw: string | null, fallback: T): T {
+  if (!raw) return fallback;
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+export function recordCrash(
+  kind: CrashKind,
+  error: unknown,
+  recovered: boolean
+): CrashEntry {
+  const err = error instanceof Error ? error : new Error(String(error));
+  const entry: CrashEntry = {
+    at: new Date().toISOString(),
+    kind,
+    message: err.message || "unknown error",
+    stack: err.stack,
+    route:
+      typeof window !== "undefined"
+        ? `${window.location.pathname}${window.location.search}${window.location.hash}`
+        : "",
+    userAgent:
+      typeof navigator !== "undefined" ? navigator.userAgent : "unknown",
+    recovered,
+  };
+
+  try {
+    const log = safeParse<CrashEntry[]>(localStorage.getItem(LOG_KEY), []);
+    log.push(entry);
+    while (log.length > LOG_LIMIT) log.shift();
+    localStorage.setItem(LOG_KEY, JSON.stringify(log));
+  } catch {
+    // localStorage indisponível (modo privado, quota): só ignora.
+  }
+
+  devError(`[crash:${kind}]`, entry);
+  return entry;
+}
+
+export function getCrashLog(): CrashEntry[] {
+  try {
+    return safeParse<CrashEntry[]>(localStorage.getItem(LOG_KEY), []);
+  } catch {
+    return [];
+  }
+}
+
+export function clearCrashLog(): void {
+  try {
+    localStorage.removeItem(LOG_KEY);
+  } catch {
+    // ignore
+  }
+}
+
+interface AttemptsState {
+  count: number;
+  firstAt: number;
+}
+
+function readAttempts(): AttemptsState {
+  return safeParse<AttemptsState>(sessionStorage.getItem(ATTEMPTS_KEY), {
+    count: 0,
+    firstAt: 0,
+  });
+}
+
+function writeAttempts(state: AttemptsState): void {
+  try {
+    sessionStorage.setItem(ATTEMPTS_KEY, JSON.stringify(state));
+  } catch {
+    // ignore
+  }
+}
+
+/**
+ * Tenta recarregar a página dentro do orçamento de tentativas. Retorna
+ * `true` se o reload foi disparado, `false` se já esgotamos as tentativas
+ * (nesse caso o caller deve mostrar fallback estático para o usuário).
+ */
+export function tryAutoReload(): boolean {
+  let state: AttemptsState;
+  try {
+    state = readAttempts();
+  } catch {
+    state = { count: 0, firstAt: 0 };
+  }
+
+  const now = Date.now();
+  if (!state.firstAt || now - state.firstAt > ATTEMPTS_WINDOW_MS) {
+    state = { count: 0, firstAt: now };
+  }
+
+  if (state.count >= MAX_ATTEMPTS) {
+    return false;
+  }
+
+  state.count += 1;
+  writeAttempts(state);
+
+  // Pequeno atraso para o log do crash terminar de persistir e dar tempo
+  // de o usuário ver algo (caso o erro tenha vindo de uma interação).
+  window.setTimeout(() => {
+    window.location.reload();
+  }, 150);
+  return true;
+}
+
+/** Chamada após render bem-sucedida — zera o contador anti-loop. */
+export function markHealthy(): void {
+  window.setTimeout(() => {
+    try {
+      sessionStorage.removeItem(ATTEMPTS_KEY);
+    } catch {
+      // ignore
+    }
+  }, HEALTHY_AFTER_MS);
+}
+
+let installed = false;
+
+/**
+ * Instala handlers globais e o watchdog de tela em branco. Idempotente.
+ * Deve ser chamado uma vez, antes do `createRoot().render()`.
+ */
+export function installCrashRecovery(): void {
+  if (installed || typeof window === "undefined") return;
+  installed = true;
+
+  window.addEventListener("error", (event) => {
+    // Filtra erros de recurso (img, script) — não derrubam a app e
+    // já são logados pelo browser. Só nos interessam erros JS.
+    if (event.error || event.message) {
+      const triedReload = false; // erros pontuais não devem reloadar sozinhos
+      recordCrash("window-error", event.error ?? event.message, triedReload);
+    }
+  });
+
+  window.addEventListener("unhandledrejection", (event) => {
+    recordCrash("unhandled-rejection", event.reason, false);
+  });
+
+  // Watchdog: se depois de N segundos o #root continuar vazio, é
+  // tela em branco — registra e tenta recarregar (com guarda anti-loop).
+  window.setTimeout(() => {
+    const root = document.getElementById("root");
+    const hasContent = !!root && root.childElementCount > 0;
+    if (!hasContent) {
+      const reloaded = tryAutoReload();
+      recordCrash(
+        "blank-screen",
+        new Error("Root element vazio após boot"),
+        reloaded
+      );
+    }
+  }, BLANK_SCREEN_TIMEOUT_MS);
+
+  // Exposto para depuração manual no DevTools — sem custo em produção.
+  (window as unknown as { __crashLog?: () => CrashEntry[] }).__crashLog =
+    getCrashLog;
+}
