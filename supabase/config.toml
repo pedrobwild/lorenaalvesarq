@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.ping-sitemap]
 verify_jwt = false
+
+[functions.report-crash]
+verify_jwt = false

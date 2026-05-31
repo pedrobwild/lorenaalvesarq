@@ -22,7 +22,6 @@
  *     O contador é limpo após 5s de render saudável (`markHealthy`).
  */
 import { devError } from "./devLog";
-import { supabase } from "@/integrations/supabase/client";
 
 const LOG_KEY = "lvbl:crash-log";
 const QUEUE_KEY = "lvbl:crash-queue";
@@ -172,20 +171,32 @@ function entryToRow(entry: CrashEntry) {
   };
 }
 
+// Endpoint da edge function que ingere os crashes. As escritas NÃO vão mais
+// direto pra /rest/v1/crash_reports via anon key — a edge function (service_role)
+// valida tamanho, filtra bots e aplica rate-limit por IP antes do INSERT.
+const CRASH_ENDPOINT = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/report-crash`;
+
 async function uploadEntry(entry: CrashEntry): Promise<void> {
   if (typeof navigator !== "undefined" && navigator.onLine === false) {
     throw new Error("offline");
   }
-  // Timeout manual: o supabase-js não tem um e queremos cair na fila
-  // rapidamente se a rede estiver lenta — não dá pra travar o boot.
+  // Timeout manual: queremos cair na fila rapidamente se a rede estiver
+  // lenta — não dá pra travar o boot esperando o POST.
   const controller = new AbortController();
   const timer = window.setTimeout(() => controller.abort(), UPLOAD_TIMEOUT_MS);
   try {
-    const { error } = await supabase
-      .from("crash_reports")
-      .insert(entryToRow(entry))
-      .abortSignal(controller.signal);
-    if (error) throw error;
+    const res = await fetch(CRASH_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(entryToRow(entry)),
+      signal: controller.signal,
+      keepalive: true,
+    });
+    // 4xx (payload inválido, bot, rate-limit) não vale reenfileirar — só 5xx
+    // e falhas de rede (que viram throw no fetch) voltam pra fila.
+    if (!res.ok && res.status >= 500) {
+      throw new Error(`crash upload failed: ${res.status}`);
+    }
   } finally {
     window.clearTimeout(timer);
   }
