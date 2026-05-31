@@ -293,6 +293,12 @@ export function installCrashRecovery(): void {
     recordCrash("unhandled-rejection", event.reason, false);
   });
 
+  // Reenvia qualquer crash que ficou pendente em sessão anterior offline.
+  void flushQueue();
+  window.addEventListener("online", () => {
+    void flushQueue();
+  });
+
   // Watchdog: se depois de N segundos o #root continuar vazio, é
   // tela em branco — registra e tenta recarregar (com guarda anti-loop).
   window.setTimeout(() => {
