@@ -22,14 +22,19 @@
  *     O contador é limpo após 5s de render saudável (`markHealthy`).
  */
 import { devError } from "./devLog";
+import { supabase } from "@/integrations/supabase/client";
 
 const LOG_KEY = "lvbl:crash-log";
+const QUEUE_KEY = "lvbl:crash-queue";
 const ATTEMPTS_KEY = "lvbl:reload-attempts";
 const ATTEMPTS_WINDOW_MS = 60_000;
 const MAX_ATTEMPTS = 2;
 const LOG_LIMIT = 20;
+const QUEUE_LIMIT = 50;
 const BLANK_SCREEN_TIMEOUT_MS = 6_000;
 const HEALTHY_AFTER_MS = 5_000;
+const UPLOAD_TIMEOUT_MS = 4_000;
+const MAX_FIELD_LEN = 8_000;
 
 export type CrashKind =
   | "react-error-boundary"
@@ -56,6 +61,12 @@ function safeParse<T>(raw: string | null, fallback: T): T {
   }
 }
 
+function truncate(value: string | undefined, max = MAX_FIELD_LEN): string | undefined {
+  if (value == null) return value;
+  if (value.length <= max) return value;
+  return `${value.slice(0, max)}…[truncated]`;
+}
+
 export function recordCrash(
   kind: CrashKind,
   error: unknown,
@@ -65,8 +76,8 @@ export function recordCrash(
   const entry: CrashEntry = {
     at: new Date().toISOString(),
     kind,
-    message: err.message || "unknown error",
-    stack: err.stack,
+    message: truncate(err.message || "unknown error", 1_000)!,
+    stack: truncate(err.stack),
     route:
       typeof window !== "undefined"
         ? `${window.location.pathname}${window.location.search}${window.location.hash}`
@@ -85,6 +96,11 @@ export function recordCrash(
     // localStorage indisponível (modo privado, quota): só ignora.
   }
 
+  // Tenta enviar imediatamente; em caso de falha (offline, gateway fora,
+  // recurso bloqueado) o entry vai pra fila persistente e é reenviado
+  // no próximo boot ou quando o evento `online` disparar.
+  void uploadEntry(entry).catch(() => enqueue(entry));
+
   devError(`[crash:${kind}]`, entry);
   return entry;
 }
@@ -102,6 +118,91 @@ export function clearCrashLog(): void {
     localStorage.removeItem(LOG_KEY);
   } catch {
     // ignore
+  }
+}
+
+// ---------- Upload + fila offline ---------------------------------------
+
+function entryToRow(entry: CrashEntry) {
+  return {
+    occurred_at: entry.at,
+    kind: entry.kind,
+    message: entry.message,
+    stack: entry.stack ?? null,
+    route: entry.route || null,
+    user_agent: entry.userAgent || null,
+    recovered: entry.recovered,
+  };
+}
+
+async function uploadEntry(entry: CrashEntry): Promise<void> {
+  if (typeof navigator !== "undefined" && navigator.onLine === false) {
+    throw new Error("offline");
+  }
+  // Timeout manual: o supabase-js não tem um e queremos cair na fila
+  // rapidamente se a rede estiver lenta — não dá pra travar o boot.
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), UPLOAD_TIMEOUT_MS);
+  try {
+    const { error } = await supabase
+      .from("crash_reports")
+      .insert(entryToRow(entry))
+      .abortSignal(controller.signal);
+    if (error) throw error;
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
+function readQueue(): CrashEntry[] {
+  try {
+    return safeParse<CrashEntry[]>(localStorage.getItem(QUEUE_KEY), []);
+  } catch {
+    return [];
+  }
+}
+
+function writeQueue(queue: CrashEntry[]): void {
+  try {
+    localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+  } catch {
+    // quota cheia: descarta — preferimos perder telemetria a quebrar a app.
+  }
+}
+
+function enqueue(entry: CrashEntry): void {
+  const queue = readQueue();
+  queue.push(entry);
+  while (queue.length > QUEUE_LIMIT) queue.shift();
+  writeQueue(queue);
+}
+
+let flushing = false;
+
+/**
+ * Drena a fila offline. Roda no boot e a cada evento `online`. Ao
+ * encontrar a primeira falha, para — assim a próxima tentativa
+ * continua de onde parou, sem quebrar a ordem cronológica nem
+ * desperdiçar requisições enquanto a rede ainda está instável.
+ */
+export async function flushQueue(): Promise<void> {
+  if (flushing) return;
+  flushing = true;
+  try {
+    let queue = readQueue();
+    while (queue.length > 0) {
+      const [next, ...rest] = queue;
+      try {
+        await uploadEntry(next);
+        queue = rest;
+        writeQueue(queue);
+      } catch {
+        // Mantém o item na fila e aborta — tentamos de novo no próximo gatilho.
+        break;
+      }
+    }
+  } finally {
+    flushing = false;
   }
 }
 
@@ -190,6 +291,12 @@ export function installCrashRecovery(): void {
 
   window.addEventListener("unhandledrejection", (event) => {
     recordCrash("unhandled-rejection", event.reason, false);
+  });
+
+  // Reenvia qualquer crash que ficou pendente em sessão anterior offline.
+  void flushQueue();
+  window.addEventListener("online", () => {
+    void flushQueue();
   });
 
   // Watchdog: se depois de N segundos o #root continuar vazio, é

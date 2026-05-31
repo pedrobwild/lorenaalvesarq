@@ -206,6 +206,48 @@ export type Database = {
         }
         Relationships: []
       }
+      crash_reports: {
+        Row: {
+          app_version: string | null
+          extra: Json | null
+          id: string
+          kind: string
+          message: string
+          occurred_at: string
+          received_at: string
+          recovered: boolean
+          route: string | null
+          stack: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          app_version?: string | null
+          extra?: Json | null
+          id?: string
+          kind: string
+          message: string
+          occurred_at: string
+          received_at?: string
+          recovered?: boolean
+          route?: string | null
+          stack?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          app_version?: string | null
+          extra?: Json | null
+          id?: string
+          kind?: string
+          message?: string
+          occurred_at?: string
+          received_at?: string
+          recovered?: boolean
+          route?: string | null
+          stack?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       faq_items: {
         Row: {
           answer: string
