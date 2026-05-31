@@ -132,7 +132,7 @@ export default function ProjectPage({ slug }: Props) {
       lenis?.destroy();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
-  }, [slug]);
+  }, [slug, renderedSlug]);
 
   // Controles do lightbox
   useEffect(() => {
