@@ -352,6 +352,21 @@ export function installCrashRecovery(): void {
   }, BLANK_SCREEN_TIMEOUT_MS);
 
   // Exposto para depuração manual no DevTools — sem custo em produção.
-  (window as unknown as { __crashLog?: () => CrashEntry[] }).__crashLog =
-    getCrashLog;
+  const w = window as unknown as {
+    __crashLog?: () => CrashEntry[];
+    __crashLogBySession?: (sessionId?: string) => CrashEntry[];
+    __crashSessionId?: () => string;
+  };
+  w.__crashLog = getCrashLog;
+  w.__crashSessionId = getSessionId;
+  w.__crashLogBySession = (sessionId?: string) => {
+    const target = sessionId ?? getSessionId();
+    const entries = getCrashLog().filter((e) => e.sessionId === target);
+    // eslint-disable-next-line no-console
+    console.info(
+      `[crash] ${entries.length} entrada(s) para sessionId=${target}`,
+      entries,
+    );
+    return entries;
+  };
 }
