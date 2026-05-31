@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { gsap, ScrollTrigger } from "../lib/gsap";
 import InternalNav from "../components/InternalNav";
 import { useBlogPost } from "../lib/useBlog";
-import { useSiteSettings } from "../lib/useSiteSettings";
+import { useSiteSettings, whatsappUrl } from "../lib/useSiteSettings";
 import { useSeo, breadcrumbJsonLd, organizationJsonLd } from "../lib/useSeo";
 import { routes, navigate } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
@@ -483,7 +483,7 @@ export default function BlogPostPage({ slug }: Props) {
             </p>
             <a
               className="hero__cta"
-              href="https://wa.me/5534996668215"
+              href={whatsappUrl(settings)}
               target="_blank"
               rel="noopener noreferrer external"
               onClick={() =>
