@@ -47,6 +47,25 @@ const HERO_IMAGES: HeroSlide[] = [
   { webp: heroImg5, avifLg: heroAvif5Lg, avifMd: heroAvif5Md },
 ];
 
+const LOADER_FAILSAFE_MS = 3_200;
+
+function revealHomeContent(): void {
+  document.body.classList.add("is-ready");
+  document.querySelectorAll<HTMLElement>(".loader").forEach((loader) => {
+    loader.style.transform = "translateY(-100%)";
+    loader.style.opacity = "0";
+    loader.style.pointerEvents = "none";
+  });
+  document
+    .querySelectorAll<HTMLElement>(
+      ".hero__title .word > span, .manifesto__text .reveal-line > span, .reveal-mask > *"
+    )
+    .forEach((el) => (el.style.transform = "none"));
+  document
+    .querySelectorAll<HTMLElement>(".reveal")
+    .forEach((el) => el.classList.add("is-visible"));
+}
+
 /**
  * Mapeamento único entre itens do menu e ids de seção da home.
  * Esta é a *fonte de verdade* usada pelo scroll-spy e pelo render do menu
