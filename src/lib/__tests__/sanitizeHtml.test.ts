@@ -87,3 +87,25 @@ describe("sanitizeBlogHtml — preserva HTML legítimo do editor", () => {
     expect(sanitizeBlogHtml("")).toBe("");
   });
 });
+
+describe("sanitizeBlogHtml — reverse tabnabbing", () => {
+  it("força rel=noopener noreferrer em <a target=_blank> sem rel", () => {
+    const out = sanitizeBlogHtml(
+      '<a href="https://exemplo.com" target="_blank">link</a>'
+    );
+    expect(out).toMatch(/rel="noopener noreferrer"/);
+  });
+
+  it("sobrescreve rel parcial em <a target=_blank>", () => {
+    const out = sanitizeBlogHtml(
+      '<a href="https://exemplo.com" target="_blank" rel="nofollow">link</a>'
+    );
+    expect(out).toMatch(/rel="noopener noreferrer"/);
+    expect(out).not.toMatch(/rel="nofollow"/);
+  });
+
+  it("não adiciona rel em <a> sem target=_blank", () => {
+    const out = sanitizeBlogHtml('<a href="https://exemplo.com">link</a>');
+    expect(out).not.toMatch(/rel=/);
+  });
+});
