@@ -304,21 +304,9 @@ export default function App() {
     let failsafe: ReturnType<typeof setTimeout> | null = null;
     const timelines: gsap.core.Timeline[] = [];
 
-    if (loader) {
-      failsafe = setTimeout(() => {
-        loader.style.transform = "translateY(-100%)";
-        loader.style.pointerEvents = "none";
-        document.body.classList.add("is-ready");
-        document
-          .querySelectorAll<HTMLElement>(
-            ".hero__title .word > span, .manifesto__text .reveal-line > span, .reveal-mask > *"
-          )
-          .forEach((el) => (el.style.transform = "none"));
-        document
-          .querySelectorAll<HTMLElement>(".reveal")
-          .forEach((el) => el.classList.add("is-visible"));
-      }, 5000);
+    failsafe = setTimeout(revealHomeContent, LOADER_FAILSAFE_MS);
 
+    if (loader) {
       const mark = loader.querySelector<HTMLElement>(".loader__mark span");
       const line = loader.querySelector<HTMLElement>(".loader__line");
       const counter = loader.querySelector<HTMLElement>(".loader__counter");
@@ -326,8 +314,7 @@ export default function App() {
       const tl = gsap.timeline({
         onComplete: () => {
           if (failsafe) clearTimeout(failsafe);
-          loader.style.pointerEvents = "none";
-          document.body.classList.add("is-ready");
+          revealHomeContent();
           startHeroAnim();
         },
       });
