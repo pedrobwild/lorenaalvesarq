@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "../lib/gsap";
 import Lenis from "lenis";
-import { type ProjectImage } from "../data/projects";
+import { type Project, type ProjectImage } from "../data/projects";
 import { useProjects } from "../lib/useProjects";
 import { routes } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
@@ -16,7 +16,15 @@ type Props = { slug: string };
 export default function ProjectPage({ slug }: Props) {
   const { projects, loading } = useProjects();
   const { settings } = useSiteSettings();
-  const project = projects.find((p) => p.slug === slug);
+  const found = projects.find((p) => p.slug === slug);
+  // Mantém o último projeto válido renderizado para evitar flash de "carregando"
+  // ou de conteúdo vazio ao navegar rapidamente entre projetos. Trocamos só
+  // quando o novo slug realmente bate com um projeto disponível.
+  const lastProjectRef = useRef<Project | null>(found ?? null);
+  if (found && lastProjectRef.current?.slug !== slug) {
+    lastProjectRef.current = found;
+  }
+  const project = found ?? (lastProjectRef.current?.slug === slug ? lastProjectRef.current : null);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
 
