@@ -120,6 +120,7 @@ export function recordCrash(
     userAgent:
       typeof navigator !== "undefined" ? navigator.userAgent : "unknown",
     recovered,
+    sessionId: getSessionId(),
   };
 
   try {
