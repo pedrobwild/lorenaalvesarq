@@ -76,6 +76,22 @@ const ALLOWED_ATTR = [
   "width",
 ];
 
+// Força `rel="noopener noreferrer"` em qualquer `<a target="_blank">` para
+// evitar reverse tabnabbing: sem `noopener`, a página externa aberta ganha
+// acesso a `window.opener` e pode redirecionar a aba de origem para phishing.
+// Sobrescreve qualquer `rel` parcial vindo do conteúdo. Registrado uma única
+// vez no carregamento do módulo.
+DOMPurify.addHook("afterSanitizeAttributes", (node) => {
+  // O keyword `_blank` é case-insensitive no HTML, então normaliza o valor
+  // antes de comparar — `_Blank`/`_BLANK` também abrem nova aba.
+  if (
+    node.tagName === "A" &&
+    node.getAttribute("target")?.toLowerCase() === "_blank"
+  ) {
+    node.setAttribute("rel", "noopener noreferrer");
+  }
+});
+
 export function sanitizeBlogHtml(html: string): string {
   if (!html) return "";
   return DOMPurify.sanitize(html, {
