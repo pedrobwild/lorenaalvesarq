@@ -6160,6 +6160,19 @@ textarea.admin-field__input {
 
 .blog-card__link:hover .blog-card__cta { gap: 0.9rem; }
 
+/* Botão inline de "tentar novamente" nos estados de erro de carregamento */
+.blog-retry {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  color: var(--clay-deep);
+  border-bottom: 1px solid rgba(143, 84, 51, 0.35);
+  transition: color 0.3s var(--ease);
+}
+.blog-retry:hover { color: var(--ink); }
+
 @media (max-width: 900px) {
   .blog-grid { grid-template-columns: 1fr; }
   .blog-card--lead .blog-card__link {

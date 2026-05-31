@@ -36,17 +36,26 @@ const PUBLIC_FIELDS =
 export function useBlogPosts() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
     (async () => {
-      const { data } = await supabase
+      const { data, error: qErr } = await supabase
         .from("blog_posts")
         .select(PUBLIC_FIELDS)
         .order("published_at", { ascending: false, nullsFirst: false })
         .order("created_at", { ascending: false });
       if (!active) return;
-      setPosts((data ?? []) as BlogPost[]);
+      if (qErr) {
+        // Não engole a falha: expõe o erro para que a UI possa distinguir
+        // "blog vazio" de "falha ao carregar" e oferecer retry/diagnóstico.
+        setError(qErr.message);
+        setPosts([]);
+      } else {
+        setError(null);
+        setPosts((data ?? []) as BlogPost[]);
+      }
       setLoading(false);
     })();
     return () => {
@@ -54,7 +63,7 @@ export function useBlogPosts() {
     };
   }, []);
 
-  return { posts, loading };
+  return { posts, loading, error };
 }
 
 /** Busca um post pelo slug (público — RLS já filtra visibilidade). */
@@ -123,7 +132,7 @@ export type BlogTag = {
  * com contagem e slug — usado pela página /blog/tags.
  */
 export function useBlogTags() {
-  const { posts, loading } = useBlogPosts();
+  const { posts, loading, error } = useBlogPosts();
 
   // Recalcula apenas quando a lista de posts muda. Sem o useMemo, cada
   // re-render do consumidor faz `slugify` rodar n*tags vezes e a saída
@@ -149,7 +158,7 @@ export function useBlogTags() {
     );
   }, [posts]);
 
-  return { tags, loading };
+  return { tags, loading, error };
 }
 
 /**
@@ -158,7 +167,7 @@ export function useBlogTags() {
  * tags armazenadas com acentos / maiúsculas / espaços.
  */
 export function useBlogPostsByTag(tagSlug: string | undefined) {
-  const { posts, loading } = useBlogPosts();
+  const { posts, loading, error } = useBlogPosts();
 
   // Memoizado por `[posts, tagSlug]`. Sem isso, a filtragem rodava de novo
   // a cada render do consumidor e o `slugify` por post fazia O(posts*tags)
@@ -180,7 +189,7 @@ export function useBlogPostsByTag(tagSlug: string | undefined) {
     return { filtered: matched, label: resolvedLabel };
   }, [posts, tagSlug]);
 
-  return { posts: filtered, label, loading };
+  return { posts: filtered, label, loading, error };
 }
 
 export type RelatedBlogPost = BlogPost & {
@@ -203,8 +212,8 @@ export type RelatedBlogPost = BlogPost & {
 export function useRelatedBlogPosts(
   current: BlogPost | null | undefined,
   limit = 3
-): { related: RelatedBlogPost[]; loading: boolean } {
-  const { posts, loading } = useBlogPosts();
+): { related: RelatedBlogPost[]; loading: boolean; error: string | null } {
+  const { posts, loading, error } = useBlogPosts();
 
   // Memoizado por `[posts, current?.id, current?.tags, current?.category, limit]`.
   // Sem isso, todo render do BlogPostPage refazia o scoring O(posts*tags).
@@ -258,5 +267,5 @@ export function useRelatedBlogPosts(
     }));
   }, [posts, current, limit]);
 
-  return { related, loading };
+  return { related, loading, error };
 }
