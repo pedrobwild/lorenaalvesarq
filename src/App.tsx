@@ -13,7 +13,7 @@ import {
   organizationJsonLd,
   faqJsonLd,
 } from "./lib/useSeo";
-import { useSiteSettings } from "./lib/useSiteSettings";
+import { useSiteSettings, whatsappUrl } from "./lib/useSiteSettings";
 import BrandLogo, { BrandSeal } from "./components/BrandLogo";
 import Picture from "./components/Picture";
 import SmartImage from "./components/SmartImage";
@@ -576,13 +576,13 @@ export default function App() {
         </nav>
         <a
           className="nav__cta"
-          href="https://wa.me/5534996668215"
+          href={whatsappUrl(settings)}
           target="_blank"
           rel="noopener noreferrer external"
           onClick={(e) => {
             track("click_contact", { value: { kind: "whatsapp", from: "nav" } });
             e.preventDefault();
-            window.open("https://wa.me/5534996668215", "_blank", "noopener,noreferrer");
+            window.open(whatsappUrl(settings), "_blank", "noopener,noreferrer");
           }}
         >
           ENTRE EM CONTATO
