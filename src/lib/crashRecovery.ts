@@ -31,7 +31,8 @@ const ATTEMPTS_WINDOW_MS = 60_000;
 const MAX_ATTEMPTS = 2;
 const LOG_LIMIT = 20;
 const QUEUE_LIMIT = 50;
-const BLANK_SCREEN_TIMEOUT_MS = 6_000;
+const BLANK_SCREEN_TIMEOUT_MS = 12_000;
+const BLANK_SCREEN_RECHECK_MS = 4_000;
 const HEALTHY_AFTER_MS = 5_000;
 const UPLOAD_TIMEOUT_MS = 4_000;
 const MAX_FIELD_LEN = 8_000;
@@ -226,6 +227,7 @@ function enqueue(entry: CrashEntry): void {
 }
 
 let flushing = false;
+let appMarkedHealthy = false;
 
 /**
  * Drena a fila offline. Roda no boot e a cada evento `online`. Ao
@@ -309,6 +311,7 @@ export function tryAutoReload(): boolean {
 
 /** Chamada após render bem-sucedida — zera o contador anti-loop. */
 export function markHealthy(): void {
+  appMarkedHealthy = true;
   window.setTimeout(() => {
     try {
       sessionStorage.removeItem(ATTEMPTS_KEY);
@@ -327,6 +330,29 @@ let installed = false;
 export function installCrashRecovery(): void {
   if (installed || typeof window === "undefined") return;
   installed = true;
+
+  const checkBlankScreen = () => {
+    if (appMarkedHealthy) return;
+
+    const root = document.getElementById("root");
+    const hasContent = !!root && root.childElementCount > 0;
+    if (hasContent) return;
+
+    // Em conexões lentas, o documento pode ainda estar carregando módulos,
+    // CSS ou imagens. Rechecar após o load evita falso positivo que causava
+    // reload antes de o React ter chance de montar no preview do usuário.
+    if (document.readyState !== "complete") {
+      window.setTimeout(checkBlankScreen, BLANK_SCREEN_RECHECK_MS);
+      return;
+    }
+
+    const reloaded = tryAutoReload();
+    recordCrash(
+      "blank-screen",
+      new Error("Root element vazio após boot"),
+      reloaded
+    );
+  };
 
   window.addEventListener("error", (event) => {
     // Filtra erros de recurso (img, script) — não derrubam a app e
@@ -349,18 +375,7 @@ export function installCrashRecovery(): void {
 
   // Watchdog: se depois de N segundos o #root continuar vazio, é
   // tela em branco — registra e tenta recarregar (com guarda anti-loop).
-  window.setTimeout(() => {
-    const root = document.getElementById("root");
-    const hasContent = !!root && root.childElementCount > 0;
-    if (!hasContent) {
-      const reloaded = tryAutoReload();
-      recordCrash(
-        "blank-screen",
-        new Error("Root element vazio após boot"),
-        reloaded
-      );
-    }
-  }, BLANK_SCREEN_TIMEOUT_MS);
+  window.setTimeout(checkBlankScreen, BLANK_SCREEN_TIMEOUT_MS);
 
   // Exposto para depuração manual no DevTools — sem custo em produção.
   const w = window as unknown as {

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM, { type Root as ReactRoot } from "react-dom/client";
 import CookieBanner from "./components/CookieBanner";
 import RootErrorBoundary from "./components/RootErrorBoundary";
 import { useCustomCursor } from "./lib/useCustomCursor";
@@ -11,7 +11,6 @@ import "./index.css";
 
 installCrashRecovery();
 installLinkInterceptor();
-markHealthy();
 
 const TRANSITION_MS = 380;
 
@@ -35,6 +34,7 @@ function Root() {
 
   // Inicializa analytics uma vez no mount
   useEffect(() => {
+    markHealthy();
     const cleanup = initAnalytics();
     return cleanup;
   }, []);
@@ -90,7 +90,12 @@ function Root() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+const rootElement = document.getElementById("root")!;
+const globalWithRoot = window as typeof window & { __lorenaReactRoot?: ReactRoot };
+const reactRoot = globalWithRoot.__lorenaReactRoot ?? ReactDOM.createRoot(rootElement);
+globalWithRoot.__lorenaReactRoot = reactRoot;
+
+reactRoot.render(
   <React.StrictMode>
     <RootErrorBoundary>
       <Root />
