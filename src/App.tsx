@@ -262,7 +262,7 @@ export default function App() {
     const useLenis = shouldUseSmoothScroll();
     const canParallax = shouldRunParallax();
     let lenis: Lenis | null = null;
-    const rafId: number | null = null;
+    let tickerFn: ((time: number) => void) | null = null;
 
     if (useLenis) {
       lenis = new Lenis({
@@ -273,9 +273,10 @@ export default function App() {
       });
 
       lenis.on("scroll", ScrollTrigger.update);
-      gsap.ticker.add((time) => {
+      tickerFn = (time) => {
         lenis?.raf(time * 1000);
-      });
+      };
+      gsap.ticker.add(tickerFn);
       gsap.ticker.lagSmoothing(0);
     }
 
@@ -517,7 +518,10 @@ export default function App() {
     // ---------- Cleanup ----------
     return () => {
       if (failsafe) clearTimeout(failsafe);
-      if (rafId) cancelAnimationFrame(rafId);
+      if (tickerFn) {
+        gsap.ticker.remove(tickerFn);
+        gsap.ticker.lagSmoothing(500, 33);
+      }
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("load", onLoad);
       mobileCleanups.forEach((fn) => fn());
