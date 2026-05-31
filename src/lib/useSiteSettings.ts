@@ -167,14 +167,15 @@ export function invalidateSiteSettings() {
  * Centraliza o número (A6) — antes ele estava hardcoded como
  * `https://wa.me/5534996668215` em App.tsx e BlogPostPage.tsx, divergindo
  * do valor já disponível em `site_settings`. Cai para o número padrão em
- * `DEFAULTS` enquanto as settings ainda carregam, então o CTA nunca aponta
- * para um link quebrado. Atualizar o número passa a ser feito num só lugar.
+ * `DEFAULTS` quando o valor configurado é vazio/não-numérico (a UI do admin
+ * normaliza branco para null, mas edições/imports diretos no banco podem
+ * deixar `''`), então o CTA nunca aponta para `https://wa.me/` quebrado.
+ * Atualizar o número passa a ser feito num só lugar.
  */
 export function whatsappUrl(settings: SiteSettings | null, text?: string): string {
-  const digits = (settings?.whatsapp_number ?? DEFAULTS.whatsapp_number ?? "").replace(
-    /\D/g,
-    ""
-  );
+  const digits =
+    (settings?.whatsapp_number ?? "").replace(/\D/g, "") ||
+    (DEFAULTS.whatsapp_number ?? "").replace(/\D/g, "");
   const base = `https://wa.me/${digits}`;
   return text ? `${base}?text=${encodeURIComponent(text)}` : base;
 }
