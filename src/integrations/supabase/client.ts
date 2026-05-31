@@ -21,8 +21,16 @@ const FALLBACK_SUPABASE_PUBLISHABLE_KEY =
 const envUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
 const envKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim();
 
-export const SUPABASE_URL = envUrl || FALLBACK_SUPABASE_URL;
-export const SUPABASE_PUBLISHABLE_KEY = envKey || FALLBACK_SUPABASE_PUBLISHABLE_KEY;
+// O override por env é tudo-ou-nada: só vale quando AMBOS os valores estão
+// presentes. Caso contrário caímos no par embutido completo — usar uma URL
+// de um projeto com a key de outro produziria falhas de autorização em vez
+// de cair no projeto embutido que funciona.
+const useEnvOverride = Boolean(envUrl && envKey);
+
+export const SUPABASE_URL = useEnvOverride ? envUrl! : FALLBACK_SUPABASE_URL;
+export const SUPABASE_PUBLISHABLE_KEY = useEnvOverride
+  ? envKey!
+  : FALLBACK_SUPABASE_PUBLISHABLE_KEY;
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
