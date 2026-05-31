@@ -121,6 +121,91 @@ export function clearCrashLog(): void {
   }
 }
 
+// ---------- Upload + fila offline ---------------------------------------
+
+function entryToRow(entry: CrashEntry) {
+  return {
+    occurred_at: entry.at,
+    kind: entry.kind,
+    message: entry.message,
+    stack: entry.stack ?? null,
+    route: entry.route || null,
+    user_agent: entry.userAgent || null,
+    recovered: entry.recovered,
+  };
+}
+
+async function uploadEntry(entry: CrashEntry): Promise<void> {
+  if (typeof navigator !== "undefined" && navigator.onLine === false) {
+    throw new Error("offline");
+  }
+  // Timeout manual: o supabase-js não tem um e queremos cair na fila
+  // rapidamente se a rede estiver lenta — não dá pra travar o boot.
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), UPLOAD_TIMEOUT_MS);
+  try {
+    const { error } = await supabase
+      .from("crash_reports")
+      .insert(entryToRow(entry))
+      .abortSignal(controller.signal);
+    if (error) throw error;
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
+function readQueue(): CrashEntry[] {
+  try {
+    return safeParse<CrashEntry[]>(localStorage.getItem(QUEUE_KEY), []);
+  } catch {
+    return [];
+  }
+}
+
+function writeQueue(queue: CrashEntry[]): void {
+  try {
+    localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+  } catch {
+    // quota cheia: descarta — preferimos perder telemetria a quebrar a app.
+  }
+}
+
+function enqueue(entry: CrashEntry): void {
+  const queue = readQueue();
+  queue.push(entry);
+  while (queue.length > QUEUE_LIMIT) queue.shift();
+  writeQueue(queue);
+}
+
+let flushing = false;
+
+/**
+ * Drena a fila offline. Roda no boot e a cada evento `online`. Ao
+ * encontrar a primeira falha, para — assim a próxima tentativa
+ * continua de onde parou, sem quebrar a ordem cronológica nem
+ * desperdiçar requisições enquanto a rede ainda está instável.
+ */
+export async function flushQueue(): Promise<void> {
+  if (flushing) return;
+  flushing = true;
+  try {
+    let queue = readQueue();
+    while (queue.length > 0) {
+      const [next, ...rest] = queue;
+      try {
+        await uploadEntry(next);
+        queue = rest;
+        writeQueue(queue);
+      } catch {
+        // Mantém o item na fila e aborta — tentamos de novo no próximo gatilho.
+        break;
+      }
+    }
+  } finally {
+    flushing = false;
+  }
+}
+
 interface AttemptsState {
   count: number;
   firstAt: number;
