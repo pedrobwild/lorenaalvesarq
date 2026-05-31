@@ -283,6 +283,7 @@ export default function App() {
     // ---------- Loader ----------
     const loader = document.querySelector<HTMLDivElement>(".loader");
     let failsafe: ReturnType<typeof setTimeout> | null = null;
+    const timelines: gsap.core.Timeline[] = [];
 
     if (loader) {
       failsafe = setTimeout(() => {
@@ -311,6 +312,7 @@ export default function App() {
           startHeroAnim();
         },
       });
+      timelines.push(tl);
 
       if (mark) tl.to(mark, { y: 0, duration: 1, ease: "power4.out" });
       if (counter) {
@@ -342,6 +344,7 @@ export default function App() {
       const scroll = hero.querySelector<HTMLElement>(".hero__scroll");
 
       const tl = gsap.timeline();
+      timelines.push(tl);
       if (heroMedia)
         tl.fromTo(
           heroMedia,
@@ -525,6 +528,7 @@ export default function App() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("load", onLoad);
       mobileCleanups.forEach((fn) => fn());
+      timelines.forEach((t) => t.kill());
       ScrollTrigger.getAll().forEach((st) => st.kill());
       lenis?.destroy();
     };
