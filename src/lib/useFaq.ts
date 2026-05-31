@@ -40,13 +40,21 @@ export function useFaq() {
       .select("id, question, answer, order_index, visible")
       .eq("visible", true)
       .order("order_index", { ascending: true })
-      .then(({ data, error }) => {
-        if (!mounted) return;
-        if (data && data.length > 0 && !error) {
-          setItems(data as FaqItem[]);
+      // O builder do Supabase é um PromiseLike (sem `.catch`), então tratamos a
+      // rejeição pelo segundo argumento de `.then(...)`.
+      .then(
+        ({ data, error }) => {
+          if (!mounted) return;
+          if (data && data.length > 0 && !error) {
+            setItems(data as FaqItem[]);
+          }
+          setLoading(false);
+        },
+        () => {
+          // Em falha de rede o FALLBACK já cobre o conteúdo; só encerramos o loading.
+          if (mounted) setLoading(false);
         }
-        setLoading(false);
-      });
+      );
     return () => {
       mounted = false;
     };
