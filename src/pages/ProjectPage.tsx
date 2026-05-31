@@ -142,6 +142,13 @@ export default function ProjectPage({ slug }: Props) {
   }, [lightboxIdx, project]);
 
   if (!project) {
+    if (loading) {
+      return (
+        <div className="pp-404" aria-busy="true" aria-live="polite">
+          <p className="mono">Carregando projeto…</p>
+        </div>
+      );
+    }
     return (
       <div className="pp-404">
         <p className="mono">Projeto não encontrado.</p>
