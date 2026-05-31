@@ -22,14 +22,19 @@
  *     O contador é limpo após 5s de render saudável (`markHealthy`).
  */
 import { devError } from "./devLog";
+import { supabase } from "@/integrations/supabase/client";
 
 const LOG_KEY = "lvbl:crash-log";
+const QUEUE_KEY = "lvbl:crash-queue";
 const ATTEMPTS_KEY = "lvbl:reload-attempts";
 const ATTEMPTS_WINDOW_MS = 60_000;
 const MAX_ATTEMPTS = 2;
 const LOG_LIMIT = 20;
+const QUEUE_LIMIT = 50;
 const BLANK_SCREEN_TIMEOUT_MS = 6_000;
 const HEALTHY_AFTER_MS = 5_000;
+const UPLOAD_TIMEOUT_MS = 4_000;
+const MAX_FIELD_LEN = 8_000;
 
 export type CrashKind =
   | "react-error-boundary"
