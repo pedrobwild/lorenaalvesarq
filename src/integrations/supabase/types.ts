@@ -217,6 +217,7 @@ export type Database = {
           received_at: string
           recovered: boolean
           route: string | null
+          session_id: string | null
           stack: string | null
           user_agent: string | null
         }
@@ -230,6 +231,7 @@ export type Database = {
           received_at?: string
           recovered?: boolean
           route?: string | null
+          session_id?: string | null
           stack?: string | null
           user_agent?: string | null
         }
@@ -243,6 +245,7 @@ export type Database = {
           received_at?: string
           recovered?: boolean
           route?: string | null
+          session_id?: string | null
           stack?: string | null
           user_agent?: string | null
         }
