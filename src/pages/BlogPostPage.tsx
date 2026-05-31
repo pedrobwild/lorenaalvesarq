@@ -140,7 +140,10 @@ export default function BlogPostPage({ slug }: Props) {
    */
   const enhancedHtml = useMemo(() => {
     if (!post?.content_html) return "";
-    if (typeof window === "undefined") return post.content_html;
+    // Sem `window` (SSR/SSG/Node) não há `DOMParser` para as transformações de
+    // DOM abaixo, mas o HTML ainda vai para `dangerouslySetInnerHTML` — então
+    // sanitiza sempre, mesmo neste ramo, para não vazar XSS armazenado.
+    if (typeof window === "undefined") return sanitizeBlogHtml(post.content_html);
     // Sanitiza ANTES de qualquer transformação: protege contra `<script>`,
     // handlers on*= e javascript: URLs que possam ter sido salvos por um
     // admin comprometido ou por conteúdo legado anterior à sanitização no
