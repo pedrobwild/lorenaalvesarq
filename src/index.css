@@ -385,6 +385,13 @@ button {
   display: grid;
   place-items: center;
   pointer-events: none;
+  transition: opacity 0.45s var(--ease), transform 0.75s var(--ease);
+}
+
+body.is-ready .loader {
+  opacity: 0;
+  transform: translateY(-100%);
+  visibility: hidden;
 }
 
 .loader__inner {
