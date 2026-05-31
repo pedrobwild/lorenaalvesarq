@@ -61,7 +61,12 @@ export default function ProjectPage({ slug }: Props) {
     jsonLd,
   });
 
+  // Slug efetivamente renderizado — animações só rodam quando o conteúdo
+  // corresponde ao slug da URL, evitando re-disparar a entrada do GSAP sobre
+  // o projeto anterior durante a transição.
+  const renderedSlug = project?.slug;
   useEffect(() => {
+    if (!renderedSlug || renderedSlug !== slug) return;
     track("project_view", { project_slug: slug });
     const useLenis = shouldUseSmoothScroll();
     const canParallax = shouldRunParallax();
