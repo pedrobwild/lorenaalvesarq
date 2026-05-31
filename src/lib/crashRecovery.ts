@@ -61,6 +61,12 @@ function safeParse<T>(raw: string | null, fallback: T): T {
   }
 }
 
+function truncate(value: string | undefined, max = MAX_FIELD_LEN): string | undefined {
+  if (value == null) return value;
+  if (value.length <= max) return value;
+  return `${value.slice(0, max)}…[truncated]`;
+}
+
 export function recordCrash(
   kind: CrashKind,
   error: unknown,
@@ -70,8 +76,8 @@ export function recordCrash(
   const entry: CrashEntry = {
     at: new Date().toISOString(),
     kind,
-    message: err.message || "unknown error",
-    stack: err.stack,
+    message: truncate(err.message || "unknown error", 1_000)!,
+    stack: truncate(err.stack),
     route:
       typeof window !== "undefined"
         ? `${window.location.pathname}${window.location.search}${window.location.hash}`
@@ -89,6 +95,11 @@ export function recordCrash(
   } catch {
     // localStorage indisponível (modo privado, quota): só ignora.
   }
+
+  // Tenta enviar imediatamente; em caso de falha (offline, gateway fora,
+  // recurso bloqueado) o entry vai pra fila persistente e é reenviado
+  // no próximo boot ou quando o evento `online` disparar.
+  void uploadEntry(entry).catch(() => enqueue(entry));
 
   devError(`[crash:${kind}]`, entry);
   return entry;
