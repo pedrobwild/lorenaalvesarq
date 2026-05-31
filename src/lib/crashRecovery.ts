@@ -22,6 +22,7 @@
  *     O contador é limpo após 5s de render saudável (`markHealthy`).
  */
 import { devError } from "./devLog";
+import { SUPABASE_URL } from "@/integrations/supabase/client";
 
 const LOG_KEY = "lvbl:crash-log";
 const QUEUE_KEY = "lvbl:crash-queue";
@@ -175,7 +176,7 @@ function entryToRow(entry: CrashEntry) {
 // Endpoint da edge function que ingere os crashes. As escritas NÃO vão mais
 // direto pra /rest/v1/crash_reports via anon key — a edge function (service_role)
 // valida tamanho, filtra bots e aplica rate-limit por IP antes do INSERT.
-const CRASH_ENDPOINT = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/report-crash`;
+const CRASH_ENDPOINT = `${SUPABASE_URL}/functions/v1/report-crash`;
 
 async function uploadEntry(entry: CrashEntry): Promise<void> {
   if (typeof navigator !== "undefined" && navigator.onLine === false) {
