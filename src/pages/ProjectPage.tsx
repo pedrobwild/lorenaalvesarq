@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "../lib/gsap";
 import Lenis from "lenis";
-import { type ProjectImage } from "../data/projects";
+import { type Project, type ProjectImage } from "../data/projects";
 import { useProjects } from "../lib/useProjects";
 import { routes } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
@@ -16,7 +16,14 @@ type Props = { slug: string };
 export default function ProjectPage({ slug }: Props) {
   const { projects, loading } = useProjects();
   const { settings } = useSiteSettings();
-  const project = projects.find((p) => p.slug === slug);
+  const found = projects.find((p) => p.slug === slug);
+  // Mantém o último projeto válido renderizado para evitar flash ao navegar
+  // rapidamente entre projetos: enquanto o novo slug ainda carrega, seguimos
+  // exibindo o anterior. Trocamos a referência só quando o novo slug bate.
+  const lastProjectRef = useRef<Project | null>(found ?? null);
+  if (found) lastProjectRef.current = found;
+  const isTransitioning = !found && !!lastProjectRef.current && loading;
+  const project = found ?? lastProjectRef.current;
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +61,12 @@ export default function ProjectPage({ slug }: Props) {
     jsonLd,
   });
 
+  // Slug efetivamente renderizado — animações só rodam quando o conteúdo
+  // corresponde ao slug da URL, evitando re-disparar a entrada do GSAP sobre
+  // o projeto anterior durante a transição.
+  const renderedSlug = project?.slug;
   useEffect(() => {
+    if (!renderedSlug || renderedSlug !== slug) return;
     track("project_view", { project_slug: slug });
     const useLenis = shouldUseSmoothScroll();
     const canParallax = shouldRunParallax();
@@ -120,7 +132,7 @@ export default function ProjectPage({ slug }: Props) {
       lenis?.destroy();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
-  }, [slug]);
+  }, [slug, renderedSlug]);
 
   // Controles do lightbox
   useEffect(() => {
@@ -163,7 +175,14 @@ export default function ProjectPage({ slug }: Props) {
   const next = projects[(i + 1) % projects.length] ?? project;
 
   return (
-    <main id="main" tabIndex={-1} className="pp-page" ref={pageRef}>
+    <main
+      id="main"
+      tabIndex={-1}
+      className="pp-page"
+      ref={pageRef}
+      aria-busy={isTransitioning || undefined}
+      data-transitioning={isTransitioning ? "true" : undefined}
+    >
       {/* Nav topo */}
       <InternalNav
         active="project"
