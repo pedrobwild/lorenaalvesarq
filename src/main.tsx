@@ -5,10 +5,13 @@ import RootErrorBoundary from "./components/RootErrorBoundary";
 import { useCustomCursor } from "./lib/useCustomCursor";
 import { useHashRoute, installLinkInterceptor, type Route } from "./lib/useHashRoute";
 import { initAnalytics } from "./lib/analytics";
+import { installCrashRecovery, markHealthy } from "./lib/crashRecovery";
 import { renderRoute } from "./router";
 import "./index.css";
 
+installCrashRecovery();
 installLinkInterceptor();
+markHealthy();
 
 const TRANSITION_MS = 380;
 
