@@ -14,7 +14,7 @@ import InternalNav from "../components/InternalNav";
 type Props = { slug: string };
 
 export default function ProjectPage({ slug }: Props) {
-  const { projects } = useProjects();
+  const { projects, loading } = useProjects();
   const { settings } = useSiteSettings();
   const project = projects.find((p) => p.slug === slug);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
