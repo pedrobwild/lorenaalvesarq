@@ -46,6 +46,10 @@ export function useFaq() {
           setItems(data as FaqItem[]);
         }
         setLoading(false);
+      })
+      .catch(() => {
+        // Em falha de rede o FALLBACK já cobre o conteúdo; só encerramos o loading.
+        if (mounted) setLoading(false);
       });
     return () => {
       mounted = false;
