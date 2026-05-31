@@ -104,6 +104,17 @@ describe("sanitizeBlogHtml — reverse tabnabbing", () => {
     expect(out).not.toMatch(/rel="nofollow"/);
   });
 
+  it("força rel mesmo com target em caixa variante (_Blank/_BLANK)", () => {
+    const outMixed = sanitizeBlogHtml(
+      '<a href="https://exemplo.com" target="_Blank">link</a>'
+    );
+    expect(outMixed).toMatch(/rel="noopener noreferrer"/);
+    const outUpper = sanitizeBlogHtml(
+      '<a href="https://exemplo.com" target="_BLANK">link</a>'
+    );
+    expect(outUpper).toMatch(/rel="noopener noreferrer"/);
+  });
+
   it("não adiciona rel em <a> sem target=_blank", () => {
     const out = sanitizeBlogHtml('<a href="https://exemplo.com">link</a>');
     expect(out).not.toMatch(/rel=/);

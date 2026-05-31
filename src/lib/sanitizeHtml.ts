@@ -82,7 +82,12 @@ const ALLOWED_ATTR = [
 // Sobrescreve qualquer `rel` parcial vindo do conteúdo. Registrado uma única
 // vez no carregamento do módulo.
 DOMPurify.addHook("afterSanitizeAttributes", (node) => {
-  if (node.tagName === "A" && node.getAttribute("target") === "_blank") {
+  // O keyword `_blank` é case-insensitive no HTML, então normaliza o valor
+  // antes de comparar — `_Blank`/`_BLANK` também abrem nova aba.
+  if (
+    node.tagName === "A" &&
+    node.getAttribute("target")?.toLowerCase() === "_blank"
+  ) {
     node.setAttribute("rel", "noopener noreferrer");
   }
 });
