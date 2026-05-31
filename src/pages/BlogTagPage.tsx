@@ -24,7 +24,7 @@ function formatDate(iso: string | null): string {
 type Props = { slug: string };
 
 export default function BlogTagPage({ slug }: Props) {
-  const { posts, label, loading } = useBlogPostsByTag(slug);
+  const { posts, label, loading, error } = useBlogPostsByTag(slug);
   const { settings } = useSiteSettings();
   const base = (settings?.seo_canonical_base || "https://lorenaalvesarq.com").replace(
     /\/$/,
@@ -97,7 +97,9 @@ export default function BlogTagPage({ slug }: Props) {
           #{displayLabel}
         </h1>
         <p className="pf-head__lede">
-          {posts.length === 0 && !loading
+          {error && !loading
+            ? "Não foi possível carregar os artigos agora."
+            : posts.length === 0 && !loading
             ? "Nenhum artigo encontrado com esta tag — por enquanto."
             : `${posts.length} ${posts.length === 1 ? "artigo" : "artigos"} marcados com “${displayLabel}”.`}
         </p>
@@ -110,7 +112,21 @@ export default function BlogTagPage({ slug }: Props) {
           </p>
         )}
 
-        {!loading && posts.length === 0 && (
+        {!loading && error && (
+          <p className="mono" role="alert" style={{ opacity: 0.7 }}>
+            Não foi possível carregar os artigos agora.{" "}
+            <button
+              type="button"
+              className="blog-retry"
+              onClick={() => window.location.reload()}
+              data-cursor="hover"
+            >
+              Tentar novamente →
+            </button>
+          </p>
+        )}
+
+        {!loading && !error && posts.length === 0 && (
           <p className="mono" style={{ opacity: 0.6 }}>
             <a href={routes.blogTags}>Voltar para todas as tags →</a>
           </p>

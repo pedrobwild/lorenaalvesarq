@@ -8,7 +8,7 @@ import { routes } from "../lib/useHashRoute";
 import { track } from "../lib/analytics";
 
 export default function BlogTagsPage() {
-  const { tags, loading } = useBlogTags();
+  const { tags, loading, error } = useBlogTags();
   const { settings } = useSiteSettings();
   const base = (settings?.seo_canonical_base || "https://lorenaalvesarq.com").replace(
     /\/$/,
@@ -104,7 +104,21 @@ export default function BlogTagsPage() {
           </p>
         )}
 
-        {!loading && tags.length === 0 && (
+        {!loading && error && (
+          <p className="mono" role="alert" style={{ opacity: 0.7 }}>
+            Não foi possível carregar as tags agora.{" "}
+            <button
+              type="button"
+              className="blog-retry"
+              onClick={() => window.location.reload()}
+              data-cursor="hover"
+            >
+              Tentar novamente →
+            </button>
+          </p>
+        )}
+
+        {!loading && !error && tags.length === 0 && (
           <p className="mono" style={{ opacity: 0.6 }}>
             Em breve, novos artigos com novos temas.
           </p>

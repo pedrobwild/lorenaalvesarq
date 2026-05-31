@@ -22,7 +22,7 @@ function formatDate(iso: string | null): string {
 }
 
 export default function BlogPage() {
-  const { posts, loading } = useBlogPosts();
+  const { posts, loading, error } = useBlogPosts();
   const { settings } = useSiteSettings();
 
   useSeo({
@@ -116,7 +116,21 @@ export default function BlogPage() {
           </p>
         )}
 
-        {!loading && posts.length === 0 && (
+        {!loading && error && (
+          <p className="mono" role="alert" style={{ opacity: 0.7 }}>
+            Não foi possível carregar os artigos agora.{" "}
+            <button
+              type="button"
+              className="blog-retry"
+              onClick={() => window.location.reload()}
+              data-cursor="hover"
+            >
+              Tentar novamente →
+            </button>
+          </p>
+        )}
+
+        {!loading && !error && posts.length === 0 && (
           <p className="mono" style={{ opacity: 0.6 }}>
             Em breve, os primeiros artigos.
           </p>
