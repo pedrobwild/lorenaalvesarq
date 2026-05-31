@@ -26,6 +26,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const LOG_KEY = "lvbl:crash-log";
 const QUEUE_KEY = "lvbl:crash-queue";
+const SESSION_ID_KEY = "lvbl:crash-session-id";
 const ATTEMPTS_KEY = "lvbl:reload-attempts";
 const ATTEMPTS_WINDOW_MS = 60_000;
 const MAX_ATTEMPTS = 2;
@@ -50,6 +51,40 @@ export interface CrashEntry {
   route: string;
   userAgent: string;
   recovered: boolean;
+  sessionId: string;
+}
+
+/**
+ * ID estável por visita (aba do navegador). Usa `sessionStorage`, então
+ * sobrevive a reloads dentro da mesma aba — exatamente o que queremos
+ * pra correlacionar crashes que ocorrem antes/depois do auto-reload —
+ * mas é descartado ao fechar a aba, garantindo que cada visita nova
+ * receba um id próprio. Cai pra um id efêmero em memória se o
+ * sessionStorage estiver indisponível (modo privado/quota).
+ */
+let cachedSessionId: string | null = null;
+function generateId(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+  return `s_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
+}
+export function getSessionId(): string {
+  if (cachedSessionId) return cachedSessionId;
+  try {
+    const existing = sessionStorage.getItem(SESSION_ID_KEY);
+    if (existing) {
+      cachedSessionId = existing;
+      return existing;
+    }
+    const fresh = generateId();
+    sessionStorage.setItem(SESSION_ID_KEY, fresh);
+    cachedSessionId = fresh;
+    return fresh;
+  } catch {
+    cachedSessionId = cachedSessionId ?? generateId();
+    return cachedSessionId;
+  }
 }
 
 function safeParse<T>(raw: string | null, fallback: T): T {
