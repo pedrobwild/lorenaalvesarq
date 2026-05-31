@@ -168,6 +168,7 @@ function entryToRow(entry: CrashEntry) {
     route: entry.route || null,
     user_agent: entry.userAgent || null,
     recovered: entry.recovered,
+    session_id: entry.sessionId,
   };
 }
 
