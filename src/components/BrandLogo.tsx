@@ -50,8 +50,8 @@ export default function BrandLogo({
     <img
       src={LOGO_SRC[variant]}
       alt={alt}
-      width={320}
-      height={88}
+      width={2052}
+      height={249}
       loading="eager"
       decoding="async"
       {...({ fetchpriority: "high" } as { fetchpriority: string })}

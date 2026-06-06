@@ -206,8 +206,11 @@ button {
 /* ---------- Brand logo (imagem oficial vetorizada do brandbook) ---------- */
 .brand-logo {
   user-select: none;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+  /* O logo é um PNG de alta resolução (2052×249) que quase sempre é
+     reduzido em tela. `crisp-edges`/`optimize-contrast` desligam o
+     downscaling suavizado do navegador e deixam as letras serrilhadas
+     ("baixa qualidade"). `auto` mantém a interpolação de alta qualidade. */
+  image-rendering: auto;
 }
 
 /* Default heights por contexto — sobrescritos via prop heightRem quando necessário */
