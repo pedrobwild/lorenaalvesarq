@@ -2,19 +2,19 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-// Credenciais do projeto Supabase conectado (kcyvttwanumuriijuctn).
+// Credenciais do projeto Lovable Cloud atual (erivcmnvvgxyfkhugupq).
 // A URL e a publishable/anon key são PÚBLICAS por design — o acesso é
 // protegido por Row Level Security em todas as tabelas. Mantê-las embutidas
-// aqui (padrão gerado pelo Lovable) garante que o app SEMPRE inicialize,
-// mesmo que as variáveis de ambiente do build/deploy não sejam injetadas.
+// aqui garante que o app SEMPRE inicialize, mesmo que as variáveis de
+// ambiente do build/deploy não sejam injetadas.
 //
 // IMPORTANTE: este módulo é avaliado no topo do grafo de imports (App, main,
 // hooks). Um `throw` aqui derrubava o bundle inteiro ANTES do React montar,
 // resultando em tela preta permanente que nenhum error boundary conseguia
 // capturar. Por isso nunca lançamos erro neste arquivo — caímos no fallback.
-const FALLBACK_SUPABASE_URL = "https://kcyvttwanumuriijuctn.supabase.co";
+const FALLBACK_SUPABASE_URL = "https://erivcmnvvgxyfkhugupq.supabase.co";
 const FALLBACK_SUPABASE_PUBLISHABLE_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjeXZ0dHdhbnVtdXJpaWp1Y3RuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3ODIwMTcsImV4cCI6MjA5MjM1ODAxN30.ms7gqbhCJydepYbaGgMIOWgvU4p_ESb8NFYudTg6Lcw";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVyaXZjbW52dmd4eWZraHVndXBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MzMxMTIsImV4cCI6MjA5MjIwOTExMn0.ZxDQJv5e6wTDdV9IdHueNT852HBTFWPLeY9zwbEs5mE";
 
 // Variáveis de ambiente têm prioridade (permitem apontar para outro projeto
 // em dev/preview), mas quando ausentes/vazias usamos o fallback embutido.
