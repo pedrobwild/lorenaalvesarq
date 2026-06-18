@@ -5,6 +5,7 @@ import { uploadImageGeneric, type UploadResult } from "@/lib/uploadImage";
 import { navigate, routes } from "@/lib/useHashRoute";
 import { sanitizeBlogHtml } from "@/lib/sanitizeHtml";
 import { slugify, readingTime, type BlogPost } from "@/lib/useBlog";
+import { useAutosaveDraft, formatSavedAt } from "@/lib/useAutosaveDraft";
 
 type Props = { slug?: string };
 
@@ -66,6 +67,29 @@ export default function BlogFormPage({ slug }: Props) {
   const [postId, setPostId] = useState<string | null>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const slugTouchedRef = useRef(isEdit);
+
+  // Autosave em localStorage — chave por slug (ou "new" para criação).
+  // Não autossalva enquanto o post original está sendo carregado para
+  // não sobrescrever o rascunho com o estado vazio inicial.
+  const draftKey = isEdit ? `blog:${slug}` : "blog:new";
+  const { savedAt, hasDraft, loadDraft, clearDraft } = useAutosaveDraft(
+    draftKey,
+    draft,
+    !loading
+  );
+  const [draftDismissed, setDraftDismissed] = useState(false);
+
+  function restoreDraft() {
+    const d = loadDraft();
+    if (!d) return;
+    setDraft(d);
+    if (editorRef.current) editorRef.current.innerHTML = d.content_html || "";
+    setDraftDismissed(true);
+  }
+  function discardDraft() {
+    clearDraft();
+    setDraftDismissed(true);
+  }
 
   // Carrega o post existente
   useEffect(() => {
@@ -271,6 +295,7 @@ export default function BlogFormPage({ slug }: Props) {
       alert("Erro ao salvar: " + error.message);
       return;
     }
+    clearDraft();
     navigate(routes.adminBlog);
   }
 
@@ -289,6 +314,11 @@ export default function BlogFormPage({ slug }: Props) {
       description={isEdit ? `/blog/${draft.slug}` : "Crie um novo artigo para o blog."}
       actions={
         <>
+          {savedAt && (
+            <span className="mono admin-hint" aria-live="polite" style={{ opacity: 0.7 }}>
+              rascunho local · {formatSavedAt(savedAt)}
+            </span>
+          )}
           <a className="admin-btn" href={routes.adminBlog}>
             cancelar
           </a>
@@ -303,6 +333,32 @@ export default function BlogFormPage({ slug }: Props) {
         </>
       }
     >
+      {hasDraft && !draftDismissed && (
+        <div
+          className="admin-card"
+          role="status"
+          style={{
+            marginBottom: 16,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+            flexWrap: "wrap",
+          }}
+        >
+          <span className="mono">
+            Rascunho local de {formatSavedAt(savedAt)} disponível.
+          </span>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button type="button" className="admin-btn" onClick={discardDraft}>
+              descartar
+            </button>
+            <button type="button" className="admin-btn admin-btn--primary" onClick={restoreDraft}>
+              restaurar
+            </button>
+          </div>
+        </div>
+      )}
       <div className="admin-form-grid">
         {/* Coluna principal */}
         <div className="admin-form-grid__main">

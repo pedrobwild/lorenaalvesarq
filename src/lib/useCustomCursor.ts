@@ -14,6 +14,10 @@ export function useCustomCursor(enabled: boolean = true) {
     if (!enabled) return;
     const hasFineHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     if (!hasFineHover) return;
+    // Respeita prefers-reduced-motion: o cursor segue o mouse via rAF
+    // com easing — é movimento decorativo que pode incomodar. Cai no
+    // cursor nativo do sistema quando o usuário pede menos movimento.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     // Cria o elemento .cursor se ainda não existir
     let c = document.querySelector<HTMLElement>(".cursor");
