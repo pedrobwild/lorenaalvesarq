@@ -154,6 +154,15 @@ export default function App() {
         : undefined,
   });
 
+  // Preload das primeiras capas de portfólio assim que a lista resolve —
+  // antecipa o download para reduzir flash ao clicar num projeto da home.
+  useEffect(() => {
+    if (PROJECTS.length === 0) return;
+    preloadProjectCovers(
+      PROJECTS.slice(0, 4).flatMap((p) => [p.coverUrlMd, p.coverUrl])
+    );
+  }, [PROJECTS]);
+
   // Hero slider — alterna a cada 4s
   useEffect(() => {
     const id = window.setInterval(() => {
