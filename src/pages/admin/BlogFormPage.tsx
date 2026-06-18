@@ -5,6 +5,7 @@ import { uploadImageGeneric, type UploadResult } from "@/lib/uploadImage";
 import { navigate, routes } from "@/lib/useHashRoute";
 import { sanitizeBlogHtml } from "@/lib/sanitizeHtml";
 import { slugify, readingTime, type BlogPost } from "@/lib/useBlog";
+import { useAutosaveDraft, formatSavedAt } from "@/lib/useAutosaveDraft";
 
 type Props = { slug?: string };
 
@@ -66,6 +67,29 @@ export default function BlogFormPage({ slug }: Props) {
   const [postId, setPostId] = useState<string | null>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const slugTouchedRef = useRef(isEdit);
+
+  // Autosave em localStorage — chave por slug (ou "new" para criação).
+  // Não autossalva enquanto o post original está sendo carregado para
+  // não sobrescrever o rascunho com o estado vazio inicial.
+  const draftKey = isEdit ? `blog:${slug}` : "blog:new";
+  const { savedAt, hasDraft, loadDraft, clearDraft } = useAutosaveDraft(
+    draftKey,
+    draft,
+    !loading
+  );
+  const [draftDismissed, setDraftDismissed] = useState(false);
+
+  function restoreDraft() {
+    const d = loadDraft();
+    if (!d) return;
+    setDraft(d);
+    if (editorRef.current) editorRef.current.innerHTML = d.content_html || "";
+    setDraftDismissed(true);
+  }
+  function discardDraft() {
+    clearDraft();
+    setDraftDismissed(true);
+  }
 
   // Carrega o post existente
   useEffect(() => {
