@@ -313,6 +313,11 @@ export default function BlogFormPage({ slug }: Props) {
       description={isEdit ? `/blog/${draft.slug}` : "Crie um novo artigo para o blog."}
       actions={
         <>
+          {savedAt && (
+            <span className="mono admin-hint" aria-live="polite" style={{ opacity: 0.7 }}>
+              rascunho local · {formatSavedAt(savedAt)}
+            </span>
+          )}
           <a className="admin-btn" href={routes.adminBlog}>
             cancelar
           </a>
