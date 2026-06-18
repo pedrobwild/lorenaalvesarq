@@ -332,6 +332,32 @@ export default function BlogFormPage({ slug }: Props) {
         </>
       }
     >
+      {hasDraft && !draftDismissed && (
+        <div
+          className="admin-card"
+          role="status"
+          style={{
+            marginBottom: 16,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+            flexWrap: "wrap",
+          }}
+        >
+          <span className="mono">
+            Rascunho local de {formatSavedAt(savedAt)} disponível.
+          </span>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button type="button" className="admin-btn" onClick={discardDraft}>
+              descartar
+            </button>
+            <button type="button" className="admin-btn admin-btn--primary" onClick={restoreDraft}>
+              restaurar
+            </button>
+          </div>
+        </div>
+      )}
       <div className="admin-form-grid">
         {/* Coluna principal */}
         <div className="admin-form-grid__main">
