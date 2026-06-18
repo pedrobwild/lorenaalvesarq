@@ -419,6 +419,7 @@ export default function ProjectFormPage({ slug }: Props) {
       }
 
       setMsg({ kind: "ok", text: "salvo." });
+      clearDraft();
       if (isNew) {
         setTimeout(() => navigate(routes.adminProjectEdit(form.slug)), 600);
       }
@@ -448,6 +449,11 @@ export default function ProjectFormPage({ slug }: Props) {
           {isNew ? "Novo projeto" : `Editar · ${form.title} ${form.em}`}
         </h1>
         <div className="admin-form-head__actions">
+          {savedAt && (
+            <span className="mono admin-hint" aria-live="polite" style={{ opacity: 0.7 }}>
+              rascunho local · {formatSavedAt(savedAt)}
+            </span>
+          )}
           {msg && (
             <span className={`admin-flash admin-flash--${msg.kind} mono`}>{msg.text}</span>
           )}
@@ -456,6 +462,37 @@ export default function ProjectFormPage({ slug }: Props) {
           </button>
         </div>
       </div>
+
+      {hasDraft && !draftDismissed && (
+        <div
+          className="admin-card"
+          role="status"
+          style={{
+            marginBottom: 16,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+            flexWrap: "wrap",
+          }}
+        >
+          <span className="mono">
+            Rascunho local de {formatSavedAt(savedAt)} disponível.
+          </span>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button type="button" className="admin-btn" onClick={discardDraft}>
+              descartar
+            </button>
+            <button
+              type="button"
+              className="admin-btn admin-btn--primary"
+              onClick={restoreDraft}
+            >
+              restaurar
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="admin-tabs">
         {(["geral", "ficha", "midia", "seo"] as const).map((t) => (
