@@ -12,7 +12,7 @@ import "./index.css";
 installCrashRecovery();
 installLinkInterceptor();
 
-const TRANSITION_MS = 380;
+const TRANSITION_MS = 180;
 
 function isAdminRoute(route: Route) {
   return route.name.startsWith("admin-");
