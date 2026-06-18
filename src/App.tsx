@@ -19,6 +19,7 @@ import Picture from "./components/Picture";
 import SmartImage from "./components/SmartImage";
 import FaqSection from "./components/FaqSection";
 import { useFaq } from "./lib/useFaq";
+import { preloadProjectCovers } from "./lib/preloadProjectCovers";
 // Hero-1 (LCP) servido a partir de /public/hero/ para URL estável,
 // permitindo preload via <link rel="preload"> no index.html.
 // Demais hero slides continuam vindo de /src/assets/ (lazy, sem urgência).
@@ -152,6 +153,15 @@ export default function App() {
           ]
         : undefined,
   });
+
+  // Preload das primeiras capas de portfólio assim que a lista resolve —
+  // antecipa o download para reduzir flash ao clicar num projeto da home.
+  useEffect(() => {
+    if (PROJECTS.length === 0) return;
+    preloadProjectCovers(
+      PROJECTS.slice(0, 4).flatMap((p) => [p.coverMd, p.cover])
+    );
+  }, [PROJECTS]);
 
   // Hero slider — alterna a cada 4s
   useEffect(() => {
