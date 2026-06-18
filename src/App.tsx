@@ -19,6 +19,7 @@ import Picture from "./components/Picture";
 import SmartImage from "./components/SmartImage";
 import FaqSection from "./components/FaqSection";
 import { useFaq } from "./lib/useFaq";
+import { preloadProjectCovers } from "./lib/preloadProjectCovers";
 // Hero-1 (LCP) servido a partir de /public/hero/ para URL estável,
 // permitindo preload via <link rel="preload"> no index.html.
 // Demais hero slides continuam vindo de /src/assets/ (lazy, sem urgência).
