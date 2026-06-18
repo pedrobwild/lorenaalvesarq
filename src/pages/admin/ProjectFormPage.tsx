@@ -20,6 +20,7 @@ import {
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { SortableRow, DragHandle } from "@/components/admin/SortableRow";
+import { useAutosaveDraft, formatSavedAt } from "@/lib/useAutosaveDraft";
 
 type Tag = "Residencial" | "Interiores" | "Comercial" | "Rural";
 
@@ -114,6 +115,27 @@ export default function ProjectFormPage({ slug }: Props) {
   const [slugDirty, setSlugDirty] = useState(false);
   const [coverAltLoading, setCoverAltLoading] = useState(false);
   const [galleryAltLoading, setGalleryAltLoading] = useState<Record<string, boolean>>({});
+
+  // Autosave em localStorage — preserva edições contra navegação acidental.
+  // Galeria fica de fora porque é colaboração com Storage e ordens vindas
+  // do banco; salvamos só os campos do formulário (texto + URLs já enviadas).
+  const draftKey = isNew ? "project:new" : `project:${slug}`;
+  const { savedAt, hasDraft, loadDraft, clearDraft } = useAutosaveDraft(
+    draftKey,
+    form,
+    !loading
+  );
+  const [draftDismissed, setDraftDismissed] = useState(false);
+
+  function restoreDraft() {
+    const d = loadDraft();
+    if (d) setForm(d);
+    setDraftDismissed(true);
+  }
+  function discardDraft() {
+    clearDraft();
+    setDraftDismissed(true);
+  }
 
   async function generateAltText(imageUrl: string): Promise<string> {
     const context = [form.title, form.em, form.tag].filter(Boolean).join(" ");
