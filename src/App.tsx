@@ -159,7 +159,7 @@ export default function App() {
   useEffect(() => {
     if (PROJECTS.length === 0) return;
     preloadProjectCovers(
-      PROJECTS.slice(0, 4).flatMap((p) => [p.coverUrlMd, p.coverUrl])
+      PROJECTS.slice(0, 4).flatMap((p) => [p.coverMd, p.cover])
     );
   }, [PROJECTS]);
 
