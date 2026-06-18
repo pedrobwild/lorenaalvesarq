@@ -295,6 +295,7 @@ export default function BlogFormPage({ slug }: Props) {
       alert("Erro ao salvar: " + error.message);
       return;
     }
+    clearDraft();
     navigate(routes.adminBlog);
   }
 
